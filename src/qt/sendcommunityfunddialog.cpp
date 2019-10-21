@@ -1,15 +1,15 @@
-#include <qt/sendcommunityfunddialog.h>
-#include <ui_sendcommunityfunddialog.h>
+#include "sendcommunityfunddialog.h"
+#include "ui_sendcommunityfunddialog.h"
 
 #include <QSettings>
 #include <guiutil.h>
 #include <vector>
 #include <string>
 #include <sstream>
-#include <consensus/cfund.h>
-#include <main.h>
-#include <base58.h>
-#include <chain.h>
+#include "consensus/cfund.h"
+#include "main.h"
+#include "base58.h"
+#include "chain.h"
 
 
 SendCommunityFundDialog::SendCommunityFundDialog(QWidget *parent, CFund::CProposal* proposal, int secDelay) :
@@ -35,7 +35,7 @@ SendCommunityFundDialog::SendCommunityFundDialog(QWidget *parent, CFund::CPropos
 
     // Amount label
     QSettings settings;
-    ui->labelRequestedAmount->setText(QString("%1 NAV / ").arg(proposal->nAmount/COIN).append("%1 EUR / ").arg(proposal->nAmount / settings.value("eurFactor", 0).toFloat()).append("%2 USD / ").arg(proposal->nAmount / settings.value("usdFactor", 0).toFloat()).append("%3 BTC").arg(proposal->nAmount / settings.value("btcFactor", 0).toFloat()));
+    ui->labelRequestedAmount->setText(QString("%1 0AE / ").arg(proposal->nAmount/COIN).append("%1 EUR / ").arg(proposal->nAmount / settings.value("eurFactor", 0).toFloat()).append("%2 USD / ").arg(proposal->nAmount / settings.value("usdFactor", 0).toFloat()).append("%3 BTC").arg(proposal->nAmount / settings.value("btcFactor", 0).toFloat()));
 
     // Format long descriptions
     std::string description = proposal->strDZeel.c_str();
@@ -58,7 +58,7 @@ SendCommunityFundDialog::SendCommunityFundDialog(QWidget *parent, CFund::CPropos
     ui->labelDuration->setText(GUIUtil::formatDurationStr(int(proposal->nDeadline)));
 
     string fee = std::to_string(Params().GetConsensus().nProposalMinimalFee / COIN);
-    string warning = "By submitting the proposal a " + fee + " NAV deduction will occur from your wallet ";
+    string warning = "By submitting the proposal a " + fee + " 0AE deduction will occur from your wallet ";
     ui->labelWarning->setText(QString::fromStdString(warning));
 }
 
@@ -92,7 +92,7 @@ SendCommunityFundDialog::SendCommunityFundDialog(QWidget *parent, CFund::CPaymen
 
     // Amount label
     QSettings settings;
-    ui->labelRequestedAmount->setText(QString("%1 NAV / ").arg(prequest->nAmount/COIN).append("%1 EUR / ").arg(prequest->nAmount / settings.value("eurFactor", 0).toFloat()).append("%2 USD / ").arg(prequest->nAmount / settings.value("usdFactor", 0).toFloat()).append("%3 BTC").arg(prequest->nAmount / settings.value("btcFactor", 0).toFloat()));
+    ui->labelRequestedAmount->setText(QString("%1 0AE / ").arg(prequest->nAmount/COIN).append("%1 EUR / ").arg(prequest->nAmount / settings.value("eurFactor", 0).toFloat()).append("%2 USD / ").arg(prequest->nAmount / settings.value("usdFactor", 0).toFloat()).append("%3 BTC").arg(prequest->nAmount / settings.value("btcFactor", 0).toFloat()));
 
     // Format long descriptions
     std::string description = prequest->strDZeel.c_str();

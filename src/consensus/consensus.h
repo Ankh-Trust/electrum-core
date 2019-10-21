@@ -3,8 +3,8 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_CONSENSUS_CONSENSUS_H
-#define NAVCOIN_CONSENSUS_CONSENSUS_H
+#ifndef ELECTRUM_CONSENSUS_CONSENSUS_H
+#define ELECTRUM_CONSENSUS_CONSENSUS_H
 
 #include <stdint.h>
 
@@ -26,4 +26,4 @@ enum {
     LOCKTIME_MEDIAN_TIME_PAST = (1 << 1),
 };
 
-#endif // NAVCOIN_CONSENSUS_CONSENSUS_H
+#endif // ELECTRUM_CONSENSUS_CONSENSUS_H

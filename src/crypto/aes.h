@@ -4,11 +4,11 @@
 //
 // C++ wrapper around ctaes, a constant-time AES implementation
 
-#ifndef NAVCOIN_CRYPTO_AES_H
-#define NAVCOIN_CRYPTO_AES_H
+#ifndef ELECTRUM_CRYPTO_AES_H
+#define ELECTRUM_CRYPTO_AES_H
 
 extern "C" {
-#include <crypto/ctaes/ctaes.h>
+#include "crypto/ctaes/ctaes.h"
 }
 
 static const int AES_BLOCKSIZE = 16;
@@ -115,4 +115,4 @@ private:
     unsigned char iv[AES_BLOCKSIZE];
 };
 
-#endif // NAVCOIN_CRYPTO_AES_H
+#endif // ELECTRUM_CRYPTO_AES_H

@@ -3,11 +3,11 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_SCRIPT_STANDARD_H
-#define NAVCOIN_SCRIPT_STANDARD_H
+#ifndef ELECTRUM_SCRIPT_STANDARD_H
+#define ELECTRUM_SCRIPT_STANDARD_H
 
-#include <script/interpreter.h>
-#include <uint256.h>
+#include "script/interpreter.h"
+#include "uint256.h"
 
 #include <boost/variant.hpp>
 
@@ -74,9 +74,9 @@ public:
  *  * CKeyID: TX_PUBKEYHASH destination
  *  * CScriptID: TX_SCRIPTHASH destination
  *  * Pair of two CKeyID: TX_COLDSTAKING destination
- *  A CTxDestination is the internal data type encoded in a CNavCoinAddress
+ *  A CTxDestination is the internal data type encoded in a CElectrumAddress
  */
-typedef boost::variant<CNoDestination, CKeyID, CScriptID, pair<CKeyID, CKeyID>, CScript> CTxDestination;
+typedef boost::variant<CNoDestination, CKeyID, CScriptID, pair<CKeyID, CKeyID>> CTxDestination;
 
 const char* GetTxnOutputType(txnouttype t);
 
@@ -89,4 +89,4 @@ CScript GetScriptForRawPubKey(const CPubKey& pubkey);
 CScript GetScriptForMultisig(int nRequired, const std::vector<CPubKey>& keys);
 CScript GetScriptForWitness(const CScript& redeemscript);
 
-#endif // NAVCOIN_SCRIPT_STANDARD_H
+#endif // ELECTRUM_SCRIPT_STANDARD_H

@@ -3,23 +3,23 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #if defined(HAVE_CONFIG_H)
-#include <config/navcoin-config.h>
+#include "config/electrum-config.h"
 #endif
 
-#include <qt/rpcconsole.h>
-#include <ui_debugwindow.h>
+#include "rpcconsole.h"
+#include "ui_debugwindow.h"
 
-#include <qt/bantablemodel.h>
-#include <qt/clientmodel.h>
-#include <qt/guiutil.h>
-#include <qt/guiconstants.h>
-#include <qt/platformstyle.h>
-#include <qt/bantablemodel.h>
+#include "bantablemodel.h"
+#include "clientmodel.h"
+#include "guiutil.h"
+#include "guiconstants.h"
+#include "platformstyle.h"
+#include "bantablemodel.h"
 
-#include <chainparams.h>
-#include <rpc/server.h>
-#include <rpc/client.h>
-#include <util.h>
+#include "chainparams.h"
+#include "rpc/server.h"
+#include "rpc/client.h"
+#include "util.h"
 
 #include <openssl/crypto.h>
 
@@ -115,7 +115,7 @@ public:
 };
 
 
-#include <qt/rpcconsole.moc>
+#include "rpcconsole.moc"
 
 /**
  * Split shell command line into a list of arguments. Aims to emulate \c bash and friends.
@@ -143,7 +143,7 @@ bool parseCommandLine(std::vector<std::string> &args, const std::string &strComm
         STATE_ESCAPE_DOUBLEQUOTED
     } state = STATE_EATING_SPACES;
     std::string curarg;
-    for(char ch: strCommand)
+    Q_FOREACH(char ch, strCommand)
     {
         switch(state)
         {
@@ -267,11 +267,11 @@ RPCConsole::RPCConsole(const PlatformStyle *platformStyle, QWidget *parent) :
     ui->openDebugLogfileButton->setToolTip(ui->openDebugLogfileButton->toolTip().arg(tr(PACKAGE_NAME)));
 
     if (platformStyle->getImagesOnButtons()) {
-        ui->openDebugLogfileButton->setIcon(platformStyle->SingleColorIcon(":/icons/export"));
+        ui->openDebugLogfileButton->setIcon(QIcon(":/icons/export"));
     }
-    ui->clearButton->setIcon(platformStyle->SingleColorIcon(":/icons/remove"));
-    ui->fontBiggerButton->setIcon(platformStyle->SingleColorIcon(":/icons/fontbigger"));
-    ui->fontSmallerButton->setIcon(platformStyle->SingleColorIcon(":/icons/fontsmaller"));
+    ui->clearButton->setIcon(QIcon(":/icons/remove"));
+    ui->fontBiggerButton->setIcon(QIcon(":/icons/fontbigger"));
+    ui->fontSmallerButton->setIcon(QIcon(":/icons/fontsmaller"));
 
     // Install event filter for up and down arrow
     ui->lineEdit->installEventFilter(this);
@@ -322,10 +322,34 @@ RPCConsole::~RPCConsole()
     delete ui;
 }
 
+void RPCConsole::showInfo()
+{
+    ui->tabWidget->setCurrentIndex(0);
+    show();
+}
+
+void RPCConsole::showConsole()
+{
+    ui->tabWidget->setCurrentIndex(1);
+    show();
+}
+
+void RPCConsole::showNetwork()
+{
+    ui->tabWidget->setCurrentIndex(2);
+    show();
+}
+
+void RPCConsole::showPeers()
+{
+    ui->tabWidget->setCurrentIndex(3);
+    show();
+}
+
 void RPCConsole::errorLogInitPos()
 {
     // Check if we already have the file
-    if (errorLogFile == nullptr) {
+    if (errorLogFile == NULL) {
         // Get a QFile instance
         errorLogFile = new QFile(QString::fromStdString(GetErrorLogPath().string()));
 
@@ -345,17 +369,13 @@ void RPCConsole::errorLogInitPos()
     // We need to move the file pos back by ERROR_LOG_INITIAL_COUNT lines
     QString ch;
     int lineCount = 0;
-    int lastPos = 0;
     while ((lineCount < ERROR_LOG_INITIAL_COUNT) && (errorLogFile->pos() > 0))
     {
-        // Save the last position before the read
-        lastPos = errorLogFile->pos();
-
         // Load the current character
         ch = errorLogFile->read(1);
 
-        // Move pos back by 1 spaces
-        errorLogFile->seek(lastPos - 1);
+        // Move pos back by 2 spaces
+        errorLogFile->seek(errorLogFile->pos() - 2);
 
         // Check if we have a newline
         if (ch == "\n")
@@ -633,6 +653,9 @@ void RPCConsole::clear(bool clearHistory)
     ui->lineEdit->clear();
     ui->lineEdit->setFocus();
 
+    QString iconPath = ":/icons/";
+    QString iconName = "";
+
     // Add smoothly scaled icon images.
     // (when using width/height on an img, Qt uses nearest instead of linear interpolation)
     for(int i=0; ICON_MAPPING[i].url; ++i)
@@ -640,7 +663,7 @@ void RPCConsole::clear(bool clearHistory)
         ui->messagesWidget->document()->addResource(
                     QTextDocument::ImageResource,
                     QUrl(ICON_MAPPING[i].url),
-                    platformStyle->SingleColorImage(ICON_MAPPING[i].source).scaled(QSize(consoleFontSize*2, consoleFontSize*2), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+                    QImage(iconPath + iconName).scaled(QSize(consoleFontSize * 2, consoleFontSize * 2), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
     }
 
     // Set default style sheet
@@ -651,7 +674,7 @@ void RPCConsole::clear(bool clearHistory)
                 "td.time { color: #808080; font-size: %2; padding-top: 3px; } "
                 "td.message { font-family: %1; font-size: %2; white-space:pre-wrap; } "
                 "td.cmd-request { color: #006060; } "
-                "td.cmd-error { color: red; } "
+                "td.cmd-error { color: #66023c; } "
                 "b { color: #006060; } "
             ).arg(fixedFontInfo.family(), QString("%1pt").arg(consoleFontSize))
         );
@@ -847,7 +870,7 @@ void RPCConsole::peerLayoutChanged()
     if (!clientModel || !clientModel->getPeerTableModel())
         return;
 
-    const CNodeCombinedStats *stats = nullptr;
+    const CNodeCombinedStats *stats = NULL;
     bool fUnselect = false;
     bool fReselect = false;
 

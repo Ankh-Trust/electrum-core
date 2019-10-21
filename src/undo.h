@@ -3,12 +3,12 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_UNDO_H
-#define NAVCOIN_UNDO_H
+#ifndef ELECTRUM_UNDO_H
+#define ELECTRUM_UNDO_H
 
-#include <compressor.h> 
-#include <primitives/transaction.h>
-#include <serialize.h>
+#include "compressor.h" 
+#include "primitives/transaction.h"
+#include "serialize.h"
 
 /** Undo information for a CTxIn
  *
@@ -82,4 +82,4 @@ public:
     }
 };
 
-#endif // NAVCOIN_UNDO_H
+#endif // ELECTRUM_UNDO_H

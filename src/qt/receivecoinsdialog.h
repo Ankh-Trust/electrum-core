@@ -2,10 +2,10 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_QT_RECEIVECOINSDIALOG_H
-#define NAVCOIN_QT_RECEIVECOINSDIALOG_H
+#ifndef ELECTRUM_QT_RECEIVECOINSDIALOG_H
+#define ELECTRUM_QT_RECEIVECOINSDIALOG_H
 
-#include <qt/guiutil.h>
+#include "guiutil.h"
 
 #include <QDialog>
 #include <QHeaderView>
@@ -27,7 +27,7 @@ QT_BEGIN_NAMESPACE
 class QModelIndex;
 QT_END_NAMESPACE
 
-/** Dialog for requesting payment of navcoins */
+/** Dialog for requesting payment of electrums */
 class ReceiveCoinsDialog : public QDialog
 {
     Q_OBJECT
@@ -76,4 +76,4 @@ private Q_SLOTS:
     void copyAmount();
 };
 
-#endif // NAVCOIN_QT_RECEIVECOINSDIALOG_H
+#endif // ELECTRUM_QT_RECEIVECOINSDIALOG_H

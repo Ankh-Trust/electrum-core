@@ -8,11 +8,11 @@
 # that spend (directly or indirectly) coinbase transactions.
 #
 
-from test_framework.test_framework import NavCoinTestFramework
+from test_framework.test_framework import ElectrumTestFramework
 from test_framework.util import *
 
 # Create one-input, one-output, no-fee transaction:
-class RawTransactionsTest(NavCoinTestFramework):
+class RawTransactionsTest(ElectrumTestFramework):
 
     def __init__(self):
         super().__init__()
@@ -23,7 +23,7 @@ class RawTransactionsTest(NavCoinTestFramework):
         self.nodes = start_nodes(self.num_nodes, self.options.tmpdir)
 
         #connect to a local machine for debugging
-        #url = "http://navcoinrpc:DP6DvqZtqXarpeNWyN3LZTFchCCyCUuHwNF7E8pX99x1@%s:%d" % ('127.0.0.1', 15555)
+        #url = "http://electrumrpc:DP6DvqZtqXarpeNWyN3LZTFchCCyCUuHwNF7E8pX99x1@%s:%d" % ('127.0.0.1', 45555)
         #proxy = AuthServiceProxy(url)
         #proxy.url = url # store URL on proxy for info
         #self.nodes.append(proxy)
@@ -80,7 +80,7 @@ class RawTransactionsTest(NavCoinTestFramework):
         #use balance deltas instead of absolute values
         bal = self.nodes[2].getbalance()
 
-        # send 1.2 NAV to msig adr
+        # send 1.2 0AE to msig adr
         txId = self.nodes[0].sendtoaddress(mSigObj, 1.2)
         self.sync_all()
         slow_gen(self.nodes[0], 1)
@@ -127,7 +127,7 @@ class RawTransactionsTest(NavCoinTestFramework):
         rawTx = self.nodes[2].createrawtransaction(inputs, outputs)
         rawTxPartialSigned = self.nodes[1].signrawtransaction(rawTx, inputs)
         assert_equal(rawTxPartialSigned['complete'], False) #node1 only has one key, can't comp. sign the tx
-        
+
         rawTxSigned = self.nodes[2].signrawtransaction(rawTx, inputs)
         assert_equal(rawTxSigned['complete'], True) #node2 can sign the tx compl., own two of three keys
         self.nodes[2].sendrawtransaction(rawTxSigned['hex'])
@@ -141,15 +141,15 @@ class RawTransactionsTest(NavCoinTestFramework):
         rawtx   = self.nodes[0].createrawtransaction(inputs, outputs)
         decrawtx= self.nodes[0].decoderawtransaction(rawtx)
         assert_equal(decrawtx['vin'][0]['sequence'], 1000)
-        
+
         inputs  = [ {'txid' : "3160bbeb3bdd39520dfb3538ce94c7073d8f987e8f1fc3b97acdf2238136c35f", 'vout' : 1, 'sequence' : -1}]
         outputs = { self.nodes[0].getnewaddress() : 1 }
         assert_raises(JSONRPCException, self.nodes[0].createrawtransaction, inputs, outputs)
-        
+
         inputs  = [ {'txid' : "3160bbeb3bdd39520dfb3538ce94c7073d8f987e8f1fc3b97acdf2238136c35f", 'vout' : 1, 'sequence' : 4294967296}]
         outputs = { self.nodes[0].getnewaddress() : 1 }
         assert_raises(JSONRPCException, self.nodes[0].createrawtransaction, inputs, outputs)
-        
+
         inputs  = [ {'txid' : "3160bbeb3bdd39520dfb3538ce94c7073d8f987e8f1fc3b97acdf2238136c35f", 'vout' : 1, 'sequence' : 4294967294}]
         outputs = { self.nodes[0].getnewaddress() : 1 }
         rawtx   = self.nodes[0].createrawtransaction(inputs, outputs)

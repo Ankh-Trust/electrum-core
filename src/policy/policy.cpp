@@ -5,29 +5,31 @@
 
 // NOTE: This file is intended to be customised by the end user, and includes only local node policy logic
 
-#include <policy/policy.h>
+#include "policy/policy.h"
 
-#include <main.h>
-#include <tinyformat.h>
-#include <util.h>
-#include <utilstrencodings.h>
+#include "main.h"
+#include "tinyformat.h"
+#include "util.h"
+#include "utilstrencodings.h"
 
-/**
- * Check transaction inputs to mitigate two
- * potential denial-of-service attacks:
- *
- * 1. scriptSigs with extra data stuffed into them,
- *    not consumed by scriptPubKey (or P2SH script)
- * 2. P2SH scripts with a crazy number of expensive
- *    CHECKSIG/CHECKMULTISIG operations
- *
- * Why bother? To avoid denial-of-service attacks; an attacker
- * can submit a standard HASH... OP_EQUAL transaction,
- * which will get accepted into blocks. The redemption
- * script can be anything; an attacker could use a very
- * expensive-to-check-upon-redemption script like:
- *   DUP CHECKSIG DROP ... repeated 100 times... OP_1
- */
+#include <boost/foreach.hpp>
+
+    /**
+     * Check transaction inputs to mitigate two
+     * potential denial-of-service attacks:
+     * 
+     * 1. scriptSigs with extra data stuffed into them,
+     *    not consumed by scriptPubKey (or P2SH script)
+     * 2. P2SH scripts with a crazy number of expensive
+     *    CHECKSIG/CHECKMULTISIG operations
+     *
+     * Why bother? To avoid denial-of-service attacks; an attacker
+     * can submit a standard HASH... OP_EQUAL transaction,
+     * which will get accepted into blocks. The redemption
+     * script can be anything; an attacker could use a very
+     * expensive-to-check-upon-redemption script like:
+     *   DUP CHECKSIG DROP ... repeated 100 times... OP_1
+     */
 
 bool IsStandard(const CScript& scriptPubKey, txnouttype& whichType, const bool witnessEnabled)
 {
@@ -71,7 +73,7 @@ bool IsStandardTx(const CTransaction& tx, std::string& reason, const bool witnes
         return false;
     }
 
-    for(const CTxIn& txin: tx.vin)
+    BOOST_FOREACH(const CTxIn& txin, tx.vin)
     {
         // Biggest 'standard' txin is a 15-of-15 P2SH multisig with compressed
         // keys (remember the 520 byte limit on redeemScript size). That works
@@ -92,7 +94,7 @@ bool IsStandardTx(const CTransaction& tx, std::string& reason, const bool witnes
 
     unsigned int nDataOut = 0;
     txnouttype whichType;
-    for(const CTxOut& txout: tx.vout) {
+    BOOST_FOREACH(const CTxOut& txout, tx.vout) {
         if (!::IsStandard(txout.scriptPubKey, whichType, witnessEnabled)) {
             reason = "scriptpubkey";
             return false;

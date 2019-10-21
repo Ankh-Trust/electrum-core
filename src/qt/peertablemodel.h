@@ -2,11 +2,11 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_QT_PEERTABLEMODEL_H
-#define NAVCOIN_QT_PEERTABLEMODEL_H
+#ifndef ELECTRUM_QT_PEERTABLEMODEL_H
+#define ELECTRUM_QT_PEERTABLEMODEL_H
 
-#include <main.h> // For CNodeStateStats
-#include <net.h>
+#include "main.h" // For CNodeStateStats
+#include "net.h"
 
 #include <QAbstractTableModel>
 #include <QStringList>
@@ -78,4 +78,4 @@ private:
     QTimer *timer;
 };
 
-#endif // NAVCOIN_QT_PEERTABLEMODEL_H
+#endif // ELECTRUM_QT_PEERTABLEMODEL_H

@@ -2,14 +2,14 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_QT_WALLETMODEL_H
-#define NAVCOIN_QT_WALLETMODEL_H
+#ifndef ELECTRUM_QT_WALLETMODEL_H
+#define ELECTRUM_QT_WALLETMODEL_H
 
-#include <qt/paymentrequestplus.h>
-#include <qt/walletmodeltransaction.h>
+#include "paymentrequestplus.h"
+#include "walletmodeltransaction.h"
 
-#include <support/allocators/secure.h>
-#include <wallet/wallet.h>
+#include "support/allocators/secure.h"
+#include "wallet/wallet.h"
 
 #include <map>
 #include <vector>
@@ -103,7 +103,7 @@ public:
     }
 };
 
-/** Interface to NavCoin wallet from Qt view code. */
+/** Interface to Electrum wallet from Qt view code. */
 class WalletModel : public QObject
 {
     Q_OBJECT
@@ -213,6 +213,8 @@ public:
     bool transactionCanBeAbandoned(uint256 hash) const;
     bool abandonTransaction(uint256 hash) const;
 
+    bool hdEnabled() const;
+
 private:
     CWallet *wallet;
     bool fHaveWatchOnly;
@@ -282,4 +284,4 @@ public Q_SLOTS:
     void pollBalanceChanged();
 };
 
-#endif // NAVCOIN_QT_WALLETMODEL_H
+#endif // ELECTRUM_QT_WALLETMODEL_H

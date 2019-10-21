@@ -2,8 +2,8 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include <qt/trafficgraphwidget.h>
-#include <qt/clientmodel.h>
+#include "trafficgraphwidget.h"
+#include "clientmodel.h"
 
 #include <QPainter>
 #include <QColor>
@@ -63,11 +63,11 @@ void TrafficGraphWidget::paintPath(QPainterPath &path, QQueue<float> &samples)
 void TrafficGraphWidget::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
-    painter.fillRect(rect(), Qt::black);
+    //painter.fillRect(rect(), Qt::black);
 
     if(fMax <= 0.0f) return;
 
-    QColor axisCol(Qt::gray);
+    QColor axisCol(Qt::black);
     int h = height() - YMARGIN * 2;
     painter.setPen(axisCol);
     painter.drawLine(XMARGIN, YMARGIN + h, width() - XMARGIN, YMARGIN + h);
@@ -105,15 +105,15 @@ void TrafficGraphWidget::paintEvent(QPaintEvent *)
     if(!vSamplesIn.empty()) {
         QPainterPath p;
         paintPath(p, vSamplesIn);
-        painter.fillPath(p, QColor(0, 255, 0, 128));
-        painter.setPen(Qt::green);
+        painter.fillPath(p, QColor(207, 181, 59, 128));
+        painter.setPen(QColor(102, 2, 60));
         painter.drawPath(p);
     }
     if(!vSamplesOut.empty()) {
         QPainterPath p;
         paintPath(p, vSamplesOut);
-        painter.fillPath(p, QColor(255, 0, 0, 128));
-        painter.setPen(Qt::red);
+        painter.fillPath(p, QColor(102, 2, 60, 128));
+        painter.setPen(QColor(207, 181, 59, 128));
         painter.drawPath(p);
     }
 }
@@ -139,10 +139,10 @@ void TrafficGraphWidget::updateRates()
     }
 
     float tmax = 0.0f;
-    for(float f: vSamplesIn) {
+    Q_FOREACH(float f, vSamplesIn) {
         if(f > tmax) tmax = f;
     }
-    for(float f: vSamplesOut) {
+    Q_FOREACH(float f, vSamplesOut) {
         if(f > tmax) tmax = f;
     }
     fMax = tmax;

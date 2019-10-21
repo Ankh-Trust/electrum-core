@@ -3,12 +3,12 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_ADDRESSINDEX_H
-#define NAVCOIN_ADDRESSINDEX_H
+#ifndef ELECTRUM_ADDRESSINDEX_H
+#define ELECTRUM_ADDRESSINDEX_H
 
-#include <uint256.h>
-#include <amount.h>
-#include <script/script.h>
+#include "uint256.h"
+#include "amount.h"
+#include "script/script.h"
 
 struct CAddressUnspentKey {
     unsigned int type;
@@ -292,4 +292,4 @@ struct CMempoolAddressDeltaKeyCompare
     }
 };
 
-#endif // NAVCOIN_ADDRESSINDEX_H
+#endif // ELECTRUM_ADDRESSINDEX_H

@@ -2,8 +2,8 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_CRYPTO_RIPEMD160_H
-#define NAVCOIN_CRYPTO_RIPEMD160_H
+#ifndef ELECTRUM_CRYPTO_RIPEMD160_H
+#define ELECTRUM_CRYPTO_RIPEMD160_H
 
 #include <stdint.h>
 #include <stdlib.h>
@@ -25,4 +25,4 @@ public:
     CRIPEMD160& Reset();
 };
 
-#endif // NAVCOIN_CRYPTO_RIPEMD160_H
+#endif // ELECTRUM_CRYPTO_RIPEMD160_H

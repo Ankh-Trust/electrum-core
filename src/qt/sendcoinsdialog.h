@@ -2,10 +2,10 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_QT_SENDCOINSDIALOG_H
-#define NAVCOIN_QT_SENDCOINSDIALOG_H
+#ifndef ELECTRUM_QT_SENDCOINSDIALOG_H
+#define ELECTRUM_QT_SENDCOINSDIALOG_H
 
-#include <qt/walletmodel.h>
+#include "walletmodel.h"
 
 #include <QDialog>
 #include <QMessageBox>
@@ -28,7 +28,7 @@ QT_END_NAMESPACE
 
 const int defaultConfirmTarget = 25;
 
-/** Dialog for sending navcoins */
+/** Dialog for sending electrums */
 class SendCoinsDialog : public QDialog
 {
     Q_OBJECT
@@ -56,10 +56,11 @@ public Q_SLOTS:
     void updateTabsAndLabels();
     void setBalance(const CAmount& balance, const CAmount& unconfirmedBalance, const CAmount& stakingBalance, const CAmount& immatureBalance,
                     const CAmount& watchOnlyBalance, const CAmount& watchUnconfBalance, const CAmount& watchImmatureBalance, const CAmount& coldStakingBalance);
-    void checkNavtechServers();
-    void showNavTechDialog();
-    void anonsendCheckboxClick();
     void useFullAmount();
+    //void checkNavtechServers();
+    //void showNavTechDialog();
+    //void anonsendCheckboxClick();
+
 
 private:
     Ui::SendCoinsDialog *ui;
@@ -124,4 +125,4 @@ private:
     int secDelay;
 };
 
-#endif // NAVCOIN_QT_SENDCOINSDIALOG_H
+#endif // ELECTRUM_QT_SENDCOINSDIALOG_H

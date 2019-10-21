@@ -3,10 +3,10 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_TIMESTAMPINDEX_H
-#define NAVCOIN_TIMESTAMPINDEX_H
+#ifndef ELECTRUM_TIMESTAMPINDEX_H
+#define ELECTRUM_TIMESTAMPINDEX_H
 
-#include <uint256.h>
+#include "uint256.h"
 
 struct CTimestampIndexIteratorKey {
     unsigned int timestamp;
@@ -128,4 +128,4 @@ struct CTimestampBlockIndexValue {
     }
 };
 
-#endif // NAVCOIN_TIMESTAMPINDEX_H
+#endif // ELECTRUM_TIMESTAMPINDEX_H

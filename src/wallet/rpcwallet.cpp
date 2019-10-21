@@ -3,26 +3,26 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include <amount.h>
-#include <base58.h>
-#include <chain.h>
-#include <consensus/cfund.h>
-#include <core_io.h>
-#include <init.h>
-#include <main.h>
-#include <wallet/navtech.h>
-#include <net.h>
-#include <netbase.h>
-#include <policy/rbf.h>
-#include <pos.h>
-#include <rpc/server.h>
-#include <txdb.h>
-#include <timedata.h>
-#include <util.h>
-#include <utils/dns_utils.h>
-#include <utilmoneystr.h>
-#include <wallet/wallet.h>
-#include <wallet/walletdb.h>
+#include "amount.h"
+#include "base58.h"
+#include "chain.h"
+#include "consensus/cfund.h"
+#include "core_io.h"
+#include "init.h"
+#include "main.h"
+#include "navtech.h"
+#include "net.h"
+#include "netbase.h"
+#include "policy/rbf.h"
+#include "pos.h"
+#include "rpc/server.h"
+#include "txdb.h"
+#include "timedata.h"
+#include "util.h"
+#include "utils/dns_utils.h"
+#include "utilmoneystr.h"
+#include "wallet.h"
+#include "walletdb.h"
 
 #include <stdint.h>
 
@@ -85,7 +85,7 @@ void WalletTxToJSON(const CWalletTx& wtx, UniValue& entry)
     uint256 hash = wtx.GetHash();
     entry.pushKV("txid", hash.GetHex());
     UniValue conflicts(UniValue::VARR);
-    for(const uint256& conflict: wtx.GetConflicts())
+    BOOST_FOREACH(const uint256& conflict, wtx.GetConflicts())
         conflicts.push_back(conflict.GetHex());
     entry.pushKV("walletconflicts", conflicts);
     entry.pushKV("time", wtx.GetTxTime());
@@ -103,7 +103,7 @@ void WalletTxToJSON(const CWalletTx& wtx, UniValue& entry)
     }
     entry.pushKV("bip125-replaceable", rbfStatus);
 
-    for(const PAIRTYPE(string,string)& item: wtx.mapValue)
+    BOOST_FOREACH(const PAIRTYPE(string,string)& item, wtx.mapValue)
         entry.pushKV(item.first, item.second);
 }
 
@@ -115,42 +115,6 @@ string AccountFromValue(const UniValue& value)
     return strAccount;
 }
 
-UniValue createrawscriptaddress(const UniValue& params, bool fHelp)
-{
-    if (fHelp || params.size() != 1)
-        throw runtime_error(
-            "createrawscriptaddress \"hex script\"\n"
-            "\nReturns the NavCoin address for the specified raw hex script.\n"
-            "\nArguments:\n"
-            "1. \"hex script\"        (string) The hex script to encode in the address.\n"
-            "\nResult:\n"
-            "\"navcoinaddress\"    (string) The  navcoin address\n"
-            "\nExamples:\n"
-            + HelpExampleCli("createrawscriptaddress", "6ac4c5")
-        );
-
-    std::string data = params[0].get_str();
-
-    if (!IsHex(data))
-        throw JSONRPCError(RPC_MISC_ERROR, "the script is not expressed in hexadecimal");
-
-    std::vector<unsigned char> vData = ParseHex(data);
-
-    CScript script(vData.begin(), vData.end());
-
-    std::string strAsm = ScriptToAsmStr(script);
-
-    if (strAsm.find("[error]") != std::string::npos || strAsm.find("OP_UNKNOWN") != std::string::npos)
-        throw JSONRPCError(RPC_MISC_ERROR, "the script includes invalid or unknown op codes");
-
-    CNavCoinAddress address(script);
-
-    if (!address.IsValid())
-        throw JSONRPCError(RPC_MISC_ERROR, "the generated address is not valid");
-
-    return address.ToString();
-}
-
 UniValue getnewaddress(const UniValue& params, bool fHelp)
 {
     if (!EnsureWalletIsAvailable(fHelp))
@@ -159,13 +123,13 @@ UniValue getnewaddress(const UniValue& params, bool fHelp)
     if (fHelp || params.size() > 1)
         throw runtime_error(
             "getnewaddress ( \"account\" )\n"
-            "\nReturns a new NavCoin address for receiving payments.\n"
+            "\nReturns a new Electrum address for receiving payments.\n"
             "If 'account' is specified (DEPRECATED), it is added to the address book \n"
             "so payments received with the address will be credited to 'account'.\n"
             "\nArguments:\n"
             "1. \"account\"        (string, optional) DEPRECATED. The account name for the address to be linked to. If not provided, the default account \"\" is used. It can also be set to the empty string \"\" to represent the default account. The account does not need to exist, it will be created if there is no account by the given name.\n"
             "\nResult:\n"
-            "\"navcoinaddress\"    (string) The new navcoin address\n"
+            "\"electrumaddress\"    (string) The new electrum address\n"
             "\nExamples:\n"
             + HelpExampleCli("getnewaddress", "")
             + HelpExampleRpc("getnewaddress", "")
@@ -189,7 +153,7 @@ UniValue getnewaddress(const UniValue& params, bool fHelp)
 
     pwalletMain->SetAddressBook(keyID, strAccount, "receive");
 
-    return CNavCoinAddress(keyID).ToString();
+    return CElectrumAddress(keyID).ToString();
 }
 
 UniValue getcoldstakingaddress(const UniValue& params, bool fHelp)
@@ -200,8 +164,8 @@ UniValue getcoldstakingaddress(const UniValue& params, bool fHelp)
             "getcoldstakingaddress \"stakingaddress\" \"spendingaddress\"\n"
             "Returns a coldstaking address based on two address inputs\n"
             "Arguments:\n"
-            "1. \"stakingaddress\"  (string, required) The navcoin staking address.\n"
-            "2. \"spendingaddress\" (string, required) The navcoin spending address.\n\n"
+            "1. \"stakingaddress\"  (string, required) The electrum staking address.\n"
+            "2. \"spendingaddress\" (string, required) The electrum spending address.\n\n"
             "\nExamples:\n"
             + HelpExampleCli("getcoldstakingaddress", "\"mqyGZvLYfEH27Zk3z6JkwJgB1zpjaEHfiW\" \"mrfjgazyerYxDQHJAPDdUcC3jpmi8WZ2uv\"") +
             "\nAs a json rpc call\n"
@@ -218,30 +182,30 @@ UniValue getcoldstakingaddress(const UniValue& params, bool fHelp)
         );
 
 
-    CNavCoinAddress stakingAddress(params[0].get_str());
+    CElectrumAddress stakingAddress(params[0].get_str());
     CKeyID stakingKeyID;
     if (!stakingAddress.IsValid() || !stakingAddress.GetKeyID(stakingKeyID))
-        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Staking address is not a valid NavCoin address");
+        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Staking address is not a valid Electrum address");
 
-    CNavCoinAddress spendingAddress(params[1].get_str());
+    CElectrumAddress spendingAddress(params[1].get_str());
     CKeyID spendingKeyID;
     if (!spendingAddress.IsValid() || !spendingAddress.GetKeyID(spendingKeyID))
-        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Spending address is not a valid NavCoin address");
+        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Spending address is not a valid Electrum address");
 
     spendingAddress.GetKeyID(spendingKeyID);
 
-    return CNavCoinAddress(stakingKeyID, spendingKeyID).ToString();
+    return CElectrumAddress(stakingKeyID, spendingKeyID).ToString();
 }
 
 
-CNavCoinAddress GetAccountAddress(string strAccount, bool bForceNew=false)
+CElectrumAddress GetAccountAddress(string strAccount, bool bForceNew=false)
 {
     CPubKey pubKey;
     if (!pwalletMain->GetAccountPubkey(pubKey, strAccount, bForceNew)) {
         throw JSONRPCError(RPC_WALLET_KEYPOOL_RAN_OUT, "Error: Keypool ran out, please call keypoolrefill first");
     }
 
-    return CNavCoinAddress(pubKey.GetID());
+    return CElectrumAddress(pubKey.GetID());
 }
 
 UniValue getaccountaddress(const UniValue& params, bool fHelp)
@@ -252,11 +216,11 @@ UniValue getaccountaddress(const UniValue& params, bool fHelp)
     if (fHelp || params.size() != 1)
         throw runtime_error(
             "getaccountaddress \"account\"\n"
-            "\nDEPRECATED. Returns the current NavCoin address for receiving payments to this account.\n"
+            "\nDEPRECATED. Returns the current Electrum address for receiving payments to this account.\n"
             "\nArguments:\n"
             "1. \"account\"       (string, required) The account name for the address. It can also be set to the empty string \"\" to represent the default account. The account does not need to exist, it will be created and a new address created  if there is no account by the given name.\n"
             "\nResult:\n"
-            "\"navcoinaddress\"   (string) The account navcoin address\n"
+            "\"electrumaddress\"   (string) The account electrum address\n"
             "\nExamples:\n"
             + HelpExampleCli("getaccountaddress", "")
             + HelpExampleCli("getaccountaddress", "\"\"")
@@ -284,7 +248,7 @@ UniValue getrawchangeaddress(const UniValue& params, bool fHelp)
     if (fHelp || params.size() > 1)
         throw runtime_error(
             "getrawchangeaddress\n"
-            "\nReturns a new NavCoin address, for receiving change.\n"
+            "\nReturns a new Electrum address, for receiving change.\n"
             "This is for use with raw transactions, NOT normal use.\n"
             "\nResult:\n"
             "\"address\"    (string) The address\n"
@@ -307,7 +271,7 @@ UniValue getrawchangeaddress(const UniValue& params, bool fHelp)
 
     CKeyID keyID = vchPubKey.GetID();
 
-    return CNavCoinAddress(keyID).ToString();
+    return CElectrumAddress(keyID).ToString();
 }
 
 
@@ -318,10 +282,10 @@ UniValue setaccount(const UniValue& params, bool fHelp)
 
     if (fHelp || params.size() < 1 || params.size() > 2)
         throw runtime_error(
-            "setaccount \"navcoinaddress\" \"account\"\n"
+            "setaccount \"electrumaddress\" \"account\"\n"
             "\nDEPRECATED. Sets the account associated with the given address.\n"
             "\nArguments:\n"
-            "1. \"navcoinaddress\"  (string, required) The navcoin address to be associated with an account.\n"
+            "1. \"electrumaddress\"  (string, required) The electrum address to be associated with an account.\n"
             "2. \"account\"         (string, required) The account to assign the address to.\n"
             "\nExamples:\n"
             + HelpExampleCli("setaccount", "\"1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XZ\" \"tabby\"")
@@ -330,9 +294,9 @@ UniValue setaccount(const UniValue& params, bool fHelp)
 
     LOCK2(cs_main, pwalletMain->cs_wallet);
 
-    CNavCoinAddress address(params[0].get_str());
+    CElectrumAddress address(params[0].get_str());
     if (!address.IsValid())
-        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid NavCoin address");
+        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid Electrum address");
 
     string strAccount;
     if (params.size() > 1)
@@ -364,10 +328,10 @@ UniValue getaccount(const UniValue& params, bool fHelp)
 
     if (fHelp || params.size() != 1)
         throw runtime_error(
-            "getaccount \"navcoinaddress\"\n"
+            "getaccount \"electrumaddress\"\n"
             "\nDEPRECATED. Returns the account associated with the given address.\n"
             "\nArguments:\n"
-            "1. \"navcoinaddress\"  (string, required) The navcoin address for account lookup.\n"
+            "1. \"electrumaddress\"  (string, required) The electrum address for account lookup.\n"
             "\nResult:\n"
             "\"accountname\"        (string) the account address\n"
             "\nExamples:\n"
@@ -377,9 +341,9 @@ UniValue getaccount(const UniValue& params, bool fHelp)
 
     LOCK2(cs_main, pwalletMain->cs_wallet);
 
-    CNavCoinAddress address(params[0].get_str());
+    CElectrumAddress address(params[0].get_str());
     if (!address.IsValid())
-        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid NavCoin address");
+        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid Electrum address");
 
     string strAccount;
     map<CTxDestination, CAddressBookData>::iterator mi = pwalletMain->mapAddressBook.find(address.Get());
@@ -402,7 +366,7 @@ UniValue getaddressesbyaccount(const UniValue& params, bool fHelp)
             "1. \"account\"  (string, required) The account name.\n"
             "\nResult:\n"
             "[                     (json array of string)\n"
-            "  \"navcoinaddress\"  (string) a navcoin address associated with the given account\n"
+            "  \"electrumaddress\"  (string) a electrum address associated with the given account\n"
             "  ,...\n"
             "]\n"
             "\nExamples:\n"
@@ -416,9 +380,9 @@ UniValue getaddressesbyaccount(const UniValue& params, bool fHelp)
 
     // Find all addresses that have the given account
     UniValue ret(UniValue::VARR);
-    for(const PAIRTYPE(CNavCoinAddress, CAddressBookData)& item: pwalletMain->mapAddressBook)
+    BOOST_FOREACH(const PAIRTYPE(CElectrumAddress, CAddressBookData)& item, pwalletMain->mapAddressBook)
     {
-        const CNavCoinAddress& address = item.first;
+        const CElectrumAddress& address = item.first;
         const string& strName = item.second.name;
         if (strName == strAccount)
             ret.push_back(address.ToString());
@@ -439,7 +403,7 @@ static void SendMoney(const CTxDestination &address, CAmount nValue, bool fSubtr
 
     CScript CFContributionScript;
 
-    // Parse NavCoin address
+    // Parse Electrum address
     CScript scriptPubKey = GetScriptForDestination(address);
 
     if(donate)
@@ -453,7 +417,7 @@ static void SendMoney(const CTxDestination &address, CAmount nValue, bool fSubtr
     int nChangePosRet = -1;
     CRecipient recipient = {scriptPubKey, nValue, fSubtractFeeFromAmount, ""};
     vecSend.push_back(recipient);
-    if (!pwalletMain->CreateTransaction(vecSend, wtxNew, reservekey, nFeeRequired, nChangePosRet, strError, nullptr, true, strDZeel)) {
+    if (!pwalletMain->CreateTransaction(vecSend, wtxNew, reservekey, nFeeRequired, nChangePosRet, strError, NULL, true, strDZeel)) {
         if (!fSubtractFeeFromAmount && nValue + nFeeRequired > pwalletMain->GetBalance())
             strError = strprintf("Error: This transaction requires a transaction fee of at least %s because of its amount, complexity, or use of recently received funds!", FormatMoney(nFeeRequired));
         throw JSONRPCError(RPC_WALLET_ERROR, strError);
@@ -469,11 +433,11 @@ UniValue sendtoaddress(const UniValue& params, bool fHelp)
 
     if (fHelp || params.size() < 2 || params.size() > 6)
         throw runtime_error(
-            "sendtoaddress \"navcoinaddress\" amount ( \"comment\" \"comment-to\" \"anon-destination\" subtractfeefromamount )\n"
+            "sendtoaddress \"electrumaddress\" amount ( \"comment\" \"comment-to\" \"anon-destination\" subtractfeefromamount )\n"
             "\nSend an amount to a given address.\n"
             + HelpRequiringPassphrase() +
             "\nArguments:\n"
-            "1. \"navcoinaddress\"  (string, required) The navcoin address to send to.\n"
+            "1. \"electrumaddress\"  (string, required) The electrum address to send to.\n"
             "2. \"amount\"      (numeric or string, required) The amount in " + CURRENCY_UNIT + " to send. eg 0.1\n"
             "3. \"comment\"     (string, optional) A comment used to store what the transaction is for. \n"
             "                             This is not part of the transaction, just kept in your wallet.\n"
@@ -482,7 +446,7 @@ UniValue sendtoaddress(const UniValue& params, bool fHelp)
             "                             transaction, just kept in your wallet.\n"
             "5. \"anon-destination\"  (string, optional) Encrypted destination address if you're sending a NAVtech transaction \n"
             "6. subtractfeefromamount  (boolean, optional, default=false) The fee will be deducted from the amount being sent.\n"
-            "                             The recipient will receive less navcoins than you enter in the amount field.\n"
+            "                             The recipient will receive less electrums than you enter in the amount field.\n"
             "\nResult:\n"
             "\"transactionid\"  (string) The transaction id.\n"
             "\nExamples:\n"
@@ -515,9 +479,9 @@ UniValue sendtoaddress(const UniValue& params, bool fHelp)
 
     }
 
-    CNavCoinAddress address(address_str);
+    CElectrumAddress address(address_str);
     if (!address.IsValid())
-        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid NavCoin address");
+        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid Electrum address");
 
     // Amount
     CAmount nAmount = AmountFromValue(params[1]);
@@ -578,11 +542,11 @@ UniValue createproposal(const UniValue& params, bool fHelp)
 
     if (fHelp || params.size() < 4)
         throw runtime_error(
-            "createproposal \"navcoinaddress\" \"amount\" duration \"desc\" ( fee dump_raw )\n"
-            "\nCreates a proposal for the community fund. Min fee of " + std::to_string((float)Params().GetConsensus().nProposalMinimalFee/COIN) + "NAV is required.\n"
+            "createproposal \"electrumaddress\" \"amount\" duration \"desc\" ( fee dump_raw )\n"
+            "\nCreates a proposal for the community fund. Min fee of " + std::to_string((float)Params().GetConsensus().nProposalMinimalFee/COIN) + "0AE is required.\n"
             + HelpRequiringPassphrase() +
             "\nArguments:\n"
-            "1. \"navcoinaddress\"     (string, required) The navcoin address where coins would be sent if proposal is approved.\n"
+            "1. \"electrumaddress\"     (string, required) The electrum address where coins would be sent if proposal is approved.\n"
             "2. \"amount\"             (numeric or string, required) The amount in " + CURRENCY_UNIT + " to request. eg 0.1\n"
             "3. duration               (numeric, required) Number of seconds the proposal will exist after being accepted.\n"
             "4. \"desc\"               (string, required) Short description of the proposal.\n"
@@ -598,7 +562,7 @@ UniValue createproposal(const UniValue& params, bool fHelp)
 
     LOCK2(cs_main, pwalletMain->cs_wallet);
 
-    CNavCoinAddress address("NQFqqMUD55ZV3PJEJZtaKCsQmjLT6JkjvJ"); // Dummy address
+    CElectrumAddress address("NQFqqMUD55ZV3PJEJZtaKCsQmjLT6JkjvJ"); // Dummy address
 
     // Amount
     CAmount nAmount = params.size() == 5 ? AmountFromValue(params[4]) : Params().GetConsensus().nProposalMinimalFee;
@@ -612,9 +576,9 @@ UniValue createproposal(const UniValue& params, bool fHelp)
 
     string Address = params[0].get_str();
 
-    CNavCoinAddress destaddress(Address);
+    CElectrumAddress destaddress(Address);
     if (!destaddress.IsValid())
-      throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid Navcoin address");
+      throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid Electrum address");
 
     CAmount nReqAmount = AmountFromValue(params[1]);
     int64_t nDeadline = params[2].get_int64();
@@ -677,7 +641,7 @@ UniValue createpaymentrequest(const UniValue& params, bool fHelp)
     if (fHelp || params.size() < 3)
         throw runtime_error(
             "createpaymentrequest \"hash\" \"amount\" \"id\" ( dump_raw )\n"
-            "\nCreates a proposal to withdraw funds from the community fund. Fee: 0.0001 NAV\n"
+            "\nCreates a proposal to withdraw funds from the community fund. Fee: 0.0001 0AE\n"
             + HelpRequiringPassphrase() +
             "\nArguments:\n"
             "1. \"hash\"               (string, required) The hash of the proposal from which you want to withdraw funds. It must be approved.\n"
@@ -701,10 +665,10 @@ UniValue createpaymentrequest(const UniValue& params, bool fHelp)
     if(proposal.fState != CFund::ACCEPTED)
         throw JSONRPCError(RPC_TYPE_ERROR, "Proposal has not been accepted.");
 
-    CNavCoinAddress address(proposal.Address);
+    CElectrumAddress address(proposal.Address);
 
     if(!address.IsValid())
-        throw JSONRPCError(RPC_TYPE_ERROR, "Address of the proposal is not a valid NavCoin address.");
+        throw JSONRPCError(RPC_TYPE_ERROR, "Address of the proposal is not a valid Electrum address.");
 
     CKeyID keyID;
     if (!address.GetKeyID(keyID))
@@ -724,7 +688,7 @@ UniValue createpaymentrequest(const UniValue& params, bool fHelp)
     std::string sRandom = random_string(16);
 
     std::string Secret = sRandom + "I kindly ask to withdraw " +
-            std::to_string(nReqAmount) + "NAV from the proposal " +
+            std::to_string(nReqAmount) + "0AE from the proposal " +
             proposal.hash.ToString() + ". Payment request id: " + id;
 
     CHashWriter ss(SER_GETHASH, 0);
@@ -785,7 +749,7 @@ UniValue donatefund(const UniValue& params, bool fHelp)
             "\nArguments:\n"
             "1. \"amount\"      (numeric or string, required) The amount in " + CURRENCY_UNIT + " to donate. eg 0.1\n"
             "2. subtractfeefromamount  (boolean, optional, default=false) The fee will be deducted from the amount being sent.\n"
-            "                             The fund will receive less navcoins than you enter in the amount field.\n"
+            "                             The fund will receive less electrums than you enter in the amount field.\n"
             "\nResult:\n"
             "\"transactionid\"  (string) The transaction id.\n"
             "\nExamples:\n"
@@ -796,7 +760,7 @@ UniValue donatefund(const UniValue& params, bool fHelp)
 
     LOCK2(cs_main, pwalletMain->cs_wallet);
 
-    CNavCoinAddress address("NQFqqMUD55ZV3PJEJZtaKCsQmjLT6JkjvJ"); // Dummy address
+    CElectrumAddress address("NQFqqMUD55ZV3PJEJZtaKCsQmjLT6JkjvJ"); // Dummy address
 
     // Amount
     CAmount nAmount = AmountFromValue(params[0]);
@@ -822,11 +786,11 @@ UniValue anonsend(const UniValue& params, bool fHelp)
 
     if (fHelp || params.size() < 2 || params.size() > 5)
         throw runtime_error(
-            "anonsend \"navcoinaddress\" amount ( \"comment\" \"comment-to\" )\n"
+            "anonsend \"electrumaddress\" amount ( \"comment\" \"comment-to\" )\n"
             "\nSend an amount to a given address anonymously.\n"
             + HelpRequiringPassphrase() +
             "\nArguments:\n"
-            "1. \"navcoinaddress\"  (string, required) The navcoin address to send to.\n"
+            "1. \"electrumaddress\"  (string, required) The electrum address to send to.\n"
             "2. \"amount\"      (numeric or string, required) The amount in " + CURRENCY_UNIT + " to send. eg 0.1\n"
             "3. \"comment\"     (string, optional) A comment used to store what the transaction is for. \n"
             "                             This is not part of the transaction, just kept in your wallet.\n"
@@ -874,9 +838,9 @@ UniValue anonsend(const UniValue& params, bool fHelp)
 
     }
 
-    CNavCoinAddress address(address_str);
+    CElectrumAddress address(address_str);
     if (!address.IsValid())
-      throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid Navcoin address");
+      throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid Electrum address");
 
     UniValue navtechData = navtech.CreateAnonTransaction(params[0].get_str(), nAmount / (nTransactions * 2), nTransactions);
     std::vector<UniValue> serverNavAddresses(find_value(navtechData, "anonaddress").getValues());
@@ -886,9 +850,9 @@ UniValue anonsend(const UniValue& params, bool fHelp)
 
     for(unsigned int i = 0; i < serverNavAddresses.size(); i++)
     {
-        CNavCoinAddress serverNavAddress(serverNavAddresses[i].get_str());
+        CElectrumAddress serverNavAddress(serverNavAddresses[i].get_str());
         if (!serverNavAddress.IsValid())
-            throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid Navcoin address provided by NAVTech server");
+            throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid Electrum address provided by NAVTech server");
     }
 
     // Wallet comments
@@ -914,7 +878,7 @@ UniValue anonsend(const UniValue& params, bool fHelp)
 
     for(unsigned int i = 0; i < serverNavAddresses.size(); i++)
     {
-        CNavCoinAddress serverNavAddress(serverNavAddresses[i].get_str());
+        CElectrumAddress serverNavAddress(serverNavAddresses[i].get_str());
         CAmount nAmountRound = 0;
         CAmount nAmountNotProcessed = nAmount - nAmountAlreadyProcessed;
         CAmount nAmountToSubstract = nAmountNotProcessed / ((rand() % nEntropy)+2);
@@ -945,11 +909,11 @@ UniValue getanondestination(const UniValue& params, bool fHelp)
 
     if (fHelp || params.size() != 1)
         throw runtime_error(
-            "getanondestination \"navcoinaddress\"\n"
+            "getanondestination \"electrumaddress\"\n"
             "\nGet the the encrypted anon destination and address to send to.\n"
             + HelpRequiringPassphrase() +
             "\nArguments:\n"
-            "1. \"navcoinaddress\"  (string, required) The navcoin address to send to.\n"
+            "1. \"electrumaddress\"  (string, required) The electrum address to send to.\n"
             "\nResult:\n"
             "\"anondestination\"  (string) The encrypted information to attach to the transaction.\n"
             "\"anonaddress\"  (string) The nav coin address to send the anon transaction to.\n"
@@ -980,15 +944,15 @@ UniValue getanondestination(const UniValue& params, bool fHelp)
 
     }
 
-    CNavCoinAddress address(address_str);
+    CElectrumAddress address(address_str);
     if (!address.IsValid())
-        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid Navcoin address");
+        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid Electrum address");
 
     UniValue navtechData = navtech.CreateAnonTransaction(params[0].get_str());
 
-    CNavCoinAddress serverNavAddress(find_value(navtechData, "anonaddress").get_str());
+    CElectrumAddress serverNavAddress(find_value(navtechData, "anonaddress").get_str());
     if (!serverNavAddress.IsValid())
-        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid Navcoin address provided by NAVTech server");
+        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid Electrum address provided by NAVTech server");
 
     return navtechData;
 }
@@ -1009,7 +973,7 @@ UniValue listaddressgroupings(const UniValue& params, bool fHelp)
             "[\n"
             "  [\n"
             "    [\n"
-            "      \"navcoinaddress\",     (string) The navcoin address\n"
+            "      \"electrumaddress\",     (string) The electrum address\n"
             "      amount,                 (numeric) The amount in " + CURRENCY_UNIT + "\n"
             "      \"account\"             (string, optional) The account (DEPRECATED)\n"
             "    ]\n"
@@ -1026,17 +990,17 @@ UniValue listaddressgroupings(const UniValue& params, bool fHelp)
 
     UniValue jsonGroupings(UniValue::VARR);
     map<CTxDestination, CAmount> balances = pwalletMain->GetAddressBalances();
-    for(set<CTxDestination> grouping: pwalletMain->GetAddressGroupings())
+    BOOST_FOREACH(set<CTxDestination> grouping, pwalletMain->GetAddressGroupings())
     {
         UniValue jsonGrouping(UniValue::VARR);
-        for(CTxDestination address: grouping)
+        BOOST_FOREACH(CTxDestination address, grouping)
         {
             UniValue addressInfo(UniValue::VARR);
-            addressInfo.push_back(CNavCoinAddress(address).ToString());
+            addressInfo.push_back(CElectrumAddress(address).ToString());
             addressInfo.push_back(ValueFromAmount(balances[address]));
             {
-                if (pwalletMain->mapAddressBook.find(CNavCoinAddress(address).Get()) != pwalletMain->mapAddressBook.end())
-                    addressInfo.push_back(pwalletMain->mapAddressBook.find(CNavCoinAddress(address).Get())->second.name);
+                if (pwalletMain->mapAddressBook.find(CElectrumAddress(address).Get()) != pwalletMain->mapAddressBook.end())
+                    addressInfo.push_back(pwalletMain->mapAddressBook.find(CElectrumAddress(address).Get())->second.name);
             }
             jsonGrouping.push_back(addressInfo);
         }
@@ -1052,11 +1016,11 @@ UniValue signmessage(const UniValue& params, bool fHelp)
 
     if (fHelp || params.size() != 2)
         throw runtime_error(
-            "signmessage \"navcoinaddress\" \"message\"\n"
+            "signmessage \"electrumaddress\" \"message\"\n"
             "\nSign a message with the private key of an address"
             + HelpRequiringPassphrase() + "\n"
             "\nArguments:\n"
-            "1. \"navcoinaddress\"  (string, required) The navcoin address to use for the private key.\n"
+            "1. \"electrumaddress\"  (string, required) The electrum address to use for the private key.\n"
             "2. \"message\"         (string, required) The message to create a signature of.\n"
             "\nResult:\n"
             "\"signature\"          (string) The signature of the message encoded in base 64\n"
@@ -1078,7 +1042,7 @@ UniValue signmessage(const UniValue& params, bool fHelp)
     string strAddress = params[0].get_str();
     string strMessage = params[1].get_str();
 
-    CNavCoinAddress addr(strAddress);
+    CElectrumAddress addr(strAddress);
     if (!addr.IsValid())
         throw JSONRPCError(RPC_TYPE_ERROR, "Invalid address");
 
@@ -1108,10 +1072,10 @@ UniValue getreceivedbyaddress(const UniValue& params, bool fHelp)
 
     if (fHelp || params.size() < 1 || params.size() > 2)
         throw runtime_error(
-            "getreceivedbyaddress \"navcoinaddress\" ( minconf )\n"
-            "\nReturns the total amount received by the given navcoinaddress in transactions with at least minconf confirmations.\n"
+            "getreceivedbyaddress \"electrumaddress\" ( minconf )\n"
+            "\nReturns the total amount received by the given electrumaddress in transactions with at least minconf confirmations.\n"
             "\nArguments:\n"
-            "1. \"navcoinaddress\"  (string, required) The navcoin address for transactions.\n"
+            "1. \"electrumaddress\"  (string, required) The electrum address for transactions.\n"
             "2. minconf             (numeric, optional, default=1) Only include transactions confirmed at least this many times.\n"
             "\nResult:\n"
             "amount   (numeric) The total amount in " + CURRENCY_UNIT + " received at this address.\n"
@@ -1128,10 +1092,10 @@ UniValue getreceivedbyaddress(const UniValue& params, bool fHelp)
 
     LOCK2(cs_main, pwalletMain->cs_wallet);
 
-    // NavCoin address
-    CNavCoinAddress address = CNavCoinAddress(params[0].get_str());
+    // Electrum address
+    CElectrumAddress address = CElectrumAddress(params[0].get_str());
     if (!address.IsValid())
-        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid NavCoin address");
+        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid Electrum address");
     CScript scriptPubKey = GetScriptForDestination(address.Get());
     if (!IsMine(*pwalletMain, scriptPubKey))
         return ValueFromAmount(0);
@@ -1149,7 +1113,7 @@ UniValue getreceivedbyaddress(const UniValue& params, bool fHelp)
         if (wtx.IsCoinBase() || wtx.IsCoinStake() || !CheckFinalTx(wtx))
             continue;
 
-        for(const CTxOut& txout: wtx.vout)
+        BOOST_FOREACH(const CTxOut& txout, wtx.vout)
             if (txout.scriptPubKey == scriptPubKey)
                 if (wtx.GetDepthInMainChain() >= nMinDepth)
                     nAmount += txout.nValue;
@@ -1203,7 +1167,7 @@ UniValue getreceivedbyaccount(const UniValue& params, bool fHelp)
         if (wtx.IsCoinBase() || wtx.IsCoinStake() || !CheckFinalTx(wtx))
             continue;
 
-        for(const CTxOut& txout: wtx.vout)
+        BOOST_FOREACH(const CTxOut& txout, wtx.vout)
         {
             CTxDestination address;
             if (ExtractDestination(txout.scriptPubKey, address) && IsMine(*pwalletMain, address) && setAddress.count(address))
@@ -1274,10 +1238,10 @@ UniValue getbalance(const UniValue& params, bool fHelp)
             wtx.GetAmounts(listReceived, listSent, allFee, strSentAccount, filter);
             if (wtx.GetDepthInMainChain() >= nMinDepth)
             {
-                for(const COutputEntry& r: listReceived)
+                BOOST_FOREACH(const COutputEntry& r, listReceived)
                     nBalance += r.amount;
             }
-            for(const COutputEntry& s: listSent)
+            BOOST_FOREACH(const COutputEntry& s, listSent)
                 nBalance -= s.amount;
             nBalance -= allFee;
         }
@@ -1361,12 +1325,12 @@ UniValue sendfrom(const UniValue& params, bool fHelp)
 
     if (fHelp || params.size() < 3 || params.size() > 6)
         throw runtime_error(
-            "sendfrom \"fromaccount\" \"tonavcoinaddress\" amount ( minconf \"comment\" \"comment-to\" )\n"
-            "\nDEPRECATED (use sendtoaddress). Sent an amount from an account to a navcoin address."
+            "sendfrom \"fromaccount\" \"toelectrumaddress\" amount ( minconf \"comment\" \"comment-to\" )\n"
+            "\nDEPRECATED (use sendtoaddress). Sent an amount from an account to a electrum address."
             + HelpRequiringPassphrase() + "\n"
             "\nArguments:\n"
             "1. \"fromaccount\"       (string, required) The name of the account to send funds from. May be the default account using \"\".\n"
-            "2. \"tonavcoinaddress\"  (string, required) The navcoin address to send funds to.\n"
+            "2. \"toelectrumaddress\"  (string, required) The electrum address to send funds to.\n"
             "3. amount                (numeric or string, required) The amount in " + CURRENCY_UNIT + " (transaction fee is added on top).\n"
             "4. minconf               (numeric, optional, default=1) Only use funds with at least this many confirmations.\n"
             "5. \"comment\"           (string, optional) A comment used to store what the transaction is for. \n"
@@ -1388,9 +1352,9 @@ UniValue sendfrom(const UniValue& params, bool fHelp)
     LOCK2(cs_main, pwalletMain->cs_wallet);
 
     string strAccount = AccountFromValue(params[0]);
-    CNavCoinAddress address(params[1].get_str());
+    CElectrumAddress address(params[1].get_str());
     if (!address.IsValid())
-        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid NavCoin address");
+        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid Electrum address");
     CAmount nAmount = AmountFromValue(params[2]);
     if (nAmount <= 0)
         throw JSONRPCError(RPC_TYPE_ERROR, "Invalid amount for send");
@@ -1432,14 +1396,14 @@ UniValue sendmany(const UniValue& params, bool fHelp)
             "1. \"fromaccount\"         (string, required) DEPRECATED. The account to send the funds from. Should be \"\" for the default account\n"
             "2. \"amounts\"             (string, required) A json object with addresses and amounts\n"
             "    {\n"
-            "      \"address\":amount   (numeric or string) The navcoin address is the key, the numeric amount (can be string) in " + CURRENCY_UNIT + " is the value\n"
+            "      \"address\":amount   (numeric or string) The electrum address is the key, the numeric amount (can be string) in " + CURRENCY_UNIT + " is the value\n"
             "      ,...\n"
             "    }\n"
             "3. minconf                 (numeric, optional, default=1) Only use the balance confirmed at least this many times.\n"
             "4. \"comment\"             (string, optional) A comment\n"
             "5. subtractfeefromamount   (string, optional) A json array with addresses.\n"
             "                           The fee will be equally deducted from the amount of each selected address.\n"
-            "                           Those recipients will receive less navcoins than you enter in their corresponding amount field.\n"
+            "                           Those recipients will receive less electrums than you enter in their corresponding amount field.\n"
             "                           If no addresses are specified here, the sender pays the fee.\n"
             "    [\n"
             "      \"address\"            (string) Subtract fee from this address\n"
@@ -1476,16 +1440,16 @@ UniValue sendmany(const UniValue& params, bool fHelp)
     if (params.size() > 4)
         subtractFeeFromAmount = params[4].get_array();
 
-    set<CNavCoinAddress> setAddress;
+    set<CElectrumAddress> setAddress;
     vector<CRecipient> vecSend;
 
     CAmount totalAmount = 0;
     vector<string> keys = sendTo.getKeys();
-    for(const string& name_: keys)
+    BOOST_FOREACH(const string& name_, keys)
     {
-        CNavCoinAddress address(name_);
+        CElectrumAddress address(name_);
         if (!address.IsValid())
-            throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, string("Invalid NavCoin address: ")+name_);
+            throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, string("Invalid Electrum address: ")+name_);
 
         if (setAddress.count(address))
             throw JSONRPCError(RPC_INVALID_PARAMETER, string("Invalid parameter, duplicated address: ")+name_);
@@ -1541,20 +1505,20 @@ UniValue addmultisigaddress(const UniValue& params, bool fHelp)
     {
         string msg = "addmultisigaddress nrequired [\"key\",...] ( \"account\" )\n"
             "\nAdd a nrequired-to-sign multisignature address to the wallet.\n"
-            "Each key is a NavCoin address or hex-encoded public key.\n"
+            "Each key is a Electrum address or hex-encoded public key.\n"
             "If 'account' is specified (DEPRECATED), assign address to that account.\n"
 
             "\nArguments:\n"
             "1. nrequired        (numeric, required) The number of required signatures out of the n keys or addresses.\n"
-            "2. \"keysobject\"   (string, required) A json array of navcoin addresses or hex-encoded public keys\n"
+            "2. \"keysobject\"   (string, required) A json array of electrum addresses or hex-encoded public keys\n"
             "     [\n"
-            "       \"address\"  (string) navcoin address or hex-encoded public key\n"
+            "       \"address\"  (string) electrum address or hex-encoded public key\n"
             "       ...,\n"
             "     ]\n"
             "3. \"account\"      (string, optional) DEPRECATED. An account to assign the addresses to.\n"
 
             "\nResult:\n"
-            "\"navcoinaddress\"  (string) A navcoin address associated with the keys.\n"
+            "\"electrumaddress\"  (string) A electrum address associated with the keys.\n"
 
             "\nExamples:\n"
             "\nAdd a multisig address from 2 addresses\n"
@@ -1577,7 +1541,7 @@ UniValue addmultisigaddress(const UniValue& params, bool fHelp)
     pwalletMain->AddCScript(inner);
 
     pwalletMain->SetAddressBook(innerID, strAccount, "send");
-    return CNavCoinAddress(innerID).ToString();
+    return CElectrumAddress(innerID).ToString();
 }
 
 class Witnessifier : public boost::static_visitor<bool>
@@ -1648,9 +1612,9 @@ UniValue addwitnessaddress(const UniValue& params, bool fHelp)
         }
     }
 
-    CNavCoinAddress address(params[0].get_str());
+    CElectrumAddress address(params[0].get_str());
     if (!address.IsValid())
-        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid NavCoin address");
+        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid Electrum address");
 
     Witnessifier w;
     CTxDestination dest = address.Get();
@@ -1659,7 +1623,7 @@ UniValue addwitnessaddress(const UniValue& params, bool fHelp)
         throw JSONRPCError(RPC_WALLET_ERROR, "Public key or redeemscript not known to wallet");
     }
 
-    return CNavCoinAddress(w.result).ToString();
+    return CElectrumAddress(w.result).ToString();
 }
 
 struct tallyitem
@@ -1694,7 +1658,7 @@ UniValue ListReceived(const UniValue& params, bool fByAccounts)
             filter = filter | ISMINE_WATCH_ONLY;
 
     // Tally
-    map<CNavCoinAddress, tallyitem> mapTally;
+    map<CElectrumAddress, tallyitem> mapTally;
     for (map<uint256, CWalletTx>::iterator it = pwalletMain->mapWallet.begin(); it != pwalletMain->mapWallet.end(); ++it)
     {
         const CWalletTx& wtx = (*it).second;
@@ -1706,7 +1670,7 @@ UniValue ListReceived(const UniValue& params, bool fByAccounts)
         if (nDepth < nMinDepth)
             continue;
 
-        for(const CTxOut& txout: wtx.vout)
+        BOOST_FOREACH(const CTxOut& txout, wtx.vout)
         {
             CTxDestination address;
             if (!ExtractDestination(txout.scriptPubKey, address))
@@ -1728,11 +1692,11 @@ UniValue ListReceived(const UniValue& params, bool fByAccounts)
     // Reply
     UniValue ret(UniValue::VARR);
     map<string, tallyitem> mapAccountTally;
-    for(const PAIRTYPE(CNavCoinAddress, CAddressBookData)& item: pwalletMain->mapAddressBook)
+    BOOST_FOREACH(const PAIRTYPE(CElectrumAddress, CAddressBookData)& item, pwalletMain->mapAddressBook)
     {
-        const CNavCoinAddress& address = item.first;
+        const CElectrumAddress& address = item.first;
         const string& strAccount = item.second.name;
-        map<CNavCoinAddress, tallyitem>::iterator it = mapTally.find(address);
+        map<CElectrumAddress, tallyitem>::iterator it = mapTally.find(address);
         if (it == mapTally.end() && !fIncludeEmpty)
             continue;
 
@@ -1767,7 +1731,7 @@ UniValue ListReceived(const UniValue& params, bool fByAccounts)
             UniValue transactions(UniValue::VARR);
             if (it != mapTally.end())
             {
-                for(const uint256& item: (*it).second.txids)
+                BOOST_FOREACH(const uint256& item, (*it).second.txids)
                 {
                     transactions.push_back(item.GetHex());
                 }
@@ -1873,7 +1837,7 @@ UniValue listreceivedbyaccount(const UniValue& params, bool fHelp)
 
 static void MaybePushAddress(UniValue & entry, const CTxDestination &dest)
 {
-    CNavCoinAddress addr;
+    CElectrumAddress addr;
     if (addr.Set(dest)) {
         entry.pushKV("address", addr.ToString());
     }
@@ -1904,11 +1868,14 @@ void GetReceived(const COutputEntry& r, const CWalletTx& wtx, const string& strA
         {
             entry.pushKV("category", "receive");
         }
-        entry.pushKV("amount", ValueFromAmount(r.amount));
-
+        if (!wtx.IsCoinStake())
+            entry.pushKV("amount", ValueFromAmount(r.amount));
+        else {
+            entry.pushKV("amount", ValueFromAmount(-nFee));
+        }
         entry.pushKV("canStake", (::IsMine(*pwalletMain, r.destination) & ISMINE_STAKABLE ||
                                           (::IsMine(*pwalletMain, r.destination) & ISMINE_SPENDABLE &&
-                                           !CNavCoinAddress(r.destination).IsColdStakingAddress(Params()))) ? true : false);
+                                           !CElectrumAddress(r.destination).IsColdStakingAddress(Params()))) ? true : false);
         entry.pushKV("canSpend", (::IsMine(*pwalletMain, r.destination) & ISMINE_SPENDABLE) ? true : false);
         if (pwalletMain->mapAddressBook.count(r.destination))
             entry.pushKV("label", account);
@@ -1934,7 +1901,7 @@ void ListTransactions(const CWalletTx& wtx, const string& strAccount, int nMinDe
     // Sent
     if ((!wtx.IsCoinStake())  && (!listSent.empty() || nFee != 0) && (fAllAccounts || strAccount == strSentAccount))
     {
-        for(const COutputEntry& s: listSent)
+        BOOST_FOREACH(const COutputEntry& s, listSent)
         {
             UniValue entry(UniValue::VOBJ);
             if(involvesWatchonly || (::IsMine(*pwalletMain, s.destination) & ISMINE_WATCH_ONLY))
@@ -1963,9 +1930,20 @@ void ListTransactions(const CWalletTx& wtx, const string& strAccount, int nMinDe
     // Received
     if (listReceived.size() > 0 && wtx.GetDepthInMainChain() >= nMinDepth)
     {
-        for(const COutputEntry& r: listReceived)
+        if (!wtx.IsCoinStake())
         {
-            GetReceived(r, wtx, strAccount, fLong, ret, nFee, fAllAccounts, involvesWatchonly);
+            BOOST_FOREACH(const COutputEntry& r, listReceived)
+            {
+                 GetReceived(r, wtx, strAccount, fLong, ret, nFee, fAllAccounts, involvesWatchonly);
+            }
+        }
+        else
+        {
+            // only get the coinstake reward output
+            if (wtx.GetValueOutCFund() == 0)
+                GetReceived(listReceived.back(), wtx, strAccount, fLong, ret, nFee, fAllAccounts, involvesWatchonly);
+            else
+                GetReceived(*std::prev(listReceived.end(),1), wtx, strAccount, fLong, ret, nFee, fAllAccounts, involvesWatchonly);
         }
     }
 }
@@ -2007,7 +1985,7 @@ UniValue listtransactions(const UniValue& params, bool fHelp)
             "  {\n"
             "    \"account\":\"accountname\",       (string) DEPRECATED. The account name associated with the transaction. \n"
             "                                                It will be \"\" for the default account.\n"
-            "    \"address\":\"navcoinaddress\",    (string) The navcoin address of the transaction. Not present for \n"
+            "    \"address\":\"electrumaddress\",    (string) The electrum address of the transaction. Not present for \n"
             "                                                move transactions (category = move).\n"
             "    \"category\":\"send|receive|move\", (string) The transaction category. 'move' is a local (off blockchain)\n"
             "                                                transaction between accounts, and not associated with an address,\n"
@@ -2157,7 +2135,7 @@ UniValue listaccounts(const UniValue& params, bool fHelp)
             includeWatchonly = includeWatchonly | ISMINE_WATCH_ONLY;
 
     map<string, CAmount> mapAccountBalances;
-    for(const PAIRTYPE(CTxDestination, CAddressBookData)& entry: pwalletMain->mapAddressBook) {
+    BOOST_FOREACH(const PAIRTYPE(CTxDestination, CAddressBookData)& entry, pwalletMain->mapAddressBook) {
         if (IsMine(*pwalletMain, entry.first) & includeWatchonly) // This address belongs to me
             mapAccountBalances[entry.second.name] = 0;
     }
@@ -2174,11 +2152,11 @@ UniValue listaccounts(const UniValue& params, bool fHelp)
             continue;
         wtx.GetAmounts(listReceived, listSent, nFee, strSentAccount, includeWatchonly);
         mapAccountBalances[strSentAccount] -= nFee;
-        for(const COutputEntry& s: listSent)
+        BOOST_FOREACH(const COutputEntry& s, listSent)
             mapAccountBalances[strSentAccount] -= s.amount;
         if (nDepth >= nMinDepth)
         {
-            for(const COutputEntry& r: listReceived)
+            BOOST_FOREACH(const COutputEntry& r, listReceived)
                 if (pwalletMain->mapAddressBook.count(r.destination))
                     mapAccountBalances[pwalletMain->mapAddressBook[r.destination].name] += r.amount;
                 else
@@ -2187,11 +2165,11 @@ UniValue listaccounts(const UniValue& params, bool fHelp)
     }
 
     const list<CAccountingEntry> & acentries = pwalletMain->laccentries;
-    for(const CAccountingEntry& entry: acentries)
+    BOOST_FOREACH(const CAccountingEntry& entry, acentries)
         mapAccountBalances[entry.strAccount] += entry.nCreditDebit;
 
     UniValue ret(UniValue::VOBJ);
-    for(const PAIRTYPE(string, CAmount)& accountBalance: mapAccountBalances) {
+    BOOST_FOREACH(const PAIRTYPE(string, CAmount)& accountBalance, mapAccountBalances) {
         ret.pushKV(accountBalance.first, ValueFromAmount(accountBalance.second));
     }
     return ret;
@@ -2214,7 +2192,7 @@ UniValue listsinceblock(const UniValue& params, bool fHelp)
             "{\n"
             "  \"transactions\": [\n"
             "    \"account\":\"accountname\",       (string) DEPRECATED. The account name associated with the transaction. Will be \"\" for the default account.\n"
-            "    \"address\":\"navcoinaddress\",    (string) The navcoin address of the transaction. Not present for move transactions (category = move).\n"
+            "    \"address\":\"electrumaddress\",    (string) The electrum address of the transaction. Not present for move transactions (category = move).\n"
             "    \"category\":\"send|receive\",     (string) The transaction category. 'send' has negative amounts, 'receive' has positive amounts.\n"
             "    \"amount\": x.xxx,          (numeric) The amount in " + CURRENCY_UNIT + ". This is negative for the 'send' category, and for the 'move' category for moves \n"
             "                                          outbound. It is positive for the 'receive' category, and for the 'move' category for inbound funds.\n"
@@ -2241,7 +2219,7 @@ UniValue listsinceblock(const UniValue& params, bool fHelp)
 
     LOCK2(cs_main, pwalletMain->cs_wallet);
 
-    CBlockIndex *pindex = nullptr;
+    CBlockIndex *pindex = NULL;
     int target_confirms = 1;
     isminefilter filter = ISMINE_SPENDABLE;
 
@@ -2316,7 +2294,7 @@ UniValue gettransaction(const UniValue& params, bool fHelp)
             "  \"details\" : [\n"
             "    {\n"
             "      \"account\" : \"accountname\",  (string) DEPRECATED. The account name involved in the transaction, can be \"\" for the default account.\n"
-            "      \"address\" : \"navcoinaddress\",   (string) The navcoin address involved in the transaction\n"
+            "      \"address\" : \"electrumaddress\",   (string) The electrum address involved in the transaction\n"
             "      \"category\" : \"send|receive\",    (string) The category, either 'send' or 'receive'\n"
             "      \"amount\" : x.xxx,                 (numeric) The amount in " + CURRENCY_UNIT + "\n"
             "      \"label\" : \"label\",              (string) A comment for the address/transaction, if any\n"
@@ -2483,7 +2461,7 @@ UniValue walletpassphrase(const UniValue& params, bool fHelp)
         throw runtime_error(
             "walletpassphrase \"passphrase\" timeout [stakingonly]\n"
             "\nStores the wallet decryption key in memory for 'timeout' seconds.\n"
-            "This is needed prior to performing transactions related to private keys such as sending navcoins\n"
+            "This is needed prior to performing transactions related to private keys such as sending electrums\n"
             "\nArguments:\n"
             "1. \"passphrase\"     (string, required) The wallet passphrase\n"
             "2. timeout            (numeric, required) The time to keep the decryption key in seconds.\n"
@@ -2538,7 +2516,6 @@ UniValue walletpassphrase(const UniValue& params, bool fHelp)
 
     return NullUniValue;
 }
-
 
 UniValue walletpassphrasechange(const UniValue& params, bool fHelp)
 {
@@ -2644,10 +2621,10 @@ UniValue encryptwallet(const UniValue& params, bool fHelp)
             "\nExamples:\n"
             "\nEncrypt you wallet\n"
             + HelpExampleCli("encryptwallet", "\"my pass phrase\"") +
-            "\nNow set the passphrase to use the wallet, such as for signing or sending navcoin\n"
+            "\nNow set the passphrase to use the wallet, such as for signing or sending electrum\n"
             + HelpExampleCli("walletpassphrase", "\"my pass phrase\"") +
             "\nNow we can so something like sign\n"
-            + HelpExampleCli("signmessage", "\"navcoinaddress\" \"test message\"") +
+            + HelpExampleCli("signmessage", "\"electrumaddress\" \"test message\"") +
             "\nNow lock the wallet again by removing the passphrase\n"
             + HelpExampleCli("walletlock", "") +
             "\nAs a json rpc call\n"
@@ -2679,7 +2656,7 @@ UniValue encryptwallet(const UniValue& params, bool fHelp)
     // slack space in .dat files; that is bad if the old data is
     // unencrypted private keys. So:
     StartShutdown();
-    return "wallet encrypted; NavCoin server stopping, restart to run with encrypted wallet. The keypool has been flushed and a new HD seed was generated (if you are using HD). You need to make a new backup.";
+    return "wallet encrypted; Electrum server stopping, restart to run with encrypted wallet. The keypool has been flushed and a new HD seed was generated (if you are using HD). You need to make a new backup.";
 }
 
 UniValue lockunspent(const UniValue& params, bool fHelp)
@@ -2693,7 +2670,7 @@ UniValue lockunspent(const UniValue& params, bool fHelp)
             "\nUpdates list of temporarily unspendable outputs.\n"
             "Temporarily lock (unlock=false) or unlock (unlock=true) specified transaction outputs.\n"
             "If no transaction outputs are specified when unlocking then all current locked transaction outputs are unlocked.\n"
-            "A locked transaction output will not be chosen by automatic coin selection, when spending navcoins.\n"
+            "A locked transaction output will not be chosen by automatic coin selection, when spending electrums.\n"
             "Locks are stored in memory only. Nodes start with zero locked outputs, and the locked output list\n"
             "is always cleared (by virtue of process exit) when a node stops or fails.\n"
             "Also see the listunspent call\n"
@@ -2809,7 +2786,7 @@ UniValue listlockunspent(const UniValue& params, bool fHelp)
 
     UniValue ret(UniValue::VARR);
 
-    for(COutPoint &outpt: vOutpts) {
+    BOOST_FOREACH(COutPoint &outpt, vOutpts) {
         UniValue o(UniValue::VOBJ);
 
         o.pushKV("txid", outpt.hash.GetHex());
@@ -2915,7 +2892,7 @@ UniValue resendwallettransactions(const UniValue& params, bool fHelp)
 
     std::vector<uint256> txids = pwalletMain->ResendWalletTransactionsBefore(GetTime());
     UniValue result(UniValue::VARR);
-    for(const uint256& txid: txids)
+    BOOST_FOREACH(const uint256& txid, txids)
     {
         result.push_back(txid.ToString());
     }
@@ -2936,9 +2913,9 @@ UniValue listunspent(const UniValue& params, bool fHelp)
             "\nArguments:\n"
             "1. minconf          (numeric, optional, default=1) The minimum confirmations to filter\n"
             "2. maxconf          (numeric, optional, default=9999999) The maximum confirmations to filter\n"
-            "3. \"addresses\"    (string) A json array of navcoin addresses to filter\n"
+            "3. \"addresses\"    (string) A json array of electrum addresses to filter\n"
             "    [\n"
-            "      \"address\"   (string) navcoin address\n"
+            "      \"address\"   (string) electrum address\n"
             "      ,...\n"
             "    ]\n"
             "\nResult\n"
@@ -2946,7 +2923,7 @@ UniValue listunspent(const UniValue& params, bool fHelp)
             "  {\n"
             "    \"txid\" : \"txid\",          (string) the transaction id \n"
             "    \"vout\" : n,               (numeric) the vout value\n"
-            "    \"address\" : \"address\",    (string) the navcoin address\n"
+            "    \"address\" : \"address\",    (string) the electrum address\n"
             "    \"account\" : \"account\",    (string) DEPRECATED. The associated account, or \"\" for the default account\n"
             "    \"scriptPubKey\" : \"key\",   (string) the script key\n"
             "    \"amount\" : x.xxx,         (numeric) the transaction amount in " + CURRENCY_UNIT + "\n"
@@ -2974,14 +2951,14 @@ UniValue listunspent(const UniValue& params, bool fHelp)
     if (params.size() > 1)
         nMaxDepth = params[1].get_int();
 
-    set<CNavCoinAddress> setAddress;
+    set<CElectrumAddress> setAddress;
     if (params.size() > 2) {
         UniValue inputs = params[2].get_array();
         for (unsigned int idx = 0; idx < inputs.size(); idx++) {
             const UniValue& input = inputs[idx];
-            CNavCoinAddress address(input.get_str());
+            CElectrumAddress address(input.get_str());
             if (!address.IsValid())
-                throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, string("Invalid NavCoin address: ")+input.get_str());
+                throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, string("Invalid Electrum address: ")+input.get_str());
             if (setAddress.count(address))
                 throw JSONRPCError(RPC_INVALID_PARAMETER, string("Invalid parameter, duplicated address: ")+input.get_str());
            setAddress.insert(address);
@@ -2990,10 +2967,10 @@ UniValue listunspent(const UniValue& params, bool fHelp)
 
     UniValue results(UniValue::VARR);
     vector<COutput> vecOutputs;
-    assert(pwalletMain != nullptr);
+    assert(pwalletMain != NULL);
     LOCK2(cs_main, pwalletMain->cs_wallet);
-    pwalletMain->AvailableCoins(vecOutputs, false, nullptr, true);
-    for(const COutput& out: vecOutputs) {
+    pwalletMain->AvailableCoins(vecOutputs, false, NULL, true);
+    BOOST_FOREACH(const COutput& out, vecOutputs) {
         if (out.nDepth < nMinDepth || out.nDepth > nMaxDepth)
             continue;
 
@@ -3009,7 +2986,7 @@ UniValue listunspent(const UniValue& params, bool fHelp)
         entry.pushKV("vout", out.i);
 
         if (fValidAddress) {
-            entry.pushKV("address", CNavCoinAddress(address).ToString());
+            entry.pushKV("address", CElectrumAddress(address).ToString());
 
             if (pwalletMain->mapAddressBook.count(address))
                 entry.pushKV("account", pwalletMain->mapAddressBook[address].name);
@@ -3054,7 +3031,7 @@ UniValue fundrawtransaction(const UniValue& params, bool fHelp)
                             "1. \"hexstring\"           (string, required) The hex string of the raw transaction\n"
                             "2. options               (object, optional)\n"
                             "   {\n"
-                            "     \"changeAddress\"     (string, optional, default pool address) The navcoin address to receive the change\n"
+                            "     \"changeAddress\"     (string, optional, default pool address) The electrum address to receive the change\n"
                             "     \"changePosition\"    (numeric, optional, default random) The index of the change output\n"
                             "     \"includeWatching\"   (boolean, optional, default false) Also select inputs which are watch only\n"
                             "     \"lockUnspents\"      (boolean, optional, default false) Lock selected unspent outputs\n"
@@ -3109,10 +3086,10 @@ UniValue fundrawtransaction(const UniValue& params, bool fHelp)
             true, true);
 
         if (options.exists("changeAddress")) {
-            CNavCoinAddress address(options["changeAddress"].get_str());
+            CElectrumAddress address(options["changeAddress"].get_str());
 
             if (!address.IsValid())
-                throw JSONRPCError(RPC_INVALID_PARAMETER, "changeAddress must be a valid navcoin address");
+                throw JSONRPCError(RPC_INVALID_PARAMETER, "changeAddress must be a valid electrum address");
 
             changeAddress = address.Get();
         }
@@ -3429,12 +3406,12 @@ UniValue resolveopenalias(const UniValue& params, bool fHelp)
   if ((fHelp || params.size() != 1))
       throw runtime_error(
           "resolveopenallias \"openAlias\"\n"
-          "\nResolves the given OpenAlias address to a NavCoin address.\n"
+          "\nResolves the given OpenAlias address to a Electrum address.\n"
           "\nArguments:\n"
           "1. \"address\"    (string) The OpenAlias address.\n"
           "\nExamples:\n"
           "\nGet information about an OpenAlias address\n"
-          + HelpExampleCli("resolveopenalias", "\"donate@navcoin.org\"")
+          + HelpExampleCli("resolveopenalias", "\"donate@electrum.org\"")
       );
 
   std::string address = params[0].get_str();
@@ -3719,7 +3696,6 @@ static const CRPCCommand commands[] =
     { "wallet",             "addmultisigaddress",       &addmultisigaddress,       true  },
     { "wallet",             "addwitnessaddress",        &addwitnessaddress,        true  },
     { "wallet",             "backupwallet",             &backupwallet,             true  },
-    { "wallet",             "createrawscriptaddress",   &createrawscriptaddress,   true  },
     { "wallet",             "dumpprivkey",              &dumpprivkey,              true  },
     { "wallet",             "dumpmasterprivkey",        &dumpmasterprivkey,        true  },
     { "wallet",             "dumpmnemonic",             &dumpmnemonic,             true  },

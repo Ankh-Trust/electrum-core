@@ -1,16 +1,16 @@
-// Copyright (c) 2018 The NavCoin Core developers
+// Copyright (c) 2018 The NAVcoin Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_CFUND_H
-#define NAVCOIN_CFUND_H
+#ifndef ELECTRUM_CFUND_H
+#define ELECTRUM_CFUND_H
 
-#include <amount.h>
-#include <script/script.h>
-#include <serialize.h>
-#include <tinyformat.h>
-#include <univalue/include/univalue.h>
-#include <uint256.h>
+#include "amount.h"
+#include "script/script.h"
+#include "serialize.h"
+#include "tinyformat.h"
+#include "univalue/include/univalue.h"
+#include "uint256.h"
 
 using namespace std;
 
@@ -330,4 +330,4 @@ void CFundStep(const CValidationState& state, CBlockIndex *pindexNew, const bool
 
 }
 
-#endif // NAVCOIN_CFUND_H
+#endif // ELECTRUM_CFUND_H

@@ -196,8 +196,8 @@ DNSResolver::DNSResolver() : m_data(new DNSResolverData())
         ub_ctx_set_option(m_data->m_ub_context, string_copy("do-tcp:"), string_copy("yes"));
     } else {
         // look for "/etc/resolv.conf" and "/etc/hosts" or platform equivalent
-        ub_ctx_resolvconf(m_data->m_ub_context, nullptr);
-        ub_ctx_hosts(m_data->m_ub_context, nullptr);
+        ub_ctx_resolvconf(m_data->m_ub_context, NULL);
+        ub_ctx_hosts(m_data->m_ub_context, NULL);
     }
 
     const char * const *ds = ::get_builtin_ds();
@@ -212,7 +212,7 @@ DNSResolver::~DNSResolver()
 {
     if (m_data)
     {
-        if (m_data->m_ub_context != nullptr)
+        if (m_data->m_ub_context != NULL)
         {
             ub_ctx_delete(m_data->m_ub_context);
         }
@@ -244,7 +244,7 @@ std::vector<std::string> DNSResolver::get_record(const std::string& url, int rec
             if(!result->secure && result->bogus)
                 LogPrintf("[DNSResolver] DNSSec bogus entry for %s found: %s\n", url.c_str(), result->why_bogus);
 
-            for (size_t i=0; result->data[i] != nullptr; i++)
+            for (size_t i=0; result->data[i] != NULL; i++)
             {
                 addresses.push_back((*reader)(result->data[i], result->len[i]));
             }
@@ -298,7 +298,7 @@ std::vector<std::string> DNSResolver::get_record(const std::string& url, int rec
     bool DNSResolver::check_address_syntax(const char *addr) const
     {
         // if string doesn't contain a dot, we won't consider it a url for now.
-        if (strchr(addr,'.') == nullptr)
+        if (strchr(addr,'.') == NULL)
         {
             return false;
         }
@@ -329,18 +329,18 @@ std::vector<std::string> DNSResolver::get_record(const std::string& url, int rec
     }
 
     /**
-     * @brief gets a navcoin address from the TXT record of a DNS entry
+     * @brief gets a electrum address from the TXT record of a DNS entry
      *
-     * gets the navcoin address from the  TXT  record of the DNS entry associated
+     * gets the electrum address from the  TXT  record of the DNS entry associated
      * with  <url>.   If this lookup fails,  or the TXT record does not contain a
-     * NAV address in the correct format, returns an empty string. <dnssec_valid>
+     * 0AE address in the correct format, returns an empty string. <dnssec_valid>
      * will be set true or false according to whether or not the DNS query passes
      * DNSSEC validation.
      *
      * @param url the url to look up
      * @param dnssec_valid return-by-reference for DNSSEC status of query
      *
-     * @return a navcoin address (as a string) or an empty string
+     * @return a electrum address (as a string) or an empty string
      */
     std::vector<std::string> addresses_from_url(const std::string& url, bool& dnssec_available, bool& dnssec_valid)
     {
@@ -357,7 +357,7 @@ std::vector<std::string> DNSResolver::get_record(const std::string& url, int rec
         }
         else dnssec_valid = false;
 
-        // for each txt record, try to find a navcoin address in it.
+        // for each txt record, try to find a electrum address in it.
         for (auto& rec : records)
         {
             std::string addr = address_from_txt_record(rec);
@@ -513,4 +513,3 @@ std::vector<std::string> DNSResolver::get_record(const std::string& url, int rec
     }  // namespace utils::dns_utils
 
 }  // namespace utils
-

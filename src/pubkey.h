@@ -3,12 +3,12 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_PUBKEY_H
-#define NAVCOIN_PUBKEY_H
+#ifndef ELECTRUM_PUBKEY_H
+#define ELECTRUM_PUBKEY_H
 
-#include <hash.h>
-#include <serialize.h>
-#include <uint256.h>
+#include "hash.h"
+#include "serialize.h"
+#include "uint256.h"
 
 #include <stdexcept>
 #include <vector>
@@ -247,4 +247,4 @@ public:
     ~ECCVerifyHandle();
 };
 
-#endif // NAVCOIN_PUBKEY_H
+#endif // ELECTRUM_PUBKEY_H

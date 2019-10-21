@@ -2,10 +2,10 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_QT_TRANSACTIONVIEW_H
-#define NAVCOIN_QT_TRANSACTIONVIEW_H
+#ifndef ELECTRUM_QT_TRANSACTIONVIEW_H
+#define ELECTRUM_QT_TRANSACTIONVIEW_H
 
-#include <qt/guiutil.h>
+#include "guiutil.h"
 
 #include <QWidget>
 #include <QKeyEvent>
@@ -51,11 +51,11 @@ public:
 
     enum ColumnWidths {
         STATUS_COLUMN_WIDTH = 30,
-        WATCHONLY_COLUMN_WIDTH = 23,
+        WATCHONLY_COLUMN_WIDTH = 30,
         DATE_COLUMN_WIDTH = 120,
-        TYPE_COLUMN_WIDTH = 113,
-        AMOUNT_MINIMUM_COLUMN_WIDTH = 150,
-        MINIMUM_COLUMN_WIDTH = 23
+        TYPE_COLUMN_WIDTH = 240,
+        AMOUNT_MINIMUM_COLUMN_WIDTH = 120,
+        MINIMUM_COLUMN_WIDTH = 30
     };
 
 private:
@@ -117,4 +117,4 @@ public Q_SLOTS:
 
 };
 
-#endif // NAVCOIN_QT_TRANSACTIONVIEW_H
+#endif // ELECTRUM_QT_TRANSACTIONVIEW_H

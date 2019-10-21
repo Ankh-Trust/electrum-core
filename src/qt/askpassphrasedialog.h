@@ -2,8 +2,8 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_QT_ASKPASSPHRASEDIALOG_H
-#define NAVCOIN_QT_ASKPASSPHRASEDIALOG_H
+#ifndef ELECTRUM_QT_ASKPASSPHRASEDIALOG_H
+#define ELECTRUM_QT_ASKPASSPHRASEDIALOG_H
 
 #include <QDialog>
 
@@ -44,10 +44,11 @@ private:
 private Q_SLOTS:
     void textChanged();
     void secureClearPassFields();
+    void toggleShowPassword(bool);
 
 protected:
     bool event(QEvent *event);
     bool eventFilter(QObject *object, QEvent *event);
 };
 
-#endif // NAVCOIN_QT_ASKPASSPHRASEDIALOG_H
+#endif // ELECTRUM_QT_ASKPASSPHRASEDIALOG_H

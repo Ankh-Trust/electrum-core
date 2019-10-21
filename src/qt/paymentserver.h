@@ -2,11 +2,11 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_QT_PAYMENTSERVER_H
-#define NAVCOIN_QT_PAYMENTSERVER_H
+#ifndef ELECTRUM_QT_PAYMENTSERVER_H
+#define ELECTRUM_QT_PAYMENTSERVER_H
 
 // This class handles payment requests from clicking on
-// navcoin: URIs
+// electrum: URIs
 //
 // This is somewhat tricky, because we have to deal with
 // the situation where the user clicks on a link during
@@ -32,8 +32,8 @@
 // sends them to the server.
 //
 
-#include <qt/paymentrequestplus.h>
-#include <qt/walletmodel.h>
+#include "paymentrequestplus.h"
+#include "walletmodel.h"
 
 #include <QObject>
 #include <QString>
@@ -152,4 +152,4 @@ private:
     WalletModel *model;
 };
 
-#endif // NAVCOIN_QT_PAYMENTSERVER_H
+#endif // ELECTRUM_QT_PAYMENTSERVER_H

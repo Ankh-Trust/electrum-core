@@ -3,13 +3,13 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_MERKLEBLOCK_H
-#define NAVCOIN_MERKLEBLOCK_H
+#ifndef ELECTRUM_MERKLEBLOCK_H
+#define ELECTRUM_MERKLEBLOCK_H
 
-#include <serialize.h>
-#include <uint256.h>
-#include <primitives/block.h>
-#include <bloom.h>
+#include "serialize.h"
+#include "uint256.h"
+#include "primitives/block.h"
+#include "bloom.h"
 
 #include <vector>
 
@@ -154,4 +154,4 @@ public:
     }
 };
 
-#endif // NAVCOIN_MERKLEBLOCK_H
+#endif // ELECTRUM_MERKLEBLOCK_H

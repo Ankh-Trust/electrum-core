@@ -3,14 +3,14 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_WALLET_DB_H
-#define NAVCOIN_WALLET_DB_H
+#ifndef ELECTRUM_WALLET_DB_H
+#define ELECTRUM_WALLET_DB_H
 
-#include <clientversion.h>
-#include <serialize.h>
-#include <streams.h>
-#include <sync.h>
-#include <version.h>
+#include "clientversion.h"
+#include "serialize.h"
+#include "streams.h"
+#include "sync.h"
+#include "version.h"
 
 #include <map>
 #include <string>
@@ -309,4 +309,4 @@ public:
     bool static Rewrite(const std::string& strFile, const char* pszSkip = NULL);
 };
 
-#endif // NAVCOIN_WALLET_DB_H
+#endif // ELECTRUM_WALLET_DB_H

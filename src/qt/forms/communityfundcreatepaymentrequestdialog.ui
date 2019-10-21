@@ -67,12 +67,12 @@
         </font>
        </property>
        <property name="text">
-        <string>Requested Amount (NAV):</string>
+        <string>Requested Amount (0AE):</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="NavCoinAmountField" name="lineEditRequestedAmount"/>
+      <widget class="ElectrumAmountField" name="lineEditRequestedAmount"/>
      </item>
      <item>
       <widget class="QLabel" name="labelDescriptionTitle">
@@ -137,9 +137,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>NavCoinAmountField</class>
+   <class>ElectrumAmountField</class>
    <extends>QLineEdit</extends>
-   <header>navcoinamountfield.h</header>
+   <header>electrumamountfield.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

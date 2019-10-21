@@ -2,10 +2,10 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_ZMQ_ZMQPUBLISHNOTIFIER_H
-#define NAVCOIN_ZMQ_ZMQPUBLISHNOTIFIER_H
+#ifndef ELECTRUM_ZMQ_ZMQPUBLISHNOTIFIER_H
+#define ELECTRUM_ZMQ_ZMQPUBLISHNOTIFIER_H
 
-#include <zmq/zmqabstractnotifier.h>
+#include "zmqabstractnotifier.h"
 
 class CBlockIndex;
 
@@ -52,4 +52,4 @@ public:
     bool NotifyTransaction(const CTransaction &transaction);
 };
 
-#endif // NAVCOIN_ZMQ_ZMQPUBLISHNOTIFIER_H
+#endif // ELECTRUM_ZMQ_ZMQPUBLISHNOTIFIER_H

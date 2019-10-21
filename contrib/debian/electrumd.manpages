@@ -1,0 +1,3 @@
+debian/manpages/electrumd.1
+debian/manpages/electrum.conf.5
+debian/manpages/electrum-cli.1

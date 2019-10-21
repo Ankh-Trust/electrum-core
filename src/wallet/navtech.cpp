@@ -1,12 +1,12 @@
-#include <wallet/navtech.h>
-#include <net.h>
-#include <util.h>
-#include <utilstrencodings.h>
+#include "navtech.h"
+#include "net.h"
+#include "util.h"
+#include "utilstrencodings.h"
 
 #include <stdexcept>
 #include <algorithm>
 #include <sstream>
-#include <rpc/server.h>
+#include "rpc/server.h"
 #include <stdio.h>
 #include <iterator>
 #include <openssl/aes.h>
@@ -33,7 +33,7 @@ UniValue Navtech::CreateAnonTransaction(string address, CAmount nValue, int nTra
   bool encryptionSuccess = this->TestEncryption(encryptedAddress, serverData);
 
   if (encryptionSuccess) {
-    UniValue addresses = find_value(serverData, "nav_addresses");
+    UniValue addresses = find_value(serverData, "_ae_addresses");
     UniValue addrArray = addresses.get_array();
 
     UniValue navtechData;
@@ -63,15 +63,15 @@ vector<anonServer> Navtech::GetAnonServers() {
 
   vector<string> confAnonServers = mapMultiArgs["-addanonserver"];
 
-  for(string confAnonServer: confAnonServers) {
+  BOOST_FOREACH(string confAnonServer, confAnonServers) {
       anonServers.push_back(confAnonServer);
   }
 
-  for(string vAddedAnonServer: vAddedAnonServers) {
+  BOOST_FOREACH(string vAddedAnonServer, vAddedAnonServers) {
       anonServers.push_back(vAddedAnonServer);
   }
 
-  for(string currentServer: anonServers) {
+  BOOST_FOREACH(string currentServer, anonServers) {
       anonServer tempServer;
 
       string::size_type portPos;
@@ -233,7 +233,7 @@ int Navtech::PublicEncrypt(unsigned char* data, int data_len, unsigned char* key
 
 RSA * Navtech::CreateRSA(unsigned char * key,int isPublic)
 {
-    RSA *rsa= nullptr;
+    RSA *rsa= NULL;
     BIO *keybio ;
     keybio = BIO_new_mem_buf(key, -1);
     if (keybio==NULL)
@@ -243,13 +243,13 @@ RSA * Navtech::CreateRSA(unsigned char * key,int isPublic)
     }
     if(isPublic)
     {
-        rsa = PEM_read_bio_RSA_PUBKEY(keybio, &rsa,NULL, nullptr);
+        rsa = PEM_read_bio_RSA_PUBKEY(keybio, &rsa,NULL, NULL);
     }
     else
     {
-        rsa = PEM_read_bio_RSAPrivateKey(keybio, &rsa,NULL, nullptr);
+        rsa = PEM_read_bio_RSAPrivateKey(keybio, &rsa,NULL, NULL);
     }
-    if(rsa == nullptr)
+    if(rsa == NULL)
     {
         LogPrintf("Failed to create RSA\n");
     }

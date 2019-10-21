@@ -3,14 +3,16 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include <script/ismine.h>
+#include "ismine.h"
 
-#include <base58.h>
-#include <key.h>
-#include <keystore.h>
-#include <script/script.h>
-#include <script/standard.h>
-#include <script/sign.h>
+#include "base58.h"
+#include "key.h"
+#include "keystore.h"
+#include "script/script.h"
+#include "script/standard.h"
+#include "script/sign.h"
+
+#include <boost/foreach.hpp>
 
 using namespace std;
 
@@ -19,7 +21,7 @@ typedef vector<unsigned char> valtype;
 unsigned int HaveKeys(const vector<valtype>& pubkeys, const CKeyStore& keystore)
 {
     unsigned int nResult = 0;
-    for(const valtype& pubkey: pubkeys)
+    BOOST_FOREACH(const valtype& pubkey, pubkeys)
     {
         CKeyID keyID = CPubKey(pubkey).GetID();
         if (keystore.HaveKey(keyID))
@@ -81,8 +83,8 @@ isminetype IsMine(const CKeyStore &keystore, const CScript& scriptPubKey)
             return ISMINE_STAKABLE;
 
         // if spending/staking address is being watched
-        CNavCoinAddress spendingAddress(keyID);
-        CNavCoinAddress stakingAddress(keyID2);
+        CElectrumAddress spendingAddress(keyID);
+        CElectrumAddress stakingAddress(keyID2);
         CScript spendingScript = GetScriptForDestination(spendingAddress.Get());
         CScript stakingScript = GetScriptForDestination(stakingAddress.Get());
         SignatureData sigs;

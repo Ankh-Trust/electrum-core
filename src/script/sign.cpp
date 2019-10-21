@@ -3,14 +3,16 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include <script/sign.h>
+#include "script/sign.h"
 
-#include <key.h>
-#include <keystore.h>
-#include <policy/policy.h>
-#include <primitives/transaction.h>
-#include <script/standard.h>
-#include <uint256.h>
+#include "key.h"
+#include "keystore.h"
+#include "policy/policy.h"
+#include "primitives/transaction.h"
+#include "script/standard.h"
+#include "uint256.h"
+
+#include <boost/foreach.hpp>
 
 using namespace std;
 
@@ -142,7 +144,7 @@ static bool SignStep(const BaseSignatureCreator& creator, const CScript& scriptP
 static CScript PushAll(const vector<valtype>& values)
 {
     CScript result;
-    for(const valtype& v: values) {
+    BOOST_FOREACH(const valtype& v, values) {
         if (v.size() == 0) {
             result << OP_0;
         } else if (v.size() == 1 && v[0] >= 1 && v[0] <= 16) {
@@ -253,12 +255,12 @@ static vector<valtype> CombineMultisig(const CScript& scriptPubKey, const BaseSi
 {
     // Combine all the signatures we've got:
     set<valtype> allsigs;
-    for(const valtype& v: sigs1)
+    BOOST_FOREACH(const valtype& v, sigs1)
     {
         if (!v.empty())
             allsigs.insert(v);
     }
-    for(const valtype& v: sigs2)
+    BOOST_FOREACH(const valtype& v, sigs2)
     {
         if (!v.empty())
             allsigs.insert(v);
@@ -269,7 +271,7 @@ static vector<valtype> CombineMultisig(const CScript& scriptPubKey, const BaseSi
     unsigned int nSigsRequired = vSolutions.front()[0];
     unsigned int nPubKeys = vSolutions.size()-2;
     map<valtype, valtype> sigs;
-    for(const valtype& sig: allsigs)
+    BOOST_FOREACH(const valtype& sig, allsigs)
     {
         for (unsigned int i = 0; i < nPubKeys; i++)
         {

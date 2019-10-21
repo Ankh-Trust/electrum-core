@@ -5,8 +5,8 @@
 #include <QDialog>
 #include <QTimer>
 
-#include <qt/../consensus/cfund.h>
-#include <wallet/wallet.h>
+#include "../consensus/cfund.h"
+#include "wallet/wallet.h"
 
 /* Confirmation dialog for proposals and payment requests. Widgets are hidden according if proposal or payment request*/
 

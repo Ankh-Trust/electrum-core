@@ -7,7 +7,7 @@
 # Test replace by fee code
 #
 
-from test_framework.test_framework import NavCoinTestFramework
+from test_framework.test_framework import ElectrumTestFramework
 from test_framework.util import *
 from test_framework.script import *
 from test_framework.mininode import *
@@ -66,7 +66,7 @@ def make_utxo(node, amount, confirmed=True, scriptPubKey=CScript([1])):
 
     return COutPoint(int(txid, 16), 0)
 
-class ReplaceByFeeTest(NavCoinTestFramework):
+class ReplaceByFeeTest(ElectrumTestFramework):
 
     def __init__(self):
         super().__init__()
@@ -139,7 +139,7 @@ class ReplaceByFeeTest(NavCoinTestFramework):
         else:
             assert(False)
 
-        # Extra 0.1 NAV fee
+        # Extra 0.1 0AE fee
         tx1b = CTransaction()
         tx1b.vin = [CTxIn(tx0_outpoint, nSequence=0)]
         tx1b.vout = [CTxOut(int(0.9*COIN), CScript([b'b']))]
@@ -173,7 +173,7 @@ class ReplaceByFeeTest(NavCoinTestFramework):
             prevout = COutPoint(int(txid, 16), 0)
 
         # Whether the double-spend is allowed is evaluated by including all
-        # child fees - 40 NAV - so this attempt is rejected.
+        # child fees - 40 0AE - so this attempt is rejected.
         dbl_tx = CTransaction()
         dbl_tx.vin = [CTxIn(tx0_outpoint, nSequence=0)]
         dbl_tx.vout = [CTxOut(initial_nValue - 30*COIN, CScript([1]))]
@@ -251,7 +251,7 @@ class ReplaceByFeeTest(NavCoinTestFramework):
         else:
             assert(False)
 
-        # 1 NAV fee is enough
+        # 1 0AE fee is enough
         dbl_tx = CTransaction()
         dbl_tx.vin = [CTxIn(tx0_outpoint, nSequence=0)]
         dbl_tx.vout = [CTxOut(initial_nValue - fee*n - 1*COIN, CScript([1]))]

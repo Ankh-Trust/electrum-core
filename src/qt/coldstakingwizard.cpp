@@ -2,7 +2,7 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include <qt/coldstakingwizard.h>
+#include "coldstakingwizard.h"
 
 #include <QDebug>
 
@@ -77,8 +77,8 @@ bool GetAddressesPage::validatePage()
     QString stakingAddressStr = field("stakingAddress").toString();
     QString spendingAddressStr = field("spendingAddress").toString();
 
-    CNavCoinAddress stakingAddress(stakingAddressStr.toStdString());
-    CNavCoinAddress spendingAddress(spendingAddressStr.toStdString());
+    CElectrumAddress stakingAddress(stakingAddressStr.toStdString());
+    CElectrumAddress spendingAddress(spendingAddressStr.toStdString());
 
     CKeyID stakingKeyID;
     CKeyID spendingKeyID;
@@ -120,18 +120,18 @@ void ColdStakingAddressPage::initializePage()
     QString spendingAddressStr = field("spendingAddress").toString();
 
 
-    CNavCoinAddress stakingAddress(stakingAddressStr.toStdString());
+    CElectrumAddress stakingAddress(stakingAddressStr.toStdString());
     CKeyID stakingKeyID;
     stakingAddress.GetKeyID(stakingKeyID);
 
-    CNavCoinAddress spendingAddress(spendingAddressStr.toStdString());
+    CElectrumAddress spendingAddress(spendingAddressStr.toStdString());
     CKeyID spendingKeyID;
     spendingAddress.GetKeyID(spendingKeyID);
 
-    coldStakingAddress = QString::fromStdString(CNavCoinAddress(stakingKeyID, spendingKeyID).ToString());
+    coldStakingAddress = QString::fromStdString(CElectrumAddress(stakingKeyID, spendingKeyID).ToString());
 
 #ifdef USE_QRCODE
-    QString uri = "navcoin:" + coldStakingAddress;
+    QString uri = "electrum:" + coldStakingAddress;
     image->setText("");
     if(!uri.isEmpty())
     {

@@ -2,13 +2,14 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include <util.h>
-#include <test/test_navcoin.h>
+#include "util.h"
+#include "test/test_electrum.h"
 
 #include <string>
 #include <vector>
 
 #include <boost/algorithm/string.hpp>
+#include <boost/foreach.hpp>
 #include <boost/test/unit_test.hpp>
 
 BOOST_FIXTURE_TEST_SUITE(getarg_tests, BasicTestingSetup)
@@ -20,11 +21,11 @@ static void ResetArgs(const std::string& strArg)
       boost::split(vecArg, strArg, boost::is_space(), boost::token_compress_on);
 
     // Insert dummy executable name:
-    vecArg.insert(vecArg.begin(), "testnavcoin");
+    vecArg.insert(vecArg.begin(), "testelectrum");
 
     // Convert to char*:
     std::vector<const char*> vecChar;
-    for(std::string& s: vecArg)
+    BOOST_FOREACH(std::string& s, vecArg)
         vecChar.push_back(s.c_str());
 
     ParseParameters(vecChar.size(), &vecChar[0]);

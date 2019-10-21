@@ -2,13 +2,13 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_QT_RPCCONSOLE_H
-#define NAVCOIN_QT_RPCCONSOLE_H
+#ifndef ELECTRUM_QT_RPCCONSOLE_H
+#define ELECTRUM_QT_RPCCONSOLE_H
 
-#include <qt/guiutil.h>
-#include <qt/peertablemodel.h>
+#include "guiutil.h"
+#include "peertablemodel.h"
 
-#include <net.h>
+#include "net.h"
 
 #include <QCompleter>
 #include <QFile>
@@ -29,7 +29,7 @@ class QMenu;
 class QItemSelection;
 QT_END_NAMESPACE
 
-/** Local NavCoin RPC console. */
+/** Local Electrum RPC console. */
 class RPCConsole: public QWidget
 {
     Q_OBJECT
@@ -87,6 +87,7 @@ public Q_SLOTS:
     void fontBigger();
     void fontSmaller();
     void setFontSize(int newSize);
+
     /** Append the message to the message widget */
     void message(int category, const QString &message, bool html = false);
     /** Set number of connections shown in the UI */
@@ -103,7 +104,15 @@ public Q_SLOTS:
     void peerSelected(const QItemSelection &selected, const QItemSelection &deselected);
     /** Handle updated peer information */
     void peerLayoutChanged();
-    /** Disconnect a selected node on the Peers tab */
+    /** Switch to info tab and show */
+    void showInfo();
+    /** Switch to console tab and show */
+    void showConsole();
+    /** Switch to network tab and show */
+    void showNetwork();
+    /** Switch to peers tab and show */
+    void showPeers();
+    /** Switch to wallet-repair tab and show */
     void disconnectSelectedNode();
     /** Ban a selected node on the Peers tab */
     void banSelectedNode(int bantime);
@@ -120,11 +129,15 @@ Q_SIGNALS:
     // For RPC command executor
     void stopExecutor();
     void cmdRequest(const QString &command);
+    /** Get restart command-line parameters and handle restart */
+    void handleRestart(QStringList args);
 
 private:
     static QString FormatBytes(quint64 bytes);
     void startExecutor();
     void setTrafficGraphRange(int mins);
+    /** Build parameter list for restart */
+    void buildParameterlist(QString arg);
     /** show detailed information on ui about selected node */
     void updateNodeDetail(const CNodeCombinedStats *stats);
 
@@ -155,4 +168,4 @@ private:
     bool errorLogRefreshing = false;
 };
 
-#endif // NAVCOIN_QT_RPCCONSOLE_H
+#endif // ELECTRUM_QT_RPCCONSOLE_H

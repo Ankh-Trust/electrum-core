@@ -1,27 +1,27 @@
 // Copyright (c) 2010 Satoshi Nakamoto
 // Copyright (c) 2009-2015 The Bitcoin Core developers
-// Copyright (c) 2018 The NavCoin Core developers
+// Copyright (c) 2018 The NAVcoin Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include <base58.h>
-#include <amount.h>
-#include <chain.h>
-#include <chainparams.h>
-#include <consensus/consensus.h>
-#include <consensus/params.h>
-#include <consensus/validation.h>
-#include <core_io.h>
-#include <init.h>
-#include <main.h>
-#include <miner.h>
-#include <net.h>
-#include <pow.h>
-#include <rpc/server.h>
-#include <txmempool.h>
-#include <util.h>
-#include <utilstrencodings.h>
-#include <validationinterface.h>
+#include "base58.h"
+#include "amount.h"
+#include "chain.h"
+#include "chainparams.h"
+#include "consensus/consensus.h"
+#include "consensus/params.h"
+#include "consensus/validation.h"
+#include "core_io.h"
+#include "init.h"
+#include "main.h"
+#include "miner.h"
+#include "net.h"
+#include "pow.h"
+#include "rpc/server.h"
+#include "txmempool.h"
+#include "util.h"
+#include "utilstrencodings.h"
+#include "validationinterface.h"
 
 #include <stdint.h>
 
@@ -136,7 +136,7 @@ UniValue generateBlocks(boost::shared_ptr<CReserveScript> coinbaseScript, int nG
             continue;
         }
         CValidationState state;
-        if (!ProcessNewBlock(state, Params(), nullptr, pblock, true, nullptr))
+        if (!ProcessNewBlock(state, Params(), NULL, pblock, true, NULL))
             throw JSONRPCError(RPC_INTERNAL_ERROR, "ProcessNewBlock, block not accepted");
         else {
             SetCoinBaseStrDZeel("");
@@ -206,7 +206,7 @@ UniValue generatetoaddress(const UniValue& params, bool fHelp)
             "\nMine blocks immediately to a specified address (before the RPC call returns)\n"
             "\nArguments:\n"
             "1. numblocks    (numeric, required) How many blocks are generated immediately.\n"
-            "2. address    (string, required) The address to send the newly generated navcoin to.\n"
+            "2. address    (string, required) The address to send the newly generated electrum to.\n"
             "3. maxtries     (numeric, optional) How many iterations to try (default = 1000000).\n"
             "\nResult\n"
             "[ blockhashes ]     (array) hashes of blocks generated\n"
@@ -224,7 +224,7 @@ UniValue generatetoaddress(const UniValue& params, bool fHelp)
         nMaxTries = params[2].get_int();
     }
 
-    CNavCoinAddress address(params[1].get_str());
+    CElectrumAddress address(params[1].get_str());
     if (!address.IsValid())
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Error: Invalid address");
 
@@ -278,7 +278,7 @@ UniValue getmininginfo(const UniValue& params, bool fHelp)
 }
 
 
-// NOTE: Unlike wallet RPC (which use NAV values), mining RPCs follow GBT (BIP 22) in using satoshi amounts
+// NOTE: Unlike wallet RPC (which use 0AE values), mining RPCs follow GBT (BIP 22) in using satoshi amounts
 UniValue prioritisetransaction(const UniValue& params, bool fHelp)
 {
     if (fHelp || params.size() != 3)
@@ -346,8 +346,8 @@ UniValue getblocktemplate(const UniValue& params, bool fHelp)
             "\nIf the request parameters include a 'mode' key, that is used to explicitly select between the default 'template' request or a 'proposal'.\n"
             "It returns data needed to construct a block to work on.\n"
             "For full specification, see BIPs 22 and 9:\n"
-            "    https://github.com/navcoin/bips/blob/master/bip-0022.mediawiki\n"
-            "    https://github.com/navcoin/bips/blob/master/bip-0009.mediawiki#getblocktemplate_changes\n"
+            "    https://github.com/electrum/bips/blob/master/bip-0022.mediawiki\n"
+            "    https://github.com/electrum/bips/blob/master/bip-0009.mediawiki#getblocktemplate_changes\n"
 
             "\nArguments:\n"
             "1. \"jsonrequestobject\"       (string, optional) A json object in the following spec\n"
@@ -483,10 +483,10 @@ UniValue getblocktemplate(const UniValue& params, bool fHelp)
         throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid mode");
 
     if (vNodes.empty())
-        throw JSONRPCError(RPC_CLIENT_NOT_CONNECTED, "NavCoin is not connected!");
+        throw JSONRPCError(RPC_CLIENT_NOT_CONNECTED, "Electrum is not connected!");
 
     if (IsInitialBlockDownload())
-        throw JSONRPCError(RPC_CLIENT_IN_INITIAL_DOWNLOAD, "NavCoin is downloading blocks...");
+        throw JSONRPCError(RPC_CLIENT_IN_INITIAL_DOWNLOAD, "Electrum is downloading blocks...");
 
     static unsigned int nTransactionsUpdatedLast;
 
@@ -544,7 +544,7 @@ UniValue getblocktemplate(const UniValue& params, bool fHelp)
         (mempool.GetTransactionsUpdated() != nTransactionsUpdatedLast && GetTime() - nStart > 5))
     {
         // Clear pindexPrev so future calls make a new block, despite any failures from here on
-        pindexPrev = nullptr;
+        pindexPrev = NULL;
 
         // Store the pindexBest used before CreateNewBlock, to avoid races
         nTransactionsUpdatedLast = mempool.GetTransactionsUpdated();
@@ -555,7 +555,7 @@ UniValue getblocktemplate(const UniValue& params, bool fHelp)
         if(pblocktemplate)
         {
             delete pblocktemplate;
-            pblocktemplate = nullptr;
+            pblocktemplate = NULL;
         }
         CScript scriptDummy = CScript() << OP_TRUE;
         pblocktemplate = BlockAssembler(Params()).CreateNewBlock(scriptDummy,false,0);
@@ -580,7 +580,7 @@ UniValue getblocktemplate(const UniValue& params, bool fHelp)
     UniValue transactions(UniValue::VARR);
     map<uint256, int64_t> setTxIndex;
     int i = 0;
-    for(CTransaction& tx: pblock->vtx) {
+    BOOST_FOREACH (CTransaction& tx, pblock->vtx) {
         uint256 txHash = tx.GetHash();
         setTxIndex[txHash] = i++;
 
@@ -594,7 +594,7 @@ UniValue getblocktemplate(const UniValue& params, bool fHelp)
         entry.pushKV("hash", tx.GetWitnessHash().GetHex());
 
         UniValue deps(UniValue::VARR);
-        for(const CTxIn &in: tx.vin)
+        BOOST_FOREACH (const CTxIn &in, tx.vin)
         {
             if (setTxIndex.count(in.prevout.hash))
                 deps.push_back(setTxIndex[in.prevout.hash]);
@@ -734,7 +734,7 @@ UniValue submitblock(const UniValue& params, bool fHelp)
             "submitblock \"hexdata\" ( \"jsonparametersobject\" )\n"
             "\nAttempts to submit new block to network.\n"
             "The 'jsonparametersobject' parameter is currently ignored.\n"
-            "See https://en.navcoin.it/wiki/BIP_0022 for full specification.\n"
+            "See https://en.electrum.it/wiki/BIP_0022 for full specification.\n"
 
             "\nArguments\n"
             "1. \"hexdata\"    (string, required) the hex-encoded block data to submit\n"
@@ -782,7 +782,7 @@ UniValue submitblock(const UniValue& params, bool fHelp)
     CValidationState state;
     submitblock_StateCatcher sc(block.GetHash());
     RegisterValidationInterface(&sc);
-    bool fAccepted = ProcessNewBlock(state, Params(), nullptr, &block, true, nullptr);
+    bool fAccepted = ProcessNewBlock(state, Params(), NULL, &block, true, NULL);
     UnregisterValidationInterface(&sc);
     if (fBlockPresent)
     {
@@ -870,7 +870,7 @@ UniValue estimatesmartfee(const UniValue& params, bool fHelp)
             "1. nblocks     (numeric)\n"
             "\nResult:\n"
             "{\n"
-            "  \"feerate\" : x.x,     (numeric) estimate fee-per-kilobyte (in NAV)\n"
+            "  \"feerate\" : x.x,     (numeric) estimate fee-per-kilobyte (in 0AE)\n"
             "  \"blocks\" : n         (numeric) block number where estimate was found\n"
             "}\n"
             "\n"

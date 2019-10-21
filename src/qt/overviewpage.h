@@ -2,11 +2,10 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_QT_OVERVIEWPAGE_H
-#define NAVCOIN_QT_OVERVIEWPAGE_H
+#ifndef ELECTRUM_QT_OVERVIEWPAGE_H
+#define ELECTRUM_QT_OVERVIEWPAGE_H
 
-#include <amount.h>
-#include <splitrewards.h>
+#include "amount.h"
 
 #include <QWidget>
 #include <QPushButton>
@@ -45,24 +44,11 @@ public Q_SLOTS:
                     const CAmount& watchOnlyBalance, const CAmount& watchUnconfBalance, const CAmount& watchImmatureBalance,
                     const CAmount& coldStakingBalance);
 
-    void setStatusTitleBlocks(QString text);
-
-    void setStatusTitleConnections(QString text);
-
-    void setStatusTitle(QString text);
-
-    void showStatusTitleConnections();
-    void hideStatusTitleConnections();
-    void showStatusTitleBlocks();
-    void hideStatusTitleBlocks();
-
-    void showLockStaking(bool status);
-    void setStakingStatus(QString text);
     void setStakingStats(QString day, QString week, QString month, QString year, QString all);
     void updateStakeReportNow();
     void updateStakeReportbalanceChanged(CAmount, CAmount, CAmount, CAmount, CAmount, CAmount, CAmount);
     void setVotingStatus(QString text);
-    void on_showStakingSetup_clicked();
+
 
 Q_SIGNALS:
     void transactionClicked(const QModelIndex &index);
@@ -97,4 +83,4 @@ private Q_SLOTS:
     void handleOutOfSyncWarningClicks();
 };
 
-#endif // NAVCOIN_QT_OVERVIEWPAGE_H
+#endif // ELECTRUM_QT_OVERVIEWPAGE_H

@@ -3,11 +3,11 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_COMPAT_H
-#define NAVCOIN_COMPAT_H
+#ifndef ELECTRUM_COMPAT_H
+#define ELECTRUM_COMPAT_H
 
 #if defined(HAVE_CONFIG_H)
-#include <config/navcoin-config.h>
+#include "config/electrum-config.h"
 #endif
 
 #ifdef WIN32
@@ -49,7 +49,7 @@
 #define MSG_DONTWAIT        0
 #else
 typedef u_int SOCKET;
-#include <errno.h>
+#include "errno.h"
 #define WSAGetLastError()   errno
 #define WSAEINVAL           EINVAL
 #define WSAEALREADY         EALREADY
@@ -101,4 +101,4 @@ bool static inline IsSelectableSocket(SOCKET s) {
 #endif
 
 
-#endif // NAVCOIN_COMPAT_H
+#endif // ELECTRUM_COMPAT_H

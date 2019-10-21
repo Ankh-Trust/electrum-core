@@ -3,17 +3,17 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_CHAIN_H
-#define NAVCOIN_CHAIN_H
+#ifndef ELECTRUM_CHAIN_H
+#define ELECTRUM_CHAIN_H
 
-#include <arith_uint256.h>
-#include <primitives/block.h>
-#include <pow.h>
-#include <pos.h>
-#include <tinyformat.h>
-#include <uint256.h>
-#include <util.h>
-#include <utilmoneystr.h>
+#include "arith_uint256.h"
+#include "primitives/block.h"
+#include "pow.h"
+#include "pos.h"
+#include "tinyformat.h"
+#include "uint256.h"
+#include "util.h"
+#include "utilmoneystr.h"
 
 #include <vector>
 
@@ -611,4 +611,4 @@ public:
     const CBlockIndex *FindFork(const CBlockIndex *pindex) const;
 };
 
-#endif // NAVCOIN_CHAIN_H
+#endif // ELECTRUM_CHAIN_H

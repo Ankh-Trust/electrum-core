@@ -3,8 +3,8 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_UINT256_H
-#define NAVCOIN_UINT256_H
+#ifndef ELECTRUM_UINT256_H
+#define ELECTRUM_UINT256_H
 
 #include <assert.h>
 #include <cstring>
@@ -12,7 +12,7 @@
 #include <stdint.h>
 #include <string>
 #include <vector>
-#include <crypto/common.h>
+#include "crypto/common.h"
 
 /** Template base class for fixed-sized opaque blobs. */
 template<unsigned int BITS>
@@ -230,4 +230,4 @@ inline uint512 uint512S(const std::string& str)
     rv.SetHex(str);
     return rv;
 }
-#endif // NAVCOIN_UINT256_H
+#endif // ELECTRUM_UINT256_H

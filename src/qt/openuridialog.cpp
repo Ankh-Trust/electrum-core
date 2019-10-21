@@ -2,11 +2,11 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include <qt/openuridialog.h>
-#include <ui_openuridialog.h>
+#include "openuridialog.h"
+#include "ui_openuridialog.h"
 
-#include <qt/guiutil.h>
-#include <qt/walletmodel.h>
+#include "guiutil.h"
+#include "walletmodel.h"
 
 #include <QUrl>
 
@@ -15,7 +15,7 @@ OpenURIDialog::OpenURIDialog(QWidget *parent) :
     ui(new Ui::OpenURIDialog)
 {
     ui->setupUi(this);
-    ui->uriEdit->setPlaceholderText("navcoin:");
+    ui->uriEdit->setPlaceholderText("electrum:");
 }
 
 OpenURIDialog::~OpenURIDialog()
@@ -31,7 +31,7 @@ QString OpenURIDialog::getURI()
 void OpenURIDialog::accept()
 {
     SendCoinsRecipient rcp;
-    if(GUIUtil::parseNavCoinURI(getURI(), &rcp))
+    if(GUIUtil::parseElectrumURI(getURI(), &rcp))
     {
         /* Only accept value URIs */
         QDialog::accept();
@@ -42,9 +42,9 @@ void OpenURIDialog::accept()
 
 void OpenURIDialog::on_selectFileButton_clicked()
 {
-    QString filename = GUIUtil::getOpenFileName(this, tr("Select payment request file to open"), "", "", nullptr);
+    QString filename = GUIUtil::getOpenFileName(this, tr("Select payment request file to open"), "", "", NULL);
     if(filename.isEmpty())
         return;
     QUrl fileUri = QUrl::fromLocalFile(filename);
-    ui->uriEdit->setText("navcoin:?r=" + QUrl::toPercentEncoding(fileUri.toString()));
+    ui->uriEdit->setText("electrum:?r=" + QUrl::toPercentEncoding(fileUri.toString()));
 }

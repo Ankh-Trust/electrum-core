@@ -40,7 +40,7 @@
        <bool>false</bool>
       </property>
       <property name="text">
-       <string>NavCoin uses an unique parallel cluster of nodes called NavTech to protect the privacy of your transactions.</string>
+       <string>Electrum uses an unique parallel cluster of nodes called NavTech to protect the privacy of your transactions.</string>
       </property>
       <property name="wordWrap">
        <bool>true</bool>
@@ -69,7 +69,7 @@
        </size>
       </property>
       <property name="text">
-       <string>You will find below the list of the NavCoin Foundation Servers. Feel free to modify this list to include your prefered servers:</string>
+       <string>You will find below the list of the Electrum Foundation Servers. Feel free to modify this list to include your prefered servers:</string>
       </property>
       <property name="wordWrap">
        <bool>true</bool>

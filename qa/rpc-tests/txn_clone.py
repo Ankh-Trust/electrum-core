@@ -7,10 +7,10 @@
 # Test proper accounting with an equivalent malleability clone
 #
 
-from test_framework.test_framework import NavCoinTestFramework
+from test_framework.test_framework import ElectrumTestFramework
 from test_framework.util import *
 
-class TxnMallTest(NavCoinTestFramework):
+class TxnMallTest(ElectrumTestFramework):
 
     def __init__(self):
         super().__init__()
@@ -26,7 +26,7 @@ class TxnMallTest(NavCoinTestFramework):
         return super(TxnMallTest, self).setup_network(True)
 
     def run_test(self):
-        # All nodes should start with 1,250 NAV:
+        # All nodes should start with 1,250 0AE:
         starting_balance = 1250
         for i in range(4):
             assert_equal(self.nodes[i].getbalance(), starting_balance)
@@ -49,11 +49,11 @@ class TxnMallTest(NavCoinTestFramework):
         # Coins are sent to node1_address
         node1_address = self.nodes[1].getnewaddress("from0")
 
-        # Send tx1, and another transaction tx2 that won't be cloned 
+        # Send tx1, and another transaction tx2 that won't be cloned
         txid1 = self.nodes[0].sendfrom("foo", node1_address, 40, 0)
         txid2 = self.nodes[0].sendfrom("bar", node1_address, 20, 0)
 
-        # Construct a clone of tx1, to be malleated 
+        # Construct a clone of tx1, to be malleated
         rawtx1 = self.nodes[0].getrawtransaction(txid1,1)
         clone_inputs = [{"txid":rawtx1["vin"][0]["txid"],"vout":rawtx1["vin"][0]["vout"]}]
         clone_outputs = {rawtx1["vout"][0]["scriptPubKey"]["addresses"][0]:rawtx1["vout"][0]["value"],
@@ -63,7 +63,7 @@ class TxnMallTest(NavCoinTestFramework):
 
         # createrawtransaction randomizes the order of its outputs, so swap them if necessary.
         # output 0 is at version+#inputs+input+sigstub+sequence+#outputs
-        # 40 NAV serialized is 00286bee00000000
+        # 40 0AE serialized is 00286bee00000000
         pos0 = 2*(4+1+36+1+4+1)
         hex40 = "00286bee00000000"
         output_len = 16 + 2 + 2 * int("0x" + clone_raw[pos0 + 16 : pos0 + 16 + 2], 0)
@@ -86,7 +86,7 @@ class TxnMallTest(NavCoinTestFramework):
         tx1 = self.nodes[0].gettransaction(txid1)
         tx2 = self.nodes[0].gettransaction(txid2)
 
-        # Node0's balance should be starting balance, plus 50NAV for another
+        # Node0's balance should be starting balance, plus 50 0AE for another
         # matured block, minus tx1 and tx2 amounts, and minus transaction fees:
         expected = starting_balance + fund_foo_tx["fee"] + fund_bar_tx["fee"]
         if self.options.mine_block: expected += 50
@@ -124,16 +124,16 @@ class TxnMallTest(NavCoinTestFramework):
         tx1 = self.nodes[0].gettransaction(txid1)
         tx1_clone = self.nodes[0].gettransaction(txid1_clone)
         tx2 = self.nodes[0].gettransaction(txid2)
-        
+
         # Verify expected confirmations
         assert_equal(tx1["confirmations"], -2)
         assert_equal(tx1_clone["confirmations"], 2)
         assert_equal(tx2["confirmations"], 1)
 
-        # Check node0's total balance; should be same as before the clone, + 100 NAV for 2 matured,
+        # Check node0's total balance; should be same as before the clone, + 100 0AE for 2 matured,
         # less possible orphaned matured subsidy
         expected += 100
-        if (self.options.mine_block): 
+        if (self.options.mine_block):
             expected -= 50
         assert_equal(self.nodes[0].getbalance(), expected)
         assert_equal(self.nodes[0].getbalance("*", 0), expected)
@@ -156,4 +156,3 @@ class TxnMallTest(NavCoinTestFramework):
 
 if __name__ == '__main__':
     TxnMallTest().main()
-

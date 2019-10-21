@@ -17,7 +17,7 @@ than:
       interface.
 
 For a description of arguments recognized by test scripts, see
-`qa/pull-tester/test_framework/test_framework.py:NavCoinTestFramework.main`.
+`qa/pull-tester/test_framework/test_framework.py:ElectrumTestFramework.main`.
 
 """
 
@@ -43,8 +43,8 @@ RPC_TESTS_DIR = SRCDIR + '/qa/rpc-tests/'
 #If imported values are not defined then set to zero (or disabled)
 if 'ENABLE_WALLET' not in vars():
     ENABLE_WALLET=0
-if 'ENABLE_NAVCOIND' not in vars():
-    ENABLE_NAVCOIND=0
+if 'ENABLE_ELECTRUMD' not in vars():
+    ENABLE_ELECTRUMD=0
 if 'ENABLE_UTILS' not in vars():
     ENABLE_UTILS=0
 if 'ENABLE_ZMQ' not in vars():
@@ -78,19 +78,19 @@ for arg in sys.argv[1:]:
         opts.add(arg)
 
 #Set env vars
-if "NAVCOIND" not in os.environ:
-    os.environ["NAVCOIND"] = BUILDDIR + '/src/navcoind' + EXEEXT
-if "NAVCOINCLI" not in os.environ:
-    os.environ["NAVCOINCLI"] = BUILDDIR + '/src/navcoin-cli' + EXEEXT
+if "ELECTRUMD" not in os.environ:
+    os.environ["ELECTRUMD"] = BUILDDIR + '/src/electrumd' + EXEEXT
+if "ELECTRUMCLI" not in os.environ:
+    os.environ["ELECTRUMCLI"] = BUILDDIR + '/src/electrum-cli' + EXEEXT
 
 if EXEEXT == ".exe" and "-win" not in opts:
-    # https://github.com/navcoin/navcoin/commit/d52802551752140cf41f0d9a225a43e84404d3e9
-    # https://github.com/navcoin/navcoin/pull/5677#issuecomment-136646964
+    # https://github.com/electrum/electrum/commit/d52802551752140cf41f0d9a225a43e84404d3e9
+    # https://github.com/electrum/electrum/pull/5677#issuecomment-136646964
     print("Win tests currently disabled by default.  Use -win option to enable")
     sys.exit(0)
 
-if not (ENABLE_WALLET == 1 and ENABLE_UTILS == 1 and ENABLE_NAVCOIND == 1):
-    print("No rpc tests to run. Wallet, utils, and navcoind must all be enabled")
+if not (ENABLE_WALLET == 1 and ENABLE_UTILS == 1 and ENABLE_ELECTRUMD == 1):
+    print("No rpc tests to run. Wallet, utils, and electrumd must all be enabled")
     sys.exit(0)
 
 # python3-zmq may not be installed. Handle this gracefully and with some helpful info
@@ -162,7 +162,6 @@ testScripts = [
     'cfund-paymentrequest-state-expired.py',
     'cfund-proposal-state-accept.py',
     'cfund-proposal-state-expired.py',
-    'cfund-reorg.py',
     'cfund-rawtx-create-proposal.py',
     'cfund-rawtx-paymentrequest-create.py',
     'cfund-rawtx-paymentrequest-vote.py',
@@ -188,7 +187,6 @@ testScripts = [
     'sendtoaddress.py',
     'stakeimmaturebalance.py',
     'rpc-help.py',
-    'createrawscriptaddress.py'
 ]
 #if ENABLE_ZMQ:
 #    testScripts.append('zmq_test.py')
@@ -331,7 +329,7 @@ class RPCCoverage(object):
     Coverage calculation works by having each test script subprocess write
     coverage files into a particular directory. These files contain the RPC
     commands invoked during testing, as well as a complete listing of RPC
-    commands per `navcoin-cli help` (`rpc_interface.txt`).
+    commands per `electrum-cli help` (`rpc_interface.txt`).
 
     After all tests complete, the commands run are combined and diff'd against
     the complete list to calculate uncovered RPC commands.

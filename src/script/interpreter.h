@@ -3,11 +3,11 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_SCRIPT_INTERPRETER_H
-#define NAVCOIN_SCRIPT_INTERPRETER_H
+#ifndef ELECTRUM_SCRIPT_INTERPRETER_H
+#define ELECTRUM_SCRIPT_INTERPRETER_H
 
-#include <script/script_error.h>
-#include <primitives/transaction.h>
+#include "script_error.h"
+#include "primitives/transaction.h"
 
 #include <vector>
 #include <stdint.h>
@@ -187,4 +187,4 @@ bool VerifyScript(const CScript& scriptSig, const CScript& scriptPubKey, const C
 
 size_t CountWitnessSigOps(const CScript& scriptSig, const CScript& scriptPubKey, const CScriptWitness* witness, unsigned int flags);
 
-#endif // NAVCOIN_SCRIPT_INTERPRETER_H
+#endif // ELECTRUM_SCRIPT_INTERPRETER_H

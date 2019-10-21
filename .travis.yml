@@ -80,7 +80,7 @@ jobs:
         GOAL="install"
         # -Wno-psabi is to disable ABI warnings: "note: parameter passing for argument of type ... changed in GCC 7.1"
         # This could be removed once the ABI change warning does not show up by default
-        NAVCOIN_CONFIG="--enable-glibc-back-compat --enable-reduce-exports CXXFLAGS=-Wno-psabi"
+        ELECTRUM_CONFIG="--enable-glibc-back-compat --enable-reduce-exports CXXFLAGS=-Wno-psabi"
 
     - stage: test
       name: 'Win32  [GOAL: install]  [no functional tests]'
@@ -90,7 +90,7 @@ jobs:
         PACKAGES="nsis g++-mingw-w64-i686 wine-binfmt wine32"
         RUN_FUNCTIONAL_TESTS=false
         GOAL="install"
-        NAVCOIN_CONFIG="--enable-reduce-exports --disable-gui-tests"
+        ELECTRUM_CONFIG="--enable-reduce-exports --disable-gui-tests"
 
     - stage: test
       name: 'Win64  [GOAL: install]  [no functional tests]'
@@ -99,7 +99,7 @@ jobs:
         PACKAGES="nsis g++-mingw-w64-x86-64 wine-binfmt wine64"
         RUN_FUNCTIONAL_TESTS=false
         GOAL="install"
-        NAVCOIN_CONFIG="--enable-reduce-exports --disable-gui-tests"
+        ELECTRUM_CONFIG="--enable-reduce-exports --disable-gui-tests"
 
     - stage: test
       name: 'i686 Linux  [GOAL: install] [dash shell]'
@@ -108,7 +108,7 @@ jobs:
         PACKAGES="g++-multilib python3-zmq"
         DEP_OPTS="NO_QT=1"
         GOAL="install"
-        NAVCOIN_CONFIG="--enable-zmq --enable-glibc-back-compat --enable-reduce-exports LDFLAGS=-static-libstdc++"
+        ELECTRUM_CONFIG="--enable-zmq --enable-glibc-back-compat --enable-reduce-exports LDFLAGS=-static-libstdc++"
         CONFIG_SHELL="/bin/dash"
 
     - stage: test
@@ -118,7 +118,7 @@ jobs:
         PACKAGES="python3-zmq"
         DEP_OPTS="NO_QT=1 NO_UPNP=1 DEBUG=1"
         GOAL="install"
-        NAVCOIN_CONFIG="--enable-zmq --enable-glibc-back-compat --enable-reduce-exports CPPFLAGS=-DDEBUG_LOCKORDER"
+        ELECTRUM_CONFIG="--enable-zmq --enable-glibc-back-compat --enable-reduce-exports CPPFLAGS=-DDEBUG_LOCKORDER"
 
     - stage: test
       name: 'macOS 10.10  [GOAL: deploy] [no tests]'
@@ -129,4 +129,4 @@ jobs:
         RUN_UNIT_TESTS=false
         RUN_FUNCTIONAL_TESTS=false
         GOAL="deploy"
-        NAVCOIN_CONFIG="--enable-reduce-exports --enable-werror"
+        ELECTRUM_CONFIG="--enable-reduce-exports --enable-werror"

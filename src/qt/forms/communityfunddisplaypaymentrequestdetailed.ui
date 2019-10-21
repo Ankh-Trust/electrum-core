@@ -112,7 +112,7 @@
          </font>
         </property>
         <property name="text">
-         <string>100 NAV</string>
+         <string>100 0AE</string>
         </property>
         <property name="textInteractionFlags">
          <set>Qt::TextSelectableByMouse</set>

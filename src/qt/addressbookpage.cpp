@@ -3,24 +3,24 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #if defined(HAVE_CONFIG_H)
-#include <config/navcoin-config.h>
+#include "config/electrum-config.h"
 #endif
 
-#include <qt/addressbookpage.h>
-#include <ui_addressbookpage.h>
+#include "addressbookpage.h"
+#include "ui_addressbookpage.h"
 
-#include <qt/addresstablemodel.h>
-#include <base58.h>
-#include <main.h>
-#include <qt/navcoingui.h>
-#include <qt/csvmodelwriter.h>
-#include <qt/editaddressdialog.h>
-#include <qt/guiutil.h>
-#include <qt/platformstyle.h>
+#include "addresstablemodel.h"
+#include "base58.h"
+#include "main.h"
+#include "electrumgui.h"
+#include "csvmodelwriter.h"
+#include "editaddressdialog.h"
+#include "guiutil.h"
+#include "platformstyle.h"
 
 #ifdef ENABLE_WALLET
-#include <wallet/wallet.h>
-#include <qt/walletmodel.h>
+#include "wallet/wallet.h"
+#include "walletmodel.h"
 #endif
 
 #include <QIcon>
@@ -43,10 +43,10 @@ AddressBookPage::AddressBookPage(const PlatformStyle *platformStyle, Mode mode, 
         ui->deleteAddress->setIcon(QIcon());
         ui->exportButton->setIcon(QIcon());
     } else {
-        ui->newAddress->setIcon(platformStyle->SingleColorIcon(":/icons/add"));
-        ui->copyAddress->setIcon(platformStyle->SingleColorIcon(":/icons/editcopy"));
-        ui->deleteAddress->setIcon(platformStyle->SingleColorIcon(":/icons/remove"));
-        ui->exportButton->setIcon(platformStyle->SingleColorIcon(":/icons/export"));
+        ui->newAddress->setIcon(QIcon(":/icons/add"));
+        ui->copyAddress->setIcon(QIcon(":/icons/editcopy"));
+        ui->deleteAddress->setIcon(QIcon(":/icons/remove"));
+        ui->exportButton->setIcon(QIcon(":/icons/export"));
     }
 
     switch(mode)
@@ -74,12 +74,12 @@ AddressBookPage::AddressBookPage(const PlatformStyle *platformStyle, Mode mode, 
     switch(tab)
     {
     case SendingTab:
-        ui->labelExplanation->setText(tr("These are your NavCoin addresses for sending payments. Always check the amount and the receiving address before sending coins."));
+        ui->labelExplanation->setText(tr("These are your Electrum addresses for sending payments. Always check the amount and the receiving address before sending coins."));
         ui->deleteAddress->setVisible(true);
         ui->showPrivateKey->hide();
         break;
     case ReceivingTab:
-        ui->labelExplanation->setText(tr("These are your NavCoin addresses for receiving payments. It is recommended to use a new receiving address for each transaction."));
+        ui->labelExplanation->setText(tr("These are your Electrum addresses for receiving payments. It is recommended to use a new receiving address for each transaction."));
         ui->deleteAddress->setVisible(false);
         ui->showPrivateKey->show();
         break;
@@ -267,7 +267,7 @@ void AddressBookPage::done(int retval)
     // Figure out which address was selected, and return it
     QModelIndexList indexes = table->selectionModel()->selectedRows(AddressTableModel::Address);
 
-    for (const QModelIndex& index: indexes) {
+    Q_FOREACH (const QModelIndex& index, indexes) {
         QVariant address = table->model()->data(index);
         returnValue = address.toString();
     }
@@ -286,7 +286,7 @@ void AddressBookPage::on_exportButton_clicked()
     // CSV is currently the only supported format
     QString filename = GUIUtil::getSaveFileName(this,
         tr("Export Address List"), QString(),
-        tr("Comma separated file (*.csv)"), nullptr);
+        tr("Comma separated file (*.csv)"), NULL);
 
     if (filename.isNull())
         return;

@@ -2,18 +2,18 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include <clientversion.h>
+#include "clientversion.h"
 
-#include <tinyformat.h>
+#include "tinyformat.h"
 
 #include <string>
 
 /**
  * Name of client reported in the 'version' message. Report the same name
- * for both navcoind and navcoin-core, to make it harder for attackers to
+ * for both electrumd and electrum-core, to make it harder for attackers to
  * target servers or GUI users specifically.
  */
-const std::string CLIENT_NAME("NavCoin");
+const std::string CLIENT_NAME("Electrum");
 
 /**
  * Client version number
@@ -39,7 +39,7 @@ const std::string CLIENT_NAME("NavCoin");
 
 //! First, include build.h if requested
 #ifdef HAVE_BUILD_INFO
-#include <build.h>
+#include "build.h"
 #endif
 
 //! git will put "#define GIT_ARCHIVE 1" on the next line inside archives.
@@ -84,7 +84,7 @@ std::string FormatFullVersion()
 }
 
 /**
- * Format the subversion field according to BIP 14 spec (https://github.com/navcoin/bips/blob/master/bip-0014.mediawiki)
+ * Format the subversion field according to BIP 14 spec (https://github.com/electrum/bips/blob/master/bip-0014.mediawiki)
  */
 std::string FormatSubVersion(const std::string& name, int nClientVersion, const std::vector<std::string>& comments)
 {

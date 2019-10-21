@@ -1,10 +1,10 @@
-bin_PROGRAMS += bench/bench_navcoin
+bin_PROGRAMS += bench/bench_electrum
 BENCH_SRCDIR = bench
-BENCH_BINARY = bench/bench_navcoin$(EXEEXT)
+BENCH_BINARY = bench/bench_electrum$(EXEEXT)
 
 
-bench_bench_navcoin_SOURCES = \
-  bench/bench_navcoin.cpp \
+bench_bench_electrum_SOURCES = \
+  bench/bench_electrum.cpp \
   bench/bench.cpp \
   bench/bench.h \
   bench/Examples.cpp \
@@ -12,38 +12,38 @@ bench_bench_navcoin_SOURCES = \
   bench/crypto_hash.cpp \
   bench/base58.cpp
 
-bench_bench_navcoin_CPPFLAGS = $(AM_CPPFLAGS) $(NAVCOIN_INCLUDES) $(EVENT_CLFAGS) $(EVENT_PTHREADS_CFLAGS) -I$(builddir)/bench/
-bench_bench_navcoin_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-bench_bench_navcoin_LDADD = \
-  $(LIBNAVCOIN_SERVER) \
-  $(LIBNAVCOIN_COMMON) \
-  $(LIBNAVCOIN_UTIL) \
-  $(LIBNAVCOIN_CONSENSUS) \
-  $(LIBNAVCOIN_CRYPTO) \
+bench_bench_electrum_CPPFLAGS = $(AM_CPPFLAGS) $(ELECTRUM_INCLUDES) $(EVENT_CLFAGS) $(EVENT_PTHREADS_CFLAGS) -I$(builddir)/bench/
+bench_bench_electrum_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+bench_bench_electrum_LDADD = \
+  $(LIBELECTRUM_SERVER) \
+  $(LIBELECTRUM_COMMON) \
+  $(LIBELECTRUM_UTIL) \
+  $(LIBELECTRUM_CONSENSUS) \
+  $(LIBELECTRUM_CRYPTO) \
   $(LIBLEVELDB) \
   $(LIBMEMENV) \
   $(LIBSECP256K1) \
   $(LIBUNIVALUE)
 
 if ENABLE_ZMQ
-bench_bench_navcoin_LDADD += $(LIBNAVCOIN_ZMQ) $(ZMQ_LIBS)
+bench_bench_electrum_LDADD += $(LIBELECTRUM_ZMQ) $(ZMQ_LIBS)
 endif
 
 if ENABLE_WALLET
-bench_bench_navcoin_LDADD += $(LIBNAVCOIN_WALLET)
+bench_bench_electrum_LDADD += $(LIBELECTRUM_WALLET)
 endif
 
-bench_bench_navcoin_LDADD += $(BOOST_LIBS) $(BDB_LIBS) $(SSL_LIBS) $(CRYPTO_LIBS) $(MINIUPNPC_LIBS) $(EVENT_PTHREADS_LIBS) $(EVENT_LIBS)
-bench_bench_navcoin_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
+bench_bench_electrum_LDADD += $(BOOST_LIBS) $(BDB_LIBS) $(SSL_LIBS) $(CRYPTO_LIBS) $(MINIUPNPC_LIBS) $(EVENT_PTHREADS_LIBS) $(EVENT_LIBS)
+bench_bench_electrum_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
 
-CLEAN_NAVCOIN_BENCH = bench/*.gcda bench/*.gcno
+CLEAN_ELECTRUM_BENCH = bench/*.gcda bench/*.gcno
 
-CLEANFILES += $(CLEAN_NAVCOIN_BENCH)
+CLEANFILES += $(CLEAN_ELECTRUM_BENCH)
 
-navcoin_bench: $(BENCH_BINARY)
+electrum_bench: $(BENCH_BINARY)
 
 bench: $(BENCH_BINARY) FORCE
 	$(BENCH_BINARY)
 
-navcoin_bench_clean : FORCE
-	rm -f $(CLEAN_NAVCOIN_BENCH) $(bench_bench_navcoin_OBJECTS) $(BENCH_BINARY)
+electrum_bench_clean : FORCE
+	rm -f $(CLEAN_ELECTRUM_BENCH) $(bench_bench_electrum_OBJECTS) $(BENCH_BINARY)

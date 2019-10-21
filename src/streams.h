@@ -3,11 +3,11 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_STREAMS_H
-#define NAVCOIN_STREAMS_H
+#ifndef ELECTRUM_STREAMS_H
+#define ELECTRUM_STREAMS_H
 
-#include <support/allocators/zeroafterfree.h>
-#include <serialize.h>
+#include "support/allocators/zeroafterfree.h"
+#include "serialize.h"
 
 #include <algorithm>
 #include <assert.h>
@@ -641,4 +641,4 @@ public:
     }
 };
 
-#endif // NAVCOIN_STREAMS_H
+#endif // ELECTRUM_STREAMS_H

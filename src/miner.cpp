@@ -1,39 +1,39 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2015 The Bitcoin Core developers
-// Copyright (c) 2018 The NavCoin developers
+// Copyright (c) 2018 The Electrum developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include <miner.h>
+#include "miner.h"
 
-#include <amount.h>
-#include <base58.h>
-#include <chain.h>
-#include <chainparams.h>
-#include <coins.h>
-#include <consensus/consensus.h>
-#include <consensus/merkle.h>
-#include <consensus/validation.h>
-#include <core_io.h>
-#include <hash.h>
-#include <init.h>
-#include <main.h>
-#include <net.h>
-#include <ntpclient.h>
-#include <policy/policy.h>
-#include <pos.h>
-#include <primitives/transaction.h>
-#include <script/sign.h>
-#include <script/standard.h>
-#include <timedata.h>
-#include <txmempool.h>
-#include <util.h>
-#include <utiltime.h>
-#include <utilmoneystr.h>
-#include <validationinterface.h>
-#include <versionbits.h>
-#include <wallet/wallet.h>
-#include <kernel.h>
+#include "amount.h"
+#include "base58.h"
+#include "chain.h"
+#include "chainparams.h"
+#include "coins.h"
+#include "consensus/consensus.h"
+#include "consensus/merkle.h"
+#include "consensus/validation.h"
+#include "core_io.h"
+#include "hash.h"
+#include "init.h"
+#include "main.h"
+#include "net.h"
+#include "ntpclient.h"
+#include "policy/policy.h"
+#include "pos.h"
+#include "primitives/transaction.h"
+#include "script/sign.h"
+#include "script/standard.h"
+#include "timedata.h"
+#include "txmempool.h"
+#include "util.h"
+#include "utiltime.h"
+#include "utilmoneystr.h"
+#include "validationinterface.h"
+#include "versionbits.h"
+#include "wallet/wallet.h"
+#include "kernel.h"
 
 #include <algorithm>
 #include <boost/thread.hpp>
@@ -145,7 +145,7 @@ CBlockTemplate* BlockAssembler::CreateNewBlock(const CScript& scriptPubKeyIn, bo
     pblocktemplate.reset(new CBlockTemplate());
 
     if(!pblocktemplate.get())
-        return nullptr;
+        return NULL;
     pblock = &pblocktemplate->block; // pointer for convenience
 
     // Add dummy coinbase tx as first transaction
@@ -237,7 +237,7 @@ CBlockTemplate* BlockAssembler::CreateNewBlock(const CScript& scriptPubKeyIn, bo
                 if (mapBlockIndex.count(proposal.blockhash) == 0)
                     continue;
                 CBlockIndex* pblockindex = mapBlockIndex[proposal.blockhash];
-                if(pblockindex == nullptr)
+                if(pblockindex == NULL)
                     continue;
                 if((proposal.CanRequestPayments() || proposal.fState == CFund::PENDING_VOTING_PREQ)
                         && prequest.CanVote(*pcoinsTip) && votes.count(prequest.hash) == 0 &&
@@ -266,7 +266,7 @@ CBlockTemplate* BlockAssembler::CreateNewBlock(const CScript& scriptPubKeyIn, bo
                 if (mapBlockIndex.count(prequest.blockhash) == 0)
                     continue;
                 CBlockIndex* pblockindex = mapBlockIndex[prequest.blockhash];
-                if(pblockindex == nullptr)
+                if(pblockindex == NULL)
                     continue;
                 if(prequest.hash == uint256())
                     continue;
@@ -274,7 +274,7 @@ CBlockTemplate* BlockAssembler::CreateNewBlock(const CScript& scriptPubKeyIn, bo
                         pindexPrev->nHeight - pblockindex->nHeight > Params().GetConsensus().nCommunityFundMinAge) {
                     CFund::CProposal proposal;
                     if(pcoinsTip->GetProposal(prequest.proposalhash, proposal)) {
-                        CNavCoinAddress addr(proposal.Address);
+                        CElectrumAddress addr(proposal.Address);
                         if (!addr.IsValid())
                             continue;
                         coinbaseTx.vout.resize(coinbaseTx.vout.size()+1);
@@ -325,7 +325,7 @@ CBlockTemplate* BlockAssembler::CreateNewBlock(const CScript& scriptPubKeyIn, bo
 
 bool BlockAssembler::isStillDependent(CTxMemPool::txiter iter)
 {
-    for(CTxMemPool::txiter parent: mempool.GetMemPoolParents(iter))
+    BOOST_FOREACH(CTxMemPool::txiter parent, mempool.GetMemPoolParents(iter))
     {
         if (!inBlock.count(parent)) {
             return true;
@@ -365,7 +365,7 @@ bool BlockAssembler::TestPackage(uint64_t packageSize, int64_t packageSigOpsCost
 bool BlockAssembler::TestPackageTransactions(const CTxMemPool::setEntries& package)
 {
     uint64_t nPotentialBlockSize = nBlockSize; // only used with fNeedSizeAccounting
-    for(const CTxMemPool::txiter it: package) {
+    BOOST_FOREACH (const CTxMemPool::txiter it, package) {
         if (!IsFinalTx(it->GetTx(), nHeight, nLockTimeCutoff))
             return false;
         if (!fIncludeWitness && !it->GetTx().wit.IsNull())
@@ -462,11 +462,11 @@ void BlockAssembler::AddToBlock(CTxMemPool::txiter iter)
 void BlockAssembler::UpdatePackagesForAdded(const CTxMemPool::setEntries& alreadyAdded,
         indexed_modified_transaction_set &mapModifiedTx)
 {
-    for(const CTxMemPool::txiter it: alreadyAdded) {
+    BOOST_FOREACH(const CTxMemPool::txiter it, alreadyAdded) {
         CTxMemPool::setEntries descendants;
         mempool.CalculateDescendants(it, descendants);
         // Insert all descendants (not yet in block) into the modified set
-        for(CTxMemPool::txiter desc: descendants) {
+        BOOST_FOREACH(CTxMemPool::txiter desc, descendants) {
             if (alreadyAdded.count(desc))
                 continue;
             modtxiter mit = mapModifiedTx.find(desc);
@@ -702,7 +702,7 @@ void BlockAssembler::addPriorityTxs(bool fProofOfStake, int blockTime)
 
             // This tx was successfully added, so
             // add transactions that depend on this one to the priority queue to try again
-            for(CTxMemPool::txiter child: mempool.GetMemPoolChildren(iter))
+            BOOST_FOREACH(CTxMemPool::txiter child, mempool.GetMemPoolChildren(iter))
             {
                 waitPriIter wpiter = waitPriMap.find(child);
                 if (wpiter != waitPriMap.end()) {
@@ -742,11 +742,11 @@ void IncrementExtraNonce(CBlock* pblock, const CBlockIndex* pindexPrev, unsigned
 
 extern unsigned int nMinerSleep;
 
-void NavCoinStaker(const CChainParams& chainparams)
+void ElectrumStaker(const CChainParams& chainparams)
 {
-    LogPrintf("NavCoinStaker started\n");
+    LogPrintf("ElectrumStaker started\n");
     SetThreadPriority(THREAD_PRIORITY_LOWEST);
-    RenameThread("navcoin-staker");
+    RenameThread("electrum-staker");
 
     boost::shared_ptr<CReserveScript> coinbaseScript;
     GetMainSignals().ScriptForMining(coinbaseScript);
@@ -817,12 +817,12 @@ void NavCoinStaker(const CChainParams& chainparams)
             std::unique_ptr<CBlockTemplate> pblocktemplate(BlockAssembler(Params()).CreateNewBlock(coinbaseScript->reserveScript, true, &nFees));
             if (!pblocktemplate.get())
             {
-                LogPrintf("Error in NavCoinStaker: Keypool ran out, please call keypoolrefill before restarting the staking thread\n");
+                LogPrintf("Error in ElectrumStaker: Keypool ran out, please call keypoolrefill before restarting the staking thread\n");
                 return;
             }
             CBlock *pblock = &pblocktemplate->block;
 
-            //LogPrint("coinstake","Running NavCoinStaker with %u transactions in block (%u bytes)\n", pblock->vtx.size(),
+            //LogPrint("coinstake","Running ElectrumStaker with %u transactions in block (%u bytes)\n", pblock->vtx.size(),
             //     ::GetSerializeSize(*pblock, SER_NETWORK, PROTOCOL_VERSION));
 
             //Trying to sign a block
@@ -841,12 +841,12 @@ void NavCoinStaker(const CChainParams& chainparams)
     }
     catch (const boost::thread_interrupted&)
     {
-        LogPrintf("NavCoinStaker terminated\n");
+        LogPrintf("ElectrumStaker terminated\n");
         throw;
     }
     catch (const std::runtime_error &e)
     {
-        LogPrintf("NavCoinStaker runtime error: %s\n", e.what());
+        LogPrintf("ElectrumStaker runtime error: %s\n", e.what());
         return;
     }
 }
@@ -979,7 +979,7 @@ bool CheckStake(CBlock* pblock, CWallet& wallet, const CChainParams& chainparams
         return error("CheckStake(): could not find previous block");
 
     // verify hash target and signature of coinstake tx
-    if (!CheckProofOfStake(mapBlockIndex[pblock->hashPrevBlock], pblock->vtx[1], pblock->nBits, proofHash, hashTarget, nullptr, *pcoinsTip, false))
+    if (!CheckProofOfStake(mapBlockIndex[pblock->hashPrevBlock], pblock->vtx[1], pblock->nBits, proofHash, hashTarget, NULL, *pcoinsTip, false))
         return error("CheckStake() : proof-of-stake checking failed");
 
     //// debug print
@@ -1001,9 +1001,9 @@ bool CheckStake(CBlock* pblock, CWallet& wallet, const CChainParams& chainparams
 
         // Process this block the same as if we had received it from another node
         CValidationState state;
-        if (!ProcessNewBlock(state, chainparams, nullptr, pblock, true, nullptr))
+        if (!ProcessNewBlock(state, chainparams, NULL, pblock, true, NULL))
         {
-            return error("NavCoinStaker: ProcessNewBlock, block not accepted");
+            return error("ElectrumStaker: ProcessNewBlock, block not accepted");
         }
         else
         {

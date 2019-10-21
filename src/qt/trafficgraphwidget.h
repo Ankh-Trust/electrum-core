@@ -2,8 +2,8 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_QT_TRAFFICGRAPHWIDGET_H
-#define NAVCOIN_QT_TRAFFICGRAPHWIDGET_H
+#ifndef ELECTRUM_QT_TRAFFICGRAPHWIDGET_H
+#define ELECTRUM_QT_TRAFFICGRAPHWIDGET_H
 
 #include <QWidget>
 #include <QQueue>
@@ -45,4 +45,4 @@ private:
     ClientModel *clientModel;
 };
 
-#endif // NAVCOIN_QT_TRAFFICGRAPHWIDGET_H
+#endif // ELECTRUM_QT_TRAFFICGRAPHWIDGET_H

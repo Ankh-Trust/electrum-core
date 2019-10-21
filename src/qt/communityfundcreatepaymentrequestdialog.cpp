@@ -1,21 +1,20 @@
-#include <qt/communityfundcreatepaymentrequestdialog.h>
-#include <qt/communityfundsuccessdialog.h>
-#include <qt/sendcommunityfunddialog.h>
-#include <ui_communityfundcreatepaymentrequestdialog.h>
+#include "communityfundcreatepaymentrequestdialog.h"
+#include "communityfundsuccessdialog.h"
+#include "sendcommunityfunddialog.h"
+#include "ui_communityfundcreatepaymentrequestdialog.h"
 
 #include <QMessageBox>
 #include <string>
 
-#include <base58.h>
-#include <consensus/cfund.h>
-#include <qt/guiconstants.h>
-#include <qt/guiutil.h>
-#include <main.cpp>
-#include <main.h>
-#include <qt/skinize.h>
-#include <sync.h>
-#include <wallet/wallet.h>
-#include <qt/walletmodel.h>
+#include "base58.h"
+#include "consensus/cfund.h"
+#include "guiconstants.h"
+#include "guiutil.h"
+#include "main.cpp"
+#include "main.h"
+#include "sync.h"
+#include "wallet/wallet.h"
+#include "walletmodel.h"
 
 std::string random_str(size_t length)
 {
@@ -113,7 +112,7 @@ void CommunityFundCreatePaymentRequestDialog::click_pushButtonSubmitPaymentReque
         }
 
         // Get Address
-        CNavCoinAddress address(proposal.Address);
+        CElectrumAddress address(proposal.Address);
         if(!address.IsValid()) {
             QMessageBox msgBox(this);
             std::string str = "The address of the Proposal is not valid\n";
@@ -166,7 +165,7 @@ void CommunityFundCreatePaymentRequestDialog::click_pushButtonSubmitPaymentReque
 
         // Construct Secret
         std::string Secret = sRandom + "I kindly ask to withdraw " +
-                std::to_string(nReqAmount) + "NAV from the proposal " +
+                std::to_string(nReqAmount) + "0AE from the proposal " +
                 proposal.hash.ToString() + ". Payment request id: " + id;
 
         CHashWriter ss(SER_GETHASH, 0);
@@ -234,11 +233,11 @@ void CommunityFundCreatePaymentRequestDialog::click_pushButtonSubmitPaymentReque
         if (curBalance <= 10000) {
             QMessageBox msgBox(this);
             string fee = std::to_string(10000 / COIN);
-            std::string str = "You require at least " + fee + " NAV mature and available to create a payment request\n";
+            std::string str = "You require at least " + fee + " 0AE mature and available to create a payment request\n";
             msgBox.setText(tr(str.c_str()));
             msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
             msgBox.setIcon(QMessageBox::Warning);
-            msgBox.setWindowTitle("Insufficient NAV");
+            msgBox.setWindowTitle("Insufficient 0AE");
             msgBox.exec();
             return;
         }
@@ -258,7 +257,7 @@ void CommunityFundCreatePaymentRequestDialog::click_pushButtonSubmitPaymentReque
             }
             else {
                 // User accepted making the prequest
-                // Parse NavCoin address
+                // Parse Electrum address
                 CScript CFContributionScript;
                 CScript scriptPubKey = GetScriptForDestination(address.Get());
                 CFund::SetScriptForCommunityFundContribution(scriptPubKey);
@@ -275,7 +274,7 @@ void CommunityFundCreatePaymentRequestDialog::click_pushButtonSubmitPaymentReque
 
                 bool created_prequest = true;
 
-                if (!pwalletMain->CreateTransaction(vecSend, wtx, reservekey, nFeeRequired, nChangePosRet, strError, nullptr, true, "")) {
+                if (!pwalletMain->CreateTransaction(vecSend, wtx, reservekey, nFeeRequired, nChangePosRet, strError, NULL, true, "")) {
                     if (!fSubtractFeeFromAmount && nValue + nFeeRequired > pwalletMain->GetBalance()) {
                         created_prequest = false;
                     }

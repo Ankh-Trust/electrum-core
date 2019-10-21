@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-# Copyright (c) 2018 The Navcoin Core developers
+# Copyright (c) 2018 The NAVcoin Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-from test_framework.test_framework import NavCoinTestFramework
+from test_framework.test_framework import ElectrumTestFramework
 from test_framework.util import *
 
-class GetColdStakingAddress(NavCoinTestFramework):
+class GetColdStakingAddress(ElectrumTestFramework):
     """Tests the creation of a cold staking address."""
 
     def __init__(self):
@@ -68,19 +68,19 @@ class GetColdStakingAddress(NavCoinTestFramework):
             self.nodes[0].getcoldstakingaddress(coldstaking_address_one, address_one)
             make_addr_fail = False
         except JSONRPCException as e:
-            assert("Staking address is not a valid NavCoin address" in e.error['message'])
+            assert("Staking address is not a valid Electrum address" in e.error['message'])
 
         try:
             self.nodes[0].getcoldstakingaddress(address_one, coldstaking_address_one)
             make_addr_fail = False
         except JSONRPCException as e:
-            assert("Spending address is not a valid NavCoin address" in e.error['message'])
+            assert("Spending address is not a valid Electrum address" in e.error['message'])
 
         try:
             self.nodes[0].getcoldstakingaddress(coldstaking_address_one, cold_staking_address_two)
             make_addr_fail = False
         except JSONRPCException as e:
-            assert("Staking address is not a valid NavCoin address" in e.error['message'])
+            assert("Staking address is not a valid Electrum address" in e.error['message'])
 
         try:
             self.nodes[0].getcoldstakingaddress(coldstaking_address_one, coldstaking_address_one)
@@ -102,7 +102,7 @@ class GetColdStakingAddress(NavCoinTestFramework):
             self.nodes[0].getcoldstakingaddress("", address_one)
             make_addr_fail = False
         except JSONRPCException as e:
-            assert("Staking address is not a valid NavCoin address" in e.error['message'])
+            assert("Staking address is not a valid Electrum address" in e.error['message'])
 
         try:
             self.nodes[0].getcoldstakingaddress(address_one)
@@ -112,8 +112,8 @@ class GetColdStakingAddress(NavCoinTestFramework):
             assert(("getcoldstakingaddress \"stakingaddress\" \"spendingaddres"
                 "s\"\nReturns a coldstaking address based on two address input"
                 "s\nArguments:\n1. \"stakingaddress\"  (string, required) The "
-                "navcoin staking address.\n2. \"spendingaddress\" (string, req"
-                "uired) The navcoin spending address.\n\n\nExamples:\n> navcoi"
+                "electrum staking address.\n2. \"spendingaddress\" (string, req"
+                "uired) The electrum spending address.\n\n\nExamples:\n> navcoi"
                 "n-cli getcoldstakingaddress \"mqyGZvLYfEH27Zk3z6JkwJgB1zpjaEH"
                 "fiW\" \"mrfjgazyerYxDQHJAPDdUcC3jpmi8WZ2uv\"\n\nAs a json rpc"
                 " call\n> curl --user myusername --data-binary '{\"jsonrpc\": "
@@ -138,7 +138,7 @@ class GetColdStakingAddress(NavCoinTestFramework):
             self.nodes[0].getcoldstakingaddress("123", address_one)
             make_addr_fail = False
         except JSONRPCException as e:
-            assert("Staking address is not a valid NavCoin address" in e.error['message'])
+            assert("Staking address is not a valid Electrum address" in e.error['message'])
 
         try:
             self.nodes[0].getcoldstakingaddress(address_one, 123)
@@ -150,7 +150,7 @@ class GetColdStakingAddress(NavCoinTestFramework):
             self.nodes[0].getcoldstakingaddress(address_one, "123")
             make_addr_fail = False
         except JSONRPCException as e:
-            assert("Spending address is not a valid NavCoin address" in e.error['message'])
+            assert("Spending address is not a valid Electrum address" in e.error['message'])
 
         assert(make_addr_fail)
 
@@ -160,7 +160,7 @@ class GetColdStakingAddress(NavCoinTestFramework):
             self.nodes[0].getcoldstakingaddress("\"test\"", address_one)
             make_addr_fail = False
         except JSONRPCException as e:
-            assert("Staking address is not a valid NavCoin address" in e.error['message'])
+            assert("Staking address is not a valid Electrum address" in e.error['message'])
 
         try:
             self.nodes[0].getcoldstakingaddress(address_one, True)
@@ -179,13 +179,13 @@ class GetColdStakingAddress(NavCoinTestFramework):
             self.nodes[0].getcoldstakingaddress(bitcoin_address_one, address_two)
             make_addr_fail = False
         except JSONRPCException as e:
-            assert("Staking address is not a valid NavCoin address" in e.error['message'])
+            assert("Staking address is not a valid Electrum address" in e.error['message'])
 
         try:
             self.nodes[0].getcoldstakingaddress(address_one, bitcoin_address_two)
             make_addr_fail = False
         except JSONRPCException as e:
-            assert("Spending address is not a valid NavCoin address" in e.error['message'])
+            assert("Spending address is not a valid Electrum address" in e.error['message'])
 
         assert(make_addr_fail)
 

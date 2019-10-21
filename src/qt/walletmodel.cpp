@@ -2,29 +2,31 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include <qt/walletmodel.h>
+#include "walletmodel.h"
 
-#include <qt/addresstablemodel.h>
-#include <qt/guiconstants.h>
-#include <qt/guiutil.h>
-#include <qt/paymentserver.h>
-#include <qt/recentrequeststablemodel.h>
-#include <qt/transactiontablemodel.h>
+#include "addresstablemodel.h"
+#include "guiconstants.h"
+#include "guiutil.h"
+#include "paymentserver.h"
+#include "recentrequeststablemodel.h"
+#include "transactiontablemodel.h"
 
-#include <base58.h>
-#include <keystore.h>
-#include <main.h>
-#include <sync.h>
-#include <ui_interface.h>
-#include <utils/dns_utils.h>
-#include <wallet/wallet.h>
-#include <wallet/walletdb.h> // for BackupWallet
+#include "base58.h"
+#include "keystore.h"
+#include "main.h"
+#include "sync.h"
+#include "ui_interface.h"
+#include "utils/dns_utils.h"
+#include "wallet/wallet.h"
+#include "wallet/walletdb.h" // for BackupWallet
 
 #include <stdint.h>
 
 #include <QDebug>
 #include <QSet>
 #include <QTimer>
+
+#include <boost/foreach.hpp>
 
 WalletModel::WalletModel(const PlatformStyle *platformStyle, CWallet *wallet, OptionsModel *optionsModel, QObject *parent) :
     QObject(parent), wallet(wallet), optionsModel(optionsModel), addressTableModel(0),
@@ -61,7 +63,7 @@ CAmount WalletModel::getBalance(const CCoinControl *coinControl) const
         CAmount nBalance = 0;
         std::vector<COutput> vCoins;
         wallet->AvailableCoins(vCoins, true, coinControl);
-        for(const COutput& out: vCoins)
+        BOOST_FOREACH(const COutput& out, vCoins)
             if(out.fSpendable)
                 nBalance += out.tx->vout[out.i].nValue;
 
@@ -202,7 +204,7 @@ bool WalletModel::validateAddress(const QString &address)
   std::string address_str = address.toStdString();
   utils::DNSResolver* DNS = nullptr;;
 
-  // Validate the passed NavCoin address
+  // Validate the passed Electrum address
   if(DNS->check_address_syntax(address_str.c_str()))
   {
 
@@ -216,7 +218,7 @@ bool WalletModel::validateAddress(const QString &address)
 
   }
 
-  CNavCoinAddress addressParsed(address_str);
+  CElectrumAddress addressParsed(address_str);
   return addressParsed.IsValid();
 }
 
@@ -238,7 +240,7 @@ WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransact
     QString anondestination;
 
     // Pre-check input data for validity
-    for(const SendCoinsRecipient &rcp: recipients)
+    Q_FOREACH(const SendCoinsRecipient &rcp, recipients)
     {
         if (rcp.fSubtractFeeFromAmount)
             fSubtractFeeFromAmount = true;
@@ -265,7 +267,7 @@ WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransact
             total += subtotal;
         }
         else
-        {   // User-entered navcoin address / amount:
+        {   // User-entered electrum address / amount:
             if(!validateAddress(rcp.isanon?rcp.destaddress:rcp.address))
             {
                 return InvalidAddress;
@@ -277,7 +279,7 @@ WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransact
             setAddress.insert(rcp.isanon?rcp.destaddress:rcp.address);
             ++nAddresses;
 
-            CScript scriptPubKey = GetScriptForDestination(CNavCoinAddress(rcp.isanon ? rcp.destaddress.toStdString() : rcp.address.toStdString()).Get());
+            CScript scriptPubKey = GetScriptForDestination(CElectrumAddress(rcp.isanon ? rcp.destaddress.toStdString() : rcp.address.toStdString()).Get());
             CRecipient recipient = {scriptPubKey, !rcp.fSubtractFeeFromAmount && rcp.isanon ? rcp.amount + rcp.anonfee: rcp.amount, rcp.fSubtractFeeFromAmount, rcp.anondestination.toStdString()};
             vecSend.push_back(recipient);
 
@@ -303,7 +305,7 @@ WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransact
 
     int i = 0;
 
-    for(const CRecipient &rcp: vecSend)
+    Q_FOREACH(const CRecipient &rcp, vecSend)
     {
         LOCK2(cs_main, wallet->cs_wallet);
         std::vector<CRecipient> vec;
@@ -358,13 +360,13 @@ WalletModel::SendCoinsReturn WalletModel::sendCoins(WalletModelTransaction &tran
     {
         LOCK2(cs_main, wallet->cs_wallet);
 
-        for(const CRecipient &rcp: transaction.vecSend)
+        Q_FOREACH(const CRecipient &rcp, transaction.vecSend)
         {
 
-          for(const CWalletTx newTx: transaction.vTransactions)
+          Q_FOREACH(const CWalletTx newTx, transaction.vTransactions)
           {
 
-            for(const SendCoinsRecipient &rcp: transaction.getRecipients())
+            Q_FOREACH(const SendCoinsRecipient &rcp, transaction.getRecipients())
             {
               if (rcp.paymentRequest.IsInitialized())
               {
@@ -379,7 +381,7 @@ WalletModel::SendCoinsReturn WalletModel::sendCoins(WalletModelTransaction &tran
                 rcp.paymentRequest.SerializeToString(&value);
                 const_cast<CWalletTx&>(newTx).vOrderForm.push_back(make_pair(key, value));
               }
-              else if (!rcp.message.isEmpty()) // Message from normal navcoin:URI (navcoin:123...?message=example)
+              else if (!rcp.message.isEmpty()) // Message from normal electrum:URI (electrum:123...?message=example)
                 const_cast<CWalletTx&>(newTx).vOrderForm.push_back(make_pair("Message", rcp.message.toStdString()));
             }
           }
@@ -409,13 +411,13 @@ WalletModel::SendCoinsReturn WalletModel::sendCoins(WalletModelTransaction &tran
 
     // Add addresses / update labels that we've sent to to the address book,
     // and emit coinsSent signal for each recipient
-    for(const SendCoinsRecipient &rcp: transaction.getRecipients())
+    Q_FOREACH(const SendCoinsRecipient &rcp, transaction.getRecipients())
     {
         // Don't touch the address book when we have a payment request
         if (!rcp.paymentRequest.IsInitialized())
         {
             std::string strAddress = rcp.address.toStdString();
-            CTxDestination dest = CNavCoinAddress(strAddress).Get();
+            CTxDestination dest = CElectrumAddress(strAddress).Get();
             std::string strLabel = rcp.label.toStdString();
             {
                 LOCK(wallet->cs_wallet);
@@ -539,7 +541,7 @@ static void NotifyAddressBookChanged(WalletModel *walletmodel, CWallet *wallet,
         const CTxDestination &address, const std::string &label, bool isMine,
         const std::string &purpose, ChangeType status)
 {
-    QString strAddress = QString::fromStdString(CNavCoinAddress(address).ToString());
+    QString strAddress = QString::fromStdString(CElectrumAddress(address).ToString());
     QString strLabel = QString::fromStdString(label);
     QString strPurpose = QString::fromStdString(purpose);
 
@@ -651,7 +653,7 @@ bool WalletModel::havePrivKey(const CKeyID &address) const
 void WalletModel::getOutputs(const std::vector<COutPoint>& vOutpoints, std::vector<COutput>& vOutputs)
 {
     LOCK2(cs_main, wallet->cs_wallet);
-    for(const COutPoint& outpoint: vOutpoints)
+    BOOST_FOREACH(const COutPoint& outpoint, vOutpoints)
     {
         if (!wallet->mapWallet.count(outpoint.hash)) continue;
         int nDepth = wallet->mapWallet[outpoint.hash].GetDepthInMainChain();
@@ -678,7 +680,7 @@ void WalletModel::listCoins(std::map<QString, std::vector<COutput> >& mapCoins) 
     wallet->ListLockedCoins(vLockedCoins);
 
     // add locked coins
-    for(const COutPoint& outpoint: vLockedCoins)
+    BOOST_FOREACH(const COutPoint& outpoint, vLockedCoins)
     {
         if (!wallet->mapWallet.count(outpoint.hash)) continue;
         int nDepth = wallet->mapWallet[outpoint.hash].GetDepthInMainChain();
@@ -688,7 +690,7 @@ void WalletModel::listCoins(std::map<QString, std::vector<COutput> >& mapCoins) 
             vCoins.push_back(out);
     }
 
-    for(const COutput& out: vCoins)
+    BOOST_FOREACH(const COutput& out, vCoins)
     {
         COutput cout = out;
 
@@ -701,7 +703,7 @@ void WalletModel::listCoins(std::map<QString, std::vector<COutput> >& mapCoins) 
         CTxDestination address;
         if(!out.fSpendable || !ExtractDestination(cout.tx->vout[cout.i].scriptPubKey, address))
             continue;
-        mapCoins[QString::fromStdString(CNavCoinAddress(address).ToString())].push_back(out);
+        mapCoins[QString::fromStdString(CElectrumAddress(address).ToString())].push_back(out);
     }
 }
 
@@ -732,15 +734,15 @@ void WalletModel::listLockedCoins(std::vector<COutPoint>& vOutpts)
 void WalletModel::loadReceiveRequests(std::vector<std::string>& vReceiveRequests)
 {
     LOCK(wallet->cs_wallet);
-    for(const PAIRTYPE(CTxDestination, CAddressBookData)& item: wallet->mapAddressBook)
-        for(const PAIRTYPE(std::string, std::string)& item2: item.second.destdata)
+    BOOST_FOREACH(const PAIRTYPE(CTxDestination, CAddressBookData)& item, wallet->mapAddressBook)
+        BOOST_FOREACH(const PAIRTYPE(std::string, std::string)& item2, item.second.destdata)
             if (item2.first.size() > 2 && item2.first.substr(0,2) == "rr") // receive request
                 vReceiveRequests.push_back(item2.second);
 }
 
 bool WalletModel::saveReceiveRequest(const std::string &sAddress, const int64_t nId, const std::string &sRequest)
 {
-    CTxDestination dest = CNavCoinAddress(sAddress).Get();
+    CTxDestination dest = CElectrumAddress(sAddress).Get();
 
     std::stringstream ss;
     ss << nId;
@@ -766,4 +768,9 @@ bool WalletModel::abandonTransaction(uint256 hash) const
 {
     LOCK2(cs_main, wallet->cs_wallet);
     return wallet->AbandonTransaction(hash);
+}
+
+bool WalletModel::hdEnabled() const
+{
+    return wallet->IsHDEnabled();
 }

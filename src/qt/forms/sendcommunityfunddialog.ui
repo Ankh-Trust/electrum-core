@@ -172,7 +172,7 @@
        <item>
         <widget class="QLabel" name="labelRequestedAmount">
          <property name="text">
-          <string>100 NAV / 100 EUR / 100 USD / 100 BTC</string>
+          <string>100 0AE / 100 EUR / 100 USD / 100 BTC</string>
          </property>
         </widget>
        </item>
@@ -287,7 +287,7 @@
           </font>
          </property>
          <property name="text">
-          <string>By submitting the proposal a X NAV deduction will occur from your wallet </string>
+          <string>By submitting the proposal a X 0AE deduction will occur from your wallet </string>
          </property>
          <property name="wordWrap">
           <bool>true</bool>

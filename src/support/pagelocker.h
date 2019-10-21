@@ -3,10 +3,10 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_SUPPORT_PAGELOCKER_H
-#define NAVCOIN_SUPPORT_PAGELOCKER_H
+#ifndef ELECTRUM_SUPPORT_PAGELOCKER_H
+#define ELECTRUM_SUPPORT_PAGELOCKER_H
 
-#include <support/cleanse.h>
+#include "support/cleanse.h"
 
 #include <map>
 
@@ -174,4 +174,4 @@ void UnlockObject(const T& t)
     LockedPageManager::Instance().UnlockRange((void*)(&t), sizeof(T));
 }
 
-#endif // NAVCOIN_SUPPORT_PAGELOCKER_H
+#endif // ELECTRUM_SUPPORT_PAGELOCKER_H

@@ -1,9 +1,8 @@
-#include <qt/navtechsetup.h>
-#include <qt/navtechitem.h>
-#include <qt/ui_navtechsetup.h>
-#include <net.h>
-#include <qt/skinize.h>
-#include <util.h>
+#include "navtechsetup.h"
+#include "navtechitem.h"
+#include "ui_navtechsetup.h"
+#include "net.h"
+#include "util.h"
 
 #include <QVBoxLayout>
 #include <QListWidgetItem>
@@ -68,19 +67,18 @@ void navtechsetup::reloadNavtechServers()
 
     const std::vector<std::string>& confAnonServers = mapMultiArgs["-addanonserver"];
 
-    for(std::string confAnonServer: confAnonServers) {
+    BOOST_FOREACH(std::string confAnonServer, confAnonServers) {
         ui->serversListWidget->addItem(QString::fromStdString(confAnonServer));
     }
 
-    for(std::string vAddedAnonServer: vAddedAnonServers) {
+    BOOST_FOREACH(std::string vAddedAnonServer, vAddedAnonServers) {
         ui->serversListWidget->addItem(QString::fromStdString(vAddedAnonServer));
     }
 }
 
 void navtechsetup::showNavtechIntro()
 {
-    setWindowIcon(QIcon(":icons/navcoin"));
-    setStyleSheet(Skinize());
+    setWindowIcon(QIcon(":icons/electrum"));
 
     ui->saveButton->setVisible(true);
 

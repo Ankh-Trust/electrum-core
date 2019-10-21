@@ -2,11 +2,11 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_QT_TRANSACTIONRECORD_H
-#define NAVCOIN_QT_TRANSACTIONRECORD_H
+#ifndef ELECTRUM_QT_TRANSACTIONRECORD_H
+#define ELECTRUM_QT_TRANSACTIONRECORD_H
 
-#include <amount.h>
-#include <uint256.h>
+#include "amount.h"
+#include "uint256.h"
 
 #include <QList>
 #include <QString>
@@ -146,4 +146,4 @@ public:
     bool statusUpdateNeeded();
 };
 
-#endif // NAVCOIN_QT_TRANSACTIONRECORD_H
+#endif // ELECTRUM_QT_TRANSACTIONRECORD_H

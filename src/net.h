@@ -3,19 +3,19 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_NET_H
-#define NAVCOIN_NET_H
+#ifndef ELECTRUM_NET_H
+#define ELECTRUM_NET_H
 
-#include <amount.h>
-#include <bloom.h>
-#include <compat.h>
-#include <limitedmap.h>
-#include <netbase.h>
-#include <protocol.h>
-#include <random.h>
-#include <streams.h>
-#include <sync.h>
-#include <uint256.h>
+#include "amount.h"
+#include "bloom.h"
+#include "compat.h"
+#include "limitedmap.h"
+#include "netbase.h"
+#include "protocol.h"
+#include "random.h"
+#include "streams.h"
+#include "sync.h"
+#include "uint256.h"
 
 #include <atomic>
 #include <deque>
@@ -26,6 +26,7 @@
 #endif
 
 #include <boost/filesystem/path.hpp>
+#include <boost/foreach.hpp>
 #include <boost/signals2/signal.hpp>
 
 class CAddrMan;
@@ -482,7 +483,7 @@ public:
     unsigned int GetTotalRecvSize()
     {
         unsigned int total = 0;
-        for(const CNetMessage &msg: vRecvMsg)
+        BOOST_FOREACH(const CNetMessage &msg, vRecvMsg)
             total += msg.vRecv.size() + 24;
         return total;
     }
@@ -494,7 +495,7 @@ public:
     void SetRecvVersion(int nVersionIn)
     {
         nRecvVersion = nVersionIn;
-        for(CNetMessage &msg: vRecvMsg)
+        BOOST_FOREACH(CNetMessage &msg, vRecvMsg)
             msg.SetVersion(nVersionIn);
     }
 
@@ -854,4 +855,4 @@ struct AddedNodeInfo
 
 std::vector<AddedNodeInfo> GetAddedNodeInfo();
 
-#endif // NAVCOIN_NET_H
+#endif // ELECTRUM_NET_H

@@ -3,10 +3,10 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_SYNC_H
-#define NAVCOIN_SYNC_H
+#ifndef ELECTRUM_SYNC_H
+#define ELECTRUM_SYNC_H
 
-#include <threadsafety.h>
+#include "threadsafety.h"
 
 #include <boost/thread/condition_variable.hpp>
 #include <boost/thread/locks.hpp>
@@ -286,4 +286,4 @@ public:
     }
 };
 
-#endif // NAVCOIN_SYNC_H
+#endif // ELECTRUM_SYNC_H

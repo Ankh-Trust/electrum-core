@@ -1,93 +1,93 @@
-bin_PROGRAMS += qt/navcoin-qt
-EXTRA_LIBRARIES += qt/libnavcoinqt.a
+bin_PROGRAMS += qt/electrum-qt
+EXTRA_LIBRARIES += qt/libelectrumqt.a
 
-# navcoin qt core #
+# electrum qt core #
 QT_TS = \
-	qt/locale/navcoin_af.ts \
-	qt/locale/navcoin_af_ZA.ts \
-	qt/locale/navcoin_ar.ts \
-	qt/locale/navcoin_be_BY.ts \
-	qt/locale/navcoin_bg.ts \
-	qt/locale/navcoin_bg_BG.ts \
-	qt/locale/navcoin_ca_ES.ts \
-	qt/locale/navcoin_ca.ts \
-	qt/locale/navcoin_ca@valencia.ts \
-	qt/locale/navcoin_cs_CZ.ts \
-	qt/locale/navcoin_cs.ts \
-	qt/locale/navcoin_cy.ts \
-	qt/locale/navcoin_da.ts \
-	qt/locale/navcoin_de.ts \
-	qt/locale/navcoin_el_GR.ts \
-	qt/locale/navcoin_el.ts \
-	qt/locale/navcoin_en_GB.ts \
-	qt/locale/navcoin_en.ts \
-	qt/locale/navcoin_eo.ts \
-	qt/locale/navcoin_es_AR.ts \
-	qt/locale/navcoin_es_CL.ts \
-	qt/locale/navcoin_es_CO.ts \
-	qt/locale/navcoin_es_DO.ts \
-	qt/locale/navcoin_es_ES.ts \
-	qt/locale/navcoin_es_MX.ts \
-	qt/locale/navcoin_es.ts \
-	qt/locale/navcoin_es_UY.ts \
-	qt/locale/navcoin_es_VE.ts \
-	qt/locale/navcoin_et.ts \
-	qt/locale/navcoin_eu_ES.ts \
-	qt/locale/navcoin_fa_IR.ts \
-	qt/locale/navcoin_fa.ts \
-	qt/locale/navcoin_fi.ts \
-	qt/locale/navcoin_fr_CA.ts \
-	qt/locale/navcoin_fr_FR.ts \
-	qt/locale/navcoin_fr.ts \
-	qt/locale/navcoin_gl.ts \
-	qt/locale/navcoin_he.ts \
-	qt/locale/navcoin_hi_IN.ts \
-	qt/locale/navcoin_hr.ts \
-	qt/locale/navcoin_hu.ts \
-	qt/locale/navcoin_id_ID.ts \
-	qt/locale/navcoin_it_IT.ts \
-	qt/locale/navcoin_it.ts \
-	qt/locale/navcoin_ja.ts \
-	qt/locale/navcoin_ka.ts \
-	qt/locale/navcoin_kk_KZ.ts \
-	qt/locale/navcoin_ko_KR.ts \
-	qt/locale/navcoin_ku_IQ.ts \
-	qt/locale/navcoin_ky.ts \
-	qt/locale/navcoin_la.ts \
-	qt/locale/navcoin_lt.ts \
-	qt/locale/navcoin_lv_LV.ts \
-	qt/locale/navcoin_mk_MK.ts \
-	qt/locale/navcoin_mn.ts \
-	qt/locale/navcoin_ms_MY.ts \
-	qt/locale/navcoin_nb.ts \
-	qt/locale/navcoin_nl.ts \
-	qt/locale/navcoin_pam.ts \
-	qt/locale/navcoin_pl.ts \
-	qt/locale/navcoin_pt_BR.ts \
-	qt/locale/navcoin_pt_PT.ts \
-	qt/locale/navcoin_ro_RO.ts \
-	qt/locale/navcoin_ro.ts \
-	qt/locale/navcoin_ru_RU.ts \
-	qt/locale/navcoin_ru.ts \
-	qt/locale/navcoin_sk.ts \
-	qt/locale/navcoin_sl_SI.ts \
-	qt/locale/navcoin_sq.ts \
-	qt/locale/navcoin_sr@latin.ts \
-	qt/locale/navcoin_sr.ts \
-	qt/locale/navcoin_sv.ts \
-	qt/locale/navcoin_ta.ts \
-	qt/locale/navcoin_th_TH.ts \
-	qt/locale/navcoin_tr_TR.ts \
-	qt/locale/navcoin_tr.ts \
-	qt/locale/navcoin_uk.ts \
-	qt/locale/navcoin_ur_PK.ts \
-	qt/locale/navcoin_uz@Cyrl.ts \
-	qt/locale/navcoin_vi.ts \
-	qt/locale/navcoin_vi_VN.ts \
-	qt/locale/navcoin_zh_CN.ts \
-	qt/locale/navcoin_zh_HK.ts \
-	qt/locale/navcoin_zh.ts \
-	qt/locale/navcoin_zh_TW.ts
+	qt/locale/electrum_af.ts \
+	qt/locale/electrum_af_ZA.ts \
+	qt/locale/electrum_ar.ts \
+	qt/locale/electrum_be_BY.ts \
+	qt/locale/electrum_bg.ts \
+	qt/locale/electrum_bg_BG.ts \
+	qt/locale/electrum_ca_ES.ts \
+	qt/locale/electrum_ca.ts \
+	qt/locale/electrum_ca@valencia.ts \
+	qt/locale/electrum_cs_CZ.ts \
+	qt/locale/electrum_cs.ts \
+	qt/locale/electrum_cy.ts \
+	qt/locale/electrum_da.ts \
+	qt/locale/electrum_de.ts \
+	qt/locale/electrum_el_GR.ts \
+	qt/locale/electrum_el.ts \
+	qt/locale/electrum_en_GB.ts \
+	qt/locale/electrum_en.ts \
+	qt/locale/electrum_eo.ts \
+	qt/locale/electrum_es_AR.ts \
+	qt/locale/electrum_es_CL.ts \
+	qt/locale/electrum_es_CO.ts \
+	qt/locale/electrum_es_DO.ts \
+	qt/locale/electrum_es_ES.ts \
+	qt/locale/electrum_es_MX.ts \
+	qt/locale/electrum_es.ts \
+	qt/locale/electrum_es_UY.ts \
+	qt/locale/electrum_es_VE.ts \
+	qt/locale/electrum_et.ts \
+	qt/locale/electrum_eu_ES.ts \
+	qt/locale/electrum_fa_IR.ts \
+	qt/locale/electrum_fa.ts \
+	qt/locale/electrum_fi.ts \
+	qt/locale/electrum_fr_CA.ts \
+	qt/locale/electrum_fr_FR.ts \
+	qt/locale/electrum_fr.ts \
+	qt/locale/electrum_gl.ts \
+	qt/locale/electrum_he.ts \
+	qt/locale/electrum_hi_IN.ts \
+	qt/locale/electrum_hr.ts \
+	qt/locale/electrum_hu.ts \
+	qt/locale/electrum_id_ID.ts \
+	qt/locale/electrum_it_IT.ts \
+	qt/locale/electrum_it.ts \
+	qt/locale/electrum_ja.ts \
+	qt/locale/electrum_ka.ts \
+	qt/locale/electrum_kk_KZ.ts \
+	qt/locale/electrum_ko_KR.ts \
+	qt/locale/electrum_ku_IQ.ts \
+	qt/locale/electrum_ky.ts \
+	qt/locale/electrum_la.ts \
+	qt/locale/electrum_lt.ts \
+	qt/locale/electrum_lv_LV.ts \
+	qt/locale/electrum_mk_MK.ts \
+	qt/locale/electrum_mn.ts \
+	qt/locale/electrum_ms_MY.ts \
+	qt/locale/electrum_nb.ts \
+	qt/locale/electrum_nl.ts \
+	qt/locale/electrum_pam.ts \
+	qt/locale/electrum_pl.ts \
+	qt/locale/electrum_pt_BR.ts \
+	qt/locale/electrum_pt_PT.ts \
+	qt/locale/electrum_ro_RO.ts \
+	qt/locale/electrum_ro.ts \
+	qt/locale/electrum_ru_RU.ts \
+	qt/locale/electrum_ru.ts \
+	qt/locale/electrum_sk.ts \
+	qt/locale/electrum_sl_SI.ts \
+	qt/locale/electrum_sq.ts \
+	qt/locale/electrum_sr@latin.ts \
+	qt/locale/electrum_sr.ts \
+	qt/locale/electrum_sv.ts \
+	qt/locale/electrum_ta.ts \
+	qt/locale/electrum_th_TH.ts \
+	qt/locale/electrum_tr_TR.ts \
+	qt/locale/electrum_tr.ts \
+	qt/locale/electrum_uk.ts \
+	qt/locale/electrum_ur_PK.ts \
+	qt/locale/electrum_uz@Cyrl.ts \
+	qt/locale/electrum_vi.ts \
+	qt/locale/electrum_vi_VN.ts \
+	qt/locale/electrum_zh_CN.ts \
+	qt/locale/electrum_zh_HK.ts \
+	qt/locale/electrum_zh.ts \
+	qt/locale/electrum_zh_TW.ts
 
 QT_FORMS_UI = \
 	qt/forms/addressbookpage.ui \
@@ -118,18 +118,17 @@ QT_FORMS_UI = \
 	qt/forms/communityfunddisplaypaymentrequestdetailed.ui \
 	qt/navtechinit.ui \
 	qt/navtechitem.ui \
-	qt/navtechsetup.ui \
-	qt/getaddresstoreceive.ui
+	qt/navtechsetup.ui
 
 QT_MOC_CPP = \
 	qt/moc_addressbookpage.cpp \
 	qt/moc_addresstablemodel.cpp \
 	qt/moc_askpassphrasedialog.cpp \
 	qt/moc_bantablemodel.cpp \
-	qt/moc_navcoinaddressvalidator.cpp \
-	qt/moc_navcoinamountfield.cpp \
-	qt/moc_navcoingui.cpp \
-	qt/moc_navcoinunits.cpp \
+	qt/moc_electrumaddressvalidator.cpp \
+	qt/moc_electrumamountfield.cpp \
+	qt/moc_electrumgui.cpp \
+	qt/moc_electrumunits.cpp \
 	qt/moc_clientmodel.cpp \
 	qt/moc_coincontroldialog.cpp \
 	qt/moc_coincontroltreewidget.cpp \
@@ -144,7 +143,6 @@ QT_MOC_CPP = \
 	qt/moc_navtechinit.cpp \
 	qt/moc_navtechsetup.cpp \
 	qt/moc_navtechitem.cpp \
-	qt/moc_getaddresstoreceive.cpp \
 	qt/moc_notificator.cpp \
 	qt/moc_openuridialog.cpp \
 	qt/moc_optionsdialog.cpp \
@@ -158,9 +156,8 @@ QT_MOC_CPP = \
 	qt/moc_communityfundcreatepaymentrequestdialog.cpp \
 	qt/moc_peertablemodel.cpp \
 	qt/moc_paymentserver.cpp \
-  qt/moc_qjsonmodel.cpp \
-  qt/moc_qvalidatedlineedit.cpp \
-  qt/moc_qvalidatedplaintextedit.cpp \
+	qt/moc_qvalidatedlineedit.cpp \
+	qt/moc_qvalidatedplaintextedit.cpp \
 	qt/moc_qvalidatedspinbox.cpp \
 	qt/moc_qvaluecombobox.cpp \
 	qt/moc_receivecoinsdialog.cpp \
@@ -172,7 +169,6 @@ QT_MOC_CPP = \
 	qt/moc_sendcommunityfunddialog.cpp \
 	qt/moc_communityfundsuccessdialog.cpp \
 	qt/moc_signverifymessagedialog.cpp \
-  qt/moc_splitrewards.cpp \
 	qt/moc_splashscreen.cpp \
 	qt/moc_trafficgraphwidget.cpp \
 	qt/moc_transactiondesc.cpp \
@@ -186,13 +182,13 @@ QT_MOC_CPP = \
 	qt/moc_walletview.cpp \
 	qt/moc_communityfunddisplaydetailed.cpp
 
-NAVCOIN_MM = \
+ELECTRUM_MM = \
 	qt/macdockiconhandler.mm \
 	qt/macnotificationhandler.mm
 
 QT_MOC = \
-	qt/navcoin.moc \
-	qt/navcoinamountfield.moc \
+	qt/electrum.moc \
+	qt/electrumamountfield.moc \
 	qt/intro.moc \
 	qt/overviewpage.moc \
 	qt/rpcconsole.moc \
@@ -204,24 +200,24 @@ QT_MOC = \
 	qt/communityfundcreateproposaldialog.moc \
 	qt/communityfundcreatepaymentrequestdialog.moc
 
-QT_QRC_CPP = qt/qrc_navcoin.cpp
-QT_QRC = qt/navcoin.qrc
-QT_QRC_LOCALE_CPP = qt/qrc_navcoin_locale.cpp
-QT_QRC_LOCALE = qt/navcoin_locale.qrc
+QT_QRC_CPP = qt/qrc_electrum.cpp
+QT_QRC = qt/electrum.qrc
+QT_QRC_LOCALE_CPP = qt/qrc_electrum_locale.cpp
+QT_QRC_LOCALE = qt/electrum_locale.qrc
 
 PROTOBUF_CC = qt/paymentrequest.pb.cc
 PROTOBUF_H = qt/paymentrequest.pb.h
 PROTOBUF_PROTO = qt/paymentrequest.proto
 
-NAVCOIN_QT_H = \
+ELECTRUM_QT_H = \
 	qt/addressbookpage.h \
 	qt/addresstablemodel.h \
 	qt/askpassphrasedialog.h \
 	qt/bantablemodel.h \
-	qt/navcoinaddressvalidator.h \
-	qt/navcoinamountfield.h \
-	qt/navcoingui.h \
-	qt/navcoinunits.h \
+	qt/electrumaddressvalidator.h \
+	qt/electrumamountfield.h \
+	qt/electrumgui.h \
+	qt/electrumunits.h \
 	qt/clientmodel.h \
 	qt/coincontroldialog.h \
 	qt/coincontroltreewidget.h \
@@ -231,15 +227,12 @@ NAVCOIN_QT_H = \
 	qt/guiconstants.h \
 	qt/guiutil.h \
 	qt/intro.h \
-  qt/qjsonitem.h \
-  qt/qjsonmodel.h \
 	qt/listview.h \
 	qt/macdockiconhandler.h \
 	qt/macnotificationhandler.h \
 	qt/navtechinit.h \
 	qt/navtechitem.h \
 	qt/navtechsetup.h \
-	qt/getaddresstoreceive.h \
 	qt/modaloverlay.h \
 	qt/networkstyle.h \
 	qt/notificator.h \
@@ -271,8 +264,6 @@ NAVCOIN_QT_H = \
 	qt/sendcommunityfunddialog.h \
 	qt/communityfundsuccessdialog.h \
 	qt/signverifymessagedialog.h \
-	qt/skinize.h \
-  qt/splitrewards.h \
 	qt/splashscreen.h \
 	qt/trafficgraphwidget.h \
 	qt/transactiondesc.h \
@@ -289,9 +280,8 @@ NAVCOIN_QT_H = \
 	qt/winshutdownmonitor.h
 
 RES_ICONS = \
-	qt/res/icons/background_top.png \
-	qt/res/icons/navcoin.png \
-	qt/res/icons/navcoin.ico \
+	qt/res/icons/electrum.png \
+	qt/res/icons/electrum.ico \
 	qt/res/icons/ghost.png \
 	qt/res/icons/address-book.png \
 	qt/res/icons/quit.png \
@@ -323,6 +313,7 @@ RES_ICONS = \
 	qt/res/icons/export.png \
 	qt/res/icons/synced.png \
 	qt/res/icons/remove.png \
+	qt/res/icons/staking.png \
 	qt/res/icons/tx_mined.png \
 	qt/res/icons/tx_input.png \
 	qt/res/icons/tx_output.png \
@@ -330,11 +321,15 @@ RES_ICONS = \
 	qt/res/icons/lock_closed.png \
 	qt/res/icons/lock_open.png \
 	qt/res/icons/key.png \
+	qt/res/icons/hd_disabled.png \
+	qt/res/icons/hd_enabled.png \
 	qt/res/icons/filesave.png \
 	qt/res/icons/splash.png \
 	qt/res/icons/debugwindow.png \
 	qt/res/icons/open.png \
 	qt/res/icons/info.png \
+	qt/res/icons/staking_off.png \
+	qt/res/icons/staking_on.png \
 	qt/res/icons/about.png \
 	qt/res/icons/about_qt.png \
 	qt/res/icons/verify.png \
@@ -342,40 +337,18 @@ RES_ICONS = \
 	qt/res/icons/fontbigger.png \
 	qt/res/icons/fontsmaller.png \
 	qt/res/icons/chevron.png \
-	qt/res/icons/transaction_abandoned.png \
-	qt/res/icons/logo_ns.png \
-	qt/res/icons/home_ns.png \
-	qt/res/icons/receive_ns.png \
-	qt/res/icons/send_ns.png \
-	qt/res/icons/home_hover.png \
-	qt/res/icons/home_s.png \
-	qt/res/icons/receive_hover.png \
-	qt/res/icons/receive_s.png \
-	qt/res/icons/send_hover.png \
-	qt/res/icons/send_s.png \
-	qt/res/icons/transaction_ns.png \
-	qt/res/icons/transaction_s.png \
-	qt/res/icons/transaction_hover.png \
-	qt/res/icons/community_fund_ns.png \
-	qt/res/icons/community_fund_s.png \
-	qt/res/icons/community_fund_hover.png \
-	qt/res/fonts/roboto.ttf \
-	qt/res/fonts/robotoregular.ttf \
-	qt/res/fonts/source.ttf \
-	qt/res/fonts/Roboto-Black.ttf \
-	qt/res/fonts/Roboto-Bold.ttf \
-	qt/res/fonts/Roboto-Medium.ttf
+	qt/res/icons/privkey.png \
+	qt/res/icons/transaction_abandoned.png
 
-NAVCOIN_QT_CPP = \
+ELECTRUM_QT_CPP = \
 	qt/bantablemodel.cpp \
-	qt/navcoinaddressvalidator.cpp \
-	qt/navcoinamountfield.cpp \
-	qt/navcoingui.cpp \
-	qt/navcoinunits.cpp \
+	qt/electrumaddressvalidator.cpp \
+	qt/electrumamountfield.cpp \
+	qt/electrumgui.cpp \
+	qt/electrumunits.cpp \
 	qt/navtechinit.cpp \
 	qt/navtechitem.cpp \
 	qt/navtechsetup.cpp \
-	qt/getaddresstoreceive.cpp \
 	qt/clientmodel.cpp \
 	qt/csvmodelwriter.cpp \
 	qt/guiutil.cpp \
@@ -391,17 +364,16 @@ NAVCOIN_QT_CPP = \
 	qt/qvalidatedspinbox.cpp \
 	qt/qvaluecombobox.cpp \
 	qt/rpcconsole.cpp \
-	qt/skinize.cpp \
 	qt/splashscreen.cpp \
 	qt/trafficgraphwidget.cpp \
 	qt/utilitydialog.cpp
 
 if TARGET_WINDOWS
-NAVCOIN_QT_CPP += qt/winshutdownmonitor.cpp
+ELECTRUM_QT_CPP += qt/winshutdownmonitor.cpp
 endif
 
 if ENABLE_WALLET
-NAVCOIN_QT_CPP += \
+ELECTRUM_QT_CPP += \
 	qt/addressbookpage.cpp \
 	qt/addresstablemodel.cpp \
 	qt/askpassphrasedialog.cpp \
@@ -419,8 +391,6 @@ NAVCOIN_QT_CPP += \
 	qt/communityfunddisplaydetailed.cpp \
 	qt/communityfundcreateproposaldialog.cpp \
 	qt/communityfundcreatepaymentrequestdialog.cpp \
-  qt/qjsonitem.cpp \
-  qt/qjsonmodel.cpp \
 	qt/paymentrequestplus.cpp \
 	qt/paymentserver.cpp \
 	qt/receivecoinsdialog.cpp \
@@ -431,7 +401,6 @@ NAVCOIN_QT_CPP += \
 	qt/sendcommunityfunddialog.cpp \
 	qt/communityfundsuccessdialog.cpp \
 	qt/signverifymessagedialog.cpp \
-  qt/splitrewards.cpp \
 	qt/transactiondesc.cpp \
 	qt/transactiondescdialog.cpp \
 	qt/transactionfilterproxy.cpp \
@@ -448,20 +417,20 @@ RES_IMAGES =
 
 RES_MOVIES = $(wildcard qt/res/movies/spinner-*.png)
 
-NAVCOIN_RC = qt/res/navcoin-qt-res.rc
+ELECTRUM_RC = qt/res/electrum-qt-res.rc
 
-NAVCOIN_QT_INCLUDES = -I$(builddir)/qt -I$(srcdir)/qt -I$(srcdir)/qt/forms \
+ELECTRUM_QT_INCLUDES = -I$(builddir)/qt -I$(srcdir)/qt -I$(srcdir)/qt/forms \
 	-I$(builddir)/qt/forms -DQT_NO_KEYWORDS
 
-qt_libnavcoinqt_a_CPPFLAGS = $(AM_CPPFLAGS) $(NAVCOIN_INCLUDES) $(NAVCOIN_QT_INCLUDES) \
+qt_libelectrumqt_a_CPPFLAGS = $(AM_CPPFLAGS) $(ELECTRUM_INCLUDES) $(ELECTRUM_QT_INCLUDES) \
 	$(QT_INCLUDES) $(QT_DBUS_INCLUDES) $(PROTOBUF_CFLAGS) $(QR_CFLAGS)
-qt_libnavcoinqt_a_CXXFLAGS = $(AM_CXXFLAGS) $(QT_PIE_FLAGS)
-qt_libnavcoinqt_a_OBJCXXFLAGS = $(AM_OBJCXXFLAGS) $(QT_PIE_FLAGS)
+qt_libelectrumqt_a_CXXFLAGS = $(AM_CXXFLAGS) $(QT_PIE_FLAGS)
+qt_libelectrumqt_a_OBJCXXFLAGS = $(AM_OBJCXXFLAGS) $(QT_PIE_FLAGS)
 
-qt_libnavcoinqt_a_SOURCES = $(NAVCOIN_QT_CPP) $(NAVCOIN_QT_H) $(QT_FORMS_UI) \
+qt_libelectrumqt_a_SOURCES = $(ELECTRUM_QT_CPP) $(ELECTRUM_QT_H) $(QT_FORMS_UI) \
 	$(QT_QRC) $(QT_QRC_LOCALE) $(QT_TS) $(PROTOBUF_PROTO) $(RES_ICONS) $(RES_IMAGES) $(RES_MOVIES)
 
-nodist_qt_libnavcoinqt_a_SOURCES = $(QT_MOC_CPP) $(QT_MOC) $(PROTOBUF_CC) \
+nodist_qt_libelectrumqt_a_SOURCES = $(QT_MOC_CPP) $(QT_MOC) $(PROTOBUF_CC) \
 	$(PROTOBUF_H) $(QT_QRC_CPP) $(QT_QRC_LOCALE_CPP)
 
 # forms/foo.h -> forms/ui_foo.h
@@ -470,71 +439,71 @@ QT_FORMS_H=$(join $(dir $(QT_FORMS_UI)),$(addprefix ui_, $(notdir $(QT_FORMS_UI:
 # Most files will depend on the forms and moc files as includes. Generate them
 # before anything else.
 $(QT_MOC): $(QT_FORMS_H)
-$(qt_libnavcoinqt_a_OBJECTS) $(qt_navcoin_qt_OBJECTS) : | $(QT_MOC)
+$(qt_libelectrumqt_a_OBJECTS) $(qt_electrum_qt_OBJECTS) : | $(QT_MOC)
 
 #Generating these with a half-written protobuf header leads to wacky results.
 #This makes sure it's done.
 $(QT_MOC): $(PROTOBUF_H)
 $(QT_MOC_CPP): $(PROTOBUF_H)
 
-# navcoin-qt binary #
-qt_navcoin_qt_CPPFLAGS = $(AM_CPPFLAGS) $(NAVCOIN_INCLUDES) $(CURL_INCLUDES) $(NAVCOIN_QT_INCLUDES) \
+# electrum-qt binary #
+qt_electrum_qt_CPPFLAGS = $(AM_CPPFLAGS) $(ELECTRUM_INCLUDES) $(CURL_INCLUDES) $(ELECTRUM_QT_INCLUDES) \
 	$(QT_INCLUDES) $(PROTOBUF_CFLAGS) $(QR_CFLAGS)
-qt_navcoin_qt_CXXFLAGS = $(AM_CXXFLAGS) $(QT_PIE_FLAGS)
+qt_electrum_qt_CXXFLAGS = $(AM_CXXFLAGS) $(QT_PIE_FLAGS)
 
-qt_navcoin_qt_SOURCES = qt/navcoin.cpp
+qt_electrum_qt_SOURCES = qt/electrum.cpp
 if TARGET_DARWIN
-  qt_navcoin_qt_SOURCES += $(NAVCOIN_MM)
+  qt_electrum_qt_SOURCES += $(ELECTRUM_MM)
 endif
 if TARGET_WINDOWS
-  qt_navcoin_qt_SOURCES+=$(NAVCOIN_RC)
+  qt_electrum_qt_SOURCES+=$(ELECTRUM_RC)
 endif
-qt_navcoin_qt_LDADD = qt/libnavcoinqt.a $(LIBNAVCOIN_SERVER)
+qt_electrum_qt_LDADD = qt/libelectrumqt.a $(LIBELECTRUM_SERVER)
 if ENABLE_WALLET
-qt_navcoin_qt_LDADD += $(LIBNAVCOIN_UTIL) $(LIBNAVCOIN_WALLET)
+qt_electrum_qt_LDADD += $(LIBELECTRUM_UTIL) $(LIBELECTRUM_WALLET)
 endif
 if ENABLE_ZMQ
-qt_navcoin_qt_LDADD += $(LIBNAVCOIN_ZMQ) $(ZMQ_LIBS)
+qt_electrum_qt_LDADD += $(LIBELECTRUM_ZMQ) $(ZMQ_LIBS)
 endif
-qt_navcoin_qt_LDADD += $(LIBNAVCOIN_CLI) $(LIBNAVCOIN_COMMON) $(LIBNAVCOIN_UTIL) $(LIBNAVCOIN_CONSENSUS) $(LIBNAVCOIN_CRYPTO) $(LIBUNIVALUE) $(LIBLEVELDB) $(LIBMEMENV) \
+qt_electrum_qt_LDADD += $(LIBELECTRUM_CLI) $(LIBELECTRUM_COMMON) $(LIBELECTRUM_UTIL) $(LIBELECTRUM_CONSENSUS) $(LIBELECTRUM_CRYPTO) $(LIBUNIVALUE) $(LIBLEVELDB) $(LIBMEMENV) \
 	$(BOOST_LIBS) $(QT_LIBS) $(QT_DBUS_LIBS) $(QR_LIBS) $(PROTOBUF_LIBS) $(BDB_LIBS) $(UNBOUND_LIBS) $(SSL_LIBS) $(CURL_LIBS) $(CRYPTO_LIBS) $(MINIUPNPC_LIBS) $(LIBSECP256K1) \
 	$(EVENT_PTHREADS_LIBS) $(EVENT_LIBS)
-qt_navcoin_qt_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(QT_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
-qt_navcoin_qt_LIBTOOLFLAGS = $(AM_LIBTOOLFLAGS) --tag CXX
+qt_electrum_qt_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(QT_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
+qt_electrum_qt_LIBTOOLFLAGS = $(AM_LIBTOOLFLAGS) --tag CXX
 
 #locale/foo.ts -> locale/foo.qm
 QT_QM=$(QT_TS:.ts=.qm)
 
 SECONDARY: $(QT_QM)
 
-$(srcdir)/qt/navcoinstrings.cpp: $(libnavcoin_server_a_SOURCES) $(libnavcoin_wallet_a_SOURCES) $(libnavcoin_common_a_SOURCES) $(libnavcoin_zmq_a_SOURCES) $(libnavcoin_consensus_a_SOURCES) $(libnavcoin_util_a_SOURCES)
+$(srcdir)/qt/electrumstrings.cpp: $(libelectrum_server_a_SOURCES) $(libelectrum_wallet_a_SOURCES) $(libelectrum_common_a_SOURCES) $(libelectrum_zmq_a_SOURCES) $(libelectrum_consensus_a_SOURCES) $(libelectrum_util_a_SOURCES)
 	@test -n $(XGETTEXT) || echo "xgettext is required for updating translations"
 	$(AM_V_GEN) cd $(srcdir); XGETTEXT=$(XGETTEXT) PACKAGE_NAME="$(PACKAGE_NAME)" COPYRIGHT_HOLDERS="$(COPYRIGHT_HOLDERS)" COPYRIGHT_HOLDERS_SUBSTITUTION="$(COPYRIGHT_HOLDERS_SUBSTITUTION)" $(PYTHON) ../share/qt/extract_strings_qt.py $^
 
-translate: $(srcdir)/qt/navcoinstrings.cpp $(QT_FORMS_UI) $(QT_FORMS_UI) $(NAVCOIN_QT_BASE_CPP) qt/navcoin.cpp $(NAVCOIN_QT_WINDOWS_CPP) $(NAVCOIN_QT_WALLET_CPP) $(NAVCOIN_QT_H) $(NAVCOIN_MM)
+translate: $(srcdir)/qt/electrumstrings.cpp $(QT_FORMS_UI) $(QT_FORMS_UI) $(ELECTRUM_QT_BASE_CPP) qt/electrum.cpp $(ELECTRUM_QT_WINDOWS_CPP) $(ELECTRUM_QT_WALLET_CPP) $(ELECTRUM_QT_H) $(ELECTRUM_MM)
 	@test -n $(LUPDATE) || echo "lupdate is required for updating translations"
-	$(AM_V_GEN) QT_SELECT=$(QT_SELECT) $(LUPDATE) $^ -locations relative -no-obsolete -ts $(srcdir)/qt/locale/navcoin_en.ts
+	$(AM_V_GEN) QT_SELECT=$(QT_SELECT) $(LUPDATE) $^ -locations relative -no-obsolete -ts $(srcdir)/qt/locale/electrum_en.ts
 
 $(QT_QRC_LOCALE_CPP): $(QT_QRC_LOCALE) $(QT_QM)
 	@test -f $(RCC)
 	@cp -f $< $(@D)/temp_$(<F)
-	$(AM_V_GEN) QT_SELECT=$(QT_SELECT) $(RCC) -name navcoin_locale $(@D)/temp_$(<F) | \
+	$(AM_V_GEN) QT_SELECT=$(QT_SELECT) $(RCC) -name electrum_locale $(@D)/temp_$(<F) | \
 		$(SED) -e '/^\*\*.*Created:/d' -e '/^\*\*.*by:/d' > $@
 	@rm $(@D)/temp_$(<F)
 
 $(QT_QRC_CPP): $(QT_QRC) $(QT_FORMS_H) $(RES_ICONS) $(RES_IMAGES) $(RES_MOVIES) $(PROTOBUF_H)
 	@test -f $(RCC)
-	$(AM_V_GEN) QT_SELECT=$(QT_SELECT) $(RCC) -name navcoin $< | \
+	$(AM_V_GEN) QT_SELECT=$(QT_SELECT) $(RCC) -name electrum $< | \
 		$(SED) -e '/^\*\*.*Created:/d' -e '/^\*\*.*by:/d' > $@
 
-CLEAN_QT = $(nodist_qt_libnavcoinqt_a_SOURCES) $(QT_QM) $(QT_FORMS_H) qt/*.gcda qt/*.gcno qt/temp_navcoin_locale.qrc
+CLEAN_QT = $(nodist_qt_libelectrumqt_a_SOURCES) $(QT_QM) $(QT_FORMS_H) qt/*.gcda qt/*.gcno qt/temp_electrum_locale.qrc
 
 CLEANFILES += $(CLEAN_QT)
 
-navcoin_qt_clean: FORCE
-	rm -f $(CLEAN_QT) $(qt_libnavcoinqt_a_OBJECTS) $(qt_navcoin_qt_OBJECTS) qt/navcoin-qt$(EXEEXT) $(LIBNAVCOINQT)
+electrum_qt_clean: FORCE
+	rm -f $(CLEAN_QT) $(qt_libelectrumqt_a_OBJECTS) $(qt_electrum_qt_OBJECTS) qt/electrum-qt$(EXEEXT) $(LIBELECTRUMQT)
 
-navcoin_qt : qt/navcoin-qt$(EXEEXT)
+electrum_qt : qt/electrum-qt$(EXEEXT)
 
 ui_%.h: %.ui
 	@test -f $(UIC)

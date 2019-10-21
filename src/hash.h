@@ -3,21 +3,21 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_HASH_H
-#define NAVCOIN_HASH_H
+#ifndef ELECTRUM_HASH_H
+#define ELECTRUM_HASH_H
 
-#include <crypto/ripemd160.h>
-#include <crypto/sha256.h>
-#include <prevector.h>
-#include <serialize.h>
-#include <uint256.h>
-#include <version.h>
+#include "crypto/ripemd160.h"
+#include "crypto/sha256.h"
+#include "prevector.h"
+#include "serialize.h"
+#include "uint256.h"
+#include "version.h"
 
 #include <vector>
 
 typedef uint256 ChainCode;
 
-/** A hasher class for NavCoin's 256-bit hash (double SHA-256). */
+/** A hasher class for Electrum's 256-bit hash (double SHA-256). */
 class CHash256 {
 private:
     CSHA256 sha;
@@ -41,7 +41,7 @@ public:
     }
 };
 
-/** A hasher class for NavCoin's 160-bit hash (SHA-256 + RIPEMD-160). */
+/** A hasher class for Electrum's 160-bit hash (SHA-256 + RIPEMD-160). */
 class CHash160 {
 private:
     CSHA256 sha;
@@ -205,4 +205,4 @@ public:
  */
 uint64_t SipHashUint256(uint64_t k0, uint64_t k1, const uint256& val);
 
-#endif // NAVCOIN_HASH_H
+#endif // ELECTRUM_HASH_H

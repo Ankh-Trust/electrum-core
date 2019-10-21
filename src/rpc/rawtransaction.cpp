@@ -3,29 +3,29 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include <base58.h>
-#include <chain.h>
-#include <coins.h>
-#include <consensus/validation.h>
-#include <core_io.h>
-#include <init.h>
-#include <keystore.h>
-#include <main.h>
-#include <merkleblock.h>
-#include <net.h>
-#include <policy/policy.h>
-#include <primitives/transaction.h>
-#include <rpc/server.h>
-#include <script/script.h>
-#include <script/script_error.h>
-#include <script/sign.h>
-#include <script/standard.h>
-#include <txmempool.h>
-#include <uint256.h>
-#include <timedata.h>
-#include <utilstrencodings.h>
+#include "base58.h"
+#include "chain.h"
+#include "coins.h"
+#include "consensus/validation.h"
+#include "core_io.h"
+#include "init.h"
+#include "keystore.h"
+#include "main.h"
+#include "merkleblock.h"
+#include "net.h"
+#include "policy/policy.h"
+#include "primitives/transaction.h"
+#include "rpc/server.h"
+#include "script/script.h"
+#include "script/script_error.h"
+#include "script/sign.h"
+#include "script/standard.h"
+#include "txmempool.h"
+#include "uint256.h"
+#include "timedata.h"
+#include "utilstrencodings.h"
 #ifdef ENABLE_WALLET
-#include <wallet/wallet.h>
+#include "wallet/wallet.h"
 #endif
 
 #include <stdint.h>
@@ -68,8 +68,8 @@ void ScriptPubKeyToJSON(const CScript& scriptPubKey, UniValue& out, bool fInclud
     else
     {
         UniValue a(UniValue::VARR);
-        for(const CTxDestination& addr: addresses)
-            a.push_back(CNavCoinAddress(addr).ToString());
+        BOOST_FOREACH(const CTxDestination& addr, addresses)
+            a.push_back(CElectrumAddress(addr).ToString());
         out.pushKV("addresses", a);
     }
 }
@@ -107,9 +107,9 @@ void TxToJSONExpanded(const CTransaction& tx, const uint256 hashBlock, UniValue&
                 in.pushKV("value", ValueFromAmount(spentInfo.satoshis));
                 in.pushKV("valueSat", spentInfo.satoshis);
                 if (spentInfo.addressType == 1) {
-                    in.pushKV("address", CNavCoinAddress(CKeyID(spentInfo.addressHash)).ToString());
+                    in.pushKV("address", CElectrumAddress(CKeyID(spentInfo.addressHash)).ToString());
                 } else if (spentInfo.addressType == 2)  {
-                    in.pushKV("address", CNavCoinAddress(CScriptID(spentInfo.addressHash)).ToString());
+                    in.pushKV("address", CElectrumAddress(CScriptID(spentInfo.addressHash)).ToString());
                 }
             }
 
@@ -293,7 +293,7 @@ UniValue getrawtransaction(const UniValue& params, bool fHelp)
             "         \"reqSigs\" : n,            (numeric) The required sigs\n"
             "         \"type\" : \"pubkeyhash\",  (string) The type, eg 'pubkeyhash'\n"
             "         \"addresses\" : [           (json array of string)\n"
-            "           \"navcoinaddress\"        (string) navcoin address\n"
+            "           \"electrumaddress\"        (string) electrum address\n"
             "           ,...\n"
             "         ]\n"
             "       }\n"
@@ -411,7 +411,7 @@ UniValue gettxoutproof(const UniValue& params, bool fHelp)
 
     LOCK(cs_main);
 
-    CBlockIndex* pblockindex = nullptr;
+    CBlockIndex* pblockindex = NULL;
 
     uint256 hashBlock;
     if (params.size() > 1)
@@ -426,7 +426,7 @@ UniValue gettxoutproof(const UniValue& params, bool fHelp)
             pblockindex = chainActive[coins.nHeight];
     }
 
-    if (pblockindex == nullptr)
+    if (pblockindex == NULL)
     {
         CTransaction tx;
         if (!GetTransaction(oneTxid, tx, Params().GetConsensus(), hashBlock, false) || hashBlock.IsNull())
@@ -441,7 +441,7 @@ UniValue gettxoutproof(const UniValue& params, bool fHelp)
         throw JSONRPCError(RPC_INTERNAL_ERROR, "Can't read block from disk");
 
     unsigned int ntxFound = 0;
-    for(const CTransaction&tx: block.vtx)
+    BOOST_FOREACH(const CTransaction&tx, block.vtx)
         if (setTxids.count(tx.GetHash()))
             ntxFound++;
     if (ntxFound != setTxids.size())
@@ -483,7 +483,7 @@ UniValue verifytxoutproof(const UniValue& params, bool fHelp)
     if (!mapBlockIndex.count(merkleBlock.header.GetHash()) || !chainActive.Contains(mapBlockIndex[merkleBlock.header.GetHash()]))
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Block not found in chain");
 
-    for(const uint256& hash: vMatch)
+    BOOST_FOREACH(const uint256& hash, vMatch)
         res.push_back(hash.GetHex());
     return res;
 }
@@ -511,7 +511,7 @@ UniValue createrawtransaction(const UniValue& params, bool fHelp)
             "     ]\n"
             "2. \"outputs\"             (string, required) a json object with outputs\n"
             "    {\n"
-            "      \"address\": x.xxx   (numeric or string, required) The key is the navcoin address, the numeric value (can be string) is the " + CURRENCY_UNIT + " amount\n"
+            "      \"address\": x.xxx   (numeric or string, required) The key is the electrum address, the numeric value (can be string) is the " + CURRENCY_UNIT + " amount\n"
             "      \"data\": x.xxx,     (string, required) The key is hex encoded data, the numeric value (can be string) is the " + CURRENCY_UNIT + " amount\n"
             "      ...\n"
             "    }\n"
@@ -541,7 +541,7 @@ UniValue createrawtransaction(const UniValue& params, bool fHelp)
       rawTx.strDZeel = params[2].get_str();
     }
 
-    rawTx.nVersion = IsCommunityFundEnabled(chainActive.Tip(),Params().GetConsensus()) ? CTransaction::TXDZEEL_VERSION_V2 : CTransaction::TXDZEEL_VERSION;
+    rawTx.nVersion = /*IsCommunityFundEnabled(chainActive.Tip(),Params().GetConsensus())*/ true ? CTransaction::TXDZEEL_VERSION_V2 : CTransaction::TXDZEEL_VERSION;
 
     int nout = -1;
 
@@ -589,10 +589,10 @@ UniValue createrawtransaction(const UniValue& params, bool fHelp)
         rawTx.vin.push_back(in);
     }
 
-    set<CNavCoinAddress> setAddress;
+    set<CElectrumAddress> setAddress;
     vector<string> addrList = sendTo.getKeys();
-    for(const string& name_: addrList) {
-        CNavCoinAddress address(name_);
+    BOOST_FOREACH(const string& name_, addrList) {
+        CElectrumAddress address(name_);
         if (address.IsValid()) {
             if (setAddress.count(address))
                 throw JSONRPCError(RPC_INVALID_PARAMETER, string("Invalid parameter, duplicated address: ")+name_);
@@ -662,7 +662,7 @@ UniValue decoderawtransaction(const UniValue& params, bool fHelp)
             "         \"reqSigs\" : n,            (numeric) The required sigs\n"
             "         \"type\" : \"pubkeyhash\",  (string) The type, eg 'pubkeyhash'\n"
             "         \"addresses\" : [           (json array of string)\n"
-            "           \"12tvKAXCxZjSmdNbao16dKXC8tRWfcF5oc\"   (string) navcoin address\n"
+            "           \"12tvKAXCxZjSmdNbao16dKXC8tRWfcF5oc\"   (string) electrum address\n"
             "           ,...\n"
             "         ]\n"
             "       }\n"
@@ -706,7 +706,7 @@ UniValue decodescript(const UniValue& params, bool fHelp)
             "  \"type\":\"type\", (string) The output type\n"
             "  \"reqSigs\": n,    (numeric) The required signatures\n"
             "  \"addresses\": [   (json array of string)\n"
-            "     \"address\"     (string) navcoin address\n"
+            "     \"address\"     (string) electrum address\n"
             "     ,...\n"
             "  ],\n"
             "  \"p2sh\",\"address\" (string) script address\n"
@@ -728,7 +728,7 @@ UniValue decodescript(const UniValue& params, bool fHelp)
     }
     ScriptPubKeyToJSON(script, r, false);
 
-    r.pushKV("p2sh", CNavCoinAddress(CScriptID(script)).ToString());
+    r.pushKV("p2sh", CElectrumAddress(CScriptID(script)).ToString());
     return r;
 }
 
@@ -806,7 +806,7 @@ UniValue signrawtransaction(const UniValue& params, bool fHelp)
         );
 
 #ifdef ENABLE_WALLET
-    LOCK2(cs_main, pwalletMain ? &pwalletMain->cs_wallet : nullptr);
+    LOCK2(cs_main, pwalletMain ? &pwalletMain->cs_wallet : NULL);
 #else
     LOCK(cs_main);
 #endif
@@ -842,7 +842,7 @@ UniValue signrawtransaction(const UniValue& params, bool fHelp)
         CCoinsViewMemPool viewMempool(&viewChain, mempool);
         view.SetBackend(viewMempool); // temporarily switch cache backend to db+mempool view
 
-        for(const CTxIn& txin: mergedTx.vin) {
+        BOOST_FOREACH(const CTxIn& txin, mergedTx.vin) {
             const uint256& prevHash = txin.prevout.hash;
             CCoins coins;
             view.AccessCoins(prevHash); // this is certainly allowed to fail
@@ -858,7 +858,7 @@ UniValue signrawtransaction(const UniValue& params, bool fHelp)
         UniValue keys = params[2].get_array();
         for (unsigned int idx = 0; idx < keys.size(); idx++) {
             UniValue k = keys[idx];
-            CNavCoinSecret vchSecret;
+            CElectrumSecret vchSecret;
             bool fGood = vchSecret.SetString(k.get_str());
             if (!fGood)
                 throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid private key");
@@ -985,14 +985,14 @@ UniValue signrawtransaction(const UniValue& params, bool fHelp)
             ProduceSignature(MutableTransactionSignatureCreator(&keystore, &mergedTx, i, amount, nHashType), prevPubKey, sigdata);
 
         // ... and merge in other signatures:
-        for(const CMutableTransaction& txv: txVariants) {
+        BOOST_FOREACH(const CMutableTransaction& txv, txVariants) {
             sigdata = CombineSignatures(prevPubKey, TransactionSignatureChecker(&txConst, i, amount), sigdata, DataFromTransaction(txv, i));
         }
 
         UpdateTransaction(mergedTx, i, sigdata);
 
         ScriptError serror = SCRIPT_ERR_OK;
-        if (!VerifyScript(txin.scriptSig, prevPubKey, mergedTx.wit.vtxinwit.size() > i ? &mergedTx.wit.vtxinwit[i].scriptWitness : nullptr, STANDARD_SCRIPT_VERIFY_FLAGS, TransactionSignatureChecker(&txConst, i, amount), &serror)) {
+        if (!VerifyScript(txin.scriptSig, prevPubKey, mergedTx.wit.vtxinwit.size() > i ? &mergedTx.wit.vtxinwit[i].scriptWitness : NULL, STANDARD_SCRIPT_VERIFY_FLAGS, TransactionSignatureChecker(&txConst, i, amount), &serror)) {
             TxInErrorToJSON(txin, vErrors, ScriptErrorString(serror));
         }
     }

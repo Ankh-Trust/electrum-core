@@ -6,16 +6,16 @@
 /**
  * Money parsing/formatting utilities.
  */
-#ifndef NAVCOIN_UTILMONEYSTR_H
-#define NAVCOIN_UTILMONEYSTR_H
+#ifndef ELECTRUM_UTILMONEYSTR_H
+#define ELECTRUM_UTILMONEYSTR_H
 
 #include <stdint.h>
 #include <string>
 
-#include <amount.h>
+#include "amount.h"
 
 std::string FormatMoney(const CAmount& n);
 bool ParseMoney(const std::string& str, CAmount& nRet);
 bool ParseMoney(const char* pszIn, CAmount& nRet);
 
-#endif // NAVCOIN_UTILMONEYSTR_H
+#endif // ELECTRUM_UTILMONEYSTR_H

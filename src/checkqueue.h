@@ -2,12 +2,13 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_CHECKQUEUE_H
-#define NAVCOIN_CHECKQUEUE_H
+#ifndef ELECTRUM_CHECKQUEUE_H
+#define ELECTRUM_CHECKQUEUE_H
 
 #include <algorithm>
 #include <vector>
 
+#include <boost/foreach.hpp>
 #include <boost/thread/condition_variable.hpp>
 #include <boost/thread/locks.hpp>
 #include <boost/thread/mutex.hpp>
@@ -15,7 +16,7 @@
 template <typename T>
 class CCheckQueueControl;
 
-/**
+/** 
  * Queue for verifications that have to be performed.
   * The verifications are represented by a type T, which must provide an
   * operator(), returning a bool.
@@ -118,7 +119,7 @@ private:
                 fOk = fAllOk;
             }
             // execute work
-            for(T& check: vChecks)
+            BOOST_FOREACH (T& check, vChecks)
                 if (fOk)
                     fOk = check();
             vChecks.clear();
@@ -145,7 +146,7 @@ public:
     void Add(std::vector<T>& vChecks)
     {
         boost::unique_lock<boost::mutex> lock(mutex);
-        for(T& check: vChecks) {
+        BOOST_FOREACH (T& check, vChecks) {
             queue.push_back(T());
             check.swap(queue.back());
         }
@@ -168,7 +169,7 @@ public:
 
 };
 
-/**
+/** 
  * RAII-style controller object for a CCheckQueue that guarantees the passed
  * queue is finished before continuing.
  */
@@ -211,4 +212,4 @@ public:
     }
 };
 
-#endif // NAVCOIN_CHECKQUEUE_H
+#endif // ELECTRUM_CHECKQUEUE_H

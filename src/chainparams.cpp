@@ -3,19 +3,19 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include <chainparams.h>
-#include <consensus/merkle.h>
+#include "chainparams.h"
+#include "consensus/merkle.h"
 
-#include <tinyformat.h>
-#include <util.h>
-#include <utilstrencodings.h>
-#include <streams.h>
+#include "tinyformat.h"
+#include "util.h"
+#include "utilstrencodings.h"
+#include "streams.h"
 
 #include <assert.h>
 
 #include <boost/assign/list_of.hpp>
 
-#include <chainparamsseeds.h>
+#include "chainparamsseeds.h"
 
 static CBlock CreateGenesisBlock(const char* pszTimestamp, const CScript& genesisOutputScript, uint32_t nTime, uint32_t nNonce, uint32_t nBits, int32_t nVersion, const CAmount& genesisReward)
 {
@@ -27,7 +27,7 @@ static CBlock CreateGenesisBlock(const char* pszTimestamp, const CScript& genesi
     // txNew.vout[0].scriptPubKey.clear();
     txNew.vout[0].nValue = genesisReward;
     txNew.vout[0].scriptPubKey.clear();
-    txNew.strDZeel = "NavCoin genesis block";
+    txNew.strDZeel = "Electrum genesis block";
 
     CBlock genesis;
     genesis.nTime    = nTime;
@@ -55,15 +55,15 @@ static CBlock CreateGenesisBlock(const char* pszTimestamp, const CScript& genesi
  */
 static CBlock CreateGenesisBlock(uint32_t nTime, uint32_t nNonce, uint32_t nBits, int32_t nVersion, const CAmount& genesisReward)
 {
-    const char* pszTimestamp = "Game is afoot!";
-    const CScript genesisOutputScript = CScript() << ParseHex("04bf5608f13e9b2781b839ea78adbd1cb90d8fc17dcc67028e93e65223ea77f8bc8d8eed1191f37dd0ad20f371912d86e1c2e7369251cb06d2a3fdc5e26262d6df") << OP_CHECKSIG;
+    const char* pszTimestamp = "BBC News 20 Sep: Trump denies promise that led to formal complaint from intelligence official";
+    const CScript genesisOutputScript = CScript() << ParseHex("0464c57bba1ef866f7551bada31f6320da513fea13d56c7926d03e8449981b4f64f301043b509b7f98bce6180e93884e530f5a56333d7ac84a26f6a25f0dd09a77") << OP_CHECKSIG;
     return CreateGenesisBlock(pszTimestamp, genesisOutputScript, nTime, nNonce, nBits, nVersion, genesisReward);
 }
 
 static CBlock CreateGenesisBlockTestnet(uint32_t nTime, uint32_t nNonce, uint32_t nBits, int32_t nVersion, const CAmount& genesisReward)
 {
-    const char* pszTimestamp = "Time does not exist";
-    const CScript genesisOutputScript = CScript() << ParseHex("047c3ec9cb8ea3148cfdb2107383209fc0883585b25e355ded65970bde3a49c5c79dfac1210dc8a4876f6bb68431b273b6d5347955135502726b0743948cee36d1") << OP_CHECKSIG;
+    const char* pszTimestamp = "BBC News 20 Sep: Climate change: Arctic expedition to drift in sea-ice for a year";
+    const CScript genesisOutputScript = CScript() << ParseHex("043ebea3223e70f2c8205ecf2c32f567fbca8bf8e74e1138f6090c4cd442589c69f719199b4a12a42bd8022eed0541e43744e387bff564dd28dba51da146170626") << OP_CHECKSIG;
     return CreateGenesisBlock(pszTimestamp, genesisOutputScript, nTime, nNonce, nBits, nVersion, genesisReward);
 }
 
@@ -86,8 +86,8 @@ public:
         consensus.nMajorityEnforceBlockUpgrade = 750;
         consensus.nMajorityRejectBlockOutdated = 950;
         consensus.nMajorityWindow = 1000;
-        consensus.BIP34Height = 900000;
-        consensus.BIP34Hash = uint256S("0xecb7444214d068028ec1fa4561662433452c1cbbd6b0f8eeb6452bcfa1d0a7d6");
+        consensus.BIP34Height = 0;
+        consensus.BIP34Hash = uint256S("0x00007db8870afcd774ef9851107340256e899d58b0db163bc782f2128a4c33ed");
         consensus.powLimit = ArithToUint256(~arith_uint256(0) >> 16);
         consensus.nPowTargetTimespan = 30;
         consensus.nPowTargetSpacing = 30;
@@ -102,7 +102,7 @@ public:
         consensus.nDailyBlockCount =  (24 * 60 * 60) / consensus.nTargetSpacing;
         consensus.nModifierInterval = 10 * 60; // time to elapse before new modifier is computed
         consensus.nTargetTimespan = 25 * 30;
-        consensus.nLastPOWBlock = 20000;
+        consensus.nLastPOWBlock = 1000;
         consensus.nBlocksPerVotingCycle = 2880 * 7; // 7 Days
         consensus.nMinimumQuorum = 0.5;
         consensus.nMinimumQuorumFirstHalf = 0.5;
@@ -113,8 +113,8 @@ public:
         consensus.nVotesRejectPaymentRequest = 0.7;
         consensus.nCommunityFundMinAge = 50;
         consensus.nProposalMinimalFee = 5000000000;
-        consensus.sigActivationTime = 1512990000;
-        consensus.nCoinbaseTimeActivationHeight = 20000;
+        consensus.sigActivationTime = 1567296000;
+        consensus.nCoinbaseTimeActivationHeight = 0;
         consensus.nBlockSpreadCFundAccumulation = 500;
         consensus.nCommunityFundAmount = 0.25 * COIN;
         consensus.nCommunityFundAmountV2 = 0.5 * COIN;
@@ -123,80 +123,80 @@ public:
         consensus.nPaymentRequestMaxVersion = 3;
         consensus.nProposalMaxVersion = 3;
         consensus.nMaxFutureDrift = 60;
-        consensus.nStaticReward = 2 * COIN;
-        consensus.nHeightv451Fork = 2722100;
-        consensus.nHeightv452Fork = 2882875;
+        consensus.nStaticReward = 1 * COIN;
+        consensus.nHeightv451Fork = 1;
+        consensus.nHeightv452Fork = 2;
 
         /** Coinbase transaction outputs can only be spent after this number of new blocks (network rule) */
         consensus.nCoinbaseMaturity = 50;
 
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].bit = 28;
-        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = 1199145601; // January 1, 2008
-        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nTimeout = 1230767999; // December 31, 2008
+        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = 1567296000; // September 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nTimeout = 1598918400; // September 1st, 2020
 
         // Deployment of BIP68, BIP112, and BIP113.
         consensus.vDeployments[Consensus::DEPLOYMENT_CSV].bit = 0;
-        consensus.vDeployments[Consensus::DEPLOYMENT_CSV].nStartTime = 1462060800; // May 1st, 2016
-        consensus.vDeployments[Consensus::DEPLOYMENT_CSV].nTimeout = 1525132800; // May 1st, 2017
+        consensus.vDeployments[Consensus::DEPLOYMENT_CSV].nStartTime = 1567296000; // September 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_CSV].nTimeout = 1598918400; // September 1st, 2020
 
         // Deployment of SegWit (BIP141 and BIP143)
         consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT_LEGACY].bit = 1;
-        consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT_LEGACY].nStartTime = 1493424000; // May 1st, 2017
-        consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT_LEGACY].nTimeout = 1525132800; // May 1st, 2018
+        consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT_LEGACY].nStartTime = 1567296000; // September 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT_LEGACY].nTimeout = 1598918400; // September 1st, 2020
 
         consensus.vDeployments[Consensus::DEPLOYMENT_CSV_LEGACY].bit = 2;
-        consensus.vDeployments[Consensus::DEPLOYMENT_CSV_LEGACY].nStartTime = 1462060800; // May 1st, 2016
-        consensus.vDeployments[Consensus::DEPLOYMENT_CSV_LEGACY].nTimeout = 1525132800; // May 1st, 2018
+        consensus.vDeployments[Consensus::DEPLOYMENT_CSV_LEGACY].nStartTime = 1567296000; // September 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_CSV_LEGACY].nTimeout = 1598918400; // September 1st, 2020
 
         // Deployment of Cold Staking
         consensus.vDeployments[Consensus::DEPLOYMENT_COLDSTAKING].bit = 3;
-        consensus.vDeployments[Consensus::DEPLOYMENT_COLDSTAKING].nStartTime = 1525132800; // May 1st, 2018
-        consensus.vDeployments[Consensus::DEPLOYMENT_COLDSTAKING].nTimeout = 1556712000; // May 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_COLDSTAKING].nStartTime = 1567296000; // September 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_COLDSTAKING].nTimeout = 1598918400; // September 1st, 2020
 
         // Deployment of SegWit (BIP141 and BIP143)
         consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].bit = 4;
-        consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].nStartTime = 1493424000; // May 1st, 2017
-        consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].nTimeout = 1525132800; // May 1st, 2018
+        consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].nStartTime = 1567296000; // September 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].nTimeout = 1598918400; // September 1st, 2020
 
         // Deployment of Community Fund
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND].bit = 6;
-        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND].nStartTime = 1493424000; // May 1st, 2017
-        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND].nTimeout = 1556668800; // May 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND].nStartTime = 4070908800; // Disabled
+        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND].nTimeout = 4070908800; // Disabled
 
         // Deployment of Community Fund Accumulation
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION].bit = 7;
-        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION].nStartTime = 1525132800; // May 1st, 2018
-        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION].nTimeout = 1556712000; // May 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION].nStartTime = 4070908800; // Disabled
+        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION].nTimeout = 4070908800; // Disabled
 
         // Deployment of NTP Sync
         consensus.vDeployments[Consensus::DEPLOYMENT_NTPSYNC].bit = 8;
-        consensus.vDeployments[Consensus::DEPLOYMENT_NTPSYNC].nStartTime = 1525132800; // May 1st, 2018
-        consensus.vDeployments[Consensus::DEPLOYMENT_NTPSYNC].nTimeout = 1556712000; // May 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_NTPSYNC].nStartTime = 1567296000; // September 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_NTPSYNC].nTimeout = 1598918400; // September 1st, 2020
 
         // Deployment of Community Fund Accumulation Spread(NPIP-0003)
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION_SPREAD].bit = 14;
-        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION_SPREAD].nStartTime = 1525132800; // May 1st, 2018
-        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION_SPREAD].nTimeout = 1556712000; // May 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION_SPREAD].nStartTime = 4070908800; // Disabled
+        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION_SPREAD].nTimeout = 4070908800; // Disabled
 
-        // Increate in Community Fund Accumulation Ammonut (NPIP-0004)
+        // Increase in Community Fund Accumulation Ammonut (NPIP-0004)
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_AMOUNT_V2].bit = 16;
-        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_AMOUNT_V2].nStartTime = 1533081600; // Aug 1st, 2018
-        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_AMOUNT_V2].nTimeout = 1564617600; // Aug 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_AMOUNT_V2].nStartTime = 4070908800; // Disabled
+        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_AMOUNT_V2].nTimeout = 4070908800; // Disabled
 
         // Deployment of Static Reward
         consensus.vDeployments[Consensus::DEPLOYMENT_STATIC_REWARD].bit = 15;
-        consensus.vDeployments[Consensus::DEPLOYMENT_STATIC_REWARD].nStartTime = 1533081600; // August 1st, 2018
-        consensus.vDeployments[Consensus::DEPLOYMENT_STATIC_REWARD].nTimeout = 1564617600; // August 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_STATIC_REWARD].nStartTime = 1567296000; // September 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_STATIC_REWARD].nTimeout = 1598918400; // September 1st, 2020
 
         // Deployment of Quorum reduction for the Community Fund
         consensus.vDeployments[Consensus::DEPLOYMENT_QUORUM_CFUND].bit = 17;
-        consensus.vDeployments[Consensus::DEPLOYMENT_QUORUM_CFUND].nStartTime = 1543622400; // Dec 1st, 2018
-        consensus.vDeployments[Consensus::DEPLOYMENT_QUORUM_CFUND].nTimeout = 1575158400; // Dec 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_QUORUM_CFUND].nStartTime = 4070908800; // Disabled
+        consensus.vDeployments[Consensus::DEPLOYMENT_QUORUM_CFUND].nTimeout = 4070908800; // Disabled
 
         // Deployment of Cold Staking Pool Fee
         consensus.vDeployments[Consensus::DEPLOYMENT_POOL_FEE].bit = 18;
-        consensus.vDeployments[Consensus::DEPLOYMENT_POOL_FEE].nStartTime = 1559390400; // Jun 1st, 2018
-        consensus.vDeployments[Consensus::DEPLOYMENT_POOL_FEE].nTimeout = 1622548800; // Jun 1st, 2021
+        consensus.vDeployments[Consensus::DEPLOYMENT_POOL_FEE].nStartTime = 4070908800; // Disabled
+        consensus.vDeployments[Consensus::DEPLOYMENT_POOL_FEE].nTimeout = 4070908800; // Disabled
 
 
         /**
@@ -204,31 +204,46 @@ public:
          * The characters are rarely used upper ASCII, not valid as UTF-8, and produce
          * a large 32-bit integer with any alignment.
          */
-        pchMessageStart[0] = 0x80;
-        pchMessageStart[1] = 0x50;
-        pchMessageStart[2] = 0x34;
-        pchMessageStart[3] = 0x20;
-        nDefaultPort = 44440;
+        pchMessageStart[0] = 0x84;
+        pchMessageStart[1] = 0x54;
+        pchMessageStart[2] = 0x38;
+        pchMessageStart[3] = 0x24;
+        nDefaultPort = 44840;
         nPruneAfterHeight = 100000;
         bnProofOfWorkLimit = arith_uint256(~arith_uint256() >> 16);
 
-        genesis = CreateGenesisBlock(1460561040, 6945, 0x1f00ffff, 1, 0);
+        uint32_t nTimestamp = 1569005000;
+        uint256 hashGenesisBlock = uint256S("0x00007db8870afcd774ef9851107340256e899d58b0db163bc782f2128a4c33ed");
+        uint256 hashMerkleRoot = uint256S("0x77242bb9675ba1000fb144eb0bc92542c4fc9a34a9d1ee328dbbd987a3de7e2c");
+        uint32_t nNonce = 2043738044;
 
-	      consensus.hashGenesisBlock = genesis.GetHash();
+        genesis = CreateGenesisBlock(nTimestamp, nNonce, 0x1f00ffff, 1, 0);
+	consensus.hashGenesisBlock = genesis.GetHash();
 
-        assert(consensus.hashGenesisBlock == uint256S("0x00006a4e3e18c71c6d48ad6c261e2254fa764cf29607a4357c99b712dfbb8e6a"));
-        assert(genesis.hashMerkleRoot == uint256S("0xc507eec6ccabfd5432d764afceafba42d2d946594b8a60570cb2358a7392c61a"));
+        if (true && (genesis.GetHash() != hashGenesisBlock || genesis.hashMerkleRoot != hashMerkleRoot))
+        {
+            printf("recalculating params for mainnet.\n");
+            printf("old mainnet genesis nonce: %d\n", genesis.nNonce);
+            printf("old mainnet genesis hash:  %s\n", hashGenesisBlock.ToString().c_str());
+            // deliberately empty for loop finds nonce value.
+            for(; genesis.GetHash() > consensus.powLimit; genesis.nNonce++){ }
+            printf("new mainnet genesis merkle root: %s\n", genesis.hashMerkleRoot.ToString().c_str());
+            printf("new mainnet genesis nonce: %d\n", genesis.nNonce);
+            printf("new mainnet genesis hash: %s\n", genesis.GetHash().ToString().c_str());
+        }
 
-        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,53);
+        assert(consensus.hashGenesisBlock == hashGenesisBlock);
+        assert(genesis.hashMerkleRoot == hashMerkleRoot);
+
+        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,33);
         base58Prefixes[COLDSTAKING_ADDRESS] = std::vector<unsigned char>(1,21); // cold staking addresses start with 'X'
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,85);
-        base58Prefixes[RAW_SCRIPT_ADDRESS] = std::vector<unsigned char>(1,60);
         base58Prefixes[SECRET_KEY] =     std::vector<unsigned char>(1,150);
         base58Prefixes[EXT_PUBLIC_KEY] = boost::assign::list_of(0x04)(0x88)(0xB2)(0x1E).convert_to_container<std::vector<unsigned char> >();
         base58Prefixes[EXT_SECRET_KEY] = boost::assign::list_of(0x04)(0x88)(0xAD)(0xE4).convert_to_container<std::vector<unsigned char> >();
 
-        vSeeds.push_back(CDNSSeedData("nav.community", "seed.nav.community"));
-        vSeeds.push_back(CDNSSeedData("navcoin.org", "seed.navcoin.org"));
+        // vSeeds.push_back(CDNSSeedData("", ""));
+        // vSeeds.push_back(CDNSSeedData("", ""));
 
         vFixedSeeds = std::vector<SeedSpec6>(pnSeed6_main, pnSeed6_main + ARRAYLEN(pnSeed6_main));
 
@@ -240,33 +255,15 @@ public:
 
         checkpointData = (CCheckpointData) {
             boost::assign::map_list_of
-            ( 0, uint256S("0x00006a4e3e18c71c6d48ad6c261e2254fa764cf29607a4357c99b712dfbb8e6a"))
-            (10000, uint256S("0x844f1eab31e8773328ba21970362b4fcff19622f13787cbbe164649ad2393b7a"))
-            (10000, uint256S("0x844f1eab31e8773328ba21970362b4fcff19622f13787cbbe164649ad2393b7a"))
-            (20000, uint256S("0xfea6d227117db665c5cff2fca0b29d850c5e7f064463d001f5228e80a7e21624"))
-            (30000, uint256S("0x5e6212b3b23ed3e5092d7765f7ae36512ecdc254f84c9988161e955d94c91a48"))
-            (40000, uint256S("0x3ae62cc62888db77de952d5855fb59f24a46f008177badc5f4f78ab12734985d"))
-            (50000, uint256S("0xb0df7fbaa66f0844a607bd3d4b8d25d68a63c57fb34fdae7212c689165edcb8d"))
-            (60000, uint256S("0x65504c021a5657321f070a11dd3973cc2dbc56a1f4a0c0d5f1a4d35e887e8182"))
-            (70000, uint256S("0x22e5cbb2fbc635e031e424157c49ec55907ba5198ef3aee9595b30238666824f"))
-            (80000, uint256S("0x64ce42ada8708c0b30b800403811275edd54054fc95f770f8dc49be1dad3a0e7"))
-            (100000, uint256S("0x85e33b3e583fba18d1fc2227702ea97b9d5a441a1a3fa2633c28d6e5d3837218"))
-            (120000, uint256S("0x4a11ab4cc4774ebc1dd602472fab4759c2d19ea29d8bb71073cb64474e70da89"))
-            (140000, uint256S("0xe6c750c5ce99932b86ca000139909f37abbf829cc39cd09fe4eb7ec88cc50238"))
-            (160000, uint256S("0xb855f143c2ebec37b0b9a9e2a2fc9e3d3d2437440c2101fb57ad11407e3bb147"))
-            (180000, uint256S("0x774851c8ac775e671bed326be4fec73f5663aa4b1e84e89b20d0cea529fb5c06"))
-            (200000, uint256S("0x9aa7fff01e07e800774b4ef7e11d55afffa8a1c6fdb0cd19762418cb8b901b32"))
-            (500000, uint256S("0xee97c591a67c19ed74e6162f18eaa73c2a566d3e2754df8fa70a5662e3ed30df"))
-            (750000, uint256S("0x7c163d8dc6320bdc3b1b726bf7be13fa3a44c621efcb0f8f3bcd7f2ad374b5ef"))
-            (1000000,uint256S("0x12befed86624731beb4f53a523ece1342f68832710a2933f189f18ddaf5af713"))
-            (1250000,uint256S("0x43a9f08444cf05b1193dbdcfffebd558c0d406e478606bdc8755de75c513f620"))
-            (1500000,uint256S("0xdfc75b7d1be540bbcabea1323f6d06d92e96b73c93f386b57f82cd62a1c94ce1"))
-            (1750000,uint256S("0x713cbac2df077bacb25dedf4acd60745f102cbe53ede019b738a6864fc0b12c6"))
-            (2000000,uint256S("0x41b723e003cab30d326a0fae995521554ab59e550e1e0013187b3267d09dd42c"))
-            (2250000,uint256S("0x1f7d459f6dcb3752868395819ac676adccfb0d0ec904a60b9fcb15879bcc5228"))
-            (2500000,uint256S("0x38000f4f433d47f171c7cccc001a2e7c9292620b37170d347b5a21ef19243dda")),
-            1535607904, // * UNIX timestamp of last checkpoint block
-            5067164,    // * total number of transactions between genesis and last checkpoint
+            ( 0, uint256S("0x00007db8870afcd774ef9851107340256e899d58b0db163bc782f2128a4c33ed"))
+            ( 250, uint256S("0x668e05f32eaa6ff639b157abfaf9fe4972770a92ed7c69d566b3f4ec00d8d015"))
+            ( 500, uint256S("0xa6dd84d1f35b15aae402e72a7ff4f18dca08ac001f2b95cbb4588bdfa16eeb08"))
+            ( 1000, uint256S("0x8a75993a531726f54542bdcaffbfed023bfe97f99d9c4f025eb749c4d2ded54e"))
+            ( 2500, uint256S("0x5951c151346fb911a77a9247e0a2bfa4fd6af39dc53c64f7e0221c55b8d7bf7c"))
+            ( 5000, uint256S("0xee6193d758165b0347cff9a90228864ee1be3d6ddb6e34a19da18ae012977887"))
+            ( 10000, uint256S("0x1cfd7579b47e09e574a4e215e2cf1d5d4447cd3ac47fc7b62b1015327b21481f")),
+            1569005000, // * UNIX timestamp of last checkpoint block
+            0,          // * total number of transactions between genesis and last checkpoint
                         //   (the tx=... number in the SetBestChain debug.log lines)
             7000        // * estimated number of transactions per day after checkpoint
         };
@@ -285,8 +282,8 @@ public:
         consensus.nMajorityEnforceBlockUpgrade = 750;
         consensus.nMajorityRejectBlockOutdated = 950;
         consensus.nMajorityWindow = 1000;
-        consensus.BIP34Height = 900000;
-        consensus.BIP34Hash = uint256S("0xecb7444214d068028ec1fa4561662433452c1cbbd6b0f8eeb6452bcfa1d0a7d6");
+        consensus.BIP34Height = 0;
+        consensus.BIP34Hash = uint256S("0x00003a40545d761d6727b925c0d187b47335295b43163d075287fa7ff931e4fb");
         consensus.powLimit = ArithToUint256(~arith_uint256(0) >> 16);
         consensus.nPowTargetTimespan = 30;
         consensus.nPowTargetSpacing = 30;
@@ -325,7 +322,7 @@ public:
         consensus.nPaymentRequestMaxVersion = 3;
         consensus.nProposalMaxVersion = 3;
         consensus.nMaxFutureDrift = 60;
-        consensus.nStaticReward = 2 * COIN;
+        consensus.nStaticReward = 1 * COIN;
         consensus.nHeightv451Fork = 100000;
         consensus.nHeightv452Fork = 100000;
 
@@ -334,57 +331,57 @@ public:
 
         // Deployment of BIP68, BIP112, and BIP113.
         consensus.vDeployments[Consensus::DEPLOYMENT_CSV].bit = 0;
-        consensus.vDeployments[Consensus::DEPLOYMENT_CSV].nStartTime = 1462060800; // May 1st, 2016
+        consensus.vDeployments[Consensus::DEPLOYMENT_CSV].nStartTime = 1567296000; // September 1st, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_CSV].nTimeout = 1622548800; // Jun 1st, 2021
 
         // Deployment of Cold Staking
         consensus.vDeployments[Consensus::DEPLOYMENT_COLDSTAKING].bit = 6;
-        consensus.vDeployments[Consensus::DEPLOYMENT_COLDSTAKING].nStartTime = 1525132800; // May 1st, 2018
+        consensus.vDeployments[Consensus::DEPLOYMENT_COLDSTAKING].nStartTime = 1567296000; // September 1st, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_COLDSTAKING].nTimeout = 1622548800; // Jun 1st, 2021
 
         // Deployment of SegWit (BIP141 and BIP143)
         consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].bit = 4;
-        consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].nStartTime = 1493424000; // May 1st, 2017
+        consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].nStartTime = 1567296000; // September 1st, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].nTimeout = 1622548800; // Jun 1st, 2021
 
         // Deployment of Community Fund
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND].bit = 6;
-        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND].nStartTime = 1493424000; // May 1st, 2017
+        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND].nStartTime = 1567296000; // September 1st, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND].nTimeout = 1622548800; // Jun 1st, 2021
 
         // Deployment of Community Fund Accumulation
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION].bit = 7;
-        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION].nStartTime = 1525132800; // May 1st, 2018
+        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION].nStartTime = 1567296000; // September 1st, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION].nTimeout = 1622548800; // Jun 1st, 2021
 
         // Deployment of NTP Sync
         consensus.vDeployments[Consensus::DEPLOYMENT_NTPSYNC].bit = 8;
-        consensus.vDeployments[Consensus::DEPLOYMENT_NTPSYNC].nStartTime = 1525132800; // May 1st, 2018
+        consensus.vDeployments[Consensus::DEPLOYMENT_NTPSYNC].nStartTime = 1567296000; // September 1st, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_NTPSYNC].nTimeout = 1556712000; // 1622548800; // Jun 1st, 2021
 
         // Deployment of Community Fund Accumulation Spread(NPIP-0003)
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION_SPREAD].bit = 14;
-        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION_SPREAD].nStartTime = 1525132800; // May 1st, 2018
+        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION_SPREAD].nStartTime = 1567296000; // September 1st, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION_SPREAD].nTimeout = 1622548800; // Jun 1st, 2021
 
         // Increate in Community Fund Accumulation Ammonut (NPIP-0004)
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_AMOUNT_V2].bit = 16;
-        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_AMOUNT_V2].nStartTime = 1533081600; // Aug 1st, 2018
+        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_AMOUNT_V2].nStartTime = 1567296000; // September 1st, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_AMOUNT_V2].nTimeout = 1622548800; // Jun 1st, 2021
 
         // Deployment of Static Reward
         consensus.vDeployments[Consensus::DEPLOYMENT_STATIC_REWARD].bit = 15;
-        consensus.vDeployments[Consensus::DEPLOYMENT_STATIC_REWARD].nStartTime = 1533081600; // August 1st, 2018
+        consensus.vDeployments[Consensus::DEPLOYMENT_STATIC_REWARD].nStartTime = 1567296000; // September 1st, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_STATIC_REWARD].nTimeout = 1622548800; // Jun 1st, 2021
 
         // Deployment of Quorum reduction for the Community Fund
         consensus.vDeployments[Consensus::DEPLOYMENT_QUORUM_CFUND].bit = 17;
-        consensus.vDeployments[Consensus::DEPLOYMENT_QUORUM_CFUND].nStartTime = 1543622400; // Dec 1st, 2018
+        consensus.vDeployments[Consensus::DEPLOYMENT_QUORUM_CFUND].nStartTime = 1567296000; // September 1st, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_QUORUM_CFUND].nTimeout = 1622548800; // Jun 1st, 2021
 
         // Deployment of Cold Staking Pool Fee
         consensus.vDeployments[Consensus::DEPLOYMENT_POOL_FEE].bit = 18;
-        consensus.vDeployments[Consensus::DEPLOYMENT_POOL_FEE].nStartTime = 1559390400; // Jun 1st, 2018
+        consensus.vDeployments[Consensus::DEPLOYMENT_POOL_FEE].nStartTime = 1567296000; // September 1st, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_POOL_FEE].nTimeout = 1622548800; // Jun 1st, 2021
 
         /**
@@ -392,19 +389,19 @@ public:
          * The characters are rarely used upper ASCII, not valid as UTF-8, and produce
          * a large 32-bit integer with any alignment.
          */
-        pchMessageStart[0] = 0x3f;
-        pchMessageStart[1] = 0xa4;
-        pchMessageStart[2] = 0x52;
-        pchMessageStart[3] = 0x22;
-        nDefaultPort = 15556;
+        pchMessageStart[0] = 0x43;
+        pchMessageStart[1] = 0xa8;
+        pchMessageStart[2] = 0x56;
+        pchMessageStart[3] = 0x26;
+        nDefaultPort = 45556;
         nPruneAfterHeight = 1000;
         bnProofOfWorkLimit = arith_uint256(~arith_uint256() >> 16);
-    
-        uint32_t nTimestamp = 1545341312;
-        uint256 hashGenesisBlock = uint256S("0x0000a2ed763c6efc24bbb3ac8d9f1ab9e8f1e7100d5221ad80815cd7b369dc2c");
-        uint256 hashMerkleRoot = uint256S("0x02128838f2516796eb04f5b3fd143a7786001301dc5ffcfd2b2c687a2864aae9");
-        uint32_t nNonce = 2043585747;
-	    
+
+        uint32_t nTimestamp = 1569005000;
+        uint256 hashGenesisBlock = uint256S("0x00003a40545d761d6727b925c0d187b47335295b43163d075287fa7ff931e4fb");
+        uint256 hashMerkleRoot = uint256S("0x82248aea7886a8a448e42cad754ceae4a25d95b024923f6b4dfb208bb479e27a");
+        uint32_t nNonce = 2043802847;
+
         genesis = CreateGenesisBlockTestnet(nTimestamp, nNonce, 0x1d00ffff, 1, 0);
         consensus.hashGenesisBlock = genesis.GetHash();
 
@@ -420,16 +417,15 @@ public:
             printf("new testnet genesis hash: %s\n", genesis.GetHash().ToString().c_str());
         }
 
-        vSeeds.push_back(CDNSSeedData("testnav.community", "testseed.nav.community"));
-        vSeeds.push_back(CDNSSeedData("testnavcoin.org", "testseed.navcoin.org"));
+        // vSeeds.push_back(CDNSSeedData("", ""));
+        // vSeeds.push_back(CDNSSeedData("", ""));
 
         assert(consensus.hashGenesisBlock == hashGenesisBlock);
         assert(genesis.hashMerkleRoot == hashMerkleRoot);
 
-        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,111);
+        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,94);
         base58Prefixes[COLDSTAKING_ADDRESS] = std::vector<unsigned char>(1,8); // cold staking addresses start with 'C/D'
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,196);
-        base58Prefixes[RAW_SCRIPT_ADDRESS] = std::vector<unsigned char>(1,60);
         base58Prefixes[SECRET_KEY] =     std::vector<unsigned char>(1,239);
         base58Prefixes[EXT_PUBLIC_KEY] = boost::assign::list_of(0x40)(0x88)(0x2B)(0xE1).convert_to_container<std::vector<unsigned char> >();
         base58Prefixes[EXT_SECRET_KEY] = boost::assign::list_of(0x40)(0x88)(0xDA)(0x4E).convert_to_container<std::vector<unsigned char> >();
@@ -445,7 +441,7 @@ public:
         checkpointData = (CCheckpointData) {
             boost::assign::map_list_of
             ( 0,     hashGenesisBlock),
-            1525248575, // * UNIX timestamp of last checkpoint block
+            1569005000, // * UNIX timestamp of last checkpoint block
             0,          // * total number of transactions between genesis and last checkpoint
                         //   (the tx=... number in the SetBestChain debug.log lines)
             7000         // * estimated number of transactions per day after checkpoint
@@ -466,8 +462,8 @@ public:
         consensus.nMajorityEnforceBlockUpgrade = 750;
         consensus.nMajorityRejectBlockOutdated = 950;
         consensus.nMajorityWindow = 1000;
-        consensus.BIP34Height = 900000;
-        consensus.BIP34Hash = uint256S("0x0");
+        consensus.BIP34Height = 0;
+        consensus.BIP34Hash = uint256S("0x0000af88d8cae858d9e3e22d5931871e9eefd411984dc241e9bc2de1b7d88326");
         consensus.powLimit = ArithToUint256(~arith_uint256(0) >> 16);
         consensus.nPowTargetTimespan = 30;
         consensus.nPowTargetSpacing = 30;
@@ -506,7 +502,7 @@ public:
         consensus.nPaymentRequestMaxVersion = 3;
         consensus.nProposalMaxVersion = 3;
         consensus.nMaxFutureDrift = 60000;
-        consensus.nStaticReward = 2 * COIN;
+        consensus.nStaticReward = 1 * COIN;
         consensus.nHeightv451Fork = 1000;
         consensus.nHeightv452Fork = 1000;
 
@@ -573,26 +569,26 @@ public:
          * The characters are rarely used upper ASCII, not valid as UTF-8, and produce
          * a large 32-bit integer with any alignment.
          */
-        pchMessageStart[0] = 0xa8;
-        pchMessageStart[1] = 0xb3;
-        pchMessageStart[2] = 0x89;
-        pchMessageStart[3] = 0xfa;
-        nDefaultPort = 18886;
+        pchMessageStart[0] = 0xac;
+        pchMessageStart[1] = 0xb7;
+        pchMessageStart[2] = 0x8c;
+        pchMessageStart[3] = 0xfe;
+        nDefaultPort = 48886;
         nPruneAfterHeight = 1000;
         bnProofOfWorkLimit = arith_uint256(~arith_uint256() >> 16);
 
         // To create a new devnet:
         //
         // 1) Replace nTimestamp with current timestamp.
-        uint32_t nTimestamp = 1525248575;
+        uint32_t nTimestamp = 1569005000;
         // 2) Rebuild
         // 3) Launch daemon. It'll calculate the new parameters.
         // 4) Update the following variables with the new values:
-        uint256 hashGenesisBlock = uint256S("0x0000971c241a5a1b8462c3cb8d455f0493043eb37c7163f88c658c70aa689929");
-        uint256 hashMerkleRoot = uint256S("0x2d9101b87fe7b9deaea41849c1f3bed71e060739147802a238fe968f75ad0fd9");
-        uint32_t nNonce = 2043198879;
+        uint256 hashGenesisBlock = uint256S("0x0000af88d8cae858d9e3e22d5931871e9eefd411984dc241e9bc2de1b7d88326");
+        uint256 hashMerkleRoot = uint256S("0x82248aea7886a8a448e42cad754ceae4a25d95b024923f6b4dfb208bb479e27a");
+        uint32_t nNonce = 2043685926;
         // 5) Rebuild. Launch daemon.
-        // 6) Generate first block using RPC command "./navcoin-cli generate 1"
+        // 6) Generate first block using RPC command "./electrum-cli generate 1"
 
         genesis = CreateGenesisBlockTestnet(nTimestamp, nNonce, 0xffffffff, 1, 0);
         consensus.hashGenesisBlock = genesis.GetHash();
@@ -611,16 +607,15 @@ public:
             printf("use the new values to update CDevNetParams class in src/chainparams.cpp\n");
         }
 
-        vSeeds.push_back(CDNSSeedData("devnav.community", "devseed.nav.community"));
-        vSeeds.push_back(CDNSSeedData("devnet.navcoin.org", "devseed.navcoin.org"));
+        // vSeeds.push_back(CDNSSeedData("", ""));
+        // vSeeds.push_back(CDNSSeedData("", ""));
 
         assert(consensus.hashGenesisBlock == hashGenesisBlock);
         assert(genesis.hashMerkleRoot == hashMerkleRoot);
 
-        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,111);
+        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,94);
         base58Prefixes[COLDSTAKING_ADDRESS] = std::vector<unsigned char>(1,63); // cold staking addresses start with 'S'
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,196);
-        base58Prefixes[RAW_SCRIPT_ADDRESS] = std::vector<unsigned char>(1,60);
         base58Prefixes[SECRET_KEY] =     std::vector<unsigned char>(1,239);
         base58Prefixes[EXT_PUBLIC_KEY] = boost::assign::list_of(0x40)(0x88)(0x2B)(0xE1).convert_to_container<std::vector<unsigned char> >();
         base58Prefixes[EXT_SECRET_KEY] = boost::assign::list_of(0x40)(0x88)(0xDA)(0x4E).convert_to_container<std::vector<unsigned char> >();
@@ -636,7 +631,7 @@ public:
         checkpointData = (CCheckpointData) {
             boost::assign::map_list_of
             ( 0,     hashGenesisBlock),
-            1515437594, // * UNIX timestamp of last checkpoint block
+            1569005000, // * UNIX timestamp of last checkpoint block
             0,          // * total number of transactions between genesis and last checkpoint
                         //   (the tx=... number in the SetBestChain debug.log lines)
             7000         // * estimated number of transactions per day after checkpoint
@@ -697,7 +692,7 @@ public:
         consensus.nPaymentRequestMaxVersion = 3;
         consensus.nProposalMaxVersion = 3;
         consensus.nMaxFutureDrift = 60000;
-        consensus.nStaticReward = 2 * COIN;
+        consensus.nStaticReward = 1 * COIN;
         consensus.nHeightv451Fork = 1000;
         consensus.nHeightv452Fork = 1000;
 
@@ -711,8 +706,8 @@ public:
 
         // Deployment of Cold Staking
         consensus.vDeployments[Consensus::DEPLOYMENT_COLDSTAKING].bit = 3;
-        consensus.vDeployments[Consensus::DEPLOYMENT_COLDSTAKING].nStartTime = 1525132800; // May 1st, 2018
-        consensus.vDeployments[Consensus::DEPLOYMENT_COLDSTAKING].nTimeout = 1556712000; // May 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_COLDSTAKING].nStartTime = 1567296000; // September 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_COLDSTAKING].nTimeout = 1598918400; // September 1st, 2020
 
         // Deployment of SegWit (BIP141 and BIP143)
         consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].bit = 5;
@@ -736,45 +731,45 @@ public:
 
         // Deployment of Community Fund Accumulation Spread(NPIP-0003)
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION_SPREAD].bit = 14;
-        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION_SPREAD].nStartTime = 1525132800; // May 1st, 2018
-        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION_SPREAD].nTimeout = 1556712000; // May 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION_SPREAD].nStartTime = 1567296000; // September 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION_SPREAD].nTimeout = 1598918400; // September 1st, 2020
 
         // Increate in Community Fund Accumulation Ammonut (NPIP-0004)
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_AMOUNT_V2].bit = 16;
-        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_AMOUNT_V2].nStartTime = 1533081600; // Aug 1st, 2018
-        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_AMOUNT_V2].nTimeout = 1564617600; // Aug 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_AMOUNT_V2].nStartTime = 1567296000; // September 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_AMOUNT_V2].nTimeout = 1598918400; // September 1st, 2020
 
         // Deployment of Static Reward
         consensus.vDeployments[Consensus::DEPLOYMENT_STATIC_REWARD].bit = 15;
-        consensus.vDeployments[Consensus::DEPLOYMENT_STATIC_REWARD].nStartTime = 1533081600; // August 1st, 2018
-        consensus.vDeployments[Consensus::DEPLOYMENT_STATIC_REWARD].nTimeout = 1564617600; // August 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_STATIC_REWARD].nStartTime = 1567296000; // September 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_STATIC_REWARD].nTimeout = 1598918400; // September 1st, 2020
 
         // Deployment of Quorum reduction for the Community Fund
         consensus.vDeployments[Consensus::DEPLOYMENT_QUORUM_CFUND].bit = 17;
-        consensus.vDeployments[Consensus::DEPLOYMENT_QUORUM_CFUND].nStartTime = 1543622400; // Dec 1st, 2018
-        consensus.vDeployments[Consensus::DEPLOYMENT_QUORUM_CFUND].nTimeout = 1575158400; // Dec 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_QUORUM_CFUND].nStartTime = 1567296000; // September 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_QUORUM_CFUND].nTimeout = 1598918400; // September 1st, 2020
 
         // Deployment of Cold Staking Pool Fee
         consensus.vDeployments[Consensus::DEPLOYMENT_POOL_FEE].bit = 18;
-        consensus.vDeployments[Consensus::DEPLOYMENT_POOL_FEE].nStartTime = 1559390400; // Jun 1st, 2018
-        consensus.vDeployments[Consensus::DEPLOYMENT_POOL_FEE].nTimeout = 1622548800; // Jun 1st, 2021
+        consensus.vDeployments[Consensus::DEPLOYMENT_POOL_FEE].nStartTime = 1567296000; // September 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_POOL_FEE].nTimeout = 1598918400; // September 1st, 2020
 
         /**
          * The message start string is designed to be unlikely to occur in normal data.
          * The characters are rarely used upper ASCII, not valid as UTF-8, and produce
          * a large 32-bit integer with any alignment.
          */
-        pchMessageStart[0] = 0x7d;
-        pchMessageStart[1] = 0x11;
-        pchMessageStart[2] = 0xb7;
-        pchMessageStart[3] = 0x89;
-        nDefaultPort = 18886;
+        pchMessageStart[0] = 0x81;
+        pchMessageStart[1] = 0x15;
+        pchMessageStart[2] = 0xbb;
+        pchMessageStart[3] = 0x8d;
+        nDefaultPort = 48886;
         nPruneAfterHeight = 1000;
         bnProofOfWorkLimit = arith_uint256(~arith_uint256() >> 16);
 
         uint32_t nTimestamp = GetTimeNow();
-        uint256 hashGenesisBlock = uint256S("0x0000e01b12644af6917e5aada637a609dd9590ad6bdc4828cd8df95258d85c02");
-        uint256 hashMerkleRoot = uint256S("0x2d9101b87fe7b9deaea41849c1f3bed71e060739147802a238fe968f75ad0fd9");
+        uint256 hashGenesisBlock = uint256S("0x");
+        uint256 hashMerkleRoot = uint256S("0x");
         uint32_t nNonce = 2043184832;
 
         genesis = CreateGenesisBlockTestnet(nTimestamp, nNonce, 0x1d00ffff, 1, 0);
@@ -790,18 +785,17 @@ public:
             hashMerkleRoot = genesis.hashMerkleRoot;
         }
 
-        vSeeds.push_back(CDNSSeedData("testnav.community", "testseed.nav.community"));
-        vSeeds.push_back(CDNSSeedData("testnavcoin.org", "testseed.navcoin.org"));
+        // vSeeds.push_back(CDNSSeedData("", ""));
+        // vSeeds.push_back(CDNSSeedData("", ""));
 
         consensus.hashGenesisBlock = genesis.GetHash();
 
         assert(consensus.hashGenesisBlock == hashGenesisBlock);
         assert(genesis.hashMerkleRoot == hashMerkleRoot);
 
-        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,111);
+        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,94);
         base58Prefixes[COLDSTAKING_ADDRESS] = std::vector<unsigned char>(1,63); // cold staking addresses start with 'S'
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,196);
-        base58Prefixes[RAW_SCRIPT_ADDRESS] = std::vector<unsigned char>(1,60);
         base58Prefixes[SECRET_KEY] =     std::vector<unsigned char>(1,239);
         base58Prefixes[EXT_PUBLIC_KEY] = boost::assign::list_of(0x40)(0x88)(0x2B)(0xE1).convert_to_container<std::vector<unsigned char> >();
         base58Prefixes[EXT_SECRET_KEY] = boost::assign::list_of(0x40)(0x88)(0xDA)(0x4E).convert_to_container<std::vector<unsigned char> >();

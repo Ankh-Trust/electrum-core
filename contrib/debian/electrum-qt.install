@@ -1,0 +1,6 @@
+usr/local/bin/electrum-qt usr/bin
+share/pixmaps/electrum32.xpm usr/share/pixmaps
+share/pixmaps/electrum16.xpm usr/share/pixmaps
+share/pixmaps/electrum128.png usr/share/pixmaps
+debian/electrum-qt.desktop usr/share/applications
+debian/electrum-qt.protocol usr/share/kde4/services/

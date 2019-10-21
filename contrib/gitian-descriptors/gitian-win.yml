@@ -1,5 +1,5 @@
 ---
-name: "navcoin-win-4.0.0"
+name: "electrum-win-1.0.0"
 enable_cache: true
 distro: "ubuntu"
 suites:
@@ -24,8 +24,8 @@ packages:
 - "python3"
 - "rename"
 remotes:
-- "url": "https://github.com/navcoin/navcoin-core.git"
-  "dir": "navcoin-core"
+- "url": "https://github.com/electrum/electrum-core.git"
+  "dir": "electrum-core"
 files: []
 script: |
   set -e -o pipefail
@@ -106,7 +106,7 @@ script: |
   create_per-host_linker_wrapper "2000-01-01 12:00:00"
   export PATH=${WRAP_DIR}:${PATH}
 
-  cd navcoin-core
+  cd electrum-core
   BASEPREFIX=`pwd`/depends
   # Build dependencies for each host
   for i in $HOSTS; do
@@ -124,14 +124,14 @@ script: |
   ./autogen.sh
   CONFIG_SITE=${BASEPREFIX}/`echo "${HOSTS}" | awk '{print $1;}'`/share/config.site ./configure --prefix=/
   make dist
-  SOURCEDIST=`echo navcoin-*.tar.gz`
+  SOURCEDIST=`echo electrum-*.tar.gz`
   DISTNAME=`echo ${SOURCEDIST} | sed 's/.tar.*//'`
 
   # Correct tar file order
   mkdir -p temp
   pushd temp
   tar xf ../$SOURCEDIST
-  find navcoin-* | sort | tar --no-recursion --mode='u+rw,go+r-w,a+X' --owner=0 --group=0 -c -T - | gzip -9n > ../$SOURCEDIST
+  find electrum-* | sort | tar --no-recursion --mode='u+rw,go+r-w,a+X' --owner=0 --group=0 -c -T - | gzip -9n > ../$SOURCEDIST
   mkdir -p $OUTDIR/src
   cp ../$SOURCEDIST $OUTDIR/src
   popd
@@ -160,7 +160,7 @@ script: |
     make deploy
     make install DESTDIR=${INSTALLPATH}
     rename 's/-setup\.exe$/-setup-unsigned.exe/' *-setup.exe
-    cp -f navcoin-*setup*.exe $OUTDIR/
+    cp -f electrum-*setup*.exe $OUTDIR/
     cd installed
     mv ${DISTNAME}/bin/*.dll ${DISTNAME}/lib/
     find . -name "lib*.la" -delete

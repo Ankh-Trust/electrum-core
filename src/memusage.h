@@ -2,10 +2,10 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_MEMUSAGE_H
-#define NAVCOIN_MEMUSAGE_H
+#ifndef ELECTRUM_MEMUSAGE_H
+#define ELECTRUM_MEMUSAGE_H
 
-#include <indirectmap.h>
+#include "indirectmap.h"
 
 #include <stdlib.h>
 
@@ -13,6 +13,7 @@
 #include <set>
 #include <vector>
 
+#include <boost/foreach.hpp>
 #include <boost/unordered_set.hpp>
 #include <boost/unordered_map.hpp>
 
@@ -168,4 +169,4 @@ static inline size_t DynamicUsage(const boost::unordered_map<X, Y, Z>& m)
 
 }
 
-#endif // NAVCOIN_MEMUSAGE_H
+#endif // ELECTRUM_MEMUSAGE_H

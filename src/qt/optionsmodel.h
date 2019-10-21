@@ -2,10 +2,10 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_QT_OPTIONSMODEL_H
-#define NAVCOIN_QT_OPTIONSMODEL_H
+#ifndef ELECTRUM_QT_OPTIONSMODEL_H
+#define ELECTRUM_QT_OPTIONSMODEL_H
 
-#include <amount.h>
+#include "amount.h"
 
 #include <QAbstractListModel>
 
@@ -13,7 +13,7 @@ QT_BEGIN_NAMESPACE
 class QNetworkProxy;
 QT_END_NAMESPACE
 
-/** Interface from Qt to configuration data structure for NavCoin client.
+/** Interface from Qt to configuration data structure for Electrum client.
    To Qt, the options are presented as a list with the different options
    laid out vertically.
    This can be changed to a tree once the settings become sufficiently
@@ -38,8 +38,9 @@ public:
         ProxyUseTor,            // bool
         ProxyIPTor,             // QString
         ProxyPortTor,           // int
-        DisplayUnit,            // NavCoinUnits::Unit
+        DisplayUnit,            // ElectrumUnits::Unit
         ThirdPartyTxUrls,       // QString
+        Digits,                 // QString
         Language,               // QString
         CoinControlFeatures,    // bool
         ThreadsScriptVerif,     // int
@@ -95,4 +96,4 @@ Q_SIGNALS:
     void hideTrayIconChanged(bool);
 };
 
-#endif // NAVCOIN_QT_OPTIONSMODEL_H
+#endif // ELECTRUM_QT_OPTIONSMODEL_H

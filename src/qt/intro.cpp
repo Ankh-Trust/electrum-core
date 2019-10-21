@@ -3,17 +3,16 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #if defined(HAVE_CONFIG_H)
-#include <config/navcoin-config.h>
+#include "config/electrum-config.h"
 #endif
 
-#include <qt/intro.h>
-#include <ui_intro.h>
-#include <qt/skinize.h>
+#include "intro.h"
+#include "ui_intro.h"
 
-#include <qt/guiutil.h>
-#include <qt/navtechinit.h>
+#include "guiutil.h"
+#include "navtechinit.h"
 
-#include <util.h>
+#include "util.h"
 
 #include <boost/filesystem.hpp>
 
@@ -62,7 +61,7 @@ private:
     Intro *intro;
 };
 
-#include <qt/intro.moc>
+#include "intro.moc"
 
 FreespaceChecker::FreespaceChecker(Intro *intro)
 {
@@ -76,7 +75,7 @@ void FreespaceChecker::check()
     fs::path dataDir = GUIUtil::qstringToBoostPath(dataDirStr);
     uint64_t freeBytesAvailable = 0;
     int replyStatus = ST_OK;
-    QString replyMessage;
+    QString replyMessage = tr("A new data directory will be created.");
 
     /* Find first parent that exists, so that fs::space does not fail */
     fs::path parentDir = dataDir;
@@ -96,13 +95,14 @@ void FreespaceChecker::check()
         freeBytesAvailable = fs::space(parentDir).available;
         if(fs::exists(dataDir))
         {
-            if(!fs::is_directory(dataDir))
+            if(fs::is_directory(dataDir))
             {
+                QString separator = "<code>" + QDir::toNativeSeparators("/") + tr("name") + "</code>";
                 replyStatus = ST_OK;
-                replyMessage = tr("NavCoin will try to import an old wallet.dat file.");
+                replyMessage = tr("Directory already exists. Add %1 if you intend to create a new directory here.").arg(separator);
             } else {
                 replyStatus = ST_ERROR;
-                replyMessage = tr("You must choose a wallet.dat file.");
+                replyMessage = tr("Path already exists, and is not a directory.");
             }
         }
     } catch (const fs::filesystem_error&)
@@ -115,20 +115,22 @@ void FreespaceChecker::check()
 }
 
 
-Intro::Intro(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::Intro),
-    thread(0),
-    signalled(false)
+Intro::Intro(QWidget *parent) : QDialog(parent),
+                                ui(new Ui::Intro),
+                                thread(0),
+                                signalled(false)
 {
     ui->setupUi(this);
-    ui->welcomeLabel->setText(ui->welcomeLabel->text().arg(tr(PACKAGE_NAME)));
-    ui->storageLabel->setText(ui->storageLabel->text().arg(tr(PACKAGE_NAME)));
     uint64_t pruneTarget = std::max<int64_t>(0, GetArg("-prune", 0));
-    requiredSpace = BLOCK_CHAIN_SIZE;
-    if (pruneTarget)
-        requiredSpace = CHAIN_STATE_SIZE + std::ceil(pruneTarget * 1024 * 1024.0 / GB_BYTES);
-    ui->sizeWarningLabel->setText(ui->sizeWarningLabel->text().arg(tr(PACKAGE_NAME)).arg(requiredSpace));
+    requiredSpace += BLOCK_CHAIN_SIZE;
+    if (pruneTarget) {
+        uint64_t prunedGBs = std::ceil(pruneTarget * 1024 * 1024.0 / GB_BYTES);
+        if (prunedGBs <= requiredSpace) {
+            requiredSpace = prunedGBs;
+        }
+    }
+    requiredSpace += CHAIN_STATE_SIZE;
+    ui->sizeWarningLabel->setText(ui->sizeWarningLabel->text().arg(requiredSpace));
     startThread();
 }
 
@@ -148,8 +150,7 @@ QString Intro::getDataDirectory()
 void Intro::setDataDirectory(const QString &dataDir)
 {
     ui->dataDirectory->setText(dataDir);
-    if(dataDir == getDefaultDataDirectory() + QDir::separator() + "wallet.dat")
-    {
+    if(dataDir == getDefaultDataDirectory()) {
         ui->dataDirDefault->setChecked(true);
         ui->dataDirectory->setEnabled(false);
         ui->ellipsisButton->setEnabled(false);
@@ -165,140 +166,82 @@ QString Intro::getDefaultDataDirectory()
     return GUIUtil::boostPathToQString(GetDefaultDataDir());
 }
 
-void Intro::pickDataDirectory()
+bool Intro::pickDataDirectory()
 {
     namespace fs = boost::filesystem;
     QSettings settings;
     /* If data directory provided on command line, no need to look at settings
        or show a picking dialog */
     if(!GetArg("-datadir", "").empty())
-        return;
+        return true;
     /* 1) Default data directory for operating system */
-    QString dataDir = getDefaultDataDirectory();
+    QString dataDirDefaultCurrent = getDefaultDataDirectory();
     /* 2) Allow QSettings to override default dir */
-    dataDir = settings.value("strDataDir", dataDir).toString();
+    QString dataDir = settings.value("strDataDir", dataDirDefaultCurrent).toString();
+    /* 3) Check to see if default datadir is the one we expect */
+    QString dataDirDefaultSettings = settings.value("strDataDirDefault").toString();
 
-    if(!fs::exists(GUIUtil::qstringToBoostPath(dataDir)) || GetBoolArg("-choosedatadir", DEFAULT_CHOOSE_DATADIR))
-    {
-        /* If current default data directory does not exist, let the user choose one */
+    if (!fs::exists(GUIUtil::qstringToBoostPath(dataDir)) || GetBoolArg("-choosedatadir", DEFAULT_CHOOSE_DATADIR) || dataDirDefaultCurrent != dataDirDefaultSettings) {
+        /* Let the user choose one */
         Intro intro;
-        intro.setDataDirectory(dataDir + QDir::separator() + "wallet.dat");
-        intro.setWindowIcon(QIcon(":icons/navcoin"));
-        intro.setStyleSheet(Skinize());
+        intro.setDataDirectory(dataDirDefaultCurrent);
+        intro.setWindowIcon(QIcon(":icons/electrum"));
 
-        while(true)
-        {
-            if(!intro.exec())
-            {
+        while (true) {
+            if (!intro.exec()) {
                 /* Cancel clicked */
-                exit(0);
+                return false;
             }
-            QString oldWallet = intro.getDataDirectory();
+            dataDir = intro.getDataDirectory();
             try {
                 TryCreateDirectory(GUIUtil::qstringToBoostPath(dataDir));
-                if(oldWallet != dataDir + QDir::separator() + "wallet.dat")
-                {
-                    //Try to copy old wallet
-                    boost::filesystem::detail::copy_file(GUIUtil::qstringToBoostPath(oldWallet),GUIUtil::qstringToBoostPath(dataDir + QDir::separator() + "wallet.dat"),boost::filesystem::detail::none);
-                    SoftSetArg("-zapwallettxes","2");
-                }
-                makeDefaultConfF();
-
-                WriteConfigFile("addanonserver", "95.183.52.55:3000");
-                WriteConfigFile("addanonserver", "95.183.52.28:3000");
-                WriteConfigFile("addanonserver", "95.183.52.29:3000");
-                WriteConfigFile("addanonserver", "95.183.53.184:3000");
-                SoftSetArg("-firstrun","1");
-
                 break;
             } catch (const fs::filesystem_error&) {
-                QMessageBox::critical(0, tr(PACKAGE_NAME),
-                    tr("Error creating data folder.").arg(dataDir));
+                QMessageBox::critical(0, tr("Ankh Electrum"),
+                    tr("Error: Specified data directory \"%1\" cannot be created.").arg(dataDir));
                 /* fall through, back to choosing screen */
             }
         }
 
         settings.setValue("strDataDir", dataDir);
+        settings.setValue("strDataDirDefault", dataDirDefaultCurrent);
     }
     /* Only override -datadir if different from the default, to make it possible to
-     * override -datadir in the navcoin.conf file in the default data directory
-     * (to be consistent with navcoind behavior)
+     * override -datadir in the electrum.conf file in the default data directory
+     * (to be consistent with electrumd behavior)
      */
-    if(dataDir != getDefaultDataDirectory())
+    if(dataDir != dataDirDefaultCurrent)
         SoftSetArg("-datadir", GUIUtil::qstringToBoostPath(dataDir).string()); // use OS locale for path setting
-}
-
-void Intro::makeDefaultConfF()
-{
-    boost::filesystem::ifstream streamConfig(GetConfigFile());
-
-    if (streamConfig.good() == false)
-    {
-        char t[] = R"(##
-## navcoin.conf configuration file. Lines beginning with # are comments.
-##
- 
-# Network-related settings:
-
-# Run on the test network instead of the real navcoin network.
-#testnet=0
-
-# Run a regression test network
-#regtest=0
-
-#
-# JSON-RPC options (for controlling a running NavCoin/navcoind process)
-#
-
-# server=1 tells NavCoin-Qt and navcoind to accept JSON-RPC commands
-#server=0
-
-# You must set rpcuser and rpcpassword to secure the JSON-RPC api
-#rpcuser=Ulysseys
-#rpcpassword=YourSuperGreatPasswordNumber_DO_NOT_USE_THIS_OR_YOU_WILL_GET_ROBBED_385593
-
-# By default, only RPC connections from localhost are allowed.
-
-# server=1 tells NavCoin-Qt to accept JSON-RPC commands.
-# it is also read by navcoind to determine if RPC should be enabled 
-
-# Listen for RPC connections on this TCP port:
-# it's default port . turns on by below line.
-#rpcport=44446
-
-# Transaction Fee Changes in 0.10.0
-
-# Create transactions that have enough fees (or priority) so they are likely to begin confirmation within n blocks (default: 1).
-# This setting is over-ridden by the -paytxfee option.
-#txconfirmtarget=n
-
-# User interface options
-
-# Start NavCoin minimized
-#min=1
-
-# Minimize to the system tray 
-#minimizetotray=1)";
-
-        boost::filesystem::ofstream outStream(GetConfigFile(), std::ios_base::app);
-        outStream << t ;
-        outStream.close();
-    }
+    return true;
 }
 
 void Intro::setStatus(int status, const QString &message, quint64 bytesAvailable)
 {
-    switch(status)
-    {
-    case FreespaceChecker::ST_OK:
-        ui->errorMessage->setText(message);
-        ui->errorMessage->setStyleSheet("");
-        break;
-    case FreespaceChecker::ST_ERROR:
-        ui->errorMessage->setText(tr("Error") + ": " + message);
-        ui->errorMessage->setStyleSheet("QLabel { color: #800000 }");
-        break;
-    }
+  switch (status) {
+  case FreespaceChecker::ST_OK:
+      ui->errorMessage->setText(message);
+      ui->errorMessage->setStyleSheet("");
+      break;
+  case FreespaceChecker::ST_ERROR:
+      ui->errorMessage->setText(tr("Error") + ": " + message);
+      ui->errorMessage->setStyleSheet("QLabel { color: #66023c }");
+      break;
+  }
+  /* Indicate number of bytes available */
+  if (status == FreespaceChecker::ST_ERROR) {
+      ui->freeSpace->setText("");
+  } else {
+      QString freeString = tr("%1 GB of free space available").arg(bytesAvailable / GB_BYTES);
+      if (bytesAvailable < requiredSpace * GB_BYTES) {
+          freeString += " " + tr("(of %1 GB needed)").arg(requiredSpace);
+          ui->freeSpace->setStyleSheet("QLabel { color: #66023c }");
+      } else {
+          ui->freeSpace->setStyleSheet("");
+      }
+      ui->freeSpace->setText(freeString + ".");
+  }
+  /* Don't allow confirm in ERROR state */
+  ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(status != FreespaceChecker::ST_ERROR);
 }
 
 void Intro::on_dataDirectory_textChanged(const QString &dataDirStr)
@@ -310,13 +253,14 @@ void Intro::on_dataDirectory_textChanged(const QString &dataDirStr)
 
 void Intro::on_ellipsisButton_clicked()
 {
-    QString wallet = QDir::toNativeSeparators(QFileDialog::getOpenFileName(0, "Choose wallet file", ui->dataDirectory->text(), "Wallet (wallet.dat)"));
-    ui->dataDirectory->setText(wallet);
+    QString dir = QDir::toNativeSeparators(QFileDialog::getOpenFileName(0, "Choose data directory", ui->dataDirectory->text()));
+    if (!dir.isEmpty())
+        ui->dataDirectory->setText(dir);
 }
 
 void Intro::on_dataDirDefault_clicked()
 {
-    setDataDirectory(getDefaultDataDirectory() + QDir::separator() + "wallet.dat");
+    setDataDirectory(getDefaultDataDirectory());
 }
 
 void Intro::on_dataDirCustom_clicked()

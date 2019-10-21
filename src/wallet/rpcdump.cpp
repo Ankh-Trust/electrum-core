@@ -2,19 +2,19 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include <base58.h>
-#include <chain.h>
-#include <rpc/server.h>
-#include <init.h>
-#include <main.h>
-#include <script/script.h>
-#include <script/standard.h>
-#include <sync.h>
-#include <util.h>
-#include <utiltime.h>
-#include <wallet/wallet.h>
-#include <merkleblock.h>
-#include <core_io.h>
+#include "base58.h"
+#include "chain.h"
+#include "rpc/server.h"
+#include "init.h"
+#include "main.h"
+#include "script/script.h"
+#include "script/standard.h"
+#include "sync.h"
+#include "util.h"
+#include "utiltime.h"
+#include "wallet.h"
+#include "merkleblock.h"
+#include "core_io.h"
 
 #include <mnemonic/mnemonic.h>
 
@@ -25,6 +25,8 @@
 #include <boost/date_time/posix_time/posix_time.hpp>
 
 #include <univalue.h>
+
+#include <boost/foreach.hpp>
 
 using namespace std;
 
@@ -50,7 +52,7 @@ int64_t static DecodeDumpTime(const std::string &str) {
 
 std::string static EncodeDumpString(const std::string &str) {
     std::stringstream ret;
-    for(unsigned char c: str) {
+    BOOST_FOREACH(unsigned char c, str) {
         if (c <= 32 || c >= 128 || c == '%') {
             ret << '%' << HexStr(&c, &c + 1);
         } else {
@@ -65,7 +67,7 @@ std::string DecodeDumpString(const std::string &str) {
     for (unsigned int pos = 0; pos < str.length(); pos++) {
         unsigned char c = str[pos];
         if (c == '%' && pos+2 < str.length()) {
-            c = (((str[pos+1]>>6)*9+((str[pos+1]-'0')&15)) << 4) |
+            c = (((str[pos+1]>>6)*9+((str[pos+1]-'0')&15)) << 4) | 
                 ((str[pos+2]>>6)*9+((str[pos+2]-'0')&15));
             pos += 2;
         }
@@ -78,13 +80,13 @@ UniValue importprivkey(const UniValue& params, bool fHelp)
 {
     if (!EnsureWalletIsAvailable(fHelp))
         return NullUniValue;
-
+    
     if (fHelp || params.size() < 1 || params.size() > 3)
         throw runtime_error(
-            "importprivkey \"navcoinprivkey\" ( \"label\" rescan )\n"
+            "importprivkey \"electrumprivkey\" ( \"label\" rescan )\n"
             "\nAdds a private key (as returned by dumpprivkey) to your wallet.\n"
             "\nArguments:\n"
-            "1. \"navcoinprivkey\"   (string, required) The private key (see dumpprivkey)\n"
+            "1. \"electrumprivkey\"   (string, required) The private key (see dumpprivkey)\n"
             "2. \"label\"            (string, optional, default=\"\") An optional label\n"
             "3. rescan               (boolean, optional, default=true) Rescan the wallet for transactions\n"
             "\nNote: This call can take minutes to complete if rescan is true.\n"
@@ -117,7 +119,7 @@ UniValue importprivkey(const UniValue& params, bool fHelp)
     if (fRescan && fPruneMode)
         throw JSONRPCError(RPC_WALLET_ERROR, "Rescan is disabled in pruned mode");
 
-    CNavCoinSecret vchSecret;
+    CElectrumSecret vchSecret;
     bool fGood = vchSecret.SetString(strSecret);
 
     if (!fGood) throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid private key encoding");
@@ -152,7 +154,7 @@ UniValue importprivkey(const UniValue& params, bool fHelp)
     return NullUniValue;
 }
 
-void ImportAddress(const CNavCoinAddress& address, const string& strLabel);
+void ImportAddress(const CElectrumAddress& address, const string& strLabel);
 void ImportScript(const CScript& script, const string& strLabel, bool isRedeemScript)
 {
     if (!isRedeemScript && ::IsMine(*pwalletMain, script) == ISMINE_SPENDABLE)
@@ -166,7 +168,7 @@ void ImportScript(const CScript& script, const string& strLabel, bool isRedeemSc
     if (isRedeemScript) {
         if (!pwalletMain->HaveCScript(script) && !pwalletMain->AddCScript(script))
             throw JSONRPCError(RPC_WALLET_ERROR, "Error adding p2sh redeemScript to wallet");
-        ImportAddress(CNavCoinAddress(CScriptID(script)), strLabel);
+        ImportAddress(CElectrumAddress(CScriptID(script)), strLabel);
     } else {
         CTxDestination destination;
         if (ExtractDestination(script, destination)) {
@@ -175,7 +177,7 @@ void ImportScript(const CScript& script, const string& strLabel, bool isRedeemSc
     }
 }
 
-void ImportAddress(const CNavCoinAddress& address, const string& strLabel)
+void ImportAddress(const CElectrumAddress& address, const string& strLabel)
 {
     CScript script = GetScriptForDestination(address.Get());
     ImportScript(script, strLabel, false);
@@ -188,7 +190,7 @@ UniValue importaddress(const UniValue& params, bool fHelp)
 {
     if (!EnsureWalletIsAvailable(fHelp))
         return NullUniValue;
-
+    
     if (fHelp || params.size() < 1 || params.size() > 4)
         throw runtime_error(
             "importaddress \"address\" ( \"label\" rescan p2sh )\n"
@@ -231,7 +233,7 @@ UniValue importaddress(const UniValue& params, bool fHelp)
 
     LOCK2(cs_main, pwalletMain->cs_wallet);
 
-    CNavCoinAddress address(params[0].get_str());
+    CElectrumAddress address(params[0].get_str());
     if (address.IsValid()) {
         if (fP2SH)
             throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Cannot use the p2sh flag with an address - use a script instead");
@@ -240,7 +242,7 @@ UniValue importaddress(const UniValue& params, bool fHelp)
         std::vector<unsigned char> data(ParseHex(params[0].get_str()));
         ImportScript(CScript(data.begin(), data.end()), strLabel, fP2SH);
     } else {
-        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid NavCoin address or script");
+        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid Electrum address or script");
     }
 
     pwalletMain->nTimeFirstKey = 1; // 0 would be considered 'no value'
@@ -402,7 +404,7 @@ UniValue importpubkey(const UniValue& params, bool fHelp)
 
     LOCK2(cs_main, pwalletMain->cs_wallet);
 
-    ImportAddress(CNavCoinAddress(pubKey.GetID()), strLabel);
+    ImportAddress(CElectrumAddress(pubKey.GetID()), strLabel);
     ImportScript(GetScriptForRawPubKey(pubKey), strLabel, false);
 
     if (fRescan)
@@ -419,7 +421,7 @@ UniValue importwallet(const UniValue& params, bool fHelp)
 {
     if (!EnsureWalletIsAvailable(fHelp))
         return NullUniValue;
-
+    
     if (fHelp || params.size() != 1)
         throw runtime_error(
             "importwallet \"filename\"\n"
@@ -466,7 +468,7 @@ UniValue importwallet(const UniValue& params, bool fHelp)
         boost::split(vstr, line, boost::is_any_of(" "));
         if (vstr.size() < 2)
             continue;
-        CNavCoinSecret vchSecret;
+        CElectrumSecret vchSecret;
         if (!vchSecret.SetString(vstr[0]))
             continue;
         CKey key = vchSecret.GetKey();
@@ -474,7 +476,7 @@ UniValue importwallet(const UniValue& params, bool fHelp)
         assert(key.VerifyPubKey(pubkey));
         CKeyID keyid = pubkey.GetID();
         if (pwalletMain->HaveKey(keyid)) {
-            LogPrintf("Skipping import of %s (key already present)\n", CNavCoinAddress(keyid).ToString());
+            LogPrintf("Skipping import of %s (key already present)\n", CElectrumAddress(keyid).ToString());
             continue;
         }
         int64_t nTime = DecodeDumpTime(vstr[1]);
@@ -492,7 +494,7 @@ UniValue importwallet(const UniValue& params, bool fHelp)
                 fLabel = true;
             }
         }
-        LogPrintf("Importing %s...\n", CNavCoinAddress(keyid).ToString());
+        LogPrintf("Importing %s...\n", CElectrumAddress(keyid).ToString());
         if (!pwalletMain->AddKeyPubKey(key, pubkey)) {
             fGood = false;
             continue;
@@ -526,14 +528,14 @@ UniValue dumpprivkey(const UniValue& params, bool fHelp)
 {
     if (!EnsureWalletIsAvailable(fHelp))
         return NullUniValue;
-
+    
     if (fHelp || params.size() != 1)
         throw runtime_error(
-            "dumpprivkey \"navcoinaddress\"\n"
-            "\nReveals the private key corresponding to 'navcoinaddress'.\n"
+            "dumpprivkey \"electrumaddress\"\n"
+            "\nReveals the private key corresponding to 'electrumaddress'.\n"
             "Then the importprivkey can be used with this output\n"
             "\nArguments:\n"
-            "1. \"navcoinaddress\"   (string, required) The navcoin address for the private key\n"
+            "1. \"electrumaddress\"   (string, required) The electrum address for the private key\n"
             "\nResult:\n"
             "\"key\"                (string) The private key\n"
             "\nExamples:\n"
@@ -547,16 +549,16 @@ UniValue dumpprivkey(const UniValue& params, bool fHelp)
     EnsureWalletIsUnlocked();
 
     string strAddress = params[0].get_str();
-    CNavCoinAddress address;
+    CElectrumAddress address;
     if (!address.SetString(strAddress))
-        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid NavCoin address");
+        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid Electrum address");
     CKeyID keyID;
     if (!address.GetKeyID(keyID))
         throw JSONRPCError(RPC_TYPE_ERROR, "Address does not refer to a key");
     CKey vchSecret;
     if (!pwalletMain->GetKey(keyID, vchSecret))
         throw JSONRPCError(RPC_WALLET_ERROR, "Private key for address " + strAddress + " is not known");
-    return CNavCoinSecret(vchSecret).ToString();
+    return CElectrumSecret(vchSecret).ToString();
 }
 
 
@@ -564,7 +566,7 @@ UniValue dumpwallet(const UniValue& params, bool fHelp)
 {
     if (!EnsureWalletIsAvailable(fHelp))
         return NullUniValue;
-
+    
     if (fHelp || params.size() != 1)
         throw runtime_error(
             "dumpwallet \"filename\"\n"
@@ -599,13 +601,13 @@ UniValue dumpwallet(const UniValue& params, bool fHelp)
     std::sort(vKeyBirth.begin(), vKeyBirth.end());
 
     // produce output
-    file << strprintf("# Wallet dump created by NavCoin %s\n", CLIENT_BUILD);
+    file << strprintf("# Wallet dump created by Electrum %s\n", CLIENT_BUILD);
     file << strprintf("# * Created on %s\n", EncodeDumpTime(GetTime()));
     file << strprintf("# * Best block at time of backup was %i (%s),\n", chainActive.Height(), chainActive.Tip()->GetBlockHash().ToString());
     file << strprintf("#   mined on %s\n", EncodeDumpTime(chainActive.Tip()->GetBlockTime()));
     file << "\n";
 
-    // add the base58check encoded extended master if the wallet uses HD
+    // add the base58check encoded extended master if the wallet uses HD 
     CKeyID masterKeyID = pwalletMain->GetHDChain().masterKeyID;
     if (!masterKeyID.IsNull())
     {
@@ -615,7 +617,7 @@ UniValue dumpwallet(const UniValue& params, bool fHelp)
             CExtKey masterKey;
             masterKey.SetMaster(key.begin(), key.size());
 
-            CNavCoinExtKey b58extkey;
+            CElectrumExtKey b58extkey;
             b58extkey.SetKey(masterKey);
 
             file << "# extended private masterkey: " << b58extkey.ToString() << "\n\n";
@@ -624,10 +626,10 @@ UniValue dumpwallet(const UniValue& params, bool fHelp)
     for (std::vector<std::pair<int64_t, CKeyID> >::const_iterator it = vKeyBirth.begin(); it != vKeyBirth.end(); it++) {
         const CKeyID &keyid = it->second;
         std::string strTime = EncodeDumpTime(it->first);
-        std::string strAddr = CNavCoinAddress(keyid).ToString();
+        std::string strAddr = CElectrumAddress(keyid).ToString();
         CKey key;
         if (pwalletMain->GetKey(keyid, key)) {
-            file << strprintf("%s %s ", CNavCoinSecret(key).ToString(), strTime);
+            file << strprintf("%s %s ", CElectrumSecret(key).ToString(), strTime);
             if (pwalletMain->mapAddressBook.count(keyid)) {
                 file << strprintf("label=%s", EncodeDumpString(pwalletMain->mapAddressBook[keyid].name));
             } else if (keyid == masterKeyID) {
@@ -678,7 +680,7 @@ UniValue dumpmasterprivkey(const UniValue& params, bool fHelp)
         CExtKey masterKey;
         masterKey.SetMaster(key.begin(), key.size());
 
-        CNavCoinExtKey b58extkey;
+        CElectrumExtKey b58extkey;
         b58extkey.SetKey(masterKey);
 
         return b58extkey.ToString();

@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
-# Copyright (c) 2018 The Navcoin Core developers
+# Copyright (c) 2018 The NAVcoin Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-from test_framework.test_framework import NavCoinTestFramework
+from test_framework.test_framework import ElectrumTestFramework
 from test_framework.staticr_util import *
 
 import time
 
-class StaticRAmountTest(NavCoinTestFramework):
+class StaticRAmountTest(ElectrumTestFramework):
     """Tests the staking amount after softfork activation."""
 
     def __init__(self):
@@ -22,7 +22,7 @@ class StaticRAmountTest(NavCoinTestFramework):
 
     def run_test(self):
 
-        #check the block reward is 2 NAV after the softfork
+        #check the block reward is 2 0AE after the softfork
 
         activate_staticr(self.nodes[0])
 
@@ -39,7 +39,7 @@ class StaticRAmountTest(NavCoinTestFramework):
         wallet_info2 = self.nodes[0].getwalletinfo()
         balance_diff = wallet_info1['balance'] - wallet_info2['balance']
 
-        # check that only 2 new NAV were created
+        # check that only 2 new 0AE were created
         assert(wallet_info2['immature_balance'] == wallet_info1['immature_balance'] + balance_diff + 2)
 
 if __name__ == '__main__':

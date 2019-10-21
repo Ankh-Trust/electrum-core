@@ -2,14 +2,14 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include <qt/receiverequestdialog.h>
-#include <ui_receiverequestdialog.h>
+#include "receiverequestdialog.h"
+#include "ui_receiverequestdialog.h"
 
-#include <qt/navcoinunits.h>
-#include <qt/guiconstants.h>
-#include <qt/guiutil.h>
-#include <qt/optionsmodel.h>
-#include <qt/walletmodel.h>
+#include "electrumunits.h"
+#include "guiconstants.h"
+#include "guiutil.h"
+#include "optionsmodel.h"
+#include "walletmodel.h"
 
 #include <QClipboard>
 #include <QDrag>
@@ -19,7 +19,7 @@
 #include <QPixmap>
 
 #if defined(HAVE_CONFIG_H)
-#include <config/navcoin-config.h> /* for USE_QRCODE */
+#include "config/electrum-config.h" /* for USE_QRCODE */
 #endif
 
 #ifdef USE_QRCODE
@@ -65,7 +65,7 @@ void QRImageWidget::saveImage()
 {
     if(!pixmap())
         return;
-    QString fn = GUIUtil::getSaveFileName(this, tr("Save QR Code"), QString(), tr("PNG Image (*.png)"), nullptr);
+    QString fn = GUIUtil::getSaveFileName(this, tr("Save QR Code"), QString(), tr("PNG Image (*.png)"), NULL);
     if (!fn.isEmpty())
     {
         exportImage().save(fn);
@@ -132,7 +132,7 @@ void ReceiveRequestDialog::update()
         target = info.address;
     setWindowTitle(tr("Request payment to %1").arg(target));
 
-    QString uri = GUIUtil::formatNavCoinURI(info);
+    QString uri = GUIUtil::formatElectrumURI(info);
     ui->btnSaveAs->setEnabled(false);
     QString html;
     html += "<html><font face='verdana, arial, helvetica, sans-serif'>";
@@ -141,7 +141,7 @@ void ReceiveRequestDialog::update()
     html += "<a href=\""+uri+"\">" + GUIUtil::HtmlEscape(uri) + "</a><br>";
     html += "<b>"+tr("Address")+"</b>: " + GUIUtil::HtmlEscape(info.address) + "<br>";
     if(info.amount)
-        html += "<b>"+tr("Amount")+"</b>: " + NavCoinUnits::formatHtmlWithUnit(model->getDisplayUnit(), info.amount) + "<br>";
+        html += "<b>"+tr("Amount")+"</b>: " + ElectrumUnits::formatHtmlWithUnit(model->getDisplayUnit(), info.amount) + "<br>";
     if(!info.label.isEmpty())
         html += "<b>"+tr("Label")+"</b>: " + GUIUtil::HtmlEscape(info.label) + "<br>";
     if(!info.message.isEmpty())
@@ -197,7 +197,7 @@ void ReceiveRequestDialog::update()
 
 void ReceiveRequestDialog::on_btnCopyURI_clicked()
 {
-    GUIUtil::setClipboard(GUIUtil::formatNavCoinURI(info));
+    GUIUtil::setClipboard(GUIUtil::formatElectrumURI(info));
 }
 
 void ReceiveRequestDialog::on_btnCopyAddress_clicked()

@@ -2,10 +2,10 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_CRYPTO_HMAC_SHA512_H
-#define NAVCOIN_CRYPTO_HMAC_SHA512_H
+#ifndef ELECTRUM_CRYPTO_HMAC_SHA512_H
+#define ELECTRUM_CRYPTO_HMAC_SHA512_H
 
-#include <crypto/sha512.h>
+#include "crypto/sha512.h"
 
 #include <stdint.h>
 #include <stdlib.h>
@@ -29,4 +29,4 @@ public:
     void Finalize(unsigned char hash[OUTPUT_SIZE]);
 };
 
-#endif // NAVCOIN_CRYPTO_HMAC_SHA512_H
+#endif // ELECTRUM_CRYPTO_HMAC_SHA512_H

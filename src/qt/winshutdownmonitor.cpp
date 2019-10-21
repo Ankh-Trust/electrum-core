@@ -2,11 +2,11 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include <qt/winshutdownmonitor.h>
+#include "winshutdownmonitor.h"
 
 #if defined(Q_OS_WIN)
-#include <init.h>
-#include <util.h>
+#include "init.h"
+#include "util.h"
 
 #include <compat.h>
 
@@ -57,7 +57,7 @@ void WinShutdownMonitor::registerShutdownBlockReason(const QString& strReason, c
 {
     typedef BOOL (WINAPI *PSHUTDOWNBRCREATE)(HWND, LPCWSTR);
     PSHUTDOWNBRCREATE shutdownBRCreate = (PSHUTDOWNBRCREATE)GetProcAddress(GetModuleHandleA("User32.dll"), "ShutdownBlockReasonCreate");
-    if (shutdownBRCreate == nullptr) {
+    if (shutdownBRCreate == NULL) {
         qWarning() << "registerShutdownBlockReason: GetProcAddress for ShutdownBlockReasonCreate failed";
         return;
     }

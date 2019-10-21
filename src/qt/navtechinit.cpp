@@ -1,8 +1,7 @@
-#include <qt/navtechinit.h>
-#include <qt/ui_navtechinit.h>
-#include <net.h>
-#include <util.h>
-#include <qt/skinize.h>
+#include "navtechinit.h"
+#include "ui_navtechinit.h"
+#include "net.h"
+#include "util.h"
 
 #include <string>
 #include <iostream>
@@ -25,7 +24,6 @@ NavTechInit::~NavTechInit()
 void NavTechInit::ShowNavtechIntro(bool exitAfter)
 {
     NavTechInit navtechinit;
-    navtechinit.setStyleSheet(Skinize());
 
     if(!navtechinit.exec())
     {

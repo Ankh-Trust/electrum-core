@@ -1,0 +1,92 @@
+#!/sbin/runscript
+
+# backward compatibility for existing gentoo layout 
+#
+if [ -d "/var/lib/electrum/.electrum" ]; then
+	ELECTRUMD_DEFAULT_DATADIR="/var/lib/electrum/.electrum"
+else
+	ELECTRUMD_DEFAULT_DATADIR="/var/lib/electrumd"
+fi
+
+ELECTRUMD_CONFIGFILE=${ELECTRUMD_CONFIGFILE:-/etc/electrum/electrum.conf}
+ELECTRUMD_PIDDIR=${ELECTRUMD_PIDDIR:-/var/run/electrumd}
+ELECTRUMD_PIDFILE=${ELECTRUMD_PIDFILE:-${ELECTRUMD_PIDDIR}/electrumd.pid}
+ELECTRUMD_DATADIR=${ELECTRUMD_DATADIR:-${ELECTRUMD_DEFAULT_DATADIR}}
+ELECTRUMD_USER=${ELECTRUMD_USER:-${ELECTRUM_USER:-electrum}}
+ELECTRUMD_GROUP=${ELECTRUMD_GROUP:-electrum}
+ELECTRUMD_BIN=${ELECTRUMD_BIN:-/usr/bin/electrumd}
+ELECTRUMD_NICE=${ELECTRUMD_NICE:-${NICELEVEL:-0}}
+ELECTRUMD_OPTS="${ELECTRUMD_OPTS:-${ELECTRUM_OPTS}}"
+
+name="Electrum Core Daemon"
+description="Electrum cryptocurrency P2P network daemon"
+
+command="/usr/bin/electrumd"
+command_args="-pid=\"${ELECTRUMD_PIDFILE}\" \
+		-conf=\"${ELECTRUMD_CONFIGFILE}\" \
+		-datadir=\"${ELECTRUMD_DATADIR}\" \
+		-daemon \
+		${ELECTRUMD_OPTS}"
+
+required_files="${ELECTRUMD_CONFIGFILE}"
+start_stop_daemon_args="-u ${ELECTRUMD_USER} \
+			-N ${ELECTRUMD_NICE} -w 2000"
+pidfile="${ELECTRUMD_PIDFILE}"
+
+# The retry schedule to use when stopping the daemon. Could be either
+# a timeout in seconds or multiple signal/timeout pairs (like
+# "SIGKILL/180 SIGTERM/300")
+retry="${ELECTRUMD_SIGTERM_TIMEOUT}"
+
+depend() {
+	need localmount net
+}
+
+# verify
+# 1) that the datadir exists and is writable (or create it)
+# 2) that a directory for the pid exists and is writable
+# 3) ownership and permissions on the config file
+start_pre() {
+	checkpath \
+	-d \
+	--mode 0750 \
+	--owner "${ELECTRUMD_USER}:${ELECTRUMD_GROUP}" \
+	"${ELECTRUMD_DATADIR}"
+
+	checkpath \
+	-d \
+	--mode 0755 \
+	--owner "${ELECTRUMD_USER}:${ELECTRUMD_GROUP}" \
+	"${ELECTRUMD_PIDDIR}"
+
+	checkpath -f \
+	-o ${ELECTRUMD_USER}:${ELECTRUMD_GROUP} \
+	-m 0660 \
+	${ELECTRUMD_CONFIGFILE}
+
+	checkconfig || return 1
+}
+
+checkconfig()
+{
+	if ! grep -qs '^rpcpassword=' "${ELECTRUMD_CONFIGFILE}" ; then
+		eerror ""
+		eerror "ERROR: You must set a secure rpcpassword to run electrumd."
+		eerror "The setting must appear in ${ELECTRUMD_CONFIGFILE}"
+		eerror ""
+		eerror "This password is security critical to securing wallets "
+		eerror "and must not be the same as the rpcuser setting."
+		eerror "You can generate a suitable random password using the following"
+		eerror "command from the shell:"
+		eerror ""
+		eerror "bash -c 'tr -dc a-zA-Z0-9 < /dev/urandom | head -c32 && echo'"
+		eerror ""
+		eerror "It is also recommended that you also set alertnotify so you are "
+		eerror "notified of problems:"
+		eerror ""
+		eerror "ie: alertnotify=echo %%s | mail -s \"Electrum Alert\"" \
+			"admin@foo.com"
+		eerror ""
+		return 1
+	fi
+}

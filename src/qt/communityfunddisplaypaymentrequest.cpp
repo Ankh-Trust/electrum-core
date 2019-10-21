@@ -1,18 +1,18 @@
-#include <qt/communityfunddisplaypaymentrequest.h>
-#include <ui_communityfunddisplaypaymentrequest.h>
-#include <qt/communityfundpage.h>
-#include <qt/communityfunddisplaypaymentrequestdetailed.h>
+#include "communityfunddisplaypaymentrequest.h"
+#include "ui_communityfunddisplaypaymentrequest.h"
+#include "communityfundpage.h"
+#include "communityfunddisplaypaymentrequestdetailed.h"
 
 #include <QtWidgets/QDialogButtonBox>
-#include <main.h>
-#include <qt/../txdb.h>
+#include "main.h"
+#include "../txdb.h"
 #include <iomanip>
 #include <sstream>
 #include <ctime>
-#include <consensus/cfund.h>
-#include <wallet/wallet.h>
-#include <base58.h>
-#include <chain.h>
+#include "consensus/cfund.h"
+#include "wallet/wallet.h"
+#include "base58.h"
+#include "chain.h"
 
 CommunityFundDisplayPaymentRequest::CommunityFundDisplayPaymentRequest(QWidget *parent, CFund::CPaymentRequest prequest) :
     QWidget(parent),
@@ -47,9 +47,9 @@ void CommunityFundDisplayPaymentRequest::refresh()
     ui->title->setText(QString::fromStdString(prequest.strDZeel));
     ui->labelStatus->setText(QString::fromStdString(prequest.GetState()));
 
-    string nav_amount;
-    nav_amount = wallet->formatDisplayAmount(prequest.nAmount);
-    ui->labelRequested->setText(QString::fromStdString(nav_amount));
+    string _ae_amount;
+    _ae_amount = wallet->formatDisplayAmount(prequest.nAmount);
+    ui->labelRequested->setText(QString::fromStdString(_ae_amount));
 
     uint64_t proptime = 0;
     if (mapBlockIndex.count(prequest.blockhash) > 0) {

@@ -10,7 +10,7 @@
 
 from decimal import Decimal
 
-from test_framework.test_framework import NavCoinTestFramework
+from test_framework.test_framework import ElectrumTestFramework
 from test_framework.authproxy import JSONRPCException
 from test_framework.util import (
     assert_equal,
@@ -22,7 +22,7 @@ from test_framework.util import (
 )
 
 
-class BlockchainTest(NavCoinTestFramework):
+class BlockchainTest(ElectrumTestFramework):
     """
     Test blockchain-related RPC calls:
 

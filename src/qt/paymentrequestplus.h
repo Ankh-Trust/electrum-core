@@ -2,12 +2,12 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_QT_PAYMENTREQUESTPLUS_H
-#define NAVCOIN_QT_PAYMENTREQUESTPLUS_H
+#ifndef ELECTRUM_QT_PAYMENTREQUESTPLUS_H
+#define ELECTRUM_QT_PAYMENTREQUESTPLUS_H
 
-#include <qt/paymentrequest.pb.h>
+#include "paymentrequest.pb.h"
 
-#include <base58.h>
+#include "base58.h"
 
 #include <openssl/x509.h>
 
@@ -45,4 +45,4 @@ private:
     payments::PaymentDetails details;
 };
 
-#endif // NAVCOIN_QT_PAYMENTREQUESTPLUS_H
+#endif // ELECTRUM_QT_PAYMENTREQUESTPLUS_H

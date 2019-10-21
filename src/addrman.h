@@ -3,15 +3,15 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_ADDRMAN_H
-#define NAVCOIN_ADDRMAN_H
+#ifndef ELECTRUM_ADDRMAN_H
+#define ELECTRUM_ADDRMAN_H
 
-#include <netbase.h>
-#include <protocol.h>
-#include <random.h>
-#include <sync.h>
-#include <timedata.h>
-#include <util.h>
+#include "netbase.h"
+#include "protocol.h"
+#include "random.h"
+#include "sync.h"
+#include "timedata.h"
+#include "util.h"
 
 #include <map>
 #include <set>
@@ -602,4 +602,4 @@ public:
 
 };
 
-#endif // NAVCOIN_ADDRMAN_H
+#endif // ELECTRUM_ADDRMAN_H

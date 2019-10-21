@@ -3,11 +3,11 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include <amount.h>
+#include "amount.h"
 
-#include <tinyformat.h>
+#include "tinyformat.h"
 
-const std::string CURRENCY_UNIT = "NAV";
+const std::string CURRENCY_UNIT = "☥E";
 
 CFeeRate::CFeeRate(const CAmount& nFeePaid, size_t nBytes_)
 {

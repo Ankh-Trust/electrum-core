@@ -2,17 +2,17 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include <qt/test/paymentservertests.h>
+#include "paymentservertests.h"
 
-#include <optionsmodel.h>
-#include <qt/test/paymentrequestdata.h>
+#include "optionsmodel.h"
+#include "paymentrequestdata.h"
 
-#include <amount.h>
-#include <random.h>
-#include <script/script.h>
-#include <script/standard.h>
-#include <util.h>
-#include <utilstrencodings.h>
+#include "amount.h"
+#include "random.h"
+#include "script/script.h"
+#include "script/standard.h"
+#include "util.h"
+#include "utilstrencodings.h"
 
 #include <openssl/x509.h>
 #include <openssl/x509_vfy.h>
@@ -188,7 +188,7 @@ void PaymentServerTests::paymentServerTests()
     // compares 50001 <= BIP70_MAX_PAYMENTREQUEST_SIZE == false
     QCOMPARE(PaymentServer::verifySize(tempFile.size()), false);
 
-    // Payment request with amount overflow (amount is set to 21000001 NAV):
+    // Payment request with amount overflow (amount is set to 21000001 0AE):
     data = DecodeBase64(paymentrequest5_cert2_BASE64);
     byteArray = QByteArray((const char*)&data[0], data.size());
     r.paymentRequest.parse(byteArray);
@@ -196,7 +196,7 @@ void PaymentServerTests::paymentServerTests()
     QVERIFY(r.paymentRequest.IsInitialized());
     // Extract address and amount from the request
     QList<std::pair<CScript, CAmount> > sendingTos = r.paymentRequest.getPayTo();
-    for (const PAIRTYPE(CScript, CAmount)& sendingTo: sendingTos) {
+    Q_FOREACH (const PAIRTYPE(CScript, CAmount)& sendingTo, sendingTos) {
         CTxDestination dest;
         if (ExtractDestination(sendingTo.first, dest))
             QCOMPARE(PaymentServer::verifyAmount(sendingTo.second), false);

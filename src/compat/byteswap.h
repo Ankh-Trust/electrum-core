@@ -2,11 +2,11 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_COMPAT_BYTESWAP_H
-#define NAVCOIN_COMPAT_BYTESWAP_H
+#ifndef ELECTRUM_COMPAT_BYTESWAP_H
+#define ELECTRUM_COMPAT_BYTESWAP_H
 
 #if defined(HAVE_CONFIG_H)
-#include <config/navcoin-config.h>
+#include <config/electrum-config.h>
 #endif
 
 #include <stdint.h>
@@ -63,4 +63,4 @@ inline uint64_t bswap_64(uint64_t x)
 
 #endif // defined(MAC_OSX)
 
-#endif // NAVCOIN_COMPAT_BYTESWAP_H
+#endif // ELECTRUM_COMPAT_BYTESWAP_H

@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
-# Copyright (c) 2018 The Navcoin Core developers
+# Copyright (c) 2018 The NAVcoin Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-from test_framework.test_framework import NavCoinTestFramework
+from test_framework.test_framework import ElectrumTestFramework
 from test_framework.staticr_util import *
 
 #import time
 
-class GetStakingInfo(NavCoinTestFramework):
+class GetStakingInfo(ElectrumTestFramework):
     """Tests getstakereport accounting."""
 
     def __init__(self):
@@ -71,7 +71,7 @@ class GetStakingInfo(NavCoinTestFramework):
         # LOCK the wallet
         self.nodes[0].encryptwallet("password")
         stop_nodes(self.nodes)
-        wait_navcoinds()
+        wait_electrumds()
         self.nodes = start_nodes(self.num_nodes, self.options.tmpdir)
 
         # Check if we get the error for nWeight again after a stake

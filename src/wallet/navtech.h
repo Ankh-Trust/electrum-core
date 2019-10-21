@@ -2,10 +2,10 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_WALLET_NAVTECH_H
-#define NAVCOIN_WALLET_NAVTECH_H
+#ifndef ELECTRUM_WALLET_NAVTECH_H
+#define ELECTRUM_WALLET_NAVTECH_H
 
-#include <compat.h>
+#include "compat.h"
 
 #include <vector>
 #include <string>
@@ -18,7 +18,7 @@
 #include <openssl/err.h>
 #include <stdio.h>
 #include <curl/curl.h>
-#include <script/standard.h>
+#include "script/standard.h"
 
 #define NAVTECH_DEFAULT_INPUT_DELAY 1
 #define NAVTECH_DEFAULT_OUT_DELAY 10
@@ -55,4 +55,4 @@ private:
     bool TestEncryption(std::string encrypted, UniValue serverData);
 };
 
-#endif //NAVCOIN_WALLET_NAVTECH_H
+#endif //ELECTRUM_WALLET_NAVTECH_H

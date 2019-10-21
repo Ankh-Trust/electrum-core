@@ -2,16 +2,16 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_CRYPTO_COMMON_H
-#define NAVCOIN_CRYPTO_COMMON_H
+#ifndef ELECTRUM_CRYPTO_COMMON_H
+#define ELECTRUM_CRYPTO_COMMON_H
 
 #if defined(HAVE_CONFIG_H)
-#include <navcoin-config.h>
+#include "electrum-config.h"
 #endif
 
 #include <stdint.h>
 
-#include <compat/endian.h>
+#include "compat/endian.h"
 
 uint16_t static inline ReadLE16(const unsigned char* ptr)
 {
@@ -63,4 +63,4 @@ void static inline WriteBE64(unsigned char* ptr, uint64_t x)
     *((uint64_t*)ptr) = htobe64(x);
 }
 
-#endif // NAVCOIN_CRYPTO_COMMON_H
+#endif // ELECTRUM_CRYPTO_COMMON_H

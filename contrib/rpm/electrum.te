@@ -1,0 +1,81 @@
+policy_module(electrum, 1.100.1)
+
+########################################
+#
+# Declarations
+#
+
+type electrum_t;
+type electrum_exec_t;
+init_daemon_domain(electrum_t, electrum_exec_t)
+
+permissive electrum_t;
+
+type electrum_initrc_exec_t;
+init_script_file(electrum_initrc_exec_t)
+
+type electrum_conf_t;
+files_type(electrum_conf_t)
+
+type electrum_var_lib_t;
+files_type(electrum_var_lib_t)
+
+type electrum_var_run_t;
+files_type(electrum_var_run_t)
+
+type electrum_port_t;
+corenet_port(electrum_port_t)
+
+########################################
+#
+# electrum local policy
+#
+allow electrum_t self:process { fork };
+
+allow electrum_t self:fifo_file rw_fifo_file_perms;
+allow electrum_t self:unix_stream_socket create_stream_socket_perms;
+
+manage_dirs_pattern(electrum_t, electrum_conf_t, electrum_conf_t)
+manage_files_pattern(electrum_t, electrum_conf_t, electrum_conf_t)
+
+manage_dirs_pattern(electrum_t, electrum_var_lib_t, electrum_var_lib_t)
+manage_files_pattern(electrum_t, electrum_var_lib_t, electrum_var_lib_t)
+files_var_lib_filetrans(electrum_t, electrum_var_lib_t, { dir file })
+
+manage_dirs_pattern(electrum_t, electrum_var_run_t, electrum_var_run_t)
+manage_files_pattern(electrum_t, electrum_var_run_t, electrum_var_run_t)
+
+sysnet_dns_name_resolve(electrum_t)
+corenet_all_recvfrom_unlabeled(electrum_t)
+
+allow electrum_t self:tcp_socket create_stream_socket_perms;
+corenet_tcp_sendrecv_generic_if(electrum_t)
+corenet_tcp_sendrecv_generic_node(electrum_t)
+corenet_tcp_sendrecv_all_ports(electrum_t)
+corenet_tcp_bind_generic_node(electrum_t)
+
+gen_require(`
+    type electrum_port_t;
+')
+allow electrum_t electrum_port_t:tcp_socket name_bind;
+
+gen_require(`
+    type electrum_port_t;
+')
+allow electrum_t electrum_port_t:tcp_socket name_connect;
+
+domain_use_interactive_fds(electrum_t)
+
+files_read_etc_files(electrum_t)
+
+miscfiles_read_localization(electrum_t)
+
+sysnet_dns_name_resolve(electrum_t)
+
+allow electrum_t electrum_exec_t:file execute_no_trans;
+allow electrum_t self:process setsched;
+corecmd_exec_ls(electrum_t)
+corenet_tcp_connect_http_port(electrum_t)
+dev_read_urand(electrum_t)
+fs_getattr_xattr_fs(electrum_t)
+kernel_read_system_state(electrum_t)

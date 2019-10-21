@@ -2,10 +2,10 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_QT_COINCONTROLDIALOG_H
-#define NAVCOIN_QT_COINCONTROLDIALOG_H
+#ifndef ELECTRUM_QT_COINCONTROLDIALOG_H
+#define ELECTRUM_QT_COINCONTROLDIALOG_H
 
-#include <amount.h>
+#include "amount.h"
 
 #include <QAbstractButton>
 #include <QAction>
@@ -66,7 +66,7 @@ private:
 
     enum
     {
-        COLUMN_CHECKBOX,
+        COLUMN_CHECKBOX = 0,
         COLUMN_AMOUNT,
         COLUMN_LABEL,
         COLUMN_ADDRESS,
@@ -135,4 +135,4 @@ private Q_SLOTS:
     void updateLabelLocked();
 };
 
-#endif // NAVCOIN_QT_COINCONTROLDIALOG_H
+#endif // ELECTRUM_QT_COINCONTROLDIALOG_H

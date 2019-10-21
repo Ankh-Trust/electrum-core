@@ -1,0 +1,22 @@
+[Unit]
+Description=Electrum's distributed currency daemon
+After=network.target
+
+[Service]
+User=electrum
+Group=electrum
+
+Type=forking
+PIDFile=/var/lib/electrumd/electrumd.pid
+ExecStart=/usr/bin/electrumd -daemon -pid=/var/lib/electrumd/electrumd.pid \
+-conf=/etc/electrum/electrum.conf -datadir=/var/lib/electrumd -disablewallet
+
+Restart=always
+PrivateTmp=true
+TimeoutStopSec=60s
+TimeoutStartSec=2s
+StartLimitInterval=120s
+StartLimitBurst=5
+
+[Install]
+WantedBy=multi-user.target

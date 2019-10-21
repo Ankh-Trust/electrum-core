@@ -7,10 +7,10 @@
 # Test -alertnotify 
 #
 
-from test_framework.test_framework import NavCoinTestFramework
+from test_framework.test_framework import ElectrumTestFramework
 from test_framework.util import *
 
-class ForkNotifyTest(NavCoinTestFramework):
+class ForkNotifyTest(ElectrumTestFramework):
 
     def __init__(self):
         super().__init__()

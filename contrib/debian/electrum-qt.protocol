@@ -1,0 +1,11 @@
+[Protocol]
+exec=electrum-qt '%u'
+protocol=electrum
+input=none
+output=none
+helper=true
+listing=
+reading=false
+writing=false
+makedir=false
+deleting=false

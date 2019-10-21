@@ -1,0 +1,157 @@
+
+## <summary>policy for electrum</summary>
+
+
+########################################
+## <summary>
+##	Transition to electrum.
+## </summary>
+## <param name="domain">
+## <summary>
+##	Domain allowed to transition.
+## </summary>
+## </param>
+#
+interface(`electrum_domtrans',`
+	gen_require(`
+		type electrum_t, electrum_exec_t;
+	')
+
+	corecmd_search_bin($1)
+	domtrans_pattern($1, electrum_exec_t, electrum_t)
+')
+
+
+########################################
+## <summary>
+##	Execute electrum server in the electrum domain.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`electrum_initrc_domtrans',`
+	gen_require(`
+		type electrum_initrc_exec_t;
+	')
+
+	init_labeled_script_domtrans($1, electrum_initrc_exec_t)
+')
+
+
+########################################
+## <summary>
+##	Search electrum lib directories.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`electrum_search_lib',`
+	gen_require(`
+		type electrum_var_lib_t;
+	')
+
+	allow $1 electrum_var_lib_t:dir search_dir_perms;
+	files_search_var_lib($1)
+')
+
+########################################
+## <summary>
+##	Read electrum lib files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`electrum_read_lib_files',`
+	gen_require(`
+		type electrum_var_lib_t;
+	')
+
+	files_search_var_lib($1)
+	read_files_pattern($1, electrum_var_lib_t, electrum_var_lib_t)
+')
+
+########################################
+## <summary>
+##	Manage electrum lib files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`electrum_manage_lib_files',`
+	gen_require(`
+		type electrum_var_lib_t;
+	')
+
+	files_search_var_lib($1)
+	manage_files_pattern($1, electrum_var_lib_t, electrum_var_lib_t)
+')
+
+########################################
+## <summary>
+##	Manage electrum lib directories.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`electrum_manage_lib_dirs',`
+	gen_require(`
+		type electrum_var_lib_t;
+	')
+
+	files_search_var_lib($1)
+	manage_dirs_pattern($1, electrum_var_lib_t, electrum_var_lib_t)
+')
+
+
+########################################
+## <summary>
+##	All of the rules required to administrate
+##	an electrum environment
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+## <param name="role">
+##	<summary>
+##	Role allowed access.
+##	</summary>
+## </param>
+## <rolecap/>
+#
+interface(`electrum_admin',`
+	gen_require(`
+		type electrum_t;
+		type electrum_initrc_exec_t;
+		type electrum_var_lib_t;
+	')
+
+	allow $1 electrum_t:process { ptrace signal_perms };
+	ps_process_pattern($1, electrum_t)
+
+	electrum_initrc_domtrans($1)
+	domain_system_change_exemption($1)
+	role_transition $2 electrum_initrc_exec_t system_r;
+	allow $2 system_r;
+
+	files_search_var_lib($1)
+	admin_pattern($1, electrum_var_lib_t)
+
+')
+

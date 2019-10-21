@@ -3,10 +3,10 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_RANDOM_H
-#define NAVCOIN_RANDOM_H
+#ifndef ELECTRUM_RANDOM_H
+#define ELECTRUM_RANDOM_H
 
-#include <uint256.h>
+#include "uint256.h"
 
 #include <stdint.h>
 
@@ -49,4 +49,4 @@ static inline uint32_t insecure_rand(void)
     return (insecure_rand_Rw << 16) + insecure_rand_Rz;
 }
 
-#endif // NAVCOIN_RANDOM_H
+#endif // ELECTRUM_RANDOM_H

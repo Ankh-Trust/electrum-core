@@ -5,10 +5,10 @@
 /**
  * Functionality for communicating with Tor.
  */
-#ifndef NAVCOIN_TORCONTROL_H
-#define NAVCOIN_TORCONTROL_H
+#ifndef ELECTRUM_TORCONTROL_H
+#define ELECTRUM_TORCONTROL_H
 
-#include <scheduler.h>
+#include "scheduler.h"
 
 extern const std::string DEFAULT_TOR_CONTROL;
 static const bool DEFAULT_LISTEN_ONION = true;
@@ -17,4 +17,4 @@ void StartTorControl(boost::thread_group& threadGroup, CScheduler& scheduler);
 void InterruptTorControl();
 void StopTorControl();
 
-#endif /* NAVCOIN_TORCONTROL_H */
+#endif /* ELECTRUM_TORCONTROL_H */

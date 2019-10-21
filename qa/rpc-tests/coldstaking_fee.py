@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-# Copyright (c) 2019 The Navcoin Core developers
+# Copyright (c) 2019 The NAVcoin Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-from test_framework.test_framework import NavCoinTestFramework
+from test_framework.test_framework import ElectrumTestFramework
 from test_framework.util import *
 
-class ColdStakingFeeTest(NavCoinTestFramework):
+class ColdStakingFeeTest(ElectrumTestFramework):
     def __init__(self):
         super().__init__()
         self.setup_clean_chain = True
@@ -58,9 +58,6 @@ class ColdStakingFeeTest(NavCoinTestFramework):
         assert(node1balance > 0)
         assert_equal((node0balance+fees0) % 100000000, 0)
         assert_equal((node1balance+fees1) % 200000000, 0)
-
-        while "Coinstake tried to move cold staking coins to a non authorised script" not in open(self.options.tmpdir + '/node2/devnet/debug.log').read():
-            time.sleep(1)
 
         assert("Coinstake tried to move cold staking coins to a non authorised script" in open(self.options.tmpdir + '/node2/devnet/debug.log').read())
 

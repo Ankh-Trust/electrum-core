@@ -3,14 +3,14 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_SCRIPT_SCRIPT_H
-#define NAVCOIN_SCRIPT_SCRIPT_H
+#ifndef ELECTRUM_SCRIPT_SCRIPT_H
+#define ELECTRUM_SCRIPT_SCRIPT_H
 
-#include <crypto/common.h>
-#include <prevector.h>
-#include <pubkey.h>
-#include <uint256.h>
-#include <utilstrencodings.h>
+#include "crypto/common.h"
+#include "prevector.h"
+#include "pubkey.h"
+#include "uint256.h"
+#include "utilstrencodings.h"
 
 #include <assert.h>
 #include <climits>
@@ -660,7 +660,7 @@ public:
     }
 
     /**
-     * Pre-version-0.6, NavCoin always counted CHECKMULTISIGs
+     * Pre-version-0.6, Electrum always counted CHECKMULTISIGs
      * as 20 sigops. With pay-to-script-hash, that changed:
      * CHECKMULTISIGs serialized in scriptSigs are
      * counted more accurately, assuming they are of the form
@@ -740,4 +740,4 @@ public:
 
 
 
-#endif // NAVCOIN_SCRIPT_SCRIPT_H
+#endif // ELECTRUM_SCRIPT_SCRIPT_H

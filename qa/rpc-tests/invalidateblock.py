@@ -7,10 +7,10 @@
 # Test InvalidateBlock code
 #
 
-from test_framework.test_framework import NavCoinTestFramework
+from test_framework.test_framework import ElectrumTestFramework
 from test_framework.util import *
 
-class InvalidateTest(NavCoinTestFramework):
+class InvalidateTest(ElectrumTestFramework):
     
         
     def __init__(self):

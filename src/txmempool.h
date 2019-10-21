@@ -3,25 +3,25 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_TXMEMPOOL_H
-#define NAVCOIN_TXMEMPOOL_H
+#ifndef ELECTRUM_TXMEMPOOL_H
+#define ELECTRUM_TXMEMPOOL_H
 
 #include <list>
 #include <memory>
 #include <set>
 
-#include <addressindex.h>
-#include <spentindex.h>
-#include <amount.h>
-#include <coins.h>
-#include <indirectmap.h>
-#include <primitives/transaction.h>
-#include <sync.h>
+#include "addressindex.h"
+#include "spentindex.h"
+#include "amount.h"
+#include "coins.h"
+#include "indirectmap.h"
+#include "primitives/transaction.h"
+#include "sync.h"
 
 #undef foreach
-#include <boost/multi_index_container.hpp>
-#include <boost/multi_index/ordered_index.hpp>
-#include <boost/multi_index/hashed_index.hpp>
+#include "boost/multi_index_container.hpp"
+#include "boost/multi_index/ordered_index.hpp"
+#include "boost/multi_index/hashed_index.hpp"
 
 class CAutoFile;
 class CBlockIndex;
@@ -743,4 +743,4 @@ struct TxCoinAgePriorityCompare
     }
 };
 
-#endif // NAVCOIN_TXMEMPOOL_H
+#endif // ELECTRUM_TXMEMPOOL_H

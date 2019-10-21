@@ -2,10 +2,10 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_COINCONTROL_H
-#define NAVCOIN_COINCONTROL_H
+#ifndef ELECTRUM_COINCONTROL_H
+#define ELECTRUM_COINCONTROL_H
 
-#include <primitives/transaction.h>
+#include "primitives/transaction.h"
 
 /** Coin Control Features. */
 class CCoinControl
@@ -73,4 +73,4 @@ private:
     std::set<COutPoint> setSelected;
 };
 
-#endif // NAVCOIN_COINCONTROL_H
+#endif // ELECTRUM_COINCONTROL_H

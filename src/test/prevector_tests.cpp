@@ -3,15 +3,14 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include <vector>
-#include <prevector.h>
-#include <random.h>
+#include "prevector.h"
+#include "random.h"
 
-#include <serialize.h>
-#include <streams.h>
+#include "serialize.h"
+#include "streams.h"
 
-#include <test/test_navcoin.h>
+#include "test/test_electrum.h"
 
-#include <boost/range/adaptor/reversed.hpp>
 #include <boost/test/unit_test.hpp>
 
 BOOST_FIXTURE_TEST_SUITE(PrevectorTests, TestingSetup)
@@ -42,16 +41,16 @@ class prevector_tester {
         BOOST_CHECK(pretype(real_vector.begin(), real_vector.end()) == pre_vector);
         BOOST_CHECK(pretype(pre_vector.begin(), pre_vector.end()) == pre_vector);
         size_t pos = 0;
-        for(const T& v: pre_vector) {
+        BOOST_FOREACH(const T& v, pre_vector) {
              BOOST_CHECK(v == real_vector[pos++]);
         }
-        for(const T& v: boost::adaptors::reverse(pre_vector)) {
+        BOOST_REVERSE_FOREACH(const T& v, pre_vector) {
              BOOST_CHECK(v == real_vector[--pos]);
         }
-        for(const T& v: const_pre_vector) {
+        BOOST_FOREACH(const T& v, const_pre_vector) {
              BOOST_CHECK(v == real_vector[pos++]);
         }
-        for(const T& v: boost::adaptors::reverse(const_pre_vector)) {
+        BOOST_REVERSE_FOREACH(const T& v, const_pre_vector) {
              BOOST_CHECK(v == real_vector[--pos]);
         }
         CDataStream ss1(SER_DISK, 0);

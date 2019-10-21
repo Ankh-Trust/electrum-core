@@ -2,10 +2,10 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_ZMQ_ZMQNOTIFICATIONINTERFACE_H
-#define NAVCOIN_ZMQ_ZMQNOTIFICATIONINTERFACE_H
+#ifndef ELECTRUM_ZMQ_ZMQNOTIFICATIONINTERFACE_H
+#define ELECTRUM_ZMQ_ZMQNOTIFICATIONINTERFACE_H
 
-#include <validationinterface.h>
+#include "validationinterface.h"
 #include <string>
 #include <map>
 
@@ -34,4 +34,4 @@ private:
     std::list<CZMQAbstractNotifier*> notifiers;
 };
 
-#endif // NAVCOIN_ZMQ_ZMQNOTIFICATIONINTERFACE_H
+#endif // ELECTRUM_ZMQ_ZMQNOTIFICATIONINTERFACE_H

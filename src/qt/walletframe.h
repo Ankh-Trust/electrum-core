@@ -2,8 +2,8 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_QT_WALLETFRAME_H
-#define NAVCOIN_QT_WALLETFRAME_H
+#ifndef ELECTRUM_QT_WALLETFRAME_H
+#define ELECTRUM_QT_WALLETFRAME_H
 
 #include <QFrame>
 #include <QMap>
@@ -11,7 +11,7 @@
 #include <QPushButton>
 
 
-class NavCoinGUI;
+class ElectrumGUI;
 class ClientModel;
 class PlatformStyle;
 class SendCoinsRecipient;
@@ -27,7 +27,7 @@ class WalletFrame : public QFrame
     Q_OBJECT
 
 public:
-    explicit WalletFrame(const PlatformStyle *platformStyle, NavCoinGUI *_gui = 0);
+    explicit WalletFrame(const PlatformStyle *platformStyle, ElectrumGUI *_gui = 0);
     ~WalletFrame();
 
     void setClientModel(ClientModel *clientModel);
@@ -51,7 +51,7 @@ Q_SIGNALS:
 
 private:
     QStackedWidget *walletStack;
-    NavCoinGUI *gui;
+    ElectrumGUI *gui;
     ClientModel *clientModel;
     QMap<QString, WalletView*> mapWalletViews;
 
@@ -72,7 +72,6 @@ public Q_SLOTS:
     void gotoReceiveCoinsPage();
     /** Switch to send coins page */
     void gotoSendCoinsPage(QString addr = "");
-    void gotoRequestPaymentPage();
 
     /** Show Sign/Verify Message dialog and switch to sign message tab */
     void gotoSignMessageTab(QString addr = "");
@@ -94,25 +93,9 @@ public Q_SLOTS:
     void importPrivateKey();
     void exportMasterPrivateKeyAction();
 
-    void setStatusTitleBlocks(QString text);
-
-    void setStatusTitleConnections(QString text);
-
-    void setStatusTitle(QString text);
-
-    void showStatusTitleConnections();
-    void hideStatusTitleConnections();
-    void showStatusTitleBlocks();
-    void hideStatusTitleBlocks();
-
-    void showLockStaking(bool status);
-
-    void setStakingStatus(QString text);
     void setStakingStats(QString day, QString week, QString month, QString year, QString all);
 
     void setVotingStatus(QString text);
-
-    void splitRewards();
 
     /** Show used sending addresses */
     void usedSendingAddresses();
@@ -122,4 +105,4 @@ public Q_SLOTS:
     void outOfSyncWarningClicked();
 };
 
-#endif // NAVCOIN_QT_WALLETFRAME_H
+#endif // ELECTRUM_QT_WALLETFRAME_H

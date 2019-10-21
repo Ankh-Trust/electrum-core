@@ -30,18 +30,18 @@ NOTE: Building with Qt4 is still supported, however, could result in a broken UI
 Libunbound needs to be compiled from source. Download last version from http://www.unbound.net, untar, cd to the folder and then `./configure`, `make` and `make install-all`.
 
 
-## Build NavCoin Core
+## Build Electrum Core
 
-1.  Clone the navcoin source code and cd into `navcoin`
+1.  Clone the electrum source code and cd into `electrum`
 
     ```bash
-    git clone https://github.com/navcoin/navcoin-core.git
-    cd navcoin-core
+    git clone https://github.com/electrum/electrum-core.git
+    cd electrum-core
     ```
 
-2. Build navcoin-core:
+2. Build electrum-core:
 
-    These instructions will configure and build the headless navcoin binaries as well as the GUI (if Qt is found).
+    These instructions will configure and build the headless electrum binaries as well as the GUI (if Qt is found).
     You can disable the GUI build by passing `--without-gui` to configure.
 
     For an explanation on the `./configure` command and how it might be out of date see [README.md](README.md)
@@ -66,39 +66,39 @@ Libunbound needs to be compiled from source. Download last version from http://w
 
 ## Running
 
-NavCoin Core is now available at `./src/navcoind`
+Electrum Core is now available at `./src/electrumd`
 
 Before running, it's recommended you create an RPC configuration file.
 
 ```bash
-echo -e "rpcuser=navcoinrpc\nrpcpassword=$(xxd -l 16 -p /dev/urandom)" > "/Users/${USER}/Library/Application Support/NavCoin4/navcoin.conf"
-chmod 600 "/Users/${USER}/Library/Application Support/NavCoin4/navcoin.conf"
+echo -e "rpcuser=electrumrpc\nrpcpassword=$(xxd -l 16 -p /dev/urandom)" > "/Users/${USER}/Library/Application Support/Electrum/electrum.conf"
+chmod 600 "/Users/${USER}/Library/Application Support/Electrum/electrum.conf"
 ```
 
-The first time you run navcoind, it will start downloading the blockchain. This process could take several hours.
+The first time you run electrumd, it will start downloading the blockchain. This process could take several hours.
 
 You can monitor the download process by looking at the debug.log file:
 
-`tail -f $HOME/Library/Application\ Support/NavCoin4/debug.log`
+`tail -f $HOME/Library/Application\ Support/Electrum/debug.log`
 
 ## Other commands:
 
 ```bash
-./src/navcoind -daemon # Starts the navcoin daemon.
-./src/navcoin-cli --help # Outputs a list of command-line options.
-./src/navcoin-cli help # Outputs a list of RPC commands when the daemon is running.
+./src/electrumd -daemon # Starts the electrum daemon.
+./src/electrum-cli --help # Outputs a list of command-line options.
+./src/electrum-cli help # Outputs a list of RPC commands when the daemon is running.
 ```
 
 ## Using Qt Creator as IDE
 
-You can use Qt Creator as an IDE, for navcoin development.
+You can use Qt Creator as an IDE, for electrum development.
 Download and install the community edition of [Qt Creator](https://www.qt.io/download/).
 Uncheck everything except Qt Creator during the installation process.
 
 1. Make sure you installed everything through Homebrew mentioned above
 2. Do a proper ./configure --enable-debug
 3. In Qt Creator do "New Project" -> Import Project -> Import Existing Project
-4. Enter "navcoin-qt" as project name, enter src/qt as location
+4. Enter "electrum-qt" as project name, enter src/qt as location
 5. Leave the file selection as it is
 6. Confirm the "summary page"
 7. In the "Projects" tab select "Manage Kits..."
@@ -125,4 +125,4 @@ brew install qt@5.7
 
 - Tested on OS X 10.10 through 10.13.5 on 64-bit Intel processors only.
 
-- Building with downloaded Qt binaries is not officially supported. See the notes in [#7714](https://github.com/navcoin/navcoin/issues/7714)
+- Building with downloaded Qt binaries is not officially supported. See the notes in [#7714](https://github.com/electrum/electrum/issues/7714)

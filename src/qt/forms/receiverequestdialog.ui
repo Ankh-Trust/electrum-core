@@ -10,9 +10,6 @@
     <height>597</height>
    </rect>
   </property>
-  <property name="styleSheet">
-   <string notr="true"/>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>
     <widget class="QRImageWidget" name="lblQRCode">
@@ -30,9 +27,6 @@
      </property>
      <property name="toolTip">
       <string>QR Code</string>
-     </property>
-     <property name="styleSheet">
-      <string notr="true"/>
      </property>
      <property name="textFormat">
       <enum>Qt::PlainText</enum>
@@ -59,9 +53,6 @@
        <height>50</height>
       </size>
      </property>
-     <property name="styleSheet">
-      <string notr="true"/>
-     </property>
      <property name="frameShape">
       <enum>QFrame::NoFrame</enum>
      </property>
@@ -80,9 +71,6 @@
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QPushButton" name="btnCopyURI">
-       <property name="styleSheet">
-        <string notr="true"/>
-       </property>
        <property name="text">
         <string>Copy &amp;URI</string>
        </property>
@@ -93,9 +81,6 @@
      </item>
      <item>
       <widget class="QPushButton" name="btnCopyAddress">
-       <property name="styleSheet">
-        <string notr="true"/>
-       </property>
        <property name="text">
         <string>Copy &amp;Address</string>
        </property>
@@ -106,9 +91,6 @@
      </item>
      <item>
       <widget class="QPushButton" name="btnSaveAs">
-       <property name="styleSheet">
-        <string notr="true"/>
-       </property>
        <property name="text">
         <string>&amp;Save Image...</string>
        </property>
@@ -132,9 +114,6 @@
      </item>
      <item>
       <widget class="QDialogButtonBox" name="buttonBox">
-       <property name="styleSheet">
-        <string notr="true"/>
-       </property>
        <property name="standardButtons">
         <set>QDialogButtonBox::Close</set>
        </property>

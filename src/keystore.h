@@ -3,14 +3,14 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_KEYSTORE_H
-#define NAVCOIN_KEYSTORE_H
+#ifndef ELECTRUM_KEYSTORE_H
+#define ELECTRUM_KEYSTORE_H
 
-#include <key.h>
-#include <pubkey.h>
-#include <script/script.h>
-#include <script/standard.h>
-#include <sync.h>
+#include "key.h"
+#include "pubkey.h"
+#include "script/script.h"
+#include "script/standard.h"
+#include "sync.h"
 
 #include <boost/signals2/signal.hpp>
 #include <boost/variant.hpp>
@@ -34,7 +34,7 @@ public:
     virtual void GetKeys(std::set<CKeyID> &setAddress) const =0;
     virtual bool GetPubKey(const CKeyID &address, CPubKey& vchPubKeyOut) const =0;
 
-    //! Support for BIP 0013 : see https://github.com/navcoin/bips/blob/master/bip-0013.mediawiki
+    //! Support for BIP 0013 : see https://github.com/electrum/bips/blob/master/bip-0013.mediawiki
     virtual bool AddCScript(const CScript& redeemScript) =0;
     virtual bool HaveCScript(const CScriptID &hash) const =0;
     virtual bool GetCScript(const CScriptID &hash, CScript& redeemScriptOut) const =0;
@@ -111,4 +111,4 @@ public:
 typedef std::vector<unsigned char, secure_allocator<unsigned char> > CKeyingMaterial;
 typedef std::map<CKeyID, std::pair<CPubKey, std::vector<unsigned char> > > CryptedKeyMap;
 
-#endif // NAVCOIN_KEYSTORE_H
+#endif // ELECTRUM_KEYSTORE_H

@@ -5,7 +5,7 @@
 
 
 #
-# Expanded helper routines for regression testing of the NAV Coin community fund
+# Expanded helper routines for regression testing of the 0AE Coin community fund
 #
 
 from test_framework.util import *
@@ -62,4 +62,3 @@ def create_vote_tx(node, vote_type, vote, p_hash):
         "", 0
     )
     return vote_tx
-

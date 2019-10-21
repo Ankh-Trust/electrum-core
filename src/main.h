@@ -1,30 +1,30 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2015 The Bitcoin Core developers
-// Copyright (c) 2018 The NavCoin Core developers
+// Copyright (c) 2018 The NAVcoin Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_MAIN_H
-#define NAVCOIN_MAIN_H
+#ifndef ELECTRUM_MAIN_H
+#define ELECTRUM_MAIN_H
 
 #if defined(HAVE_CONFIG_H)
-#include <config/navcoin-config.h>
+#include "config/electrum-config.h"
 #endif
 
-#include <amount.h>
-#include <chain.h>
-#include <coins.h>
-#include <net.h>
-#include <script/interpreter.h>
-#include <script/script_error.h>
-#include <sync.h>
-#include <versionbits.h>
-#include <spentindex.h>
-#include <addressindex.h>
-#include <timestampindex.h>
-#include <wallet/walletdb.h>
-#include <txdb.h>
-#include <consensus/consensus.h>
+#include "amount.h"
+#include "chain.h"
+#include "coins.h"
+#include "net.h"
+#include "script/interpreter.h"
+#include "script/script_error.h"
+#include "sync.h"
+#include "versionbits.h"
+#include "spentindex.h"
+#include "addressindex.h"
+#include "timestampindex.h"
+#include "wallet/walletdb.h"
+#include "txdb.h"
+#include "consensus/consensus.h"
 
 
 #include <algorithm>
@@ -557,7 +557,7 @@ bool InvalidateBlock(CValidationState& state, const CChainParams& chainparams, C
 /** Remove invalidity status from a block and its descendants. */
 bool ResetBlockFailureFlags(CBlockIndex *pindex);
 
-// NAVCoin
+// Electrum
 
 inline unsigned int GetTargetSpacing(int nHeight) { return 30; }
 
@@ -648,4 +648,4 @@ bool IsSigHFEnabled(const Consensus::Params &consensus, const CBlockIndex *pinde
 bool TxToProposal(std::string strDZeel, uint256 hash, const uint256& blockhash, const CAmount& nProposalFee, CFund::CProposal& proposal);
 bool TxToPaymentRequest(std::string strDZeel, uint256 hash, const uint256& blockhash, CFund::CPaymentRequest& prequest, CCoinsViewCache& view);
 
-#endif // NAVCOIN_MAIN_H
+#endif // ELECTRUM_MAIN_H

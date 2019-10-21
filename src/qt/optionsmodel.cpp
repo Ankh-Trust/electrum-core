@@ -3,23 +3,23 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #if defined(HAVE_CONFIG_H)
-#include <config/navcoin-config.h>
+#include "config/electrum-config.h"
 #endif
 
-#include <qt/optionsmodel.h>
+#include "optionsmodel.h"
 
-#include <qt/navcoinunits.h>
-#include <qt/guiutil.h>
+#include "electrumunits.h"
+#include "guiutil.h"
 
-#include <amount.h>
-#include <init.h>
-#include <main.h> // For DEFAULT_SCRIPTCHECK_THREADS
-#include <net.h>
-#include <txdb.h> // for -dbcache defaults
+#include "amount.h"
+#include "init.h"
+#include "main.h" // For DEFAULT_SCRIPTCHECK_THREADS
+#include "net.h"
+#include "txdb.h" // for -dbcache defaults
 
 #ifdef ENABLE_WALLET
-#include <wallet/wallet.h>
-#include <wallet/walletdb.h>
+#include "wallet/wallet.h"
+#include "wallet/walletdb.h"
 #endif
 
 #include <QNetworkProxy>
@@ -57,7 +57,7 @@ void OptionsModel::Init(bool resetSettings)
         settings.setValue("fHideTrayIcon", false);
     fHideTrayIcon = settings.value("fHideTrayIcon").toBool();
     Q_EMIT hideTrayIconChanged(fHideTrayIcon);
-    
+
     if (!settings.contains("fMinimizeToTray"))
         settings.setValue("fMinimizeToTray", false);
     fMinimizeToTray = settings.value("fMinimizeToTray").toBool() && !fHideTrayIcon;
@@ -68,16 +68,22 @@ void OptionsModel::Init(bool resetSettings)
 
     // Display
     if (!settings.contains("nDisplayUnit"))
-        settings.setValue("nDisplayUnit", NavCoinUnits::NAV);
+        settings.setValue("nDisplayUnit", ElectrumUnits::_AE);
     nDisplayUnit = settings.value("nDisplayUnit").toInt();
 
     if (!settings.contains("strThirdPartyTxUrls"))
-        settings.setValue("strThirdPartyTxUrls", "https://www.navexplorer.com/tx/%s");
-    strThirdPartyTxUrls = settings.value("strThirdPartyTxUrls", "https://www.navexplorer.com/tx/%s").toString();
+        settings.setValue("strThirdPartyTxUrls", "");
+    strThirdPartyTxUrls = settings.value("strThirdPartyTxUrls", "").toString();
 
+#ifdef ENABLE_WALLET
     if (!settings.contains("fCoinControlFeatures"))
         settings.setValue("fCoinControlFeatures", false);
     fCoinControlFeatures = settings.value("fCoinControlFeatures", false).toBool();
+
+    if (!settings.contains("digits"))
+        settings.setValue("digits", "2");
+
+#endif // ENABLE_WALLET
 
     // These are shared with the core or have a command-line parameter
     // and we want command-line parameters to overwrite the GUI settings.
@@ -217,15 +223,19 @@ QVariant OptionsModel::data(const QModelIndex & index, int role) const
 #ifdef ENABLE_WALLET
         case SpendZeroConfChange:
             return settings.value("bSpendZeroConfChange");
-#endif
+#endif // ENABLE_WALLET
         case DisplayUnit:
             return nDisplayUnit;
         case ThirdPartyTxUrls:
             return strThirdPartyTxUrls;
         case Language:
             return settings.value("language");
+#ifdef ENABLE_WALLET
+        case Digits:
+            return settings.value("digits");
         case CoinControlFeatures:
             return fCoinControlFeatures;
+#endif // ENABLE_WALLET
         case DatabaseCache:
             return settings.value("nDatabaseCache");
         case ThreadsScriptVerif:
@@ -351,6 +361,14 @@ bool OptionsModel::setData(const QModelIndex & index, const QVariant & value, in
                 setRestartRequired(true);
             }
             break;
+#ifdef ENABLE_WALLET
+        case Digits:
+            if (settings.value("digits") != value) {
+                settings.setValue("digits", value);
+                setRestartRequired(true);
+            }
+        break;
+#endif // ENABLE_WALLET
         case Language:
             if (settings.value("language") != value) {
                 settings.setValue("language", value);
@@ -442,7 +460,7 @@ void OptionsModel::checkAndMigrate()
     if (settingsVersion < CLIENT_VERSION)
     {
         // -dbcache was bumped from 100 to 300 in 0.13
-        // see https://github.com/navcoin/navcoin/pull/8273
+        // see https://github.com/electrum/electrum/pull/8273
         // force people to upgrade to the new value if they are using 100MB
         if (settingsVersion < 130000 && settings.contains("nDatabaseCache") && settings.value("nDatabaseCache").toLongLong() == 100)
             settings.setValue("nDatabaseCache", (qint64)nDefaultDbCache);

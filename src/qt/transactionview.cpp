@@ -2,22 +2,22 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include <qt/transactionview.h>
+#include "transactionview.h"
 
-#include <qt/addresstablemodel.h>
-#include <qt/navcoinunits.h>
-#include <qt/csvmodelwriter.h>
-#include <qt/editaddressdialog.h>
-#include <qt/guiutil.h>
-#include <qt/optionsmodel.h>
-#include <qt/platformstyle.h>
-#include <qt/transactiondescdialog.h>
-#include <qt/transactionfilterproxy.h>
-#include <qt/transactionrecord.h>
-#include <qt/transactiontablemodel.h>
-#include <qt/walletmodel.h>
+#include "addresstablemodel.h"
+#include "electrumunits.h"
+#include "csvmodelwriter.h"
+#include "editaddressdialog.h"
+#include "guiutil.h"
+#include "optionsmodel.h"
+#include "platformstyle.h"
+#include "transactiondescdialog.h"
+#include "transactionfilterproxy.h"
+#include "transactionrecord.h"
+#include "transactiontablemodel.h"
+#include "walletmodel.h"
 
-#include <ui_interface.h>
+#include "ui_interface.h"
 
 #include <QComboBox>
 #include <QDateTimeEdit>
@@ -43,18 +43,18 @@ TransactionView::TransactionView(const PlatformStyle *platformStyle, QWidget *pa
     setContentsMargins(0,0,0,0);
 
     QHBoxLayout *hlayout = new QHBoxLayout();
-    hlayout->setContentsMargins(0,0,0,6);
+    hlayout->setContentsMargins(0,0,0,0);
 
     if (platformStyle->getUseExtraSpacing()) {
-        hlayout->setSpacing(10);
-        hlayout->addSpacing(26);
+        hlayout->setSpacing(0);
+        hlayout->addSpacing(STATUS_COLUMN_WIDTH - 1);
     } else {
-        hlayout->setSpacing(5);
-        hlayout->addSpacing(23);
+        hlayout->setSpacing(0);
+        hlayout->addSpacing(STATUS_COLUMN_WIDTH);
     }
 
     watchOnlyWidget = new QComboBox(this);
-    watchOnlyWidget->setFixedWidth(24);
+    watchOnlyWidget->setFixedWidth(WATCHONLY_COLUMN_WIDTH);
     watchOnlyWidget->addItem("", TransactionFilterProxy::WatchOnlyFilter_All);
     watchOnlyWidget->addItem(platformStyle->SingleColorIcon(":/icons/eye_plus"), "", TransactionFilterProxy::WatchOnlyFilter_Yes);
     watchOnlyWidget->addItem(platformStyle->SingleColorIcon(":/icons/eye_minus"), "", TransactionFilterProxy::WatchOnlyFilter_No);
@@ -62,9 +62,9 @@ TransactionView::TransactionView(const PlatformStyle *platformStyle, QWidget *pa
 
     dateWidget = new QComboBox(this);
     if (platformStyle->getUseExtraSpacing()) {
-        dateWidget->setFixedWidth(121);
+        dateWidget->setFixedWidth(DATE_COLUMN_WIDTH - 1);
     } else {
-        dateWidget->setFixedWidth(120);
+        dateWidget->setFixedWidth(DATE_COLUMN_WIDTH);
     }
     dateWidget->addItem(tr("All"), All);
     dateWidget->addItem(tr("Today"), Today);
@@ -77,9 +77,9 @@ TransactionView::TransactionView(const PlatformStyle *platformStyle, QWidget *pa
 
     typeWidget = new QComboBox(this);
     if (platformStyle->getUseExtraSpacing()) {
-        typeWidget->setFixedWidth(121);
+        typeWidget->setFixedWidth(TYPE_COLUMN_WIDTH - 1);
     } else {
-        typeWidget->setFixedWidth(120);
+        typeWidget->setFixedWidth(TYPE_COLUMN_WIDTH);
     }
 
     typeWidget->addItem(tr("All"), TransactionFilterProxy::ALL_TYPES);
@@ -105,9 +105,9 @@ TransactionView::TransactionView(const PlatformStyle *platformStyle, QWidget *pa
     amountWidget = new QLineEdit(this);
     amountWidget->setPlaceholderText(tr("Min amount"));
     if (platformStyle->getUseExtraSpacing()) {
-        amountWidget->setFixedWidth(115);
+        amountWidget->setFixedWidth(AMOUNT_MINIMUM_COLUMN_WIDTH - 1);
     } else {
-        amountWidget->setFixedWidth(120);
+        amountWidget->setFixedWidth(AMOUNT_MINIMUM_COLUMN_WIDTH);
     }
     amountWidget->setValidator(new QDoubleValidator(0, 1e20, 8, this));
     hlayout->addWidget(amountWidget);
@@ -318,7 +318,7 @@ void TransactionView::changedAmount(const QString &amount)
     if(!transactionProxyModel)
         return;
     CAmount amount_parsed = 0;
-    if(NavCoinUnits::parse(model->getOptionsModel()->getDisplayUnit(), amount, &amount_parsed))
+    if(ElectrumUnits::parse(model->getOptionsModel()->getDisplayUnit(), amount, &amount_parsed))
     {
         transactionProxyModel->setMinAmount(amount_parsed);
     }
@@ -333,7 +333,7 @@ void TransactionView::exportClicked()
     // CSV is currently the only supported format
     QString filename = GUIUtil::getSaveFileName(this,
         tr("Export Transaction History"), QString(),
-        tr("Comma separated file (*.csv)"), nullptr);
+        tr("Comma separated file (*.csv)"), NULL);
 
     if (filename.isNull())
         return;
@@ -349,7 +349,7 @@ void TransactionView::exportClicked()
     writer.addColumn(tr("Type"), TransactionTableModel::Type, Qt::EditRole);
     writer.addColumn(tr("Label"), 0, TransactionTableModel::LabelRole);
     writer.addColumn(tr("Address"), 0, TransactionTableModel::AddressRole);
-    writer.addColumn(NavCoinUnits::getAmountColumnTitle(model->getOptionsModel()->getDisplayUnit()), 0, TransactionTableModel::FormattedAmountRole);
+    writer.addColumn(ElectrumUnits::getAmountColumnTitle(model->getOptionsModel()->getDisplayUnit()), 0, TransactionTableModel::FormattedAmountRole);
     writer.addColumn(tr("ID"), 0, TransactionTableModel::TxIDRole);
 
     if(!writer.write()) {

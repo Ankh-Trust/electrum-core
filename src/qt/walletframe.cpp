@@ -2,19 +2,18 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include <qt/walletframe.h>
-#include <qt/skinize.h>
+#include "walletframe.h"
 
-#include <qt/navcoingui.h>
-#include <qt/walletview.h>
-#include <util.h>
+#include "electrumgui.h"
+#include "walletview.h"
+#include "util.h"
 
 #include <cstdio>
 
 #include <QHBoxLayout>
 #include <QLabel>
 
-WalletFrame::WalletFrame(const PlatformStyle *platformStyle, NavCoinGUI *_gui) :
+WalletFrame::WalletFrame(const PlatformStyle *platformStyle, ElectrumGUI *_gui) :
     QFrame(_gui),
     gui(_gui),
     platformStyle(platformStyle)
@@ -37,7 +36,6 @@ WalletFrame::WalletFrame(const PlatformStyle *platformStyle, NavCoinGUI *_gui) :
     topLayout->setSpacing(0);
 
     walletStack = new QStackedWidget(this);
-    walletStack->setStyleSheet(Skinize());
 
     bottomLayout->setContentsMargins(0,0,0,0);
     bottomLayout->addWidget(walletStack);
@@ -66,7 +64,7 @@ bool WalletFrame::addWallet(const QString& name, WalletModel *walletModel)
         return false;
 
     WalletView *walletView = new WalletView(platformStyle, this);
-    walletView->setNavCoinGUI(gui);
+    walletView->setElectrumGUI(gui);
     walletView->setClientModel(clientModel);
     walletView->setWalletModel(walletModel);
     walletView->showOutOfSyncWarning(bOutOfSync);
@@ -137,27 +135,6 @@ void WalletFrame::gotoOverviewPage()
         i.value()->gotoOverviewPage();
 }
 
-void WalletFrame::setStatusTitleBlocks(QString text)
-{
-    QMap<QString, WalletView*>::const_iterator i;
-    for (i = mapWalletViews.constBegin(); i != mapWalletViews.constEnd(); ++i)
-        i.value()->setStatusTitleBlocks(text);
-}
-
-void WalletFrame::setStakingStatus(QString text)
-{
-    QMap<QString, WalletView*>::const_iterator i;
-    for (i = mapWalletViews.constBegin(); i != mapWalletViews.constEnd(); ++i)
-        i.value()->setStakingStatus(text);
-}
-
-void WalletFrame::setStatusTitleConnections(QString text)
-{
-    QMap<QString, WalletView*>::const_iterator i;
-    for (i = mapWalletViews.constBegin(); i != mapWalletViews.constEnd(); ++i)
-        i.value()->setStatusTitleConnections(text);
-}
-
 void WalletFrame::setStakingStats(QString day, QString week, QString month, QString year, QString all)
 {
     QMap<QString, WalletView*>::const_iterator i;
@@ -165,60 +142,11 @@ void WalletFrame::setStakingStats(QString day, QString week, QString month, QStr
         i.value()->setStakingStats(day,week,month,year,all);
 }
 
-void WalletFrame::showStatusTitleConnections()
-{
-    QMap<QString, WalletView*>::const_iterator i;
-    for (i = mapWalletViews.constBegin(); i != mapWalletViews.constEnd(); ++i)
-        i.value()->showStatusTitleConnections();
-}
-
-void WalletFrame::hideStatusTitleConnections()
-{
-    QMap<QString, WalletView*>::const_iterator i;
-    for (i = mapWalletViews.constBegin(); i != mapWalletViews.constEnd(); ++i)
-        i.value()->hideStatusTitleConnections();
-}
-
-void WalletFrame::showStatusTitleBlocks()
-{
-    QMap<QString, WalletView*>::const_iterator i;
-    for (i = mapWalletViews.constBegin(); i != mapWalletViews.constEnd(); ++i)
-        i.value()->showStatusTitleBlocks();
-}
-
-void WalletFrame::hideStatusTitleBlocks()
-{
-    QMap<QString, WalletView*>::const_iterator i;
-    for (i = mapWalletViews.constBegin(); i != mapWalletViews.constEnd(); ++i)
-        i.value()->hideStatusTitleBlocks();
-}
-
-void WalletFrame::setStatusTitle(QString text)
-{
-    QMap<QString, WalletView*>::const_iterator i;
-    for (i = mapWalletViews.constBegin(); i != mapWalletViews.constEnd(); ++i)
-        i.value()->setStatusTitle(text);
-}
-
-void WalletFrame::showLockStaking(bool status)
-{
-    QMap<QString, WalletView*>::const_iterator i;
-    for (i = mapWalletViews.constBegin(); i != mapWalletViews.constEnd(); ++i)
-        i.value()->showLockStaking(status);
-}
-
 void WalletFrame::setVotingStatus(QString text)
 {
     QMap<QString, WalletView*>::const_iterator i;
     for (i = mapWalletViews.constBegin(); i != mapWalletViews.constEnd(); ++i)
         i.value()->setVotingStatus(text);
-}
-
-void WalletFrame::splitRewards()
-{
-    QMap<QString, WalletView*>::const_iterator i;
-    for (i = mapWalletViews.constBegin(); i != mapWalletViews.constEnd(); ++i)
-        i.value()->splitRewards();
 }
 
 void WalletFrame::gotoHistoryPage()
@@ -240,13 +168,6 @@ void WalletFrame::gotoReceiveCoinsPage()
     QMap<QString, WalletView*>::const_iterator i;
     for (i = mapWalletViews.constBegin(); i != mapWalletViews.constEnd(); ++i)
         i.value()->gotoReceiveCoinsPage();
-}
-
-void WalletFrame::gotoRequestPaymentPage()
-{
-    QMap<QString, WalletView*>::const_iterator i;
-    for (i = mapWalletViews.constBegin(); i != mapWalletViews.constEnd(); ++i)
-        i.value()->gotoRequestPaymentPage();
 }
 
 void WalletFrame::gotoSendCoinsPage(QString addr)

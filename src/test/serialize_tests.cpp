@@ -2,10 +2,10 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include <serialize.h>
-#include <streams.h>
-#include <hash.h>
-#include <test/test_navcoin.h>
+#include "serialize.h"
+#include "streams.h"
+#include "hash.h"
+#include "test/test_electrum.h"
 
 #include <stdint.h>
 
@@ -55,14 +55,14 @@ BOOST_AUTO_TEST_CASE(floats_conversion)
     BOOST_CHECK_EQUAL(ser_uint32_to_float(0x3f800000), 1.0F);
     BOOST_CHECK_EQUAL(ser_uint32_to_float(0x40000000), 2.0F);
     BOOST_CHECK_EQUAL(ser_uint32_to_float(0x40800000), 4.0F);
-    BOOST_CHECK_EQUAL(ser_uint32_to_float(0x44444444), 785.066650390625F);
+    BOOST_CHECK_EQUAL(ser_uint32_to_float(0x44844484), 785.066650390625F);
 
     BOOST_CHECK_EQUAL(ser_float_to_uint32(0.0F), 0x00000000);
     BOOST_CHECK_EQUAL(ser_float_to_uint32(0.5F), 0x3f000000);
     BOOST_CHECK_EQUAL(ser_float_to_uint32(1.0F), 0x3f800000);
     BOOST_CHECK_EQUAL(ser_float_to_uint32(2.0F), 0x40000000);
     BOOST_CHECK_EQUAL(ser_float_to_uint32(4.0F), 0x40800000);
-    BOOST_CHECK_EQUAL(ser_float_to_uint32(785.066650390625F), 0x44444444);
+    BOOST_CHECK_EQUAL(ser_float_to_uint32(785.066650390625F), 0x44844484);
 }
 
 BOOST_AUTO_TEST_CASE(doubles_conversion)

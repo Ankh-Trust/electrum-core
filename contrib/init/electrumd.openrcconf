@@ -1,0 +1,33 @@
+# /etc/conf.d/electrumd: config file for /etc/init.d/electrumd
+
+# Config file location
+#ELECTRUMD_CONFIGFILE="/etc/electrum/electrum.conf"
+
+# What directory to write pidfile to?  (created and owned by $ELECTRUMD_USER)
+#ELECTRUMD_PIDDIR="/var/run/electrumd"
+
+# What filename to give the pidfile
+#ELECTRUMD_PIDFILE="${ELECTRUMD_PIDDIR}/electrumd.pid"
+
+# Where to write electrumd data (be mindful that the blockchain is large)
+#ELECTRUMD_DATADIR="/var/lib/electrumd"
+
+# User and group to own electrumd process
+#ELECTRUMD_USER="electrum"
+#ELECTRUMD_GROUP="electrum"
+
+# Path to electrumd executable
+#ELECTRUMD_BIN="/usr/bin/electrumd"
+
+# Nice value to run electrumd under
+#ELECTRUMD_NICE=0
+
+# Additional options (avoid -conf and -datadir, use flags above)
+ELECTRUMD_OPTS="-disablewallet"
+
+# The timeout in seconds OpenRC will wait for electrumd to terminate
+# after a SIGTERM has been raised.
+# Note that this will be mapped as argument to start-stop-daemon's
+# '--retry' option, which means you can specify a retry schedule
+# here. For more information see man 8 start-stop-daemon.
+ELECTRUMD_SIGTERM_TIMEOUT=60

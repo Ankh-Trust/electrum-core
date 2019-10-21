@@ -1,0 +1,8 @@
+/usr/bin/electrum-cli		--	gen_context(system_u:object_r:electrum_exec_t,s0)
+/usr/sbin/electrumd		--	gen_context(system_u:object_r:electrum_exec_t,s0)
+/usr/lib(64)?/electrum/electrumd		--	gen_context(system_u:object_r:electrum_exec_t,s0)
+
+/etc/electrum(/.*)?		gen_context(system_u:object_r:electrum_conf_t,s0)
+/var/lib/electrum(/.*)?		gen_context(system_u:object_r:electrum_var_lib_t,s0)
+
+(/var)?/run/electrumd(/.*)?   gen_context(system_u:object_r:electrum_var_run_t,s0)

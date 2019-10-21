@@ -2,12 +2,12 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_CORE_MEMUSAGE_H
-#define NAVCOIN_CORE_MEMUSAGE_H
+#ifndef ELECTRUM_CORE_MEMUSAGE_H
+#define ELECTRUM_CORE_MEMUSAGE_H
 
-#include <primitives/transaction.h>
-#include <primitives/block.h>
-#include <memusage.h>
+#include "primitives/transaction.h"
+#include "primitives/block.h"
+#include "memusage.h"
 
 static inline size_t RecursiveDynamicUsage(const CScript& script) {
     return memusage::DynamicUsage(*static_cast<const CScriptBase*>(&script));
@@ -79,4 +79,4 @@ static inline size_t RecursiveDynamicUsage(const CBlockLocator& locator) {
     return memusage::DynamicUsage(locator.vHave);
 }
 
-#endif // NAVCOIN_CORE_MEMUSAGE_H
+#endif // ELECTRUM_CORE_MEMUSAGE_H

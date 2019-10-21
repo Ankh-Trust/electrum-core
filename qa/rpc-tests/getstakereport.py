@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
-# Copyright (c) 2018 The Navcoin Core developers
+# Copyright (c) 2018 The NAVcoin Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-from test_framework.test_framework import NavCoinTestFramework
+from test_framework.test_framework import ElectrumTestFramework
 from test_framework.staticr_util import *
 
 #import time
 
-class GetStakeReport(NavCoinTestFramework):
+class GetStakeReport(ElectrumTestFramework):
     """Tests getstakereport accounting."""
 
     def __init__(self):
@@ -48,7 +48,7 @@ class GetStakeReport(NavCoinTestFramework):
         # Create the cold address
         coldstaking_address_staking = self.nodes[1].getcoldstakingaddress(staking_address_public_key, spending_address_public_key)
 
-        # Send funds to the spending address (leave me NAV for fees)
+        # Send funds to the spending address (leave me 0AE for fees)
         self.nodes[0].sendtoaddress(spending_address_public_key, self.nodes[0].getbalance() - 1)
         self.nodes[0].generate(1)
         self.sync_all()
@@ -64,7 +64,7 @@ class GetStakeReport(NavCoinTestFramework):
         # print('staking', staking_address_last_24h)
         # print('merged', merged_address_last_24h)
 
-        # Make sure we have staked 2 NAV to the spending address
+        # Make sure we have staked 2 0AE to the spending address
         # So that means spending last 24h == 2
         # And staking last 24h == 0 We have not sent any coins yet
         # And merged will have the total of the spending + staking
@@ -72,7 +72,7 @@ class GetStakeReport(NavCoinTestFramework):
         assert_equal('2.00', spending_address_last_24h)
         assert_equal('0.00', staking_address_last_24h)
 
-        # Send funds to the cold staking address (leave some NAV for fees)
+        # Send funds to the cold staking address (leave some 0AE for fees)
         self.nodes[1].sendtoaddress(coldstaking_address_staking, self.nodes[1].getbalance() - 1)
         self.nodes[1].generate(1)
         self.sync_all()
@@ -88,9 +88,9 @@ class GetStakeReport(NavCoinTestFramework):
         # print('staking', staking_address_last_24h)
         # print('merged', merged_address_last_24h)
 
-        # Make sure we staked 4 NAV in spending address (2 NAV via COLD Stake)
+        # Make sure we staked 4 0AE in spending address (2 0AE via COLD Stake)
         # So that means spending last 24h == 4
-        # And staking last 24h == 2 We stake 2 NAV via COLD already
+        # And staking last 24h == 2 We stake 2 0AE via COLD already
         # And merged will have the total of the spending + staking
         assert_equal('4.00', merged_address_last_24h)
         assert_equal('4.00', spending_address_last_24h)
@@ -125,7 +125,7 @@ class GetStakeReport(NavCoinTestFramework):
         assert_equal('6.00', spending_address_last_7d)
         assert_equal('4.00', staking_address_last_7d)
 
-        # Load the averages for stake amounts 
+        # Load the averages for stake amounts
         avg_last7d   = self.nodes[0].getstakereport()['Last 7 Days Avg']
         avg_last30d  = self.nodes[0].getstakereport()['Last 30 Days Avg']
         avg_last365d = self.nodes[0].getstakereport()['Last 365 Days Avg']
@@ -161,7 +161,7 @@ class GetStakeReport(NavCoinTestFramework):
         assert_equal('2.00', spending_address_last_7d)
         assert_equal('2.00', staking_address_last_7d)
 
-        # Load the averages for stake amounts 
+        # Load the averages for stake amounts
         avg_last7d   = self.nodes[0].getstakereport()['Last 7 Days Avg']
         avg_last30d  = self.nodes[0].getstakereport()['Last 30 Days Avg']
         avg_last365d = self.nodes[0].getstakereport()['Last 365 Days Avg']
@@ -197,7 +197,7 @@ class GetStakeReport(NavCoinTestFramework):
         assert_equal('0.00', spending_address_last_7d)
         assert_equal('0.00', staking_address_last_7d)
 
-        # Load the averages for stake amounts 
+        # Load the averages for stake amounts
         avg_last7d   = self.nodes[0].getstakereport()['Last 7 Days Avg']
         avg_last30d  = self.nodes[0].getstakereport()['Last 30 Days Avg']
         avg_last365d = self.nodes[0].getstakereport()['Last 365 Days Avg']

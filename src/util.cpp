@@ -4,20 +4,20 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #if defined(HAVE_CONFIG_H)
-#include <config/navcoin-config.h>
+#include "config/electrum-config.h"
 #endif
 
-#include <util.h>
+#include "util.h"
 
-#include <chainparamsbase.h>
-#include <main.h>
-#include <miner.h>
-#include <net.h>
-#include <random.h>
-#include <serialize.h>
-#include <sync.h>
-#include <utilstrencodings.h>
-#include <utiltime.h>
+#include "chainparamsbase.h"
+#include "main.h"
+#include "miner.h"
+#include "net.h"
+#include "random.h"
+#include "serialize.h"
+#include "sync.h"
+#include "utilstrencodings.h"
+#include "utiltime.h"
 
 #include <stdarg.h>
 
@@ -80,6 +80,7 @@
 #include <boost/algorithm/string/predicate.hpp> // for startswith() and endswith()
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
+#include <boost/foreach.hpp>
 #include <boost/program_options/detail/config_file.hpp>
 #include <boost/program_options/parsers.hpp>
 #include <boost/thread.hpp>
@@ -101,8 +102,8 @@ namespace boost {
 
 using namespace std;
 
-const char * const NAVCOIN_CONF_FILENAME = "navcoin.conf";
-const char * const NAVCOIN_PID_FILENAME = "navcoin.pid";
+const char * const ELECTRUM_CONF_FILENAME = "electrum.conf";
+const char * const ELECTRUM_PID_FILENAME = "electrum.pid";
 
 std::vector<std::string> vAddedAnonServers;
 CCriticalSection cs_vAddedAnonServers;
@@ -198,10 +199,10 @@ static boost::once_flag errorPrintInitFlag = BOOST_ONCE_INIT;
  * up by the OS/libc. When the shutdown sequence is fully audited and
  * tested, explicit destruction of these objects can be implemented.
  */
-static FILE* fileoutDebugLog = nullptr;
-static FILE* fileoutErrorLog = nullptr;
-static boost::mutex* mutexDebugLog = nullptr;
-static boost::mutex* mutexErrorLog = nullptr;
+static FILE* fileoutDebugLog = NULL;
+static FILE* fileoutErrorLog = NULL;
+static boost::mutex* mutexDebugLog = NULL;
+static boost::mutex* mutexErrorLog = NULL;
 static list<string> *vMsgsBeforeOpenDebugLog;
 static list<string> *vMsgsBeforeOpenErrorLog;
 
@@ -225,14 +226,14 @@ static int ErrorLogWriteStr(const std::string &str)
 
 static void DebugPrintInit()
 {
-    assert(mutexDebugLog == nullptr);
+    assert(mutexDebugLog == NULL);
     mutexDebugLog = new boost::mutex();
     vMsgsBeforeOpenDebugLog = new list<string>;
 }
 
 static void ErrorPrintInit()
 {
-    assert(mutexErrorLog == nullptr);
+    assert(mutexErrorLog == NULL);
     mutexErrorLog = new boost::mutex();
     vMsgsBeforeOpenErrorLog = new list<string>;
 }
@@ -244,18 +245,18 @@ void OpenDebugLog()
     boost::mutex::scoped_lock scoped_lock_debug(*mutexDebugLog);
     boost::mutex::scoped_lock scoped_lock_error(*mutexErrorLog);
 
-    assert(fileoutDebugLog == nullptr);
-    assert(fileoutErrorLog == nullptr);
+    assert(fileoutDebugLog == NULL);
+    assert(fileoutErrorLog == NULL);
     assert(vMsgsBeforeOpenDebugLog);
     assert(vMsgsBeforeOpenErrorLog);
 
     // Open the debug log
     fileoutDebugLog = fopen(GetDebugLogPath().string().c_str(), "a");
-    if (fileoutDebugLog) setbuf(fileoutDebugLog, nullptr); // unbuffered
+    if (fileoutDebugLog) setbuf(fileoutDebugLog, NULL); // unbuffered
 
     // Open the error log
     fileoutErrorLog = fopen(GetErrorLogPath().string().c_str(), "a");
-    if (fileoutErrorLog) setbuf(fileoutErrorLog, nullptr); // unbuffered
+    if (fileoutErrorLog) setbuf(fileoutErrorLog, NULL); // unbuffered
 
     // dump buffered messages from before we opened the log
     while (!vMsgsBeforeOpenDebugLog->empty()) {
@@ -271,13 +272,13 @@ void OpenDebugLog()
 
     delete vMsgsBeforeOpenDebugLog;
     delete vMsgsBeforeOpenErrorLog;
-    vMsgsBeforeOpenDebugLog = nullptr;
-    vMsgsBeforeOpenErrorLog = nullptr;
+    vMsgsBeforeOpenDebugLog = NULL;
+    vMsgsBeforeOpenErrorLog = NULL;
 }
 
 bool LogAcceptCategory(const char* category)
 {
-    if (category != nullptr)
+    if (category != NULL)
     {
         if (!fDebug)
             return false;
@@ -287,7 +288,7 @@ bool LogAcceptCategory(const char* category)
         // where mapMultiArgs might be deleted before another
         // global destructor calls LogPrint()
         static boost::thread_specific_ptr<set<string> > ptrCategory;
-        if (ptrCategory.get() == nullptr)
+        if (ptrCategory.get() == NULL)
         {
             const vector<string>& categories = mapMultiArgs["-debug"];
             ptrCategory.reset(new set<string>(categories.begin(), categories.end()));
@@ -363,7 +364,7 @@ int DebugLogPrintStr(const std::string &str)
         boost::mutex::scoped_lock scoped_lock_debug(*mutexDebugLog);
 
         // buffer if we haven't opened the log yet
-        if (fileoutDebugLog == nullptr) {
+        if (fileoutDebugLog == NULL) {
             assert(vMsgsBeforeOpenDebugLog);
             ret = strTimestamped.length();
             vMsgsBeforeOpenDebugLog->push_back(strTimestamped);
@@ -404,7 +405,7 @@ int ErrorLogPrintStr(const std::string &str)
         boost::mutex::scoped_lock scoped_lock_error(*mutexErrorLog);
 
         // buffer if we haven't opened the log yet
-        if (fileoutErrorLog == nullptr) {
+        if (fileoutErrorLog == NULL) {
             assert(vMsgsBeforeOpenErrorLog);
             ret = strTimestamped.length();
             vMsgsBeforeOpenErrorLog->push_back(strTimestamped);
@@ -537,7 +538,7 @@ static std::string FormatException(const std::exception* pex, const char* pszThr
     char pszModule[MAX_PATH] = "";
     GetModuleFileNameA(NULL, pszModule, sizeof(pszModule));
 #else
-    const char* pszModule = "navcoin";
+    const char* pszModule = "electrum";
 #endif
     if (pex)
         return strprintf(
@@ -557,13 +558,13 @@ void PrintExceptionContinue(const std::exception* pex, const char* pszThread)
 boost::filesystem::path GetDefaultDataDir()
 {
     namespace fs = boost::filesystem;
-    // Windows < Vista: C:\Documents and Settings\Username\Application Data\NavCoin
-    // Windows >= Vista: C:\Users\Username\AppData\Roaming\NavCoin
-    // Mac: ~/Library/Application Support/NavCoin
-    // Unix: ~/.navcoin
+    // Windows < Vista: C:\Documents and Settings\Username\Application Data\Electrum
+    // Windows >= Vista: C:\Users\Username\AppData\Roaming\Electrum
+    // Mac: ~/Library/Application Support/Electrum
+    // Unix: ~/.electrum
 #ifdef WIN32
     // Windows
-    return GetSpecialFolderPath(CSIDL_APPDATA) / "NavCoin4";
+    return GetSpecialFolderPath(CSIDL_APPDATA) / "Electrum";
 #else
     fs::path pathRet;
     char* pszHome = getenv("HOME");
@@ -573,10 +574,10 @@ boost::filesystem::path GetDefaultDataDir()
         pathRet = fs::path(pszHome);
 #ifdef MAC_OSX
     // Mac
-    return pathRet / "Library/Application Support/NavCoin4";
+    return pathRet / "Library/Application Support/Electrum";
 #else
     // Unix
-    return pathRet / ".navcoin4";
+    return pathRet / ".electrum";
 #endif
 #endif
 }
@@ -623,7 +624,7 @@ void ClearDatadirCache()
 
 boost::filesystem::path GetConfigFile()
 {
-    boost::filesystem::path pathConfigFile(GetArg("-conf", NAVCOIN_CONF_FILENAME));
+    boost::filesystem::path pathConfigFile(GetArg("-conf", ELECTRUM_CONF_FILENAME));
     if (!pathConfigFile.is_complete())
         pathConfigFile = GetDataDir(false) / pathConfigFile;
 
@@ -635,14 +636,14 @@ void ReadConfigFile(map<string, string>& mapSettingsRet,
 {
     boost::filesystem::ifstream streamConfig(GetConfigFile());
     if (!streamConfig.good())
-        return; // No navcoin.conf file is OK
+        return; // No electrum.conf file is OK
 
     set<string> setOptions;
     setOptions.insert("*");
 
     for (boost::program_options::detail::config_file_iterator it(streamConfig, setOptions), end; it != end; ++it)
     {
-        // Don't overwrite existing settings so command line settings override navcoin.conf
+        // Don't overwrite existing settings so command line settings override electrum.conf
         string strKey = string("-") + it->string_key;
         string strValue = it->value[0];
 
@@ -789,7 +790,7 @@ void RemoveConfigFile(std::string key)
 #ifndef WIN32
 boost::filesystem::path GetPidFile()
 {
-    boost::filesystem::path pathPidFile(GetArg("-pid", NAVCOIN_PID_FILENAME));
+    boost::filesystem::path pathPidFile(GetArg("-pid", ELECTRUM_PID_FILENAME));
     if (!pathPidFile.is_complete()) pathPidFile = GetDataDir() / pathPidFile;
     return pathPidFile;
 }
@@ -954,7 +955,7 @@ void ShrinkDebugFile(boost::filesystem::path pathLog, int maxSize)
             fclose(file);
         }
     }
-    else if (file != nullptr)
+    else if (file != NULL)
         fclose(file);
 }
 

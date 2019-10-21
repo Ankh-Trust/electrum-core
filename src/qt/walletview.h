@@ -2,16 +2,15 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_QT_WALLETVIEW_H
-#define NAVCOIN_QT_WALLETVIEW_H
+#ifndef ELECTRUM_QT_WALLETVIEW_H
+#define ELECTRUM_QT_WALLETVIEW_H
 
-#include <amount.h>
-#include <splitrewards.h>
+#include "amount.h"
 
 #include <QStackedWidget>
 #include <QPushButton>
 
-class NavCoinGUI;
+class ElectrumGUI;
 class ClientModel;
 class OverviewPage;
 class CommunityFundPage;
@@ -22,7 +21,6 @@ class SendCoinsRecipient;
 class TransactionView;
 class WalletModel;
 class AddressBookPage;
-class getAddressToReceive;
 
 QT_BEGIN_NAMESPACE
 class QModelIndex;
@@ -43,13 +41,13 @@ public:
     explicit WalletView(const PlatformStyle *platformStyle, QWidget *parent);
     ~WalletView();
 
-    void setNavCoinGUI(NavCoinGUI *gui);
+    void setElectrumGUI(ElectrumGUI *gui);
     /** Set the client model.
         The client model represents the part of the core that communicates with the P2P network, and is wallet-agnostic.
     */
     void setClientModel(ClientModel *clientModel);
     /** Set the wallet model.
-        The wallet model represents a navcoin wallet, and offers access to the list of transactions, address book and sending
+        The wallet model represents a electrum wallet, and offers access to the list of transactions, address book and sending
         functionality.
     */
     void setWalletModel(WalletModel *walletModel);
@@ -67,7 +65,6 @@ private:
     ReceiveCoinsDialog *receiveCoinsPage;
     SendCoinsDialog *sendCoinsPage;
     CommunityFundPage *communityFundPage;
-    getAddressToReceive *requestPaymentPage;
     AddressBookPage *usedSendingAddressesPage;
     AddressBookPage *usedReceivingAddressesPage;
 
@@ -87,7 +84,6 @@ public Q_SLOTS:
     void gotoReceiveCoinsPage();
     /** Switch to send coins page */
     void gotoSendCoinsPage(QString addr = "");
-    void gotoRequestPaymentPage();
 
     /** Show Sign/Verify Message dialog and switch to sign message tab */
     void gotoSignMessageTab(QString addr = "");
@@ -112,8 +108,6 @@ public Q_SLOTS:
     void importPrivateKey();
     void exportMasterPrivateKeyAction();
 
-    void splitRewards();
-
     /** Show used sending addresses */
     void usedSendingAddresses();
     /** Show used receiving addresses */
@@ -128,21 +122,8 @@ public Q_SLOTS:
     /** User has requested more information about the out of sync state */
     void requestedSyncWarningInfo();
 
-    void setStatusTitleBlocks(QString text);
-
-    void setStatusTitleConnections(QString text);
-
-    void setStatusTitle(QString text);
-
     void setVotingStatus(QString text);
 
-    void showStatusTitleConnections();
-    void hideStatusTitleConnections();
-    void showStatusTitleBlocks();
-    void hideStatusTitleBlocks();
-
-    void showLockStaking(bool status);
-    void setStakingStatus(QString text);
     void setStakingStats(QString day, QString week, QString month, QString year, QString all);
     void requestAddressHistory();
 
@@ -153,6 +134,8 @@ Q_SIGNALS:
     void message(const QString &title, const QString &message, unsigned int style);
     /** Encryption status of wallet changed */
     void encryptionStatusChanged(int status);
+    /** HD-Enabled status of wallet changed (only possible during startup) */
+    void hdEnabledStatusChanged(int hdEnabled);
     /** Notify that a new transaction appeared */
     void incomingTransaction(const QString& date, int unit, const CAmount& amount, const QString& type, const QString& address, const QString& label);
     /** Notify that the out of sync warning icon has been pressed */
@@ -160,7 +143,7 @@ Q_SIGNALS:
 
     void openAddressHistory();
 
-    friend NavCoinGUI;
+    friend ElectrumGUI;
 };
 
-#endif // NAVCOIN_QT_WALLETVIEW_H
+#endif // ELECTRUM_QT_WALLETVIEW_H

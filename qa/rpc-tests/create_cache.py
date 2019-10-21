@@ -5,12 +5,12 @@
 
 #
 # Helper script to create the cache
-# (see NavCoinTestFramework.setup_chain)
+# (see ElectrumTestFramework.setup_chain)
 #
 
-from test_framework.test_framework import NavCoinTestFramework
+from test_framework.test_framework import ElectrumTestFramework
 
-class CreateCache(NavCoinTestFramework):
+class CreateCache(ElectrumTestFramework):
 
     def setup_network(self):
         # Don't setup any test nodes

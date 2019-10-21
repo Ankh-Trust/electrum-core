@@ -3,12 +3,12 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_RPCSERVER_H
-#define NAVCOIN_RPCSERVER_H
+#ifndef ELECTRUM_RPCSERVER_H
+#define ELECTRUM_RPCSERVER_H
 
-#include <amount.h>
-#include <rpc/protocol.h>
-#include <uint256.h>
+#include "amount.h"
+#include "rpc/protocol.h"
+#include "uint256.h"
 
 #include <list>
 #include <map>
@@ -134,7 +134,7 @@ public:
 };
 
 /**
- * NavCoin RPC command dispatcher.
+ * Electrum RPC command dispatcher.
  */
 class CRPCTable
 {
@@ -195,4 +195,4 @@ void InterruptRPC();
 void StopRPC();
 std::string JSONRPCExecBatch(const UniValue& vReq);
 
-#endif // NAVCOIN_RPCSERVER_H
+#endif // ELECTRUM_RPCSERVER_H

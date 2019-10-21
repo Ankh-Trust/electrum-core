@@ -2,8 +2,8 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_QT_INTRO_H
-#define NAVCOIN_QT_INTRO_H
+#ifndef ELECTRUM_QT_INTRO_H
+#define ELECTRUM_QT_INTRO_H
 
 #include <QDialog>
 #include <QMutex>
@@ -38,13 +38,12 @@ public:
      * @note do NOT call global GetDataDir() before calling this function, this
      * will cause the wrong path to be cached.
      */
-    static void pickDataDirectory();
+    static bool pickDataDirectory();
 
     /**
      * Determine default data directory for operating system.
      */
     static QString getDefaultDataDirectory();
-    static void makeDefaultConfF();
 
 Q_SIGNALS:
     void requestCheck();
@@ -73,4 +72,4 @@ private:
     friend class FreespaceChecker;
 };
 
-#endif // NAVCOIN_QT_INTRO_H
+#endif // ELECTRUM_QT_INTRO_H

@@ -3,14 +3,14 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_PRIMITIVES_BLOCK_H
-#define NAVCOIN_PRIMITIVES_BLOCK_H
+#ifndef ELECTRUM_PRIMITIVES_BLOCK_H
+#define ELECTRUM_PRIMITIVES_BLOCK_H
 
-#include <primitives/transaction.h>
-#include <serialize.h>
-#include <uint256.h>
-#include <arith_uint256.h>
-#include <hash.h>
+#include "primitives/transaction.h"
+#include "serialize.h"
+#include "uint256.h"
+#include "arith_uint256.h"
+#include "hash.h"
 
 /** Nodes collect new transactions into a block, hash them into a hash tree,
  * and scan through nonce values to make the block's hash satisfy proof-of-work
@@ -217,4 +217,4 @@ struct CBlockLocator
 /** Compute the consensus-critical block weight (see BIP 141). */
 int64_t GetBlockWeight(const CBlock& tx);
 
-#endif // NAVCOIN_PRIMITIVES_BLOCK_H
+#endif // ELECTRUM_PRIMITIVES_BLOCK_H

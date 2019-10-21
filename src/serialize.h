@@ -3,10 +3,10 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_SERIALIZE_H
-#define NAVCOIN_SERIALIZE_H
+#ifndef ELECTRUM_SERIALIZE_H
+#define ELECTRUM_SERIALIZE_H
 
-#include <compat/endian.h>
+#include "compat/endian.h"
 
 #include <algorithm>
 #include <assert.h>
@@ -20,7 +20,7 @@
 #include <utility>
 #include <vector>
 
-#include <prevector.h>
+#include "prevector.h"
 
 static const unsigned int MAX_SIZE = 0x02000000;
 
@@ -973,4 +973,4 @@ public:
     }
 };
 
-#endif // NAVCOIN_SERIALIZE_H
+#endif // ELECTRUM_SERIALIZE_H

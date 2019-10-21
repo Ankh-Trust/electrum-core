@@ -2,10 +2,10 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_BLOCK_ENCODINGS_H
-#define NAVCOIN_BLOCK_ENCODINGS_H
+#ifndef ELECTRUM_BLOCK_ENCODINGS_H
+#define ELECTRUM_BLOCK_ENCODINGS_H
 
-#include <primitives/block.h>
+#include "primitives/block.h"
 
 #include <memory>
 

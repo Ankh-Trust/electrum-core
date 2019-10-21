@@ -2,20 +2,20 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include <qt/guiutil.h>
+#include "guiutil.h"
 
-#include <qt/navcoinaddressvalidator.h>
-#include <qt/navcoinunits.h>
-#include <qt/qvalidatedlineedit.h>
-#include <qt/walletmodel.h>
+#include "electrumaddressvalidator.h"
+#include "electrumunits.h"
+#include "qvalidatedlineedit.h"
+#include "walletmodel.h"
 
-#include <primitives/transaction.h>
-#include <init.h>
-#include <main.h> // For minRelayTxFee
-#include <protocol.h>
-#include <script/script.h>
-#include <script/standard.h>
-#include <util.h>
+#include "primitives/transaction.h"
+#include "init.h"
+#include "main.h" // For minRelayTxFee
+#include "protocol.h"
+#include "script/script.h"
+#include "script/standard.h"
+#include "util.h"
 
 #ifdef WIN32
 #ifdef _WIN32_WINNT
@@ -30,9 +30,9 @@
 #ifndef NOMINMAX
 #define NOMINMAX
 #endif
-#include <shellapi.h>
-#include <shlobj.h>
-#include <shlwapi.h>
+#include "shellapi.h"
+#include "shlobj.h"
+#include "shlwapi.h"
 #endif
 
 #include <boost/filesystem.hpp>
@@ -99,7 +99,7 @@ static std::string DummyAddress(const CChainParams &params)
     sourcedata.insert(sourcedata.end(), dummydata, dummydata + sizeof(dummydata));
     for(int i=0; i<256; ++i) { // Try every trailing byte
         std::string s = EncodeBase58(begin_ptr(sourcedata), end_ptr(sourcedata));
-        if (!CNavCoinAddress(s).IsValid())
+        if (!CElectrumAddress(s).IsValid())
             return s;
         sourcedata[sourcedata.size()-1] += 1;
     }
@@ -113,10 +113,10 @@ void setupAddressWidget(QValidatedLineEdit *widget, QWidget *parent)
     widget->setFont(fixedPitchFont());
     // We don't want translators to use own addresses in translations
     // and this is the only place, where this address is supplied.
-    widget->setPlaceholderText(QObject::tr("Enter a NavCoin address or OpenAlias address (e.g. %1)").arg(
+    widget->setPlaceholderText(QObject::tr("Enter a Electrum address or OpenAlias address (e.g. %1)").arg(
         QString::fromStdString(DummyAddress(Params()))));
-    widget->setValidator(new NavCoinAddressEntryValidator(parent));
-    widget->setCheckValidator(new NavCoinAddressCheckValidator(parent));
+    widget->setValidator(new ElectrumAddressEntryValidator(parent));
+    widget->setCheckValidator(new ElectrumAddressCheckValidator(parent));
 }
 
 void setupAmountWidget(QLineEdit *widget, QWidget *parent)
@@ -128,10 +128,10 @@ void setupAmountWidget(QLineEdit *widget, QWidget *parent)
     widget->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
 }
 
-bool parseNavCoinURI(const QUrl &uri, SendCoinsRecipient *out)
+bool parseElectrumURI(const QUrl &uri, SendCoinsRecipient *out)
 {
-    // return if URI is not valid or is no navcoin: URI
-    if(!uri.isValid() || uri.scheme() != QString("navcoin"))
+    // return if URI is not valid or is no electrum: URI
+    if(!uri.isValid() || uri.scheme() != QString("electrum"))
         return false;
 
     SendCoinsRecipient rv;
@@ -167,7 +167,7 @@ bool parseNavCoinURI(const QUrl &uri, SendCoinsRecipient *out)
         {
             if(!i->second.isEmpty())
             {
-                if(!NavCoinUnits::parse(NavCoinUnits::NAV, i->second, &rv.amount))
+                if(!ElectrumUnits::parse(ElectrumUnits::_AE, i->second, &rv.amount))
                 {
                     return false;
                 }
@@ -185,20 +185,20 @@ bool parseNavCoinURI(const QUrl &uri, SendCoinsRecipient *out)
     return true;
 }
 
-bool parseNavCoinURI(QString uri, SendCoinsRecipient *out)
+bool parseElectrumURI(QString uri, SendCoinsRecipient *out)
 {
     QUrl uriInstance(uri);
-    return parseNavCoinURI(uriInstance, out);
+    return parseElectrumURI(uriInstance, out);
 }
 
-QString formatNavCoinURI(const SendCoinsRecipient &info)
+QString formatElectrumURI(const SendCoinsRecipient &info)
 {
-    QString ret = QString("navcoin:%1").arg(info.address);
+    QString ret = QString("electrum:%1").arg(info.address);
     int paramCount = 0;
 
     if (info.amount)
     {
-        ret += QString("?amount=%1").arg(NavCoinUnits::format(NavCoinUnits::NAV, info.amount, false, NavCoinUnits::separatorNever));
+        ret += QString("?amount=%1").arg(ElectrumUnits::format(ElectrumUnits::_AE, info.amount, false, ElectrumUnits::separatorNever));
         paramCount++;
     }
 
@@ -221,7 +221,7 @@ QString formatNavCoinURI(const SendCoinsRecipient &info)
 
 bool isDust(const QString& address, const CAmount& amount)
 {
-    CTxDestination dest = CNavCoinAddress(address.toStdString()).Get();
+    CTxDestination dest = CElectrumAddress(address.toStdString()).Get();
     CScript script = GetScriptForDestination(dest);
     CTxOut txOut(amount, script);
     return txOut.IsDust(::minRelayTxFee);
@@ -382,11 +382,11 @@ void openDebugLogfile()
         QDesktopServices::openUrl(QUrl::fromLocalFile(boostPathToQString(pathDebug)));
 }
 
-void openNavCoinConf()
+void openElectrumConf()
 {
      boost::filesystem::path pathConfig = GetConfigFile();
 
-     /* Open navcoin.conf with the associated application */
+     /* Open electrum.conf with the associated application */
      if (boost::filesystem::exists(pathConfig))
          QDesktopServices::openUrl(QUrl::fromLocalFile(boostPathToQString(pathConfig)));
 }
@@ -546,15 +546,15 @@ boost::filesystem::path static StartupShortcutPath()
 {
     std::string chain = ChainNameFromCommandLine();
     if (chain == CBaseChainParams::MAIN)
-        return GetSpecialFolderPath(CSIDL_STARTUP) / "NavCoin.lnk";
+        return GetSpecialFolderPath(CSIDL_STARTUP) / "Electrum.lnk";
     if (chain == CBaseChainParams::TESTNET) // Remove this special case when CBaseChainParams::TESTNET = "testnet4"
-        return GetSpecialFolderPath(CSIDL_STARTUP) / "NavCoin (testnet).lnk";
-    return GetSpecialFolderPath(CSIDL_STARTUP) / strprintf("NavCoin (%s).lnk", chain);
+        return GetSpecialFolderPath(CSIDL_STARTUP) / "Electrum (testnet).lnk";
+    return GetSpecialFolderPath(CSIDL_STARTUP) / strprintf("Electrum (%s).lnk", chain);
 }
 
 bool GetStartOnSystemStartup()
 {
-    // check for NavCoin*.lnk
+    // check for Electrum*.lnk
     return boost::filesystem::exists(StartupShortcutPath());
 }
 
@@ -568,8 +568,8 @@ bool SetStartOnSystemStartup(bool fAutoStart)
         CoInitialize(NULL);
 
         // Get a pointer to the IShellLink interface.
-        IShellLink* psl = nullptr;
-        HRESULT hres = CoCreateInstance(CLSID_ShellLink, nullptr,
+        IShellLink* psl = NULL;
+        HRESULT hres = CoCreateInstance(CLSID_ShellLink, NULL,
             CLSCTX_INPROC_SERVER, IID_IShellLink,
             reinterpret_cast<void**>(&psl));
 
@@ -605,7 +605,7 @@ bool SetStartOnSystemStartup(bool fAutoStart)
 
             // Query IShellLink for the IPersistFile interface for
             // saving the shortcut in persistent storage.
-            IPersistFile* ppf = nullptr;
+            IPersistFile* ppf = NULL;
             hres = psl->QueryInterface(IID_IPersistFile, reinterpret_cast<void**>(&ppf));
             if (SUCCEEDED(hres))
             {
@@ -646,8 +646,8 @@ boost::filesystem::path static GetAutostartFilePath()
 {
     std::string chain = ChainNameFromCommandLine();
     if (chain == CBaseChainParams::MAIN)
-        return GetAutostartDir() / "navcoin.desktop";
-    return GetAutostartDir() / strprintf("navcoin-%s.lnk", chain);
+        return GetAutostartDir() / "electrum.desktop";
+    return GetAutostartDir() / strprintf("electrum-%s.lnk", chain);
 }
 
 bool GetStartOnSystemStartup()
@@ -686,13 +686,13 @@ bool SetStartOnSystemStartup(bool fAutoStart)
         if (!optionFile.good())
             return false;
         std::string chain = ChainNameFromCommandLine();
-        // Write a navcoin.desktop file to the autostart directory:
+        // Write a electrum.desktop file to the autostart directory:
         optionFile << "[Desktop Entry]\n";
         optionFile << "Type=Application\n";
         if (chain == CBaseChainParams::MAIN)
-            optionFile << "Name=NavCoin\n";
+            optionFile << "Name=Electrum\n";
         else
-            optionFile << strprintf("Name=NavCoin (%s)\n", chain);
+            optionFile << strprintf("Name=Electrum (%s)\n", chain);
         optionFile << "Exec=" << pszExePath << strprintf(" -min -testnet=%d -regtest=%d -devnet=%d\n", GetBoolArg("-testnet", false), GetBoolArg("-regtest", false), GetBoolArg("-devnet", false));
         optionFile << "Terminal=false\n";
         optionFile << "Hidden=false\n";
@@ -711,22 +711,22 @@ bool SetStartOnSystemStartup(bool fAutoStart)
 LSSharedFileListItemRef findStartupItemInList(LSSharedFileListRef list, CFURLRef findUrl);
 LSSharedFileListItemRef findStartupItemInList(LSSharedFileListRef list, CFURLRef findUrl)
 {
-    // loop through the list of startup items and try to find the navcoin app
-    CFArrayRef listSnapshot = LSSharedFileListCopySnapshot(list, nullptr);
+    // loop through the list of startup items and try to find the electrum app
+    CFArrayRef listSnapshot = LSSharedFileListCopySnapshot(list, NULL);
     for(int i = 0; i < CFArrayGetCount(listSnapshot); i++) {
         LSSharedFileListItemRef item = (LSSharedFileListItemRef)CFArrayGetValueAtIndex(listSnapshot, i);
         UInt32 resolutionFlags = kLSSharedFileListNoUserInteraction | kLSSharedFileListDoNotMountVolumes;
-        CFURLRef currentItemURL = nullptr;
+        CFURLRef currentItemURL = NULL;
 
 #if defined(MAC_OS_X_VERSION_MAX_ALLOWED) && MAC_OS_X_VERSION_MAX_ALLOWED >= 10100
     if(&LSSharedFileListItemCopyResolvedURL)
-        currentItemURL = LSSharedFileListItemCopyResolvedURL(item, resolutionFlags, nullptr);
+        currentItemURL = LSSharedFileListItemCopyResolvedURL(item, resolutionFlags, NULL);
 #if defined(MAC_OS_X_VERSION_MIN_REQUIRED) && MAC_OS_X_VERSION_MIN_REQUIRED < 10100
     else
-        LSSharedFileListItemResolve(item, resolutionFlags, &currentItemURL, nullptr);
+        LSSharedFileListItemResolve(item, resolutionFlags, &currentItemURL, NULL);
 #endif
 #else
-    LSSharedFileListItemResolve(item, resolutionFlags, &currentItemURL, nullptr);
+    LSSharedFileListItemResolve(item, resolutionFlags, &currentItemURL, NULL);
 #endif
 
         if(currentItemURL && CFEqual(currentItemURL, findUrl)) {
@@ -738,26 +738,26 @@ LSSharedFileListItemRef findStartupItemInList(LSSharedFileListRef list, CFURLRef
             CFRelease(currentItemURL);
         }
     }
-    return nullptr;
+    return NULL;
 }
 
 bool GetStartOnSystemStartup()
 {
-    CFURLRef navcoinAppUrl = CFBundleCopyBundleURL(CFBundleGetMainBundle());
-    LSSharedFileListRef loginItems = LSSharedFileListCreate(NULL, kLSSharedFileListSessionLoginItems, nullptr);
-    LSSharedFileListItemRef foundItem = findStartupItemInList(loginItems, navcoinAppUrl);
+    CFURLRef electrumAppUrl = CFBundleCopyBundleURL(CFBundleGetMainBundle());
+    LSSharedFileListRef loginItems = LSSharedFileListCreate(NULL, kLSSharedFileListSessionLoginItems, NULL);
+    LSSharedFileListItemRef foundItem = findStartupItemInList(loginItems, electrumAppUrl);
     return !!foundItem; // return boolified object
 }
 
 bool SetStartOnSystemStartup(bool fAutoStart)
 {
-    CFURLRef navcoinAppUrl = CFBundleCopyBundleURL(CFBundleGetMainBundle());
-    LSSharedFileListRef loginItems = LSSharedFileListCreate(NULL, kLSSharedFileListSessionLoginItems, nullptr);
-    LSSharedFileListItemRef foundItem = findStartupItemInList(loginItems, navcoinAppUrl);
+    CFURLRef electrumAppUrl = CFBundleCopyBundleURL(CFBundleGetMainBundle());
+    LSSharedFileListRef loginItems = LSSharedFileListCreate(NULL, kLSSharedFileListSessionLoginItems, NULL);
+    LSSharedFileListItemRef foundItem = findStartupItemInList(loginItems, electrumAppUrl);
 
     if(fAutoStart && !foundItem) {
-        // add navcoin app to startup item list
-        LSSharedFileListInsertItemURL(loginItems, kLSSharedFileListItemBeforeFirst, nullptr, nullptr, navcoinAppUrl, nullptr, nullptr);
+        // add electrum app to startup item list
+        LSSharedFileListInsertItemURL(loginItems, kLSSharedFileListItemBeforeFirst, NULL, NULL, electrumAppUrl, NULL, NULL);
     }
     else if(!fAutoStart && foundItem) {
         // remove item

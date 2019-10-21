@@ -2,10 +2,10 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_CONSENSUS_VERSIONBITS
-#define NAVCOIN_CONSENSUS_VERSIONBITS
+#ifndef ELECTRUM_CONSENSUS_VERSIONBITS
+#define ELECTRUM_CONSENSUS_VERSIONBITS
 
-#include <chain.h>
+#include "chain.h"
 #include <map>
 
 /** What block version to use for new blocks (pre versionbits) */
@@ -20,7 +20,7 @@ static const int32_t VERSIONBITS_NUM_BITS = 29;
 
 /***
 *
-* NavCoin Version Bits
+* Electrum Version Bits
 *
 * SIGNAL
 *

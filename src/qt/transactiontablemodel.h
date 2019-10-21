@@ -2,10 +2,10 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_QT_TRANSACTIONTABLEMODEL_H
-#define NAVCOIN_QT_TRANSACTIONTABLEMODEL_H
+#ifndef ELECTRUM_QT_TRANSACTIONTABLEMODEL_H
+#define ELECTRUM_QT_TRANSACTIONTABLEMODEL_H
 
-#include <qt/navcoinunits.h>
+#include "electrumunits.h"
 
 #include <QAbstractTableModel>
 #include <QStringList>
@@ -98,7 +98,7 @@ private:
     QString formatTxDate(const TransactionRecord *wtx) const;
     QString formatTxType(const TransactionRecord *wtx) const;
     QString formatTxToAddress(const TransactionRecord *wtx, bool tooltip) const;
-    QString formatTxAmount(const TransactionRecord *wtx, bool showUnconfirmed=true, NavCoinUnits::SeparatorStyle separators=NavCoinUnits::separatorStandard) const;
+    QString formatTxAmount(const TransactionRecord *wtx, bool showUnconfirmed=true, ElectrumUnits::SeparatorStyle separators=ElectrumUnits::separatorStandard) const;
     QString formatTooltip(const TransactionRecord *rec) const;
     QVariant txStatusDecoration(const TransactionRecord *wtx) const;
     QVariant txWatchonlyDecoration(const TransactionRecord *wtx) const;
@@ -117,4 +117,4 @@ public Q_SLOTS:
     friend class TransactionTablePriv;
 };
 
-#endif // NAVCOIN_QT_TRANSACTIONTABLEMODEL_H
+#endif // ELECTRUM_QT_TRANSACTIONTABLEMODEL_H

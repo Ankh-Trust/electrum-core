@@ -1,5 +1,5 @@
-#include <qt/qvalidatedplaintextedit.h>
-#include <qt/guiconstants.h>
+#include "qvalidatedplaintextedit.h"
+#include "guiconstants.h"
 
 QValidatedPlainTextEdit::QValidatedPlainTextEdit(QWidget *parent):
     QPlainTextEdit(parent),

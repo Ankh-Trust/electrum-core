@@ -2,15 +2,15 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include <httpserver.h>
+#include "httpserver.h"
 
-#include <chainparamsbase.h>
-#include <compat.h>
-#include <util.h>
-#include <netbase.h>
-#include <rpc/protocol.h> // For HTTP status codes
-#include <sync.h>
-#include <ui_interface.h>
+#include "chainparamsbase.h"
+#include "compat.h"
+#include "util.h"
+#include "netbase.h"
+#include "rpc/protocol.h" // For HTTP status codes
+#include "sync.h"
+#include "ui_interface.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -189,7 +189,7 @@ static bool ClientAllowed(const CNetAddr& netaddr)
 {
     if (!netaddr.IsValid())
         return false;
-    for(const CSubNet& subnet: rpc_allow_subnets)
+    BOOST_FOREACH (const CSubNet& subnet, rpc_allow_subnets)
         if (subnet.Match(netaddr))
             return true;
     return false;
@@ -203,7 +203,7 @@ static bool InitHTTPAllowList()
     rpc_allow_subnets.push_back(CSubNet("::1"));         // always allow IPv6 localhost
     if (mapMultiArgs.count("-rpcallowip")) {
         const std::vector<std::string>& vAllow = mapMultiArgs["-rpcallowip"];
-        for(std::string strAllow: vAllow) {
+        BOOST_FOREACH (std::string strAllow, vAllow) {
             CSubNet subnet(strAllow);
             if (!subnet.IsValid()) {
                 uiInterface.ThreadSafeMessageBox(
@@ -215,7 +215,7 @@ static bool InitHTTPAllowList()
         }
     }
     std::string strAllowed;
-    for(const CSubNet& subnet: rpc_allow_subnets)
+    BOOST_FOREACH (const CSubNet& subnet, rpc_allow_subnets)
         strAllowed += subnet.ToString() + " ";
     LogPrint("http", "Allowing HTTP connections from: %s\n", strAllowed);
     return true;
@@ -298,13 +298,13 @@ static void http_request_cb(struct evhttp_request* req, void* arg)
 static void http_reject_request_cb(struct evhttp_request* req, void*)
 {
     LogPrint("http", "Rejecting request while shutting down\n");
-    evhttp_send_error(req, HTTP_SERVUNAVAIL, nullptr);
+    evhttp_send_error(req, HTTP_SERVUNAVAIL, NULL);
 }
 
 /** Event dispatcher thread */
 static void ThreadHTTP(struct event_base* base, struct evhttp* http)
 {
-    RenameThread("navcoin-http");
+    RenameThread("electrum-http");
     LogPrint("http", "Entering http event loop\n");
     event_base_dispatch(base);
     // Event loop will be interrupted by InterruptHTTPServer()
@@ -353,7 +353,7 @@ static bool HTTPBindAddresses(struct evhttp* http)
 /** Simple wrapper to set thread name and run work queue */
 static void HTTPWorkQueueRun(WorkQueue<HTTPClosure>* queue)
 {
-    RenameThread("navcoin-httpworker");
+    RenameThread("electrum-httpworker");
     queue->Run();
 }
 
@@ -418,7 +418,7 @@ bool InitHTTPServer()
     evhttp_set_timeout(http, GetArg("-rpcservertimeout", DEFAULT_HTTP_SERVER_TIMEOUT));
     evhttp_set_max_headers_size(http, MAX_HEADERS_SIZE);
     evhttp_set_max_body_size(http, MAX_SIZE);
-    evhttp_set_gencb(http, http_request_cb, nullptr);
+    evhttp_set_gencb(http, http_request_cb, NULL);
 
     if (!HTTPBindAddresses(http)) {
         LogPrintf("Unable to bind any endpoint for RPC server\n");
@@ -456,11 +456,11 @@ void InterruptHTTPServer()
     LogPrint("http", "Interrupting HTTP server\n");
     if (eventHTTP) {
         // Unlisten sockets
-        for(evhttp_bound_socket *socket: boundSockets) {
+        BOOST_FOREACH (evhttp_bound_socket *socket, boundSockets) {
             evhttp_del_accept_socket(eventHTTP, socket);
         }
         // Reject requests on current connections
-        evhttp_set_gencb(eventHTTP, http_reject_request_cb, nullptr);
+        evhttp_set_gencb(eventHTTP, http_reject_request_cb, NULL);
     }
     if (workQueue)
         workQueue->Interrupt();
@@ -481,7 +481,7 @@ void StopHTTPServer()
         // at least libevent 2.0.21 and always introduced a delay. In libevent
         // master that appears to be solved, so in the future that solution
         // could be used again (if desirable).
-        // (see discussion in https://github.com/navcoin/navcoin/pull/6990)
+        // (see discussion in https://github.com/electrum/electrum/pull/6990)
 #if BOOST_VERSION >= 105000
         if (!threadHTTP.try_join_for(boost::chrono::milliseconds(2000))) {
 #else
@@ -529,7 +529,7 @@ HTTPEvent::~HTTPEvent()
 }
 void HTTPEvent::trigger(struct timeval* tv)
 {
-    if (tv == nullptr)
+    if (tv == NULL)
         event_active(ev, 0, 0); // immediately trigger event in main thread
     else
         evtimer_add(ev, tv); // trigger after timeval passed

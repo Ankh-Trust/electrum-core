@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
-# Copyright (c) 2018 The Navcoin Core developers
+# Copyright (c) 2018 The NAVcoin Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-from test_framework.test_framework import NavCoinTestFramework
+from test_framework.test_framework import ElectrumTestFramework
 from test_framework.cfund_util import *
 
 import time
 
-class CommunityFundRawTXCreateProposalTest(NavCoinTestFramework):
+class CommunityFundRawTXCreateProposalTest(ElectrumTestFramework):
     """Tests the state transition of proposals of the Community fund."""
 
     def __init__(self):
@@ -17,7 +17,7 @@ class CommunityFundRawTXCreateProposalTest(NavCoinTestFramework):
         self.num_nodes = 1
 
 
-        self.goodDescription = "these are not the NAV Droids you are looking for"
+        self.goodDescription = "these are not the 0AE Droids you are looking for"
         self.goodDuration = 360000
         self.goodAmount = 100
         self.goodPropHash = ""
@@ -270,7 +270,7 @@ class CommunityFundRawTXCreateProposalTest(NavCoinTestFramework):
         self.descTxtAllCharsSymbol3 = "♩ ♪ ♫ ♬ ♭ ♮ ♯  ⌨ ⏏ ⎗ ⎘ ⎙ ⎚ ⌥ ⎇ ⌘ ⌦ ⌫ ⌧ ♲ ♳ ♴ ♵ ♶ ♷ ♸ ♹ ♺ ♻ ♼ ♽ ⁌ ⁍ ⎌ ⌇ ⌲ ⍝ ⍟ ⍣ ⍤ ⍥ ⍨ ⍩ ⎋ ♃ ♄ ♅ ♆ ♇ ♈ ♉ ♊ ♋ ♌ ♍ ♎ ♏ ♐ ♑ ♒ ♓ ⏚ ⏛"
 
 
-        self.descTxtWhiteSpace = '''I 
+        self.descTxtWhiteSpace = '''I
 Have
 Enters
 

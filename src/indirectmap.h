@@ -1,5 +1,5 @@
-#ifndef NAVCOIN_INDIRECTMAP_H
-#define NAVCOIN_INDIRECTMAP_H
+#ifndef ELECTRUM_INDIRECTMAP_H
+#define ELECTRUM_INDIRECTMAP_H
 
 template <class T>
 struct DereferencingComparator { bool operator()(const T a, const T b) const { return *a < *b; } };
@@ -49,4 +49,4 @@ public:
     const_iterator cend() const     { return m.cend(); }
 };
 
-#endif // NAVCOIN_INDIRECTMAP_H
+#endif // ELECTRUM_INDIRECTMAP_H

@@ -3,14 +3,14 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #if defined(HAVE_CONFIG_H)
-#include <config/navcoin-config.h>
+#include "config/electrum-config.h"
 #endif
 
-#include <util.h>
-#include <qt/test/uritests.h>
+#include "util.h"
+#include "uritests.h"
 
 #ifdef ENABLE_WALLET
-#include <qt/test/paymentservertests.h>
+#include "paymentservertests.h"
 #endif
 
 #include <QCoreApplication>
@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
     // Don't remove this, it's needed to access
     // QCoreApplication:: in the tests
     QCoreApplication app(argc, argv);
-    app.setApplicationName("NavCoin-Qt-test");
+    app.setApplicationName("Electrum-Qt-test");
 
     SSL_library_init();
 

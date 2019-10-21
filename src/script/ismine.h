@@ -3,10 +3,10 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_SCRIPT_ISMINE_H
-#define NAVCOIN_SCRIPT_ISMINE_H
+#ifndef ELECTRUM_SCRIPT_ISMINE_H
+#define ELECTRUM_SCRIPT_ISMINE_H
 
-#include <script/standard.h>
+#include "script/standard.h"
 
 #include <stdint.h>
 
@@ -33,4 +33,4 @@ typedef uint8_t isminefilter;
 isminetype IsMine(const CKeyStore& keystore, const CScript& scriptPubKey);
 isminetype IsMine(const CKeyStore& keystore, const CTxDestination& dest);
 
-#endif // NAVCOIN_SCRIPT_ISMINE_H
+#endif // ELECTRUM_SCRIPT_ISMINE_H

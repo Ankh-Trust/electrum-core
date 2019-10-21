@@ -3,11 +3,11 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_SPENTINDEX_H
-#define NAVCOIN_SPENTINDEX_H
+#ifndef ELECTRUM_SPENTINDEX_H
+#define ELECTRUM_SPENTINDEX_H
 
-#include <uint256.h>
-#include <amount.h>
+#include "uint256.h"
+#include "amount.h"
 
 struct CSpentIndexKey {
     uint256 txid;
@@ -95,4 +95,4 @@ struct CSpentIndexKeyCompare
     }
 };
 
-#endif // NAVCOIN_SPENTINDEX_H
+#endif // ELECTRUM_SPENTINDEX_H

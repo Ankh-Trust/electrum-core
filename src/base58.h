@@ -11,15 +11,15 @@
  * - E-mail usually won't line-break if there's no punctuation to break at.
  * - Double-clicking selects the whole string as one word if it's all alphanumeric.
  */
-#ifndef NAVCOIN_BASE58_H
-#define NAVCOIN_BASE58_H
+#ifndef ELECTRUM_BASE58_H
+#define ELECTRUM_BASE58_H
 
-#include <chainparams.h>
-#include <key.h>
-#include <pubkey.h>
-#include <script/script.h>
-#include <script/standard.h>
-#include <support/allocators/zeroafterfree.h>
+#include "chainparams.h"
+#include "key.h"
+#include "pubkey.h"
+#include "script/script.h"
+#include "script/standard.h"
+#include "support/allocators/zeroafterfree.h"
 
 #include <string>
 #include <vector>
@@ -96,7 +96,7 @@ public:
     bool operator> (const CBase58Data& b58) const { return CompareTo(b58) >  0; }
 };
 
-/** base58-encoded NavCoin addresses.
+/** base58-encoded Electrum addresses.
  * Public-key-hash-addresses have version 111 (or 20 testnet).
  * The data vector contains RIPEMD160(SHA256(pubkey)), where pubkey is the serialized public key.
  * Script-hash-addresses have version 28 (or 96 testnet).
@@ -104,24 +104,21 @@ public:
  * Cold-staking-addresses have version 196 (or 63 testnet).
  * The data vector contains RIPEMD160(SHA256(stakingkey)) || RIPEMD160(SHA256(spendingkey)), where stakingkey and spendingkey are the serialized public keys.
  */
-class CNavCoinAddress : public CBase58Data {
+class CElectrumAddress : public CBase58Data {
 public:
     bool Set(const CKeyID &id);
     bool Set(const CKeyID &id, const CKeyID &id2);
     bool Set(const CScriptID &id);
-    bool Set(const CScript &scriptIn);
     bool Set(const CTxDestination &dest);
     bool IsValid() const;
     bool IsValid(const CChainParams &params) const;
     bool IsColdStakingAddress(const CChainParams& params) const;
-    bool IsRawScript() const;
 
-    CNavCoinAddress() {}
-    CNavCoinAddress(const CTxDestination &dest) { Set(dest); }
-    CNavCoinAddress(const CKeyID &id, const CKeyID &id2) { Set(id, id2); }
-    CNavCoinAddress(const std::string& strAddress) { SetString(strAddress); }
-    CNavCoinAddress(const char* pszAddress) { SetString(pszAddress); }
-    CNavCoinAddress(const CScript &scriptIn) { Set(scriptIn); }
+    CElectrumAddress() {}
+    CElectrumAddress(const CTxDestination &dest) { Set(dest); }
+    CElectrumAddress(const CKeyID &id, const CKeyID &id2) { Set(id, id2); }
+    CElectrumAddress(const std::string& strAddress) { SetString(strAddress); }
+    CElectrumAddress(const char* pszAddress) { SetString(pszAddress); }
 
     CTxDestination Get() const;
     bool GetKeyID(CKeyID &keyID) const;
@@ -130,15 +127,15 @@ public:
     bool GetIndexKey(uint160& hashBytes, int& type) const;
     bool IsScript() const;
 
-    bool GetStakingAddress(CNavCoinAddress &address) const;
-    bool GetSpendingAddress(CNavCoinAddress &address) const;
+    bool GetStakingAddress(CElectrumAddress &address) const;
+    bool GetSpendingAddress(CElectrumAddress &address) const;
 
 };
 
 /**
  * A base58-encoded secret key
  */
-class CNavCoinSecret : public CBase58Data
+class CElectrumSecret : public CBase58Data
 {
 public:
     void SetKey(const CKey& vchSecret);
@@ -147,11 +144,11 @@ public:
     bool SetString(const char* pszSecret);
     bool SetString(const std::string& strSecret);
 
-    CNavCoinSecret(const CKey& vchSecret) { SetKey(vchSecret); }
-    CNavCoinSecret() {}
+    CElectrumSecret(const CKey& vchSecret) { SetKey(vchSecret); }
+    CElectrumSecret() {}
 };
 
-template<typename K, int Size, CChainParams::Base58Type Type> class CNavCoinExtKeyBase : public CBase58Data
+template<typename K, int Size, CChainParams::Base58Type Type> class CElectrumExtKeyBase : public CBase58Data
 {
 public:
     void SetKey(const K &key) {
@@ -169,18 +166,18 @@ public:
         return ret;
     }
 
-    CNavCoinExtKeyBase(const K &key) {
+    CElectrumExtKeyBase(const K &key) {
         SetKey(key);
     }
 
-    CNavCoinExtKeyBase(const std::string& strBase58c) {
+    CElectrumExtKeyBase(const std::string& strBase58c) {
         SetString(strBase58c.c_str(), Params().Base58Prefix(Type).size());
     }
 
-    CNavCoinExtKeyBase() {}
+    CElectrumExtKeyBase() {}
 };
 
-typedef CNavCoinExtKeyBase<CExtKey, BIP32_EXTKEY_SIZE, CChainParams::EXT_SECRET_KEY> CNavCoinExtKey;
-typedef CNavCoinExtKeyBase<CExtPubKey, BIP32_EXTKEY_SIZE, CChainParams::EXT_PUBLIC_KEY> CNavCoinExtPubKey;
+typedef CElectrumExtKeyBase<CExtKey, BIP32_EXTKEY_SIZE, CChainParams::EXT_SECRET_KEY> CElectrumExtKey;
+typedef CElectrumExtKeyBase<CExtPubKey, BIP32_EXTKEY_SIZE, CChainParams::EXT_PUBLIC_KEY> CElectrumExtPubKey;
 
-#endif // NAVCOIN_BASE58_H
+#endif // ELECTRUM_BASE58_H

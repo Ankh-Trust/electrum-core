@@ -2,14 +2,16 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include <qt/recentrequeststablemodel.h>
+#include "recentrequeststablemodel.h"
 
-#include <qt/navcoinunits.h>
-#include <qt/guiutil.h>
-#include <qt/optionsmodel.h>
+#include "electrumunits.h"
+#include "guiutil.h"
+#include "optionsmodel.h"
 
-#include <clientversion.h>
-#include <streams.h>
+#include "clientversion.h"
+#include "streams.h"
+
+#include <boost/foreach.hpp>
 
 RecentRequestsTableModel::RecentRequestsTableModel(CWallet *wallet, WalletModel *parent) :
     walletModel(parent)
@@ -20,7 +22,7 @@ RecentRequestsTableModel::RecentRequestsTableModel(CWallet *wallet, WalletModel 
     // Load entries from wallet
     std::vector<std::string> vReceiveRequests;
     parent->loadReceiveRequests(vReceiveRequests);
-    for(const std::string& request: vReceiveRequests)
+    BOOST_FOREACH(const std::string& request, vReceiveRequests)
         addNewRequest(request);
 
     /* These columns must match the indices in the ColumnIndex enumeration */
@@ -83,9 +85,9 @@ QVariant RecentRequestsTableModel::data(const QModelIndex &index, int role) cons
             if (rec->recipient.amount == 0 && role == Qt::DisplayRole)
                 return tr("(no amount requested)");
             else if (role == Qt::EditRole)
-                return NavCoinUnits::format(walletModel->getOptionsModel()->getDisplayUnit(), rec->recipient.amount, false, NavCoinUnits::separatorNever);
+                return ElectrumUnits::format(walletModel->getOptionsModel()->getDisplayUnit(), rec->recipient.amount, false, ElectrumUnits::separatorNever);
             else
-                return NavCoinUnits::format(walletModel->getOptionsModel()->getDisplayUnit(), rec->recipient.amount);
+                return ElectrumUnits::format(walletModel->getOptionsModel()->getDisplayUnit(), rec->recipient.amount);
         }
     }
     else if (role == Qt::TextAlignmentRole)
@@ -123,7 +125,7 @@ void RecentRequestsTableModel::updateAmountColumnTitle()
 /** Gets title for amount column including current display unit if optionsModel reference available. */
 QString RecentRequestsTableModel::getAmountTitle()
 {
-    return (this->walletModel->getOptionsModel() != nullptr) ? tr("Requested") + " ("+NavCoinUnits::name(this->walletModel->getOptionsModel()->getDisplayUnit()) + ")" : "";
+    return (this->walletModel->getOptionsModel() != NULL) ? tr("Requested") + " ("+ElectrumUnits::name(this->walletModel->getOptionsModel()->getDisplayUnit()) + ")" : "";
 }
 
 QModelIndex RecentRequestsTableModel::index(int row, int column, const QModelIndex &parent) const

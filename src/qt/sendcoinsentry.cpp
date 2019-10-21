@@ -2,33 +2,34 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include <qt/sendcoinsentry.h>
-#include <ui_sendcoinsentry.h>
+#include "sendcoinsentry.h"
+#include "ui_sendcoinsentry.h"
 
-#include <qt/addressbookpage.h>
-#include <qt/addresstablemodel.h>
-#include <qt/guiutil.h>
-#include <qt/optionsmodel.h>
-#include <qt/platformstyle.h>
-#include <util.h>
-#include <utils/dns_utils.h>
-#include <qt/walletmodel.h>
+#include "addressbookpage.h"
+#include "addresstablemodel.h"
+#include "guiutil.h"
+#include "optionsmodel.h"
+#include "platformstyle.h"
+#include "util.h"
+#include "utils/dns_utils.h"
+#include "walletmodel.h"
 
 #include <QApplication>
 #include <QClipboard>
 
-SendCoinsEntry::SendCoinsEntry(const PlatformStyle *platformStyle, QWidget *parent) :
-    QStackedWidget(parent),
-    ui(new Ui::SendCoinsEntry),
-    model(0),
-    platformStyle(platformStyle),
-    totalAmount(0)
+SendCoinsEntry::SendCoinsEntry(const PlatformStyle *platformStyle, QWidget *parent) :   QStackedWidget(parent),
+                                                                                        ui(new Ui::SendCoinsEntry),
+                                                                                        model(0),
+                                                                                        platformStyle(platformStyle),
+                                                                                        totalAmount(0)
 {
     ui->setupUi(this);
 
-    ui->addressBookButton->setIcon(platformStyle->SingleColorIcon(":/icons/address-book"));
-    ui->deleteButton_is->setIcon(platformStyle->SingleColorIcon(":/icons/remove"));
-    ui->deleteButton_s->setIcon(platformStyle->SingleColorIcon(":/icons/remove"));
+    ui->addressBookButton->setIcon(QIcon(":/icons/address-book"));
+    ui->pasteButton->setIcon(QIcon(":/icons/editpaste"));
+    ui->deleteButton->setIcon(QIcon(":/icons/remove"));
+    ui->deleteButton_is->setIcon(QIcon(":/icons/remove"));
+    ui->deleteButton_s->setIcon(QIcon(":/icons/remove"));
 
     setCurrentWidget(ui->SendCoins);
 
@@ -36,20 +37,18 @@ SendCoinsEntry::SendCoinsEntry(const PlatformStyle *platformStyle, QWidget *pare
         ui->payToLayout->setSpacing(4);
     ui->addAsLabel->setPlaceholderText(tr("Enter a label for this address to add it to your address book"));
 
-    // normal navcoin address field
+
+    // normal electrum address field
     GUIUtil::setupAddressWidget(ui->payTo, this);
-    // just a label for displaying navcoin address(es)
+    // just a label for displaying electrum address(es)
     ui->payTo_is->setFont(GUIUtil::fixedPitchFont());
 
     // Connect signals
     connect(ui->payAmount, SIGNAL(valueChanged()), this, SIGNAL(payAmountChanged()));
     connect(ui->checkboxSubtractFeeFromAmount, SIGNAL(toggled(bool)), this, SIGNAL(subtractFeeFromAmountChanged()));
+    connect(ui->deleteButton, SIGNAL(clicked()), this, SLOT(deleteClicked()));
     connect(ui->deleteButton_is, SIGNAL(clicked()), this, SLOT(deleteClicked()));
     connect(ui->deleteButton_s, SIGNAL(clicked()), this, SLOT(deleteClicked()));
-    connect(ui->addressBookCheckBox, SIGNAL(clicked()), this, SLOT(updateAddressBook()));
-
-    ui->labellLabel->setVisible(ui->addressBookCheckBox->isChecked());
-    ui->addAsLabel->setVisible(ui->addressBookCheckBox->isChecked());
 }
 
 SendCoinsEntry::~SendCoinsEntry()
@@ -57,22 +56,23 @@ SendCoinsEntry::~SendCoinsEntry()
     delete ui;
 }
 
+void SendCoinsEntry::on_pasteButton_clicked()
+{
+    // Paste text from clipboard into recipient field
+    ui->payTo->setText(QApplication::clipboard()->text());
+}
 
 void SendCoinsEntry::setTotalAmount(const CAmount& amount)
 {
     totalAmount = amount;
 }
 
+
 void SendCoinsEntry::useFullAmount()
 {
     ui->payAmount->setValue(totalAmount);
 }
 
-void SendCoinsEntry::updateAddressBook()
-{
-    ui->labellLabel->setVisible(ui->addressBookCheckBox->isChecked());
-    ui->addAsLabel->setVisible(ui->addressBookCheckBox->isChecked());
-}
 
 void SendCoinsEntry::on_addressBookButton_clicked()
 {
@@ -121,7 +121,7 @@ void SendCoinsEntry::clear()
     ui->memoTextLabel_s->clear();
     ui->payAmount_s->clear();
 
-    // update the display unit, to not use the default ("NAV")
+    // update the display unit, to not use the default ("0AE")
     updateDisplayUnit();
 }
 
@@ -213,7 +213,9 @@ QWidget *SendCoinsEntry::setupTabChain(QWidget *prev)
     QWidget *w = ui->payAmount->setupTabChain(ui->addAsLabel);
     QWidget::setTabOrder(w, ui->checkboxSubtractFeeFromAmount);
     QWidget::setTabOrder(ui->checkboxSubtractFeeFromAmount, ui->addressBookButton);
-    return ui->addressBookButton;
+    QWidget::setTabOrder(ui->addressBookButton, ui->pasteButton);
+    QWidget::setTabOrder(ui->pasteButton, ui->deleteButton);
+    return ui->deleteButton;
 }
 
 void SendCoinsEntry::setValue(const SendCoinsRecipient &value)

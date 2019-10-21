@@ -2,9 +2,9 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include <qt/platformstyle.h>
+#include "platformstyle.h"
 
-#include <qt/guiconstants.h>
+#include "guiconstants.h"
 
 #include <QApplication>
 #include <QColor>
@@ -25,7 +25,7 @@ static const struct {
     {"macosx", false, false, true},
     {"windows", true, false, false},
     /* Other: linux, unix, ... */
-    {"other", true, true, false}
+    {"other", true, false, false}
 };
 static const unsigned platform_styles_count = sizeof(platform_styles)/sizeof(*platform_styles);
 
@@ -48,7 +48,8 @@ void MakeSingleColorImage(QImage& img, const QColor& colorbase)
 QIcon ColorizeIcon(const QIcon& ico, const QColor& colorbase)
 {
     QIcon new_ico;
-    for(QSize sz: ico.availableSizes())
+    QSize sz;
+    Q_FOREACH(sz, ico.availableSizes())
     {
         QImage img(ico.pixmap(sz).toImage());
         MakeSingleColorImage(img, colorbase);
@@ -143,4 +144,3 @@ const PlatformStyle *PlatformStyle::instantiate(const QString &platformId)
     }
     return 0;
 }
-

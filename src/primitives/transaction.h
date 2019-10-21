@@ -3,15 +3,15 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_PRIMITIVES_TRANSACTION_H
-#define NAVCOIN_PRIMITIVES_TRANSACTION_H
+#ifndef ELECTRUM_PRIMITIVES_TRANSACTION_H
+#define ELECTRUM_PRIMITIVES_TRANSACTION_H
 
-#include <amount.h>
-#include <consensus/cfund.h>
-#include <script/script.h>
-#include <serialize.h>
-#include <uint256.h>
-#include <univalue/include/univalue.h>
+#include "amount.h"
+#include "consensus/cfund.h"
+#include "script/script.h"
+#include "serialize.h"
+#include "uint256.h"
+#include "univalue/include/univalue.h"
 
 static const int SERIALIZE_TRANSACTION_NO_WITNESS = 0x40000000;
 
@@ -527,4 +527,4 @@ struct CMutableTransaction
 /** Compute the weight of a transaction, as defined by BIP 141 */
 int64_t GetTransactionWeight(const CTransaction &tx);
 
-#endif // NAVCOIN_PRIMITIVES_TRANSACTION_H
+#endif // ELECTRUM_PRIMITIVES_TRANSACTION_H

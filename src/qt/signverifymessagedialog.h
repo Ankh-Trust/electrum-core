@@ -2,8 +2,8 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_QT_SIGNVERIFYMESSAGEDIALOG_H
-#define NAVCOIN_QT_SIGNVERIFYMESSAGEDIALOG_H
+#ifndef ELECTRUM_QT_SIGNVERIFYMESSAGEDIALOG_H
+#define ELECTRUM_QT_SIGNVERIFYMESSAGEDIALOG_H
 
 #include <QDialog>
 
@@ -50,4 +50,4 @@ private Q_SLOTS:
     void on_clearButton_VM_clicked();
 };
 
-#endif // NAVCOIN_QT_SIGNVERIFYMESSAGEDIALOG_H
+#endif // ELECTRUM_QT_SIGNVERIFYMESSAGEDIALOG_H

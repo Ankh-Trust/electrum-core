@@ -3,13 +3,13 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_WALLET_WALLETDB_H
-#define NAVCOIN_WALLET_WALLETDB_H
+#ifndef ELECTRUM_WALLET_WALLETDB_H
+#define ELECTRUM_WALLET_WALLETDB_H
 
-#include <amount.h>
-#include <primitives/transaction.h>
-#include <wallet/db.h>
-#include <key.h>
+#include "amount.h"
+#include "primitives/transaction.h"
+#include "wallet/db.h"
+#include "key.h"
 
 #include <list>
 #include <stdint.h>
@@ -187,4 +187,4 @@ private:
 
 void ThreadFlushWalletDB(const std::string& strFile);
 
-#endif // NAVCOIN_WALLET_WALLETDB_H
+#endif // ELECTRUM_WALLET_WALLETDB_H

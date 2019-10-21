@@ -2,9 +2,9 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include <qt/networkstyle.h>
+#include "networkstyle.h"
 
-#include <qt/guiconstants.h>
+#include "guiconstants.h"
 
 #include <QApplication>
 
@@ -28,7 +28,7 @@ NetworkStyle::NetworkStyle(const QString &appName, const int iconColorHueShift, 
     titleAddText(qApp->translate("SplashScreen", titleAddText))
 {
     // load pixmap
-    QPixmap pixmap(":/icons/navcoin");
+    QPixmap pixmap(":/icons/electrum");
 
     if(iconColorHueShift != 0 && iconColorSaturationReduction != 0)
     {

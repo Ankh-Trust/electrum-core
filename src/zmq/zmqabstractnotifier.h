@@ -2,10 +2,10 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_ZMQ_ZMQABSTRACTNOTIFIER_H
-#define NAVCOIN_ZMQ_ZMQABSTRACTNOTIFIER_H
+#ifndef ELECTRUM_ZMQ_ZMQABSTRACTNOTIFIER_H
+#define ELECTRUM_ZMQ_ZMQABSTRACTNOTIFIER_H
 
-#include <zmq/zmqconfig.h>
+#include "zmqconfig.h"
 
 class CBlockIndex;
 class CZMQAbstractNotifier;
@@ -41,4 +41,4 @@ protected:
     std::string address;
 };
 
-#endif // NAVCOIN_ZMQ_ZMQABSTRACTNOTIFIER_H
+#endif // ELECTRUM_ZMQ_ZMQABSTRACTNOTIFIER_H

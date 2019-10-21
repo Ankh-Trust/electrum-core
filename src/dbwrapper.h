@@ -2,15 +2,15 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_DBWRAPPER_H
-#define NAVCOIN_DBWRAPPER_H
+#ifndef ELECTRUM_DBWRAPPER_H
+#define ELECTRUM_DBWRAPPER_H
 
-#include <clientversion.h>
-#include <serialize.h>
-#include <streams.h>
-#include <util.h>
-#include <utilstrencodings.h>
-#include <version.h>
+#include "clientversion.h"
+#include "serialize.h"
+#include "streams.h"
+#include "util.h"
+#include "utilstrencodings.h"
+#include "version.h"
 
 #include <boost/filesystem/path.hpp>
 
@@ -284,5 +284,5 @@ public:
     bool IsEmpty();
 };
 
-#endif // NAVCOIN_DBWRAPPER_H
+#endif // ELECTRUM_DBWRAPPER_H
 

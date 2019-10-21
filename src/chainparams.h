@@ -3,14 +3,14 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_CHAINPARAMS_H
-#define NAVCOIN_CHAINPARAMS_H
+#ifndef ELECTRUM_CHAINPARAMS_H
+#define ELECTRUM_CHAINPARAMS_H
 
-#include <chainparamsbase.h>
-#include <consensus/params.h>
-#include <primitives/block.h>
-#include <protocol.h>
-#include <arith_uint256.h>
+#include "chainparamsbase.h"
+#include "consensus/params.h"
+#include "primitives/block.h"
+#include "protocol.h"
+#include "arith_uint256.h"
 
 #include <vector>
 
@@ -36,7 +36,7 @@ struct CCheckpointData {
 
 /**
  * CChainParams defines various tweakable parameters of a given instance of the
- * NavCoin system. There are three: the main network on which people trade goods
+ * Electrum system. There are three: the main network on which people trade goods
  * and services, the public test network which gets reset from time to time and
  * a regression test mode which is intended for private networks only. It has
  * minimal difficulty to ensure that blocks can be found instantly.
@@ -47,7 +47,6 @@ public:
     enum Base58Type {
         PUBKEY_ADDRESS,
         SCRIPT_ADDRESS,
-        RAW_SCRIPT_ADDRESS,
         SECRET_KEY,
         EXT_PUBLIC_KEY,
         EXT_SECRET_KEY,
@@ -117,4 +116,4 @@ CChainParams& Params(const std::string& chain);
  */
 void SelectParams(const std::string& chain);
 
-#endif // NAVCOIN_CHAINPARAMS_H
+#endif // ELECTRUM_CHAINPARAMS_H

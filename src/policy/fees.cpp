@@ -3,15 +3,15 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include <policy/fees.h>
-#include <policy/policy.h>
+#include "policy/fees.h"
+#include "policy/policy.h"
 
-#include <amount.h>
-#include <primitives/transaction.h>
-#include <random.h>
-#include <streams.h>
-#include <txmempool.h>
-#include <util.h>
+#include "amount.h"
+#include "primitives/transaction.h"
+#include "random.h"
+#include "streams.h"
+#include "txmempool.h"
+#include "util.h"
 
 void TxConfirmStats::Initialize(std::vector<double>& defaultBuckets,
                                 unsigned int maxConfirms, double _decay, std::string _dataTypeString)
@@ -295,7 +295,7 @@ void CBlockPolicyEstimator::removeTx(uint256 hash)
     unsigned int entryHeight = pos->second.blockHeight;
     unsigned int bucketIndex = pos->second.bucketIndex;
 
-    if (stats != nullptr)
+    if (stats != NULL)
         stats->removeTx(entryHeight, nBestSeenHeight, bucketIndex);
     mapMemPoolTxs.erase(hash);
 }
@@ -347,7 +347,7 @@ void CBlockPolicyEstimator::processTransaction(const CTxMemPoolEntry& entry, boo
 {
     unsigned int txHeight = entry.GetHeight();
     uint256 hash = entry.GetTx().GetHash();
-    if (mapMemPoolTxs[hash].stats != nullptr) {
+    if (mapMemPoolTxs[hash].stats != NULL) {
         LogPrint("estimatefee", "Blockpolicy error mempool tx %s already being tracked\n",
                  hash.ToString().c_str());
 	return;
@@ -371,7 +371,7 @@ void CBlockPolicyEstimator::processTransaction(const CTxMemPoolEntry& entry, boo
         return;
     }
 
-    // Fees are stored and reported as NAV-per-kb:
+    // Fees are stored and reported as 0AE-per-kb:
     CFeeRate feeRate(entry.GetFee(), entry.GetTxSize());
 
     // Want the priority of the tx at confirmation. However we don't know
@@ -417,7 +417,7 @@ void CBlockPolicyEstimator::processBlockTx(unsigned int nBlockHeight, const CTxM
         return;
     }
 
-    // Fees are stored and reported as NAV-per-kb:
+    // Fees are stored and reported as 0AE-per-kb:
     CFeeRate feeRate(entry.GetFee(), entry.GetTxSize());
 
     // Want the priority of the tx at confirmation.  The priority when it

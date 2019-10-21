@@ -2,19 +2,19 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include <qt/paymentserver.h>
+#include "paymentserver.h"
 
-#include <qt/navcoinunits.h>
-#include <qt/guiutil.h>
-#include <qt/optionsmodel.h>
+#include "electrumunits.h"
+#include "guiutil.h"
+#include "optionsmodel.h"
 
-#include <base58.h>
-#include <chainparams.h>
-#include <main.h> // For minRelayTxFee
-#include <ui_interface.h>
-#include <util.h>
-#include <utils/dns_utils.h>
-#include <wallet/wallet.h>
+#include "base58.h"
+#include "chainparams.h"
+#include "main.h" // For minRelayTxFee
+#include "ui_interface.h"
+#include "util.h"
+#include "utils/dns_utils.h"
+#include "wallet/wallet.h"
 
 #include <cstdlib>
 
@@ -43,27 +43,27 @@
 #include <QTextDocument>
 #include <QUrlQuery>
 
-const int NAVCOIN_IPC_CONNECT_TIMEOUT = 1000; // milliseconds
-const QString NAVCOIN_IPC_PREFIX("navcoin:");
+const int ELECTRUM_IPC_CONNECT_TIMEOUT = 1000; // milliseconds
+const QString ELECTRUM_IPC_PREFIX("electrum:");
 // BIP70 payment protocol messages
 const char* BIP70_MESSAGE_PAYMENTACK = "PaymentACK";
 const char* BIP70_MESSAGE_PAYMENTREQUEST = "PaymentRequest";
 const char* NIP01_MESSAGE_SIGNEDMSG = "SignedMsg";
 // BIP71 payment protocol media types
-const char* BIP71_MIMETYPE_PAYMENT = "application/navcoin-payment";
-const char* BIP71_MIMETYPE_PAYMENTACK = "application/navcoin-paymentack";
-const char* BIP71_MIMETYPE_PAYMENTREQUEST = "application/navcoin-paymentrequest";
-const char* NIP01_MIMETYPE_SIGNEDMSG = "application/navcoin-signedmsg";
+const char* BIP71_MIMETYPE_PAYMENT = "application/electrum-payment";
+const char* BIP71_MIMETYPE_PAYMENTACK = "application/electrum-paymentack";
+const char* BIP71_MIMETYPE_PAYMENTREQUEST = "application/electrum-paymentrequest";
+const char* NIP01_MIMETYPE_SIGNEDMSG = "application/electrum-signedmsg";
 // BIP70 max payment request size in bytes (DoS protection)
 const qint64 BIP70_MAX_PAYMENTREQUEST_SIZE = 50000;
 
-X509_STORE* PaymentServer::certStore = nullptr;
+X509_STORE* PaymentServer::certStore = NULL;
 void PaymentServer::freeCertStore()
 {
-    if (PaymentServer::certStore != nullptr)
+    if (PaymentServer::certStore != NULL)
     {
         X509_STORE_free(PaymentServer::certStore);
-        PaymentServer::certStore = nullptr;
+        PaymentServer::certStore = NULL;
     }
 }
 
@@ -74,7 +74,7 @@ void PaymentServer::freeCertStore()
 //
 static QString ipcServerName()
 {
-    QString name("NavCoinQt");
+    QString name("ElectrumQt");
 
     // Append a simple hash of the datadir
     // Note that GetDataDir(true) returns a different path
@@ -102,7 +102,7 @@ static void ReportInvalidCertificate(const QSslCertificate& cert)
 //
 void PaymentServer::LoadRootCAs(X509_STORE* _store)
 {
-    if (PaymentServer::certStore == nullptr)
+    if (PaymentServer::certStore == NULL)
         atexit(PaymentServer::freeCertStore);
     else
         freeCertStore();
@@ -141,7 +141,7 @@ void PaymentServer::LoadRootCAs(X509_STORE* _store)
     int nRootCerts = 0;
     const QDateTime currentTime = QDateTime::currentDateTime();
 
-    for (const QSslCertificate& cert: certList) {
+    Q_FOREACH (const QSslCertificate& cert, certList) {
         // Don't log NULL certificates
         if (cert.isNull())
             continue;
@@ -203,18 +203,18 @@ void PaymentServer::ipcParseCommandLine(int argc, char* argv[])
         if (arg.startsWith("-"))
             continue;
 
-        // If the navcoin: URI contains a payment request, we are not able to detect the
+        // If the electrum: URI contains a payment request, we are not able to detect the
         // network as that would require fetching and parsing the payment request.
         // That means clicking such an URI which contains a testnet payment request
         // will start a mainnet instance and throw a "wrong network" error.
-        if (arg.startsWith(NAVCOIN_IPC_PREFIX, Qt::CaseInsensitive)) // navcoin: URI
+        if (arg.startsWith(ELECTRUM_IPC_PREFIX, Qt::CaseInsensitive)) // electrum: URI
         {
             savedPaymentRequests.append(arg);
 
             SendCoinsRecipient r;
-            if (GUIUtil::parseNavCoinURI(arg, &r) && !r.address.isEmpty())
+            if (GUIUtil::parseElectrumURI(arg, &r) && !r.address.isEmpty())
             {
-                CNavCoinAddress address(r.address.toStdString());
+                CElectrumAddress address(r.address.toStdString());
 
                 if (address.IsValid(Params(CBaseChainParams::MAIN)))
                 {
@@ -269,14 +269,14 @@ void PaymentServer::ipcParseCommandLine(int argc, char* argv[])
 bool PaymentServer::ipcSendCommandLine()
 {
     bool fResult = false;
-    for (const QString& r: savedPaymentRequests)
+    Q_FOREACH (const QString& r, savedPaymentRequests)
     {
         QLocalSocket* socket = new QLocalSocket();
         socket->connectToServer(ipcServerName(), QIODevice::WriteOnly);
-        if (!socket->waitForConnected(NAVCOIN_IPC_CONNECT_TIMEOUT))
+        if (!socket->waitForConnected(ELECTRUM_IPC_CONNECT_TIMEOUT))
         {
             delete socket;
-            socket = nullptr;
+            socket = NULL;
             return false;
         }
 
@@ -288,11 +288,11 @@ bool PaymentServer::ipcSendCommandLine()
 
         socket->write(block);
         socket->flush();
-        socket->waitForBytesWritten(NAVCOIN_IPC_CONNECT_TIMEOUT);
+        socket->waitForBytesWritten(ELECTRUM_IPC_CONNECT_TIMEOUT);
         socket->disconnectFromServer();
 
         delete socket;
-        socket = nullptr;
+        socket = NULL;
         fResult = true;
     }
 
@@ -312,7 +312,7 @@ PaymentServer::PaymentServer(QObject* parent, bool startLocalServer) :
     GOOGLE_PROTOBUF_VERIFY_VERSION;
 
     // Install global event filter to catch QFileOpenEvents
-    // on Mac: sent when you click navcoin: links
+    // on Mac: sent when you click electrum: links
     // other OSes: helpful when dealing with payment request files
     if (parent)
         parent->installEventFilter(this);
@@ -328,7 +328,7 @@ PaymentServer::PaymentServer(QObject* parent, bool startLocalServer) :
 
         if (!uriServer->listen(name)) {
             // constructor is called early in init, so don't use "Q_EMIT message()" here
-            LogPrintf("Cannot start navcoin: click-to-pay handler\n");
+            LogPrintf("Cannot start electrum: click-to-pay handler\n");
         }
         else {
             connect(uriServer, SIGNAL(newConnection()), this, SLOT(handleURIConnection()));
@@ -343,7 +343,7 @@ PaymentServer::~PaymentServer()
 }
 
 //
-// OSX-specific way of handling navcoin: URIs and PaymentRequest mime types.
+// OSX-specific way of handling electrum: URIs and PaymentRequest mime types.
 // Also used by paymentservertests.cpp and when opening a payment request file
 // via "Open URI..." menu entry.
 //
@@ -366,10 +366,10 @@ void PaymentServer::initNetManager()
 {
     if (!optionsModel)
         return;
-    if (netManager != nullptr)
+    if (netManager != NULL)
         delete netManager;
 
-    // netManager is used to fetch paymentrequests given in navcoin: URIs
+    // netManager is used to fetch paymentrequests given in electrum: URIs
     netManager = new QNetworkAccessManager(this);
 
     QNetworkProxy proxy;
@@ -394,7 +394,7 @@ void PaymentServer::uiReady()
     initNetManager();
 
     saveURIs = false;
-    for (const QString& s: savedPaymentRequests)
+    Q_FOREACH (const QString& s, savedPaymentRequests)
     {
         handleURIOrFile(s);
     }
@@ -414,12 +414,12 @@ void PaymentServer::handleURIOrFile(const QString& s)
         return;
     }
 
-    if (s.startsWith("navcoin://", Qt::CaseInsensitive))
+    if (s.startsWith("electrum://", Qt::CaseInsensitive))
     {
-        Q_EMIT message(tr("URI handling"), tr("'navcoin://' is not a valid URI. Use 'navcoin:' instead."),
+        Q_EMIT message(tr("URI handling"), tr("'electrum://' is not a valid URI. Use 'electrum:' instead."),
                        CClientUIInterface::MSG_ERROR);
     }
-    else if (s.startsWith(NAVCOIN_IPC_PREFIX, Qt::CaseInsensitive)) // navcoin: URI
+    else if (s.startsWith(ELECTRUM_IPC_PREFIX, Qt::CaseInsensitive)) // electrum: URI
     {
         QUrlQuery uri((QUrl(s)));
         if (uri.hasQueryItem("m") && uri.hasQueryItem("a")) // sign message URI
@@ -433,7 +433,7 @@ void PaymentServer::handleURIOrFile(const QString& s)
             if (!model)
                 return;
 
-            CNavCoinAddress addr(uri.queryItemValue("a").toStdString());
+            CElectrumAddress addr(uri.queryItemValue("a").toStdString());
             if (!addr.IsValid())
             {
                 Q_EMIT message(tr("Verify address"), tr("The provided address is invalid.") + QString(" ") + tr("Please check the address and try again."),
@@ -478,7 +478,7 @@ void PaymentServer::handleURIOrFile(const QString& s)
 
             QString signature = (QString::fromStdString(EncodeBase64(&vchSig[0], vchSig.size())));
 
-            QUrl fetchUrlConstructed(s.mid(NAVCOIN_IPC_PREFIX.length()));
+            QUrl fetchUrlConstructed(s.mid(ELECTRUM_IPC_PREFIX.length()));
 
             sendSignature(fetchUrlConstructed, signature);
 
@@ -508,12 +508,12 @@ void PaymentServer::handleURIOrFile(const QString& s)
         else // normal URI
         {
             SendCoinsRecipient recipient;
-            if (GUIUtil::parseNavCoinURI(s, &recipient))
+            if (GUIUtil::parseElectrumURI(s, &recipient))
             {
               std::string address_str = recipient.address.toStdString();
               utils::DNSResolver* DNS = nullptr;
 
-              // Validate the passed NavCoin address
+              // Validate the passed Electrum address
               if(DNS->check_address_syntax(recipient.address.toStdString().c_str()))
               {
 
@@ -530,7 +530,7 @@ void PaymentServer::handleURIOrFile(const QString& s)
                   address_str = addresses.front();
               }
 
-              CNavCoinAddress address(address_str);
+              CElectrumAddress address(address_str);
               if (!address.IsValid()) {
                 Q_EMIT message(tr("URI handling"), tr("Invalid payment address %1").arg(recipient.address),
                                CClientUIInterface::MSG_ERROR);
@@ -540,7 +540,7 @@ void PaymentServer::handleURIOrFile(const QString& s)
             }
             else
                 Q_EMIT message(tr("URI handling"),
-                    tr("URI cannot be parsed! This can be caused by an invalid NavCoin address or malformed URI parameters."),
+                    tr("URI cannot be parsed! This can be caused by an invalid Electrum address or malformed URI parameters."),
                     CClientUIInterface::ICON_WARNING);
 
             return;
@@ -644,15 +644,15 @@ bool PaymentServer::processPaymentRequest(const PaymentRequestPlus& request, Sen
     QList<std::pair<CScript, CAmount> > sendingTos = request.getPayTo();
     QStringList addresses;
 
-    for(const PAIRTYPE(CScript, CAmount)& sendingTo: sendingTos) {
+    Q_FOREACH(const PAIRTYPE(CScript, CAmount)& sendingTo, sendingTos) {
         // Extract and check destination addresses
         CTxDestination dest;
         if (ExtractDestination(sendingTo.first, dest)) {
             // Append destination address
-            addresses.append(QString::fromStdString(CNavCoinAddress(dest).ToString()));
+            addresses.append(QString::fromStdString(CElectrumAddress(dest).ToString()));
         }
         else if (!recipient.authenticatedMerchant.isEmpty()) {
-            // Unauthenticated payment requests to custom navcoin addresses are not supported
+            // Unauthenticated payment requests to custom electrum addresses are not supported
             // (there is no good way to tell the user where they are paying in a way they'd
             // have a chance of understanding).
             Q_EMIT message(tr("Payment request rejected"),
@@ -661,7 +661,7 @@ bool PaymentServer::processPaymentRequest(const PaymentRequestPlus& request, Sen
             return false;
         }
 
-        // NavCoin amounts are stored as (optional) uint64 in the protobuf messages (see paymentrequest.proto),
+        // Electrum amounts are stored as (optional) uint64 in the protobuf messages (see paymentrequest.proto),
         // but CAmount is defined as int64_t. Because of that we need to verify that amounts are in a valid range
         // and no overflow has happened.
         if (!verifyAmount(sendingTo.second)) {
@@ -673,7 +673,7 @@ bool PaymentServer::processPaymentRequest(const PaymentRequestPlus& request, Sen
         CTxOut txOut(sendingTo.second, sendingTo.first);
         if (txOut.IsDust(::minRelayTxFee)) {
             Q_EMIT message(tr("Payment request error"), tr("Requested payment amount of %1 is too small (considered dust).")
-                .arg(NavCoinUnits::formatWithUnit(optionsModel->getDisplayUnit(), sendingTo.second)),
+                .arg(ElectrumUnits::formatWithUnit(optionsModel->getDisplayUnit(), sendingTo.second)),
                 CClientUIInterface::MSG_ERROR);
 
             return false;
@@ -853,7 +853,7 @@ void PaymentServer::reportSslErrors(QNetworkReply* reply, const QList<QSslError>
     Q_UNUSED(reply);
 
     QString errString;
-    for (const QSslError& err: errs) {
+    Q_FOREACH (const QSslError& err, errs) {
         qWarning() << "PaymentServer::reportSslErrors: " << err;
         errString += err.errorString() + "\n";
     }

@@ -2,8 +2,8 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_QT_CSVMODELWRITER_H
-#define NAVCOIN_QT_CSVMODELWRITER_H
+#ifndef ELECTRUM_QT_CSVMODELWRITER_H
+#define ELECTRUM_QT_CSVMODELWRITER_H
 
 #include <QList>
 #include <QObject>
@@ -43,4 +43,4 @@ private:
     QList<Column> columns;
 };
 
-#endif // NAVCOIN_QT_CSVMODELWRITER_H
+#endif // ELECTRUM_QT_CSVMODELWRITER_H

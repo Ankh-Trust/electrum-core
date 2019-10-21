@@ -1,12 +1,12 @@
-// Copyright (c) 2018 The NavCoin Core developers
+// Copyright (c) 2018 The NAVcoin Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include <consensus/cfund.h>
-#include <base58.h>
-#include <main.h>
-#include <rpc/server.h>
-#include <utilmoneystr.h>
+#include "consensus/cfund.h"
+#include "base58.h"
+#include "main.h"
+#include "rpc/server.h"
+#include "utilmoneystr.h"
 
 void CFund::SetScriptForCommunityFundContribution(CScript &script)
 {
@@ -184,10 +184,10 @@ bool CFund::IsValidPaymentRequest(CTransaction tx, CCoinsViewCache& coins, int n
         sRandom = find_value(metadata, "r").get_str();
 
     std::string Secret = sRandom + "I kindly ask to withdraw " +
-            std::to_string(nAmount) + "NAV from the proposal " +
+            std::to_string(nAmount) + "0AE from the proposal " +
             proposal.hash.ToString() + ". Payment request id: " + strDZeel;
 
-    CNavCoinAddress addr(proposal.Address);
+    CElectrumAddress addr(proposal.Address);
     if (!addr.IsValid())
         return error("%s: Address %s is not valid for payment request %s", __func__, proposal.Address, Hash.c_str(), tx.GetHash().ToString());
 
@@ -283,7 +283,7 @@ bool CFund::IsValidProposal(CTransaction tx, int nMaxVersion)
     CAmount nContribution = 0;
     int nVersion = find_value(metadata, "v").isNum() ? find_value(metadata, "v").get_int() : 1;
 
-    CNavCoinAddress address(Address);
+    CElectrumAddress address(Address);
     if (!address.IsValid())
         return error("%s: Wrong address %s for proposal %s", __func__, Address.c_str(), tx.GetHash().ToString());
 
@@ -591,7 +591,7 @@ void CFund::CFundStep(const CValidationState& state, CBlockIndex *pindexNew, con
 {
     AssertLockHeld(cs_main);
 
-    const CBlockIndex* pindexDelete = nullptr;
+    const CBlockIndex* pindexDelete;
     if (fUndo)
     {
         pindexDelete = pindexNew;
@@ -614,7 +614,7 @@ void CFund::CFundStep(const CValidationState& state, CBlockIndex *pindexNew, con
 
     int64_t nTimeStart2 = GetTimeMicros();
 
-    while(nBlocks > 0 && pindexblock != nullptr)
+    while(nBlocks > 0 && pindexblock != NULL)
     {
         CProposal proposal;
         CPaymentRequest prequest;
@@ -737,10 +737,10 @@ void CFund::CFundStep(const CValidationState& state, CBlockIndex *pindexNew, con
             if (!view.GetProposal(prequest->proposalhash, proposal))
                 continue;
 
-            int nCreatedOnCycle = (pblockindex->nHeight / Params().GetConsensus().nBlocksPerVotingCycle);
-            int nCurrentCycle = (pindexNew->nHeight / Params().GetConsensus().nBlocksPerVotingCycle);
-            int nElapsedCycles = std::max(nCurrentCycle - nCreatedOnCycle, 0);
-            int nVotingCycles = std::min(nElapsedCycles, (int)Params().GetConsensus().nCyclesPaymentRequestVoting + 1);
+            auto nCreatedOnCycle = (unsigned )(pblockindex->nHeight / Params().GetConsensus().nBlocksPerVotingCycle);
+            auto nCurrentCycle = (unsigned )(pindexNew->nHeight / Params().GetConsensus().nBlocksPerVotingCycle);
+            auto nElapsedCycles = nCurrentCycle - nCreatedOnCycle;
+            auto nVotingCycles = std::min(nElapsedCycles, Params().GetConsensus().nCyclesPaymentRequestVoting + 1);
 
             auto oldState = prequest->fState;
             auto oldCycle = prequest->nVotingCycle;
@@ -803,9 +803,7 @@ void CFund::CFundStep(const CValidationState& state, CBlockIndex *pindexNew, con
 
             if (fUndo && fUpdate && prequest->fState == oldState && prequest->fState != CFund::NIL
                     && prequest->nVotingCycle != oldCycle)
-            {
                 prequest->nVotingCycle = oldCycle;
-            }
 
             if((pindexNew->nHeight) % Params().GetConsensus().nBlocksPerVotingCycle == 0)
             {
@@ -856,10 +854,10 @@ void CFund::CFundStep(const CValidationState& state, CBlockIndex *pindexNew, con
 
             CBlockIndex* pblockindex = mapBlockIndex[proposal->txblockhash];
 
-            int nCreatedOnCycle = (pblockindex->nHeight / Params().GetConsensus().nBlocksPerVotingCycle);
-            int nCurrentCycle = (pindexNew->nHeight / Params().GetConsensus().nBlocksPerVotingCycle);
-            int nElapsedCycles = std::max(nCurrentCycle - nCreatedOnCycle, 0);
-            int nVotingCycles = std::min(nElapsedCycles, (int)Params().GetConsensus().nCyclesProposalVoting + 1);
+            auto nCreatedOnCycle = (unsigned int)(pblockindex->nHeight / Params().GetConsensus().nBlocksPerVotingCycle);
+            auto nCurrentCycle = (unsigned int)(pindexNew->nHeight / Params().GetConsensus().nBlocksPerVotingCycle);
+            auto nElapsedCycles = nCurrentCycle - nCreatedOnCycle;
+            auto nVotingCycles = std::min(nElapsedCycles, Params().GetConsensus().nCyclesProposalVoting + 1);
 
             auto oldState = proposal->fState;
             auto oldCycle = proposal->nVotingCycle;
@@ -940,9 +938,7 @@ void CFund::CFundStep(const CValidationState& state, CBlockIndex *pindexNew, con
             }
 
             if (fUndo && fUpdate && proposal->fState == oldState && proposal->fState != CFund::NIL && proposal->nVotingCycle != oldCycle)
-            {
                 proposal->nVotingCycle = oldCycle;
-            }
 
             if((pindexNew->nHeight) % Params().GetConsensus().nBlocksPerVotingCycle == 0)
             {
@@ -962,4 +958,3 @@ void CFund::CFundStep(const CValidationState& state, CBlockIndex *pindexNew, con
     int64_t nTimeEnd = GetTimeMicros();
     LogPrint("bench", "  - CFund total CFundStep() function: %.2fms\n", (nTimeEnd - nTimeStart) * 0.001);
 }
-

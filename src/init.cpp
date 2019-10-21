@@ -1,48 +1,48 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2015 The Bitcoin Core developers
-// Copyright (c) 2018 The NavCoin developers
+// Copyright (c) 2018 The Electrum developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #if defined(HAVE_CONFIG_H)
-#include <config/navcoin-config.h>
+#include "config/electrum-config.h"
 #endif
 
-#include <init.h>
+#include "init.h"
 
-#include <addrman.h>
-#include <amount.h>
-#include <chain.h>
-#include <chainparams.h>
-#include <checkpoints.h>
-#include <compat/sanity.h>
-#include <consensus/validation.h>
-#include <httpserver.h>
-#include <httprpc.h>
-#include <kernel.h>
-#include <key.h>
-#include <main.h>
-#include <miner.h>
-#include <net.h>
-#include <ntpclient.h>
-#include <policy/policy.h>
-#include <rpc/server.h>
-#include <rpc/register.h>
-#include <script/standard.h>
-#include <script/sigcache.h>
-#include <scheduler.h>
-#include <timedata.h>
-#include <txdb.h>
-#include <txmempool.h>
-#include <torcontrol.h>
-#include <ui_interface.h>
-#include <untar.h>
-#include <util.h>
-#include <utiltime.h>
-#include <utilmoneystr.h>
-#include <validationinterface.h>
+#include "addrman.h"
+#include "amount.h"
+#include "chain.h"
+#include "chainparams.h"
+#include "checkpoints.h"
+#include "compat/sanity.h"
+#include "consensus/validation.h"
+#include "httpserver.h"
+#include "httprpc.h"
+#include "kernel.h"
+#include "key.h"
+#include "main.h"
+#include "miner.h"
+#include "net.h"
+#include "ntpclient.h"
+#include "policy/policy.h"
+#include "rpc/server.h"
+#include "rpc/register.h"
+#include "script/standard.h"
+#include "script/sigcache.h"
+#include "scheduler.h"
+#include "timedata.h"
+#include "txdb.h"
+#include "txmempool.h"
+#include "torcontrol.h"
+#include "ui_interface.h"
+#include "untar.h"
+#include "util.h"
+#include "utiltime.h"
+#include "utilmoneystr.h"
+#include "validationinterface.h"
 #ifdef ENABLE_WALLET
-#include <wallet/wallet.h>
+#include "wallet/wallet.h"
 #endif
 #include <stdint.h>
 #include <stdio.h>
@@ -68,7 +68,7 @@
 
 
 #if ENABLE_ZMQ
-#include <zmq/zmqnotificationinterface.h>
+#include "zmq/zmqnotificationinterface.h"
 #endif
 
 char *sPrivKey, *sPubKey;
@@ -84,7 +84,7 @@ static const bool DEFAULT_STOPAFTERBLOCKIMPORT = false;
 unsigned int nMinerSleep;
 
 #if ENABLE_ZMQ
-static CZMQNotificationInterface* pzmqNotificationInterface = nullptr;
+static CZMQNotificationInterface* pzmqNotificationInterface = NULL;
 #endif
 
 #ifdef WIN32
@@ -178,7 +178,7 @@ bool ShutdownRequested()
 /**
  * This is a minimally invasive approach to shutdown on LevelDB read errors from the
  * chainstate, while keeping user interface out of the common library, which is shared
- * between navcoind, and navcoin-qt and non-server tools.
+ * between electrumd, and electrum-qt and non-server tools.
 */
 class CCoinsViewErrorCatcher : public CCoinsViewBacked
 {
@@ -218,8 +218,8 @@ public:
     // Writes do not need similar protection, as failure to write is handled by the caller.
 };
 
-static CCoinsViewDB *pcoinsdbview = nullptr;
-static CCoinsViewErrorCatcher *pcoinscatcher = nullptr;
+static CCoinsViewDB *pcoinsdbview = NULL;
+static CCoinsViewErrorCatcher *pcoinscatcher = NULL;
 static boost::scoped_ptr<ECCVerifyHandle> globalVerifyHandle;
 
 void Interrupt(boost::thread_group& threadGroup)
@@ -244,7 +244,7 @@ void Shutdown()
     /// for example if the data directory was found to be locked.
     /// Be sure that anything that writes files or flushes caches only does this if the respective
     /// module was initialized.
-    RenameThread("navcoin-shutoff");
+    RenameThread("electrum-shutoff");
     mempool.AddTransactionsUpdated(1);
 
     StopHTTPRPC();
@@ -272,17 +272,17 @@ void Shutdown()
 
     {
         LOCK(cs_main);
-        if (pcoinsTip != nullptr) {
+        if (pcoinsTip != NULL) {
             FlushStateToDisk();
         }
         delete pcoinsTip;
-        pcoinsTip = nullptr;
+        pcoinsTip = NULL;
         delete pcoinscatcher;
-        pcoinscatcher = nullptr;
+        pcoinscatcher = NULL;
         delete pcoinsdbview;
-        pcoinsdbview = nullptr;
+        pcoinsdbview = NULL;
         delete pblocktree;
-        pblocktree = nullptr;
+        pblocktree = NULL;
     }
 #ifdef ENABLE_WALLET
     if (pwalletMain)
@@ -293,7 +293,7 @@ void Shutdown()
     if (pzmqNotificationInterface) {
         UnregisterValidationInterface(pzmqNotificationInterface);
         delete pzmqNotificationInterface;
-        pzmqNotificationInterface = nullptr;
+        pzmqNotificationInterface = NULL;
     }
 #endif
 
@@ -307,7 +307,7 @@ void Shutdown()
     UnregisterAllValidationInterfaces();
 #ifdef ENABLE_WALLET
     delete pwalletMain;
-    pwalletMain = nullptr;
+    pwalletMain = NULL;
 #endif
     globalVerifyHandle.reset();
     ECC_Stop();
@@ -370,8 +370,8 @@ std::string HelpMessage(HelpMessageMode mode)
     strUsage += HelpMessageOpt("-bootstrap=<url>", _("Specifies an URL from where a bootstrapped copy of the blockchain would be downloaded"));
     strUsage += HelpMessageOpt("-checkblocks=<n>", strprintf(_("How many blocks to check at startup (default: %u, 0 = all)"), DEFAULT_CHECKBLOCKS));
     strUsage += HelpMessageOpt("-checklevel=<n>", strprintf(_("How thorough the block verification of -checkblocks is (0-4, default: %u)"), DEFAULT_CHECKLEVEL));
-    strUsage += HelpMessageOpt("-conf=<file>", strprintf(_("Specify configuration file (default: %s)"), NAVCOIN_CONF_FILENAME));
-    if (mode == HMM_NAVCOIND)
+    strUsage += HelpMessageOpt("-conf=<file>", strprintf(_("Specify configuration file (default: %s)"), ELECTRUM_CONF_FILENAME));
+    if (mode == HMM_ELECTRUMD)
     {
 #ifndef WIN32
         strUsage += HelpMessageOpt("-daemon", _("Run in the background as a daemon and accept commands"));
@@ -390,7 +390,7 @@ std::string HelpMessage(HelpMessageMode mode)
     strUsage += HelpMessageOpt("-par=<n>", strprintf(_("Set the number of script verification threads (%u to %d, 0 = auto, <0 = leave that many cores free, default: %d)"),
                                                      -GetNumCores(), MAX_SCRIPTCHECK_THREADS, DEFAULT_SCRIPTCHECK_THREADS));
 #ifndef WIN32
-    strUsage += HelpMessageOpt("-pid=<file>", strprintf(_("Specify pid file (default: %s)"), NAVCOIN_PID_FILENAME));
+    strUsage += HelpMessageOpt("-pid=<file>", strprintf(_("Specify pid file (default: %s)"), ELECTRUM_PID_FILENAME));
 #endif
     strUsage += HelpMessageOpt("-prune=<n>", strprintf(_("Reduce storage requirements by pruning (deleting) old blocks. This mode is incompatible with -txindex and -rescan. "
                                                          "Warning: Reverting this setting requires re-downloading the entire blockchain. "
@@ -403,7 +403,6 @@ std::string HelpMessage(HelpMessageMode mode)
 #ifndef WIN32
     strUsage += HelpMessageOpt("-sysperms", _("Create new files with system default permissions, instead of umask 077 (only effective with disabled wallet functionality)"));
 #endif
-    strUsage += HelpMessageOpt("-allindex", strprintf(_("Maintain all indexes supported (default: %u)"), false));
     strUsage += HelpMessageOpt("-txindex", strprintf(_("Maintain a full transaction index, used by the getrawtransaction rpc call (default: %u)"), DEFAULT_TXINDEX));
 
     strUsage += HelpMessageOpt("-addressindex", strprintf(_("Maintain a full address index, used to query for the balance, txids and unspent outputs for addresses (default: %u)"), DEFAULT_ADDRESSINDEX));
@@ -495,7 +494,7 @@ std::string HelpMessage(HelpMessageMode mode)
         strUsage += HelpMessageOpt("-limitdescendantsize=<n>", strprintf("Do not accept transactions if any ancestor would have more than <n> kilobytes of in-mempool descendants (default: %u).", DEFAULT_DESCENDANT_SIZE_LIMIT));
     }
     string debugCategories = "addrman, alert, bench, coindb, db, http, libevent, lock, mempool, mempoolrej, net, proxy, prune, rand, reindex, rpc, selectcoins, tor, zmq"; // Don't translate these and qt below
-    if (mode == HMM_NAVCOIN_QT)
+    if (mode == HMM_ELECTRUM_QT)
         debugCategories += ", qt";
     strUsage += HelpMessageOpt("-debug=<category>", strprintf(_("Output debugging information (default: %u, supplying <category> is optional)"), 0) + ". " +
                                _("If <category> is not supplied or if <category> = 1, output all debugging information.") + _("<category> can be:") + " " + debugCategories + ".");
@@ -570,52 +569,18 @@ std::string HelpMessage(HelpMessageMode mode)
 
 std::string LicenseInfo()
 {
-    const std::string URL_SOURCE_CODE = "<https://github.com/navcoin/navcoin-core>";
-    const std::string URL_WEBSITE = "<https://navcoin.org>";
-    // todo: remove urls from translations on next change
-    return CopyrightHolders(strprintf(_("Copyright (C) %i-%i"), 2009, COPYRIGHT_YEAR) + " ") + "\n" +
-            "\n" +
-            strprintf(_("Please contribute if you find %s useful. "
-                        "Visit %s for further information about the software."),
-                      PACKAGE_NAME, URL_WEBSITE) +
-            "\n" +
-            strprintf(_("The source code is available from %s."),
-                      URL_SOURCE_CODE) +
-            "\n" +
-            "\n" +
-            _("This is experimental software.") + "\n" +
-            _("Distributed under the MIT software license, see the accompanying file COPYING or <http://www.opensource.org/licenses/mit-license.php>.") + "\n" +
-            "\n" +
-            _("This product includes software developed by the OpenSSL Project for use in the OpenSSL Toolkit <https://www.openssl.org/> and cryptographic software written by Eric Young and UPnP software written by Thomas Bernard.") +
-            "\n" +
-            _("Copyright (c) 2014-2017, The Monero Project") + "\n" +
-            "\n" +
-            _("All rights reserved.") + "\n" +
-            "\n" +
-            _("Redistribution and use in source and binary forms, with or without modification, are") + "\n" +
-            _("permitted provided that the following conditions are met:") + "\n" +
-            "\n" +
-            _("1. Redistributions of source code must retain the above copyright notice, this list of") + "\n" +
-            _("   conditions and the following disclaimer.") + "\n" +
-            "\n" +
-            _("2. Redistributions in binary form must reproduce the above copyright notice, this list") + "\n" +
-            _("   of conditions and the following disclaimer in the documentation and/or other") + "\n" +
-            _("   materials provided with the distribution.") + "\n" +
-            "\n" +
-            _("3. Neither the name of the copyright holder nor the names of its contributors may be") + "\n" +
-            _("   used to endorse or promote products derived from this software without specific") + "\n" +
-            _("   prior written permission.") + "\n" +
-            "\n" +
-            _("THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\" AND ANY") + "\n" +
-            _(" EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF") + "\n" +
-            _(" MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL") + "\n" +
-            _(" THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,") + "\n" +
-            _(" SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,") + "\n" +
-            _(" PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS") + "\n" +
-            _(" INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,") + "\n" +
-            _(" STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF") + "\n" +
-            _(" THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.") + "\n" +
-            "\n";
+  return FormatParagraph(strprintf(_("Copyright (C) 2019-%i The Ankh Core Developers"), COPYRIGHT_YEAR)) + "\n" +
+         "\n" +
+         FormatParagraph(strprintf(_("Copyright (C) 2014-%i The NAVcoin Core Developers"), COPYRIGHT_YEAR)) + "\n" +
+         "\n" +
+         FormatParagraph(strprintf(_("Copyright (C) 2009-%i The Bitcoin Core Developers"), COPYRIGHT_YEAR)) + "\n" +
+         "\n" +
+         FormatParagraph(_("This is experimental software.")) + "\n" +
+         "\n" +
+         FormatParagraph(_("Distributed under the MIT software license, see the accompanying file COPYING or <http://www.opensource.org/licenses/mit-license.php>.")) + "\n" +
+         "\n" +
+         FormatParagraph(_("This product includes software developed by the OpenSSL Project for use in the OpenSSL Toolkit <https://www.openssl.org/> and cryptographic software written by Eric Young and UPnP software written by Thomas Bernard.")) +
+         "\n";
 }
 
 static void BlockNotifyCallback(bool initialSync, const CBlockIndex *pBlockIndex)
@@ -676,7 +641,7 @@ void CleanupBlockRevFiles()
     // keeping a separate counter.  Once we hit a gap (or if 0 doesn't exist)
     // start removing block files.
     int nContigCounter = 0;
-    for(const PAIRTYPE(string, path)& item: mapBlockFiles) {
+    BOOST_FOREACH(const PAIRTYPE(string, path)& item, mapBlockFiles) {
         if (atoi(item.first) == nContigCounter) {
             nContigCounter++;
             continue;
@@ -688,7 +653,7 @@ void CleanupBlockRevFiles()
 void ThreadImport(std::vector<boost::filesystem::path> vImportFiles)
 {
     const CChainParams& chainparams = Params();
-    RenameThread("navcoin-loadblk");
+    RenameThread("electrum-loadblk");
     CImportingNow imp;
 
     // -reindex
@@ -727,7 +692,7 @@ void ThreadImport(std::vector<boost::filesystem::path> vImportFiles)
     }
 
     // -loadblock=
-    for(const boost::filesystem::path& path: vImportFiles) {
+    BOOST_FOREACH(const boost::filesystem::path& path, vImportFiles) {
         FILE *file = fopen(path.string().c_str(), "rb");
         if (file) {
             LogPrintf("Importing blocks file %s...\n", path.string());
@@ -751,7 +716,7 @@ void ThreadImport(std::vector<boost::filesystem::path> vImportFiles)
 }
 
 /** Sanity checks
- *  Ensure that NavCoin is running in a usable environment with all
+ *  Ensure that Electrum is running in a usable environment with all
  *  necessary library support.
  */
 bool InitSanityCheck(void)
@@ -882,7 +847,7 @@ void InitLogging()
     fLogIPs = GetBoolArg("-logips", DEFAULT_LOGIPS);
 
     LogPrintf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-    LogPrintf("NavCoin version %s\n", FormatFullVersion());
+    LogPrintf("Electrum version %s\n", FormatFullVersion());
 }
 
 void DownloadBlockchain(std::string url)
@@ -926,7 +891,7 @@ void DownloadBlockchain(std::string url)
 
                 a = fopen(sDownload.c_str(), "rb");
 
-                if (a == nullptr)
+                if (a == NULL)
                 {
 
                     boost::filesystem::remove_all(sDownload);
@@ -967,7 +932,7 @@ void DownloadBlockchain(std::string url)
     }
 }
 
-/** Initialize navcoin.
+/** Initialize electrum.
  *  @pre Parameters should be parsed and config file should be read.
  */
 bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
@@ -1002,7 +967,7 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
 #ifdef _MSC_VER
     // Turn off Microsoft heap dump noise
     _CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_FILE);
-    _CrtSetReportFile(_CRT_WARN, CreateFileA("NUL", GENERIC_WRITE, 0, nullptr, OPEN_EXISTING, 0, 0));
+    _CrtSetReportFile(_CRT_WARN, CreateFileA("NUL", GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, 0));
 #endif
 #if _MSC_VER >= 1400
     // Disable confusing "helpful" text message on abort, Ctrl-C
@@ -1019,7 +984,7 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
 #endif
     typedef BOOL (WINAPI *PSETPROCDEPPOL)(DWORD);
     PSETPROCDEPPOL setProcDEPPol = (PSETPROCDEPPOL)GetProcAddress(GetModuleHandleA("Kernel32.dll"), "SetProcessDEPPolicy");
-    if (setProcDEPPol != nullptr) setProcDEPPol(PROCESS_DEP_ENABLE);
+    if (setProcDEPPol != NULL) setProcDEPPol(PROCESS_DEP_ENABLE);
 #endif
 
     if (!SetupNetworking())
@@ -1031,7 +996,7 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
 
     /* Create Private Key */
     BIO *biopriv = BIO_new(BIO_s_mem());
-    PEM_write_bio_RSAPrivateKey(biopriv, rsa, nullptr, nullptr, 0, nullptr, nullptr);
+    PEM_write_bio_RSAPrivateKey(biopriv, rsa, NULL, NULL, 0, NULL, NULL);
 
     keylen_priv = BIO_pending(biopriv);
     sPrivKey = static_cast<char*>(calloc(keylen_priv+1, 1)); /* Null-terminate */
@@ -1063,15 +1028,15 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
     sa.sa_handler = HandleSIGTERM;
     sigemptyset(&sa.sa_mask);
     sa.sa_flags = 0;
-    sigaction(SIGTERM, &sa, nullptr);
-    sigaction(SIGINT, &sa, nullptr);
+    sigaction(SIGTERM, &sa, NULL);
+    sigaction(SIGINT, &sa, NULL);
 
     // Reopen debug.log on SIGHUP
     struct sigaction sa_hup;
     sa_hup.sa_handler = HandleSIGHUP;
     sigemptyset(&sa_hup.sa_mask);
     sa_hup.sa_flags = 0;
-    sigaction(SIGHUP, &sa_hup, nullptr);
+    sigaction(SIGHUP, &sa_hup, NULL);
 
     // Ignore SIGPIPE, otherwise it will bring the daemon down if the client closes unexpectedly
     signal(SIGPIPE, SIG_IGN);
@@ -1245,7 +1210,7 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
 
     std::string strDataDir = GetDataDir().string();
 
-    // Make sure only a single NavCoin process is using the data directory.
+    // Make sure only a single Electrum process is using the data directory.
     boost::filesystem::path pathLockFile = GetDataDir() / ".lock";
     FILE* file = fopen(pathLockFile.string().c_str(), "a"); // empty lock file; created if it doesn't exist.
     if (file) fclose(file);
@@ -1367,7 +1332,7 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
 
     // sanitize comments per BIP-0014, format user agent and check total size
     std::vector<string> uacomments;
-    for(string cmt: mapMultiArgs["-uacomment"])
+    BOOST_FOREACH(string cmt, mapMultiArgs["-uacomment"])
     {
         if (cmt != SanitizeString(cmt, SAFE_CHARS_UA_COMMENT))
             return InitError(strprintf(_("User Agent comment (%s) contains unsafe characters."), cmt));
@@ -1381,7 +1346,7 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
 
     if (mapArgs.count("-onlynet")) {
         std::set<enum Network> nets;
-        for(const std::string& snet: mapMultiArgs["-onlynet"]) {
+        BOOST_FOREACH(const std::string& snet, mapMultiArgs["-onlynet"]) {
             enum Network net = ParseNetwork(snet);
             if (net == NET_UNROUTABLE)
                 return InitError(strprintf(_("Unknown network specified in -onlynet: '%s'"), snet));
@@ -1395,7 +1360,7 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
     }
 
     if (mapArgs.count("-whitelist")) {
-        for(const std::string& net: mapMultiArgs["-whitelist"]) {
+        BOOST_FOREACH(const std::string& net, mapMultiArgs["-whitelist"]) {
             CSubNet subnet(net);
             if (!subnet.IsValid())
                 return InitError(strprintf(_("Invalid netmask specified in -whitelist: '%s'"), net));
@@ -1445,13 +1410,13 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
     bool fBound = false;
     if (fListen) {
         if (mapArgs.count("-bind") || mapArgs.count("-whitebind")) {
-            for(const std::string& strBind: mapMultiArgs["-bind"]) {
+            BOOST_FOREACH(const std::string& strBind, mapMultiArgs["-bind"]) {
                 CService addrBind;
                 if (!Lookup(strBind.c_str(), addrBind, GetListenPort(), false))
                     return InitError(ResolveErrMsg("bind", strBind));
                 fBound |= Bind(addrBind, (BF_EXPLICIT | BF_REPORT_ERROR));
             }
-            for(const std::string& strBind: mapMultiArgs["-whitebind"]) {
+            BOOST_FOREACH(const std::string& strBind, mapMultiArgs["-whitebind"]) {
                 CService addrBind;
                 if (!Lookup(strBind.c_str(), addrBind, 0, false))
                     return InitError(ResolveErrMsg("whitebind", strBind));
@@ -1471,7 +1436,7 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
     }
 
     if (mapArgs.count("-externalip")) {
-        for(const std::string& strAddr: mapMultiArgs["-externalip"]) {
+        BOOST_FOREACH(const std::string& strAddr, mapMultiArgs["-externalip"]) {
             CService addrLocal;
             if (Lookup(strAddr.c_str(), addrLocal, GetListenPort(), fNameLookup) && addrLocal.IsValid())
                 AddLocal(addrLocal, LOCAL_MANUAL);
@@ -1480,7 +1445,7 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
         }
     }
 
-    for(const std::string& strDest: mapMultiArgs["-seednode"])
+    BOOST_FOREACH(const std::string& strDest, mapMultiArgs["-seednode"])
             AddOneShot(strDest);
 
 #if ENABLE_ZMQ
@@ -1742,7 +1707,7 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
     // ********************************************************* Step 8: load wallet
 #ifdef ENABLE_WALLET
     if (fDisableWallet) {
-        pwalletMain = nullptr;
+        pwalletMain = NULL;
         LogPrintf("Wallet disabled!\n");
     } else {
         CWallet::InitLoadWallet();
@@ -1786,7 +1751,7 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
     std::vector<boost::filesystem::path> vImportFiles;
     if (mapArgs.count("-loadblock"))
     {
-        for(const std::string& strFile: mapMultiArgs["-loadblock"])
+        BOOST_FOREACH(const std::string& strFile, mapMultiArgs["-loadblock"])
                 vImportFiles.push_back(strFile);
     }
     threadGroup.create_thread(boost::bind(&ThreadImport, vImportFiles));
@@ -1796,7 +1761,7 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
     while (!fHaveGenesis && !fRequestShutdown) {
         {
             LOCK(cs_main);
-            fHaveGenesis = (chainActive.Tip() != nullptr);
+            fHaveGenesis = (chainActive.Tip() != NULL);
         }
 
         if (!fHaveGenesis) {
@@ -1833,7 +1798,7 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
 #ifdef ENABLE_WALLET
     // Generate coins in the background
     SetStaking(GetBoolArg("-staking", true));
-    threadGroup.create_thread(boost::bind(&NavCoinStaker, boost::cref(chainparams)));
+    threadGroup.create_thread(boost::bind(&ElectrumStaker, boost::cref(chainparams)));
 #endif
 
     uiInterface.InitMessage(_("Done loading"));

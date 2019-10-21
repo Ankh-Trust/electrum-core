@@ -2,28 +2,27 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include <qt/walletview.h>
+#include "walletview.h"
 
-#include <qt/addressbookpage.h>
-#include <qt/askpassphrasedialog.h>
-#include <qt/navcoingui.h>
-#include <qt/clientmodel.h>
-#include <qt/guiutil.h>
-#include <qt/optionsmodel.h>
-#include <qt/overviewpage.h>
-#include <qt/communityfundpage.h>
-#include <qt/platformstyle.h>
-#include <qt/getaddresstoreceive.h>
-#include <qt/receivecoinsdialog.h>
-#include <qt/sendcoinsdialog.h>
-#include <qt/signverifymessagedialog.h>
-#include <qt/transactiontablemodel.h>
-#include <qt/transactionview.h>
-#include <qt/walletmodel.h>
+#include "addressbookpage.h"
+#include "askpassphrasedialog.h"
+#include "electrumgui.h"
+#include "clientmodel.h"
+#include "guiutil.h"
+#include "optionsmodel.h"
+#include "overviewpage.h"
+#include "communityfundpage.h"
+#include "platformstyle.h"
+#include "receivecoinsdialog.h"
+#include "sendcoinsdialog.h"
+#include "signverifymessagedialog.h"
+#include "transactiontablemodel.h"
+#include "transactionview.h"
+#include "walletmodel.h"
 
-#include <ui_interface.h>
+#include "ui_interface.h"
 
-#include <main.h>
+#include "main.h"
 
 #include <QAction>
 #include <QActionGroup>
@@ -59,7 +58,6 @@ WalletView::WalletView(const PlatformStyle *platformStyle, QWidget *parent):
 
     receiveCoinsPage = new ReceiveCoinsDialog(platformStyle);
     sendCoinsPage = new SendCoinsDialog(platformStyle);
-    requestPaymentPage = new getAddressToReceive();
 
     usedSendingAddressesPage = new AddressBookPage(platformStyle, AddressBookPage::ForEditing, AddressBookPage::SendingTab, this);
     usedReceivingAddressesPage = new AddressBookPage(platformStyle, AddressBookPage::ForEditing, AddressBookPage::ReceivingTab, this);
@@ -68,7 +66,6 @@ WalletView::WalletView(const PlatformStyle *platformStyle, QWidget *parent):
     addWidget(transactionsPage);
     addWidget(receiveCoinsPage);
     addWidget(sendCoinsPage);
-    addWidget(requestPaymentPage);
     addWidget(communityFundPage);
 
     // Clicking on a transaction on the overview pre-selects the transaction on the transaction history page
@@ -87,15 +84,13 @@ WalletView::WalletView(const PlatformStyle *platformStyle, QWidget *parent):
     connect(sendCoinsPage, SIGNAL(message(QString,QString,unsigned int)), this, SIGNAL(message(QString,QString,unsigned int)));
     // Pass through messages from transactionView
     connect(transactionView, SIGNAL(message(QString,QString,unsigned int)), this, SIGNAL(message(QString,QString,unsigned int)));
-    connect(requestPaymentPage, SIGNAL(requestPayment()), this, SLOT(gotoReceiveCoinsPage()));
-    connect(requestPaymentPage, SIGNAL(requestAddressHistory()), this, SLOT(requestAddressHistory()));
 }
 
 WalletView::~WalletView()
 {
 }
 
-void WalletView::setNavCoinGUI(NavCoinGUI *gui)
+void WalletView::setElectrumGUI(ElectrumGUI *gui)
 {
     if (gui)
     {
@@ -110,6 +105,9 @@ void WalletView::setNavCoinGUI(NavCoinGUI *gui)
 
         // Pass through transaction notifications
         connect(this, SIGNAL(incomingTransaction(QString,int,CAmount,QString,QString,QString)), gui, SLOT(incomingTransaction(QString,int,CAmount,QString,QString,QString)));
+
+        // Connect HD enabled state signal
+        connect(this, SIGNAL(hdEnabledStatusChanged(int)), gui, SLOT(setHDStatus(int)));
     }
 }
 
@@ -135,8 +133,6 @@ void WalletView::setWalletModel(WalletModel *walletModel)
     overviewPage->setWalletModel(walletModel);
     communityFundPage->setWalletModel(walletModel);
     receiveCoinsPage->setModel(walletModel);
-    requestPaymentPage->setModel(walletModel);
-    requestPaymentPage->showQR();
     sendCoinsPage->setModel(walletModel);
     usedReceivingAddressesPage->setModel(walletModel->getAddressTableModel());
     usedSendingAddressesPage->setModel(walletModel->getAddressTableModel());
@@ -149,6 +145,9 @@ void WalletView::setWalletModel(WalletModel *walletModel)
         // Handle changes in encryption status
         connect(walletModel, SIGNAL(encryptionStatusChanged(int)), this, SIGNAL(encryptionStatusChanged(int)));
         updateEncryptionStatus();
+
+        // update HD status
+        Q_EMIT hdEnabledStatusChanged(walletModel->hdEnabled());
 
         // Balloon pop-up for new transaction
         connect(walletModel->getTransactionTableModel(), SIGNAL(rowsInserted(QModelIndex,int,int)),
@@ -205,10 +204,6 @@ void WalletView::gotoReceiveCoinsPage()
     setCurrentWidget(receiveCoinsPage);
 }
 
-void WalletView::gotoRequestPaymentPage(){
-    setCurrentWidget(requestPaymentPage);
-}
-
 void WalletView::gotoSendCoinsPage(QString addr)
 {
     setCurrentWidget(sendCoinsPage);
@@ -217,47 +212,11 @@ void WalletView::gotoSendCoinsPage(QString addr)
         sendCoinsPage->setAddress(addr);
 }
 
-void WalletView::setStatusTitleBlocks(QString text)
-{
-    overviewPage->setStatusTitleBlocks(text);
-}
-
-void WalletView::setStatusTitleConnections(QString text)
-{
-    overviewPage->setStatusTitleConnections(text);
-}
-
-void WalletView::setStatusTitle(QString text)
-{
-    overviewPage->setStatusTitle(text);
-}
-
 void WalletView::setVotingStatus(QString text)
 {
     overviewPage->setVotingStatus(text);
 }
 
-void WalletView::setStakingStatus(QString text)
-{
-    overviewPage->setStakingStatus(text);
-}
-
-void WalletView::showStatusTitleConnections(){
-    overviewPage->showStatusTitleConnections();
-};
-void WalletView::hideStatusTitleConnections(){
-    overviewPage->hideStatusTitleConnections();
-};
-void WalletView::showStatusTitleBlocks(){
-    overviewPage->showStatusTitleBlocks();
-};
-void WalletView::hideStatusTitleBlocks(){
-    overviewPage->hideStatusTitleBlocks();
-};
-void WalletView::showLockStaking(bool status)
-{
-    overviewPage->showLockStaking(status);
-}
 void WalletView::gotoSignMessageTab(QString addr)
 {
     // calls show() in showTab_SM()
@@ -312,7 +271,7 @@ void WalletView::backupWallet()
 {
     QString filename = GUIUtil::getSaveFileName(this,
         tr("Backup Wallet"), QString(),
-        tr("Wallet Data (*.dat)"), nullptr);
+        tr("Wallet Data (*.dat)"), NULL);
 
     if (filename.isEmpty())
         return;
@@ -352,13 +311,6 @@ void WalletView::unlockWallet()
     }
 }
 
-void WalletView::splitRewards()
-{
-    SplitRewardsDialog dlg(this);
-    dlg.setModel(walletModel);
-    dlg.exec();
-}
-
 void WalletView::exportMasterPrivateKeyAction()
 {
     LOCK2(cs_main, pwalletMain->cs_wallet);
@@ -382,7 +334,7 @@ void WalletView::exportMasterPrivateKeyAction()
          CExtKey masterKey;
          masterKey.SetMaster(key.begin(), key.size());
 
-         CNavCoinExtKey b58extkey;
+         CElectrumExtKey b58extkey;
          b58extkey.SetKey(masterKey);
 
          QMessageBox::information(this, tr("Show Master Private Key"),
@@ -413,7 +365,7 @@ void WalletView::importPrivateKey()
         return;
       }
 
-      CNavCoinSecret vchSecret;
+      CElectrumSecret vchSecret;
       bool fGood = vchSecret.SetString(privKey.toStdString());
 
       if (!fGood)
@@ -456,7 +408,7 @@ void WalletView::importPrivateKey()
         }
 
         QMessageBox::information(0, tr(PACKAGE_NAME),
-            tr("NavCoin needs to scan the chain... Please, wait."));
+            tr("Electrum needs to scan the chain... Please, wait."));
 
         // whenever a key is imported, we need to scan the whole chain
         pwalletMain->nTimeFirstKey = 1; // 0 would be considered 'no value'
@@ -539,4 +491,3 @@ void WalletView::requestedSyncWarningInfo()
 {
     Q_EMIT outOfSyncWarningClicked();
 }
-

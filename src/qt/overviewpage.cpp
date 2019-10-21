@@ -2,36 +2,35 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include <qt/overviewpage.h>
-#include <ui_overviewpage.h>
-#include <qt/skinize.h>
+#include "overviewpage.h"
+#include "ui_overviewpage.h"
 
-#include <qt/navcoinunits.h>
-#include <qt/clientmodel.h>
-#include <qt/guiconstants.h>
-#include <qt/guiutil.h>
-#include <qt/optionsmodel.h>
-#include <qt/platformstyle.h>
-#include <qt/transactionfilterproxy.h>
-#include <qt/transactiontablemodel.h>
-#include <qt/walletmodel.h>
-#include <qt/walletframe.h>
-#include <qt/askpassphrasedialog.h>
-#include <util.h>
+#include "electrumunits.h"
+#include "clientmodel.h"
+#include "guiconstants.h"
+#include "guiutil.h"
+#include "optionsmodel.h"
+#include "platformstyle.h"
+#include "transactionfilterproxy.h"
+#include "transactiontablemodel.h"
+#include "walletmodel.h"
+#include "walletframe.h"
+#include "askpassphrasedialog.h"
+#include "util.h"
 
 
 #include <QAbstractItemDelegate>
 #include <QPainter>
 
 #define DECORATION_SIZE 17
-#define NUM_ITEMS 5
+#define NUM_ITEMS 7
 
 class TxViewDelegate : public QAbstractItemDelegate
 {
     Q_OBJECT
 public:
     TxViewDelegate(const PlatformStyle *platformStyle):
-        QAbstractItemDelegate(), unit(NavCoinUnits::NAV),
+        QAbstractItemDelegate(), unit(ElectrumUnits::_AE),
         platformStyle(platformStyle)
     {
 
@@ -60,8 +59,12 @@ public:
         bool confirmed = index.data(TransactionTableModel::ConfirmedRole).toBool();
         QVariant value = index.data(Qt::ForegroundRole);
         QColor foreground = option.palette.color(QPalette::Text);
+        if (value.canConvert<QBrush>()) {
+            QBrush brush = qvariant_cast<QBrush>(value);
+            foreground = brush.color();
+        }
 
-        painter->setPen(QColor(60,60,60));
+        painter->setPen(foreground);
         QRect boundingRect;
         painter->drawText(addressRect, Qt::AlignLeft|Qt::AlignVCenter, address, &boundingRect);
 
@@ -85,7 +88,7 @@ public:
             foreground = COLOR_POSITIVE;
         }
         painter->setPen(foreground);
-        QString amountText = NavCoinUnits::formatWithUnit(unit, amount, true, NavCoinUnits::separatorAlways);
+        QString amountText = ElectrumUnits::formatWithUnit(unit, amount, true, ElectrumUnits::separatorAlways);
         if(!confirmed)
         {
             amountText = QString("[") + amountText + QString("]");
@@ -107,7 +110,7 @@ public:
     const PlatformStyle *platformStyle;
 
 };
-#include <qt/overviewpage.moc>
+#include "overviewpage.moc"
 
 OverviewPage::OverviewPage(const PlatformStyle *platformStyle, QWidget *parent) :
     QWidget(parent),
@@ -136,12 +139,14 @@ OverviewPage::OverviewPage(const PlatformStyle *platformStyle, QWidget *parent) 
     ui->listTransactions->setAttribute(Qt::WA_MacShowFocusRect, false);
 
     connect(ui->listTransactions, SIGNAL(clicked(QModelIndex)), this, SLOT(handleTransactionClicked(QModelIndex)));
-    connect(ui->unlockStakingButton, SIGNAL(clicked()), this, SLOT(unlockWalletStaking()));
+
+    // init "out of sync" warning labels
+    ui->labelWalletStatus->setText("(" + tr("out of sync") + ")");
+    ui->labelTransactionsStatus->setText("(" + tr("out of sync") + ")");
 
     // start with displaying the "out of sync" warnings
     showOutOfSyncWarning(true);
     updateStakeReportNow();
-    connect(ui->labelWalletStatus, SIGNAL(clicked()), this, SLOT(handleOutOfSyncWarningClicks()));
 }
 
 void OverviewPage::handleTransactionClicked(const QModelIndex &index)
@@ -153,11 +158,6 @@ void OverviewPage::handleTransactionClicked(const QModelIndex &index)
 void OverviewPage::handleOutOfSyncWarningClicks()
 {
     Q_EMIT outOfSyncWarningClicked();
-}
-
-void OverviewPage::showLockStaking(bool status)
-{
-    ui->unlockStakingButton->setVisible(status);
 }
 
 OverviewPage::~OverviewPage()
@@ -192,13 +192,13 @@ void OverviewPage::setBalance(const CAmount& balance, const CAmount& unconfirmed
     currentWatchUnconfBalance = watchUnconfBalance;
     currentWatchImmatureBalance = watchImmatureBalance;
     currentWatchOnlyTotalBalance = watchOnlyBalance + watchUnconfBalance + watchImmatureBalance;
-    ui->labelBalance->setText(NavCoinUnits::formatWithUnit(unit, balance, false, NavCoinUnits::separatorAlways));
-    ui->labelUnconfirmed->setText(NavCoinUnits::formatWithUnit(unit, unconfirmedBalance, false, NavCoinUnits::separatorAlways));
-    ui->labelStaking->setText(NavCoinUnits::formatWithUnit(unit, stakingBalance, false, NavCoinUnits::separatorAlways));
-    ui->labelColdStaking->setText(NavCoinUnits::formatWithUnit(unit, coldStakingBalance, false, NavCoinUnits::separatorAlways));
-    ui->labelImmature->setText(NavCoinUnits::formatWithUnit(unit, immatureBalance, false, NavCoinUnits::separatorAlways));
-    ui->labelWatchedBalance->setText(NavCoinUnits::formatWithUnit(unit, currentWatchOnlyTotalBalance, false, NavCoinUnits::separatorAlways));
-    ui->labelTotal->setText(NavCoinUnits::formatWithUnit(unit, currentTotalBalance + currentWatchOnlyTotalBalance, false, NavCoinUnits::separatorAlways));
+    ui->labelBalance->setText(ElectrumUnits::floorHtmlWithUnit(unit, balance, false, ElectrumUnits::separatorAlways));
+    ui->labelUnconfirmed->setText(ElectrumUnits::floorHtmlWithUnit(unit, unconfirmedBalance, false, ElectrumUnits::separatorAlways));
+    ui->labelStaking->setText(ElectrumUnits::floorHtmlWithUnit(unit, stakingBalance, false, ElectrumUnits::separatorAlways));
+    ui->labelColdStaking->setText(ElectrumUnits::floorHtmlWithUnit(unit, coldStakingBalance, false, ElectrumUnits::separatorAlways));
+    ui->labelImmature->setText(ElectrumUnits::floorHtmlWithUnit(unit, immatureBalance, false, ElectrumUnits::separatorAlways));
+    ui->labelWatchedBalance->setText(ElectrumUnits::floorHtmlWithUnit(unit, currentWatchOnlyTotalBalance, false, ElectrumUnits::separatorAlways));
+    ui->labelTotal->setText(ElectrumUnits::floorHtmlWithUnit(unit, currentTotalBalance + currentWatchOnlyTotalBalance, false, ElectrumUnits::separatorAlways));
 
     updateStakeReportNow();
 
@@ -232,41 +232,6 @@ void OverviewPage::updateWatchOnlyLabels(bool showWatchOnly)
 {
 
 }
-
-void OverviewPage::setStakingStatus(QString text)
-{
-    ui->stakingStatusLabel->setText(text);
-};
-
-
-void OverviewPage::setStatusTitleBlocks(QString text)
-{
-    ui->statusTitleBlocks->setText(text);
-}
-
-void OverviewPage::setStatusTitleConnections(QString text)
-{
-    ui->statusTitleConnections->setText(text);
-
-}
-
-void OverviewPage::setStatusTitle(QString text)
-{
-    ui->statusTitle->setText(text);
-}
-
-void OverviewPage::showStatusTitleConnections(){
-    ui->statusTitleConnections->show();
-};
-void OverviewPage::hideStatusTitleConnections(){
-    ui->statusTitleConnections->hide();
-};
-void OverviewPage::showStatusTitleBlocks(){
-    ui->statusTitleBlocks->show();
-};
-void OverviewPage::hideStatusTitleBlocks(){
-    ui->statusTitleBlocks->hide();
-};
 
 void OverviewPage::setClientModel(ClientModel *model)
 {
@@ -309,7 +274,7 @@ void OverviewPage::setWalletModel(WalletModel *model)
         connect(model, SIGNAL(notifyWatchonlyChanged(bool)), this, SLOT(updateWatchOnlyLabels(bool)));
     }
 
-    // update the display unit, to not use the default ("NAV")
+    // update the display unit, to not use the default ("0AE")
     updateDisplayUnit();
 }
 
@@ -350,6 +315,7 @@ void OverviewPage::updateAlerts(const QString &warnings)
 void OverviewPage::showOutOfSyncWarning(bool fShow)
 {
     ui->labelWalletStatus->setVisible(fShow);
+    ui->labelTransactionsStatus->setVisible(fShow);
 }
 
 using namespace boost;
@@ -401,11 +367,11 @@ void OverviewPage::updateStakeReport(bool fImmediate=false)
 
     int unit = walletModel->getOptionsModel()->getDisplayUnit();
 
-    ui->label24hStakingStats->setText(NavCoinUnits::formatWithUnit(unit, aRange[i++].Total, false, NavCoinUnits::separatorAlways));
-    ui->label7dStakingStats->setText(NavCoinUnits::formatWithUnit(unit, aRange[i++].Total, false, NavCoinUnits::separatorAlways));
-    ui->label30dStakingStats->setText(NavCoinUnits::formatWithUnit(unit, aRange[i++].Total, false, NavCoinUnits::separatorAlways));
-    ui->label1yStakingStats->setText(NavCoinUnits::formatWithUnit(unit, aRange[i++].Total, false, NavCoinUnits::separatorAlways));
-    ui->labelallStakingStats->setText(NavCoinUnits::formatWithUnit(unit, aRange[i++].Total, false, NavCoinUnits::separatorAlways));
+    ui->label24hStakingStats->setText(ElectrumUnits::floorHtmlWithUnit(unit, aRange[i++].Total, false, ElectrumUnits::separatorAlways));
+    ui->label7dStakingStats->setText(ElectrumUnits::floorHtmlWithUnit(unit, aRange[i++].Total, false, ElectrumUnits::separatorAlways));
+    ui->label30dStakingStats->setText(ElectrumUnits::floorHtmlWithUnit(unit, aRange[i++].Total, false, ElectrumUnits::separatorAlways));
+    ui->label1yStakingStats->setText(ElectrumUnits::floorHtmlWithUnit(unit, aRange[i++].Total, false, ElectrumUnits::separatorAlways));
+    ui->labelallStakingStats->setText(ElectrumUnits::floorHtmlWithUnit(unit, aRange[i++].Total, false, ElectrumUnits::separatorAlways));
 }
 
 
@@ -417,11 +383,4 @@ void OverviewPage::updateStakeReportbalanceChanged(CAmount, CAmount, CAmount, CA
 void OverviewPage::updateStakeReportNow()
 {
     updateStakeReport(true);
-}
-
-void OverviewPage::on_showStakingSetup_clicked()
-{
-    SplitRewardsDialog dlg(this);
-    dlg.setModel(walletModel);
-    dlg.exec();
 }

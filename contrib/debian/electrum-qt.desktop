@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Electrum
+Comment=Electrum P2P Cryptocurrency
+Comment[fr]=Electrum, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=Electrum, eşten eşe kriptografik sanal para birimi
+Exec=electrum-qt %u
+Terminal=false
+Type=Application
+Icon=electrum128
+MimeType=x-scheme-handler/electrum;
+Categories=Office;Finance;

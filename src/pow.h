@@ -3,10 +3,10 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef NAVCOIN_POW_H
-#define NAVCOIN_POW_H
+#ifndef ELECTRUM_POW_H
+#define ELECTRUM_POW_H
 
-#include <consensus/params.h>
+#include "consensus/params.h"
 
 #include <stdint.h>
 
@@ -20,4 +20,4 @@ unsigned int CalculateNextWorkRequired(const CBlockIndex* pindexLast, int64_t nF
 /** Check whether a block hash satisfies the proof-of-work requirement specified by nBits */
 bool CheckProofOfWork(uint256 hash, unsigned int nBits, const Consensus::Params&);
 
-#endif // NAVCOIN_POW_H
+#endif // ELECTRUM_POW_H
