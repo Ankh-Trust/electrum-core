@@ -1,4 +1,4 @@
-# **Electrum (0AE) v1.0.0.0**
+# **Ankh Electrum (0AE) v1.0.0.0**
 
 ![0AC logo](https://github.com/Ankh-Trust/electrum-core/blob/master/src/qt/res/icons/about.png)
 
