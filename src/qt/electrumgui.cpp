@@ -155,7 +155,7 @@ ElectrumGUI::ElectrumGUI(const PlatformStyle *platformStyle, const NetworkStyle 
     unlockWalletAction(0),
     unlockStakingAction(0),
     lockWalletAction(0),
-    //toggleStakingAction(0),
+    toggleStakingAction(0),
     generateColdStakingAction(0),
     lastDialogShown(0),
     platformStyle(platformStyle),
@@ -423,8 +423,8 @@ void ElectrumGUI::createActions()
     receiveCoinsMenuAction->setStatusTip(receiveCoinsAction->statusTip());
     receiveCoinsMenuAction->setToolTip(receiveCoinsMenuAction->statusTip());
 
-    //toggleStakingAction = new QAction(tr("Toggle &Staking"), this);
-    //toggleStakingAction->setStatusTip(tr("Toggle Staking"));
+    toggleStakingAction = new QAction(QIcon(":/icons/staking"), tr("Toggle &Staking"), this);
+    toggleStakingAction->setStatusTip(tr("Toggle Staking"));
 
     generateColdStakingAction = new QAction(QIcon(":/icons/verify"), tr("&Generate Cold Staking Address"), this);
     generateColdStakingAction->setStatusTip(tr("Generate Cold Staking Address"));
@@ -460,7 +460,7 @@ void ElectrumGUI::createActions()
     connect(receiveCoinsMenuAction, SIGNAL(triggered()), this, SLOT(gotoReceiveCoinsPage()));
     connect(historyAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
     connect(historyAction, SIGNAL(triggered()), this, SLOT(gotoHistoryPage()));
-    //connect(toggleStakingAction, SIGNAL(triggered()), this, SLOT(toggleStaking()));
+    connect(toggleStakingAction, SIGNAL(triggered()), this, SLOT(toggleStaking()));
     connect(generateColdStakingAction, SIGNAL(triggered()), this, SLOT(generateColdStaking()));
 #endif // ENABLE_WALLET
 
@@ -627,10 +627,11 @@ void ElectrumGUI::createMenuBar()
         settings->addAction(changePassphraseAction);
         settings->addAction(unlockWalletAction);
         settings->addAction(lockWalletAction);
+        settings->addSeparator();
         settings->addAction(unlockStakingAction);
+        settings->addAction(toggleStakingAction);
         settings->addSeparator();
         settings->addAction(generateColdStakingAction);
-        //settings->addAction(toggleStakingAction);
         settings->addAction(updatePriceAction);
         settings->addSeparator();
     }
@@ -1423,7 +1424,7 @@ void ElectrumGUI::setEncryptionStatus(int status)
         encryptWalletAction->setEnabled(false); // TODO: decrypt currently not supported
         unlockWalletAction->setVisible(false);
         unlockStakingAction->setVisible(false);
-        lockWalletAction->setVisible(true);
+        lockWalletAction->setVisible(false);
         break;
     case WalletModel::Locked:
         labelEncryptionIcon->show();
@@ -1432,7 +1433,7 @@ void ElectrumGUI::setEncryptionStatus(int status)
         encryptWalletAction->setChecked(true);
         changePassphraseAction->setEnabled(true);
         encryptWalletAction->setEnabled(false); // TODO: decrypt currently not supported
-        unlockWalletAction->setVisible(true);
+        unlockWalletAction->setVisible(false);
         unlockStakingAction->setVisible(true);
         lockWalletAction->setVisible(false);
         break;

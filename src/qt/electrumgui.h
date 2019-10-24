@@ -142,7 +142,7 @@ private:
     QAction *unlockWalletAction;
     QAction *unlockStakingAction;
     QAction *lockWalletAction;
-    //QAction *toggleStakingAction;
+    QAction *toggleStakingAction;
     QAction *generateColdStakingAction;
     QPushButton *topMenu1; // Home
     QPushButton *topMenu2; // Send
