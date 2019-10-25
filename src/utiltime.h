@@ -32,7 +32,7 @@ std::string StringifySeconds(uint64_t n);
 static std::vector<std::string> vDefaultNtpServers = {"de.pool.ntp.org",
                   "jp.pool.ntp.org", "id.pool.ntp.org", "in.pool.ntp.org",
                   "0.de.pool.ntp.org", "1.de.pool.ntp.org", "2.de.pool.ntp.org",
-                  "3.de.ntp.org", "cn.pool.ntp.org", "time.google.com",
+                  "3.de.pool.ntp.org", "cn.pool.ntp.org", "time.google.com",
                   "ntp0.fau.de", "ntps1-0.uni-erlangen.de", "ntps1-0.cs.tu-berlin.de",
                   "ptbtime1.ptb.de", "rustime01.rus.uni-stuttgart.de",
                   "time1.google.com", "time2.google.com", "time3.google.com", "time4.google.com",
