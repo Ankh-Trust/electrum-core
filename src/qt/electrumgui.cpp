@@ -1130,8 +1130,8 @@ void ElectrumGUI::setNumBlocks(int count, const QDateTime& blockDate, double nVe
     else
     {
         // Represent time from last generated block in human readable text
-        QString timeBehindText;
-
+        QString timeBehindText = GUIUtil::formatNiceTimeOffset(secs);
+        
         progressBarLabel->setVisible(true);
         progressBar->setFormat(tr("%1 behind").arg(timeBehindText));
         progressBar->setMaximum(1000000000);
