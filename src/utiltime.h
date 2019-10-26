@@ -41,6 +41,8 @@ static std::vector<std::string> vDefaultNtpServers = {"de.pool.ntp.org",
                   "dk.pool.ntp.org", "fi.pool.ntp.org", "fr.pool.ntp.org", "hu.pool.ntp.org",
                   "nl.pool.ntp.org", "no.pool.ntp.org", "pl.pool.ntp.org", "ru.pool.ntp.org",
                   "uk.pool.ntp.org", "ca.pool.ntp.org", "us.pool.ntp.org", "au.pool.ntp.org",
-                  "nz.pool.ntp.org", "br.pool.ntp.org"};
+                  "nz.pool.ntp.org", "br.pool.ntp.org", "ntp.se", "gbg1.ntp.se",
+                  "gbg2.ntp.se", "mmo1.ntp.se", "mmo2.ntp.se", "sth1.ntp.se",
+                  "sth2.ntp.se", "svl1.ntp.se", "svl2.ntp.se"};
 
 #endif // ELECTRUM_UTILTIME_H
