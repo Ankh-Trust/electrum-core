@@ -243,8 +243,8 @@ ElectrumGUI::ElectrumGUI(const PlatformStyle *platformStyle, const NetworkStyle 
     // Create status bar
     statusBar();
 
-    // Disable size grip because it looks ugly and nobody needs it
-    statusBar()->setSizeGripEnabled(false);
+    // Set size grip
+    statusBar()->setSizeGripEnabled(true);
 
     // Status bar notification icons
     QFrame *frameBlocks = new QFrame();
@@ -1131,7 +1131,7 @@ void ElectrumGUI::setNumBlocks(int count, const QDateTime& blockDate, double nVe
     {
         // Represent time from last generated block in human readable text
         QString timeBehindText = GUIUtil::formatNiceTimeOffset(secs);
-        
+
         progressBarLabel->setVisible(true);
         progressBar->setFormat(tr("%1 behind").arg(timeBehindText));
         progressBar->setMaximum(1000000000);
