@@ -10,7 +10,7 @@ Some notes on how to build Electrum Core in Unix.
 You can easily build the dependencies by running the [NAVcoin dev tools script](https://github.com/navcoin/navcoin-dev-tools/blob/master/ubuntu-18.04-navcoin-core-dev-setup.sh) using the command bellow.
 
 ```bash
-curl -o- https://raw.githubusercontent.com/navcoin/navcoin-dev-tools/master/navcoin-18.04-navcoin-core-dev-setup.sh | bash
+curl -o- https://raw.githubusercontent.com/navcoin/navcoin-dev-tools/master/ubuntu-18.04-navcoin-core-dev-setup.sh | bash
 ```
 
 From the electrum-core directory, you will still need to:
