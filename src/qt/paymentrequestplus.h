@@ -5,9 +5,9 @@
 #ifndef ELECTRUM_QT_PAYMENTREQUESTPLUS_H
 #define ELECTRUM_QT_PAYMENTREQUESTPLUS_H
 
-#include "paymentrequest.pb.h"
+#include <qt/paymentrequest.pb.h>
 
-#include "base58.h"
+#include <base58.h>
 
 #include <openssl/x509.h>
 

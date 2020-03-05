@@ -5,7 +5,7 @@
 #ifndef ELECTRUM_WALLET_TEST_FIXTURE_H
 #define ELECTRUM_WALLET_TEST_FIXTURE_H
 
-#include "test/test_electrum.h"
+#include <test/test_electrum.h>
 
 /** Testing setup and teardown for wallet.
  */
@@ -15,4 +15,3 @@ struct WalletTestingSetup: public TestingSetup {
 };
 
 #endif
-

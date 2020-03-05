@@ -10,10 +10,10 @@
 #ifndef ELECTRUM_PROTOCOL_H
 #define ELECTRUM_PROTOCOL_H
 
-#include "netbase.h"
-#include "serialize.h"
-#include "uint256.h"
-#include "version.h"
+#include <netbase.h>
+#include <serialize.h>
+#include <uint256.h>
+#include <version.h>
 
 #include <stdint.h>
 #include <string>

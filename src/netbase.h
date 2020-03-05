@@ -6,11 +6,11 @@
 #define ELECTRUM_NETBASE_H
 
 #if defined(HAVE_CONFIG_H)
-#include "config/electrum-config.h"
+#include <config/electrum-config.h>
 #endif
 
-#include "compat.h"
-#include "serialize.h"
+#include <compat.h>
+#include <serialize.h">
 
 #include <stdint.h>
 #include <string>

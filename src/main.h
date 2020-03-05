@@ -8,23 +8,23 @@
 #define ELECTRUM_MAIN_H
 
 #if defined(HAVE_CONFIG_H)
-#include "config/electrum-config.h"
+#include <config/electrum-config.h>
 #endif
 
-#include "amount.h"
-#include "chain.h"
-#include "coins.h"
-#include "net.h"
-#include "script/interpreter.h"
-#include "script/script_error.h"
-#include "sync.h"
-#include "versionbits.h"
-#include "spentindex.h"
-#include "addressindex.h"
-#include "timestampindex.h"
-#include "wallet/walletdb.h"
-#include "txdb.h"
-#include "consensus/consensus.h"
+#include <amount.h>
+#include <chain.h>
+#include <coins.h>
+#include <net.h>
+#include <script/interpreter.h>
+#include <script/script_error.h>
+#include <sync.h>
+#include <versionbits.h>
+#include <spentindex.h>
+#include <addressindex.h>
+#include <timestampindex.h>
+#include <wallet/walletdb.h>
+#include <txdb.h>
+#include <consensus/consensus.h>
 
 
 #include <algorithm>

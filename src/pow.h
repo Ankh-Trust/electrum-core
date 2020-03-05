@@ -6,7 +6,7 @@
 #ifndef ELECTRUM_POW_H
 #define ELECTRUM_POW_H
 
-#include "consensus/params.h"
+#include <consensus/params.h>
 
 #include <stdint.h>
 

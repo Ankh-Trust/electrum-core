@@ -5,7 +5,7 @@
 #ifndef ELECTRUM_QT_ELECTRUMUNITS_H
 #define ELECTRUM_QT_ELECTRUMUNITS_H
 
-#include "amount.h"
+#include <amount.h>
 
 #include <QAbstractListModel>
 #include <QString>

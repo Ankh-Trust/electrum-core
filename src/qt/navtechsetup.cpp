@@ -1,8 +1,8 @@
-#include "navtechsetup.h"
-#include "navtechitem.h"
-#include "ui_navtechsetup.h"
-#include "net.h"
-#include "util.h"
+#include <qt/navtechsetup.h>
+#include <qt/navtechitem.h>
+#include <qt/ui_navtechsetup.h>
+#include <net.h>
+#include <util.h>
 
 #include <QVBoxLayout>
 #include <QListWidgetItem>
@@ -67,11 +67,11 @@ void navtechsetup::reloadNavtechServers()
 
     const std::vector<std::string>& confAnonServers = mapMultiArgs["-addanonserver"];
 
-    BOOST_FOREACH(std::string confAnonServer, confAnonServers) {
+    for(std::string confAnonServer: confAnonServers) {
         ui->serversListWidget->addItem(QString::fromStdString(confAnonServer));
     }
 
-    BOOST_FOREACH(std::string vAddedAnonServer, vAddedAnonServers) {
+    for(std::string vAddedAnonServer: vAddedAnonServers) {
         ui->serversListWidget->addItem(QString::fromStdString(vAddedAnonServer));
     }
 }

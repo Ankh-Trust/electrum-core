@@ -6,7 +6,7 @@
 #ifndef ELECTRUM_SCRIPT_SIGCACHE_H
 #define ELECTRUM_SCRIPT_SIGCACHE_H
 
-#include "script/interpreter.h"
+#include <script/interpreter.h>
 
 #include <vector>
 

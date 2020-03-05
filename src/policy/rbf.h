@@ -5,7 +5,7 @@
 #ifndef ELECTRUM_POLICY_RBF_H
 #define ELECTRUM_POLICY_RBF_H
 
-#include "txmempool.h"
+#include <txmempool.h>
 
 enum RBFTransactionState {
     RBF_TRANSACTIONSTATE_UNKNOWN,

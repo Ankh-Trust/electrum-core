@@ -5,7 +5,7 @@
 #ifndef ELECTRUM_QT_GUIUTIL_H
 #define ELECTRUM_QT_GUIUTIL_H
 
-#include "amount.h"
+#include <amount.h>
 
 #include <QEvent>
 #include <QHeaderView>

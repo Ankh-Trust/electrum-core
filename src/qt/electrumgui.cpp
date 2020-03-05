@@ -3,47 +3,47 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #if defined(HAVE_CONFIG_H)
-#include "config/electrum-config.h"
+#include <config/electrum-config.h>
 #endif
 
-#include "main.h"
-#include "electrumgui.h"
-#include "electrumunits.h"
-#include "clientversion.h"
-#include "clientmodel.h"
-#include "coldstakingwizard.h"
-#include "guiconstants.h"
-#include "guiutil.h"
-#include "modaloverlay.h"
-#include "networkstyle.h"
-#include "notificator.h"
-#include "openuridialog.h"
-#include "optionsdialog.h"
-#include "optionsmodel.h"
-#include "platformstyle.h"
-#include "rpcconsole.h"
-#include "utilitydialog.h"
-#include "walletmodel.h"
-#include "wallet/rpcwallet.h"
+#include <main.h>
+#include <qt/electrumgui.h>
+#include <qt/electrumunits.h>
+#include <clientversion.h>
+#include <qt/clientmodel.h>
+#include <qt/coldstakingwizard.h>
+#include <qt/guiconstants.h>
+#include <qt/guiutil.h>
+#include <qt/modaloverlay.h>
+#include <qt/networkstyle.h>
+#include <qt/notificator.h>
+#include <qt/openuridialog.h>
+#include <qt/optionsdialog.h>
+#include <qt/optionsmodel.h>
+#include <qt/platformstyle.h>
+#include <qt/rpcconsole.h>
+#include <qt/utilitydialog.h>
+#include <qt/walletmodel.h>
+#include <wallet/rpcwallet.h>
 
 #ifdef ENABLE_WALLET
-#include "walletframe.h"
-#include "walletmodel.h"
-#include "walletview.h"
-#include "wallet/wallet.h"
+#include <qt/walletframe.h>
+#include <qt/walletmodel.h>
+#include <qt/walletview.h>
+#include <wallet/wallet.h>
 #endif // ENABLE_WALLET
 
 #ifdef Q_OS_MAC
-#include "macdockiconhandler.h"
+#include <qt/macdockiconhandler.h>
 #endif
 
-#include "chainparams.h"
-#include "init.h"
-#include "miner.h"
-#include "ui_interface.h"
-#include "util.h"
-#include "pos.h"
-#include "main.h"
+#include <chainparams.h>
+#include <init.h>
+#include <miner.h>
+#include <ui_interface.h>
+#include <util.h>
+#include <pos.h>
+#include <main.h>
 
 #include <iostream>
 #include <thread>
@@ -256,7 +256,7 @@ ElectrumGUI::ElectrumGUI(const PlatformStyle *platformStyle, const NetworkStyle 
     unitDisplayControl = new QComboBox();
     unitDisplayControl->setEditable(true);
     unitDisplayControl->setInsertPolicy(QComboBox::NoInsert);
-    Q_FOREACH(ElectrumUnits::Unit u, ElectrumUnits::availableUnits())
+    for(ElectrumUnits::Unit u: ElectrumUnits::availableUnits())
     {
         unitDisplayControl->addItem(QString(ElectrumUnits::name(u)), u);
     }
@@ -1264,7 +1264,7 @@ void ElectrumGUI::message(const QString &title, const QString &message, unsigned
         showNormalIfMinimized();
         QMessageBox mBox((QMessageBox::Icon)nMBoxIcon, strTitle, message, buttons, this);
         int r = mBox.exec();
-        if (ret != NULL)
+        if (ret != nullptr)
             *ret = r == QMessageBox::Ok;
     }
     else
@@ -1348,7 +1348,7 @@ void ElectrumGUI::dropEvent(QDropEvent *event)
 {
     if(event->mimeData()->hasUrls())
     {
-        Q_FOREACH(const QUrl &uri, event->mimeData()->urls())
+        for(const QUrl &uri: event->mimeData()->urls())
         {
             Q_EMIT receivedURI(uri.toString());
         }

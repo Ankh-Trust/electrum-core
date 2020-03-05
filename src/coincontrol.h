@@ -5,7 +5,7 @@
 #ifndef ELECTRUM_COINCONTROL_H
 #define ELECTRUM_COINCONTROL_H
 
-#include "primitives/transaction.h"
+#include <primitives/transaction.h>
 
 /** Coin Control Features. */
 class CCoinControl

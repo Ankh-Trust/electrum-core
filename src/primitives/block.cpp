@@ -3,13 +3,13 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include "primitives/block.h"
+#include <primitives/block.h>
 
-#include "hash.h"
-#include "tinyformat.h"
-#include "utilstrencodings.h"
-#include "crypto/common.h"
-#include "hashblock.h"
+#include <hash.h>
+#include <tinyformat.h>
+#include <utilstrencodings.h>
+#include <crypto/common.h>
+#include <hashblock.h>
 
 uint256 CBlockHeader::GetHash() const
 {
@@ -43,7 +43,7 @@ std::string CBlock::ToString() const
     for (unsigned int i = 0; i < vMerkleTree.size(); i++)
         s << " " << vMerkleTree[i].ToString();
     s << "\n";
-    
+
     return s.str();
 }
 

@@ -5,7 +5,7 @@
 #ifndef ELECTRUM_QT_WALLETVIEW_H
 #define ELECTRUM_QT_WALLETVIEW_H
 
-#include "amount.h"
+#include <amount.h>
 
 #include <QStackedWidget>
 #include <QPushButton>

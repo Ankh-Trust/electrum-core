@@ -5,12 +5,12 @@
 #ifndef ELECTRUM_DBWRAPPER_H
 #define ELECTRUM_DBWRAPPER_H
 
-#include "clientversion.h"
-#include "serialize.h"
-#include "streams.h"
-#include "util.h"
-#include "utilstrencodings.h"
-#include "version.h"
+#include <clientversion.h>
+#include <serialize.h>
+#include <streams.h>
+#include <util.h>
+#include <utilstrencodings.h>
+#include <version.h>
 
 #include <boost/filesystem/path.hpp>
 
@@ -285,4 +285,3 @@ public:
 };
 
 #endif // ELECTRUM_DBWRAPPER_H
-

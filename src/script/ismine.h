@@ -6,7 +6,7 @@
 #ifndef ELECTRUM_SCRIPT_ISMINE_H
 #define ELECTRUM_SCRIPT_ISMINE_H
 
-#include "script/standard.h"
+#include <script/standard.h>
 
 #include <stdint.h>
 

@@ -6,7 +6,7 @@
 #ifndef ELECTRUM_AMOUNT_H
 #define ELECTRUM_AMOUNT_H
 
-#include "serialize.h"
+#include <serialize.h>
 
 #include <stdlib.h>
 #include <string>
@@ -19,7 +19,7 @@ static const CAmount CENT = 1000000;
 
 extern const std::string CURRENCY_UNIT;
 
-/** 
+/**
  * No amount larger than this (in satoshi) is valid.
  * */
 static const CAmount MAX_MONEY = std::numeric_limits<int64_t>::max();

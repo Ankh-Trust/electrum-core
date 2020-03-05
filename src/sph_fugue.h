@@ -2,7 +2,7 @@
 #define SPH_FUGUE_H__
 
 #include <stddef.h>
-#include "sph_types.h"
+#include <sph_types.h>
 
 #ifdef __cplusplus
 extern "C"{
@@ -76,6 +76,6 @@ void sph_fugue512_addbits_and_close(
 
 #ifdef __cplusplus
 }
-#endif	
-	
+#endif
+
 #endif

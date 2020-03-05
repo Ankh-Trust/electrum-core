@@ -6,8 +6,8 @@
 #ifndef ELECTRUM_STREAMS_H
 #define ELECTRUM_STREAMS_H
 
-#include "support/allocators/zeroafterfree.h"
-#include "serialize.h"
+#include <support/allocators/zeroafterfree.h>
+#include <serialize.h>
 
 #include <algorithm>
 #include <assert.h>
@@ -380,8 +380,8 @@ private:
 
     int nType;
     int nVersion;
-	
-    FILE* file;	
+
+    FILE* file;
 
 public:
     CAutoFile(FILE* filenew, int nTypeIn, int nVersionIn)

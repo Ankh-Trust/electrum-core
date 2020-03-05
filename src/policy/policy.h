@@ -6,9 +6,9 @@
 #ifndef ELECTRUM_POLICY_POLICY_H
 #define ELECTRUM_POLICY_POLICY_H
 
-#include "consensus/consensus.h"
-#include "script/interpreter.h"
-#include "script/standard.h"
+#include <consensus/consensus.h>
+#include <script/interpreter.h>
+#include <script/standard.h>
 
 #include <string>
 

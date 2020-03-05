@@ -2,11 +2,11 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include "electrumaddressvalidator.h"
+#include <qt/electrumaddressvalidator.h>
 
-#include "base58.h"
-#include "utils/dns_utils.h"
-#include "util.h"
+#include <base58.h>
+#include <utils/dns_utils.h>
+#include <util.h>
 
 /* Base58 characters are:
      "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"

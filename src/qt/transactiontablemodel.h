@@ -5,7 +5,7 @@
 #ifndef ELECTRUM_QT_TRANSACTIONTABLEMODEL_H
 #define ELECTRUM_QT_TRANSACTIONTABLEMODEL_H
 
-#include "electrumunits.h"
+#include <qt/electrumunits.h>
 
 #include <QAbstractTableModel>
 #include <QStringList>

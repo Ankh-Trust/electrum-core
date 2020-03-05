@@ -6,7 +6,7 @@
 #define ELECTRUM_CLIENTVERSION_H
 
 #if defined(HAVE_CONFIG_H)
-#include "config/electrum-config.h"
+#include <config/electrum-config.h>
 #else
 
 /**
@@ -15,7 +15,7 @@
 
 //! These need to be macros, as clientversion.cpp's and electrum*-res.rc's voodoo requires it
 #define CLIENT_VERSION_MAJOR 1
-#define CLIENT_VERSION_MINOR 0
+#define CLIENT_VERSION_MINOR 1
 #define CLIENT_VERSION_REVISION 0
 #define CLIENT_VERSION_BUILD 0
 

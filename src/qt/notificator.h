@@ -6,7 +6,7 @@
 #define ELECTRUM_QT_NOTIFICATOR_H
 
 #if defined(HAVE_CONFIG_H)
-#include "config/electrum-config.h"
+#include <config/electrum-config.h>
 #endif
 
 #include <QIcon>

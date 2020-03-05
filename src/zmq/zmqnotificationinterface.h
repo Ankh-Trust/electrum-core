@@ -5,7 +5,7 @@
 #ifndef ELECTRUM_ZMQ_ZMQNOTIFICATIONINTERFACE_H
 #define ELECTRUM_ZMQ_ZMQNOTIFICATIONINTERFACE_H
 
-#include "validationinterface.h"
+#include <validationinterface.h>
 #include <string>
 #include <map>
 

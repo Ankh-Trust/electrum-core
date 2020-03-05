@@ -5,7 +5,7 @@
 #ifndef ELECTRUM_QT_ELECTRUMAMOUNTFIELD_H
 #define ELECTRUM_QT_ELECTRUMAMOUNTFIELD_H
 
-#include "amount.h"
+#include <amount.h>
 
 #include <QLabel>
 #include <QWidget>

@@ -9,7 +9,7 @@
 #include <stdint.h>
 
 #if defined(BUILD_ELECTRUM_INTERNAL) && defined(HAVE_CONFIG_H)
-#include "config/electrum-config.h"
+#include <qt/config/electrum-config.h>
   #if defined(_WIN32)
     #if defined(DLL_EXPORT)
       #if defined(HAVE_FUNC_ATTRIBUTE_DLLEXPORT)

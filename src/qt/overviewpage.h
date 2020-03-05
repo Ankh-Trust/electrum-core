@@ -5,7 +5,7 @@
 #ifndef ELECTRUM_QT_OVERVIEWPAGE_H
 #define ELECTRUM_QT_OVERVIEWPAGE_H
 
-#include "amount.h"
+#include <amount.h>
 
 #include <QWidget>
 #include <QPushButton>

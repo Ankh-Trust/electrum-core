@@ -5,7 +5,7 @@
 #ifndef ELECTRUM_QT_BANTABLEMODEL_H
 #define ELECTRUM_QT_BANTABLEMODEL_H
 
-#include "net.h"
+#include <net.h>
 
 #include <QAbstractTableModel>
 #include <QStringList>

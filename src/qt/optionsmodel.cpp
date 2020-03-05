@@ -3,23 +3,23 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #if defined(HAVE_CONFIG_H)
-#include "config/electrum-config.h"
+#include <config/electrum-config.h>
 #endif
 
-#include "optionsmodel.h"
+#include <qt/optionsmodel.h>
 
-#include "electrumunits.h"
-#include "guiutil.h"
+#include <qt/electrumunits.h>
+#include <qt/guiutil.h>
 
-#include "amount.h"
-#include "init.h"
-#include "main.h" // For DEFAULT_SCRIPTCHECK_THREADS
-#include "net.h"
-#include "txdb.h" // for -dbcache defaults
+#include <amount.h>
+#include <init.h>
+#include <main.h> // For DEFAULT_SCRIPTCHECK_THREADS
+#include <net.h>
+#include <txdb.h> // for -dbcache defaults
 
 #ifdef ENABLE_WALLET
-#include "wallet/wallet.h"
-#include "wallet/walletdb.h"
+#include <wallet/wallet.h>
+#include <wallet/walletdb.h>
 #endif
 
 #include <QNetworkProxy>

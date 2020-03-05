@@ -5,8 +5,8 @@
 #ifndef ELECTRUM_QT_WALLETMODELTRANSACTION_H
 #define ELECTRUM_QT_WALLETMODELTRANSACTION_H
 
-#include "walletmodel.h"
-#include "wallet/wallet.h"
+#include <qt/walletmodel.h>
+#include <wallet/wallet.h>
 
 #include <QObject>
 

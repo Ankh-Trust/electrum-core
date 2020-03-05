@@ -6,7 +6,7 @@
 #ifndef ELECTRUM_SYNC_H
 #define ELECTRUM_SYNC_H
 
-#include "threadsafety.h"
+#include <threadsafety.h>
 
 #include <boost/thread/condition_variable.hpp>
 #include <boost/thread/locks.hpp>

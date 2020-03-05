@@ -6,9 +6,9 @@
 #ifndef ELECTRUM_ADDRESSINDEX_H
 #define ELECTRUM_ADDRESSINDEX_H
 
-#include "uint256.h"
-#include "amount.h"
-#include "script/script.h"
+#include <uint256.h>
+#include <amount.h>
+#include <script/script.h>
 
 struct CAddressUnspentKey {
     unsigned int type;

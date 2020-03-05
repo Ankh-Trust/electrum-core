@@ -1,7 +1,7 @@
-#include "navtechinit.h"
-#include "ui_navtechinit.h"
-#include "net.h"
-#include "util.h"
+#include <qt/navtechinit.h>
+#include <qt/ui_navtechinit.h>
+#include <net.h>
+#include <util.h>
 
 #include <string>
 #include <iostream>

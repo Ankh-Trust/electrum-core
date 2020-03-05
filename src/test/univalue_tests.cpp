@@ -8,7 +8,7 @@
 #include <string>
 #include <map>
 #include <univalue.h>
-#include "test/test_electrum.h"
+#include <test/test_electrum.h>
 
 #include <boost/test/unit_test.hpp>
 
@@ -333,4 +333,3 @@ BOOST_AUTO_TEST_CASE(univalue_readwrite)
 }
 
 BOOST_AUTO_TEST_SUITE_END()
-

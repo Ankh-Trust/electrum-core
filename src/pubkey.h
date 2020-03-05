@@ -6,14 +6,14 @@
 #ifndef ELECTRUM_PUBKEY_H
 #define ELECTRUM_PUBKEY_H
 
-#include "hash.h"
-#include "serialize.h"
-#include "uint256.h"
+#include <hash.h>
+#include <serialize.h>
+#include <uint256.h>
 
 #include <stdexcept>
 #include <vector>
 
-/** 
+/**
  * secp256k1:
  * const unsigned int PRIVATE_KEY_SIZE = 279;
  * const unsigned int PUBLIC_KEY_SIZE  = 65;
@@ -156,7 +156,7 @@ public:
 
     /*
      * Check syntactic correctness.
-     * 
+     *
      * Note that this is consensus critical as CheckSig() calls it!
      */
     bool IsValid() const

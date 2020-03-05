@@ -3,16 +3,16 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #if defined(HAVE_CONFIG_H)
-#include "config/electrum-config.h"
+#include <config/electrum-config.h>
 #endif
 
-#include "intro.h"
-#include "ui_intro.h"
+#include <qt/intro.h>
+#include <ui_intro.h>
 
-#include "guiutil.h"
-#include "navtechinit.h"
+#include <qt/guiutil.h>
+#include <qt/navtechinit.h>
 
-#include "util.h"
+#include <util.h>
 
 #include <boost/filesystem.hpp>
 
@@ -61,7 +61,7 @@ private:
     Intro *intro;
 };
 
-#include "intro.moc"
+#include <qt/intro.moc>
 
 FreespaceChecker::FreespaceChecker(Intro *intro)
 {

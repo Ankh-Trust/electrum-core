@@ -2,11 +2,11 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include "electrumamountfield.h"
+#include <qt/electrumamountfield.h>
 
-#include "electrumunits.h"
-#include "guiconstants.h"
-#include "qvaluecombobox.h"
+#include <qt/electrumunits.h>
+#include <qt/guiconstants.h>
+#include <qt/qvaluecombobox.h>
 
 #include <QApplication>
 #include <QAbstractSpinBox>
@@ -191,7 +191,7 @@ Q_SIGNALS:
 
 };
 
-#include "electrumamountfield.moc"
+#include <qt/electrumamountfield.moc>
 
 ElectrumAmountField::ElectrumAmountField(QWidget *parent) :
     QWidget(parent),

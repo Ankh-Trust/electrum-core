@@ -6,7 +6,7 @@
 #ifndef ELECTRUM_SUPPORT_PAGELOCKER_H
 #define ELECTRUM_SUPPORT_PAGELOCKER_H
 
-#include "support/cleanse.h"
+#include <support/cleanse.h>
 
 #include <map>
 

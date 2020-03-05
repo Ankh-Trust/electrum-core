@@ -5,7 +5,7 @@
 #ifndef ELECTRUM_QT_TRANSACTIONVIEW_H
 #define ELECTRUM_QT_TRANSACTIONVIEW_H
 
-#include "guiutil.h"
+#include <qt/guiutil.h>
 
 #include <QWidget>
 #include <QKeyEvent>

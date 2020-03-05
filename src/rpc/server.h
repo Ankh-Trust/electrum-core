@@ -6,9 +6,9 @@
 #ifndef ELECTRUM_RPCSERVER_H
 #define ELECTRUM_RPCSERVER_H
 
-#include "amount.h"
-#include "rpc/protocol.h"
-#include "uint256.h"
+#include <amount.h>
+#include <rpc/protocol.h>
+#include <uint256.h>
 
 #include <list>
 #include <map>

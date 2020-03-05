@@ -2,30 +2,30 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include "sendcoinsdialog.h"
-#include "ui_sendcoinsdialog.h"
+#include <qt/sendcoinsdialog.h>
+#include <ui_sendcoinsdialog.h>
 
-#include "addresstablemodel.h"
-#include "electrumunits.h"
-#include "clientmodel.h"
-#include "coincontroldialog.h"
-#include "guiutil.h"
-#include "optionsmodel.h"
-#include "platformstyle.h"
-#include "sendcoinsentry.h"
-#include "walletmodel.h"
-#include "net.h"
-#include "util.h"
-#include "utilstrencodings.h"
-#include "navtechinit.h"
-#include "navtechsetup.h"
+#include <qt/addresstablemodel.h>
+#include <qt/electrumunits.h>
+#include <qt/clientmodel.h>
+#include <qt/coincontroldialog.h>
+#include <qt/guiutil.h>
+#include <qt/optionsmodel.h>
+#include <qt/platformstyle.h>
+#include <qt/sendcoinsentry.h>
+#include <qt/walletmodel.h>
+#include <net.h>
+#include <util.h>
+#include <utilstrencodings.h>
+#include <qt/navtechinit.h>
+#include <qt/navtechsetup.h>
 
-#include "base58.h"
-#include "coincontrol.h"
-#include "main.h" // mempool and minRelayTxFee
-#include "ui_interface.h"
-#include "txmempool.h"
-#include "wallet/wallet.h"
+#include <base58.h>
+#include <coincontrol.h>
+#include <main.h> // mempool and minRelayTxFee
+#include <ui_interface.h>
+#include <txmempool.h>
+#include <wallet/wallet.h>
 
 #include <stdexcept>
 
@@ -91,7 +91,7 @@ SendCoinsDialog::SendCoinsDialog(const PlatformStyle *platformStyle, QWidget *pa
     ui->labelCoinControlLowOutput->addAction(clipboardLowOutputAction);
     ui->labelCoinControlChange->addAction(clipboardChangeAction);
 
-    // init transaction fee section
+    // init settings values
     QSettings settings;
     if (!settings.contains("fFeeSectionMinimized"))
         settings.setValue("fFeeSectionMinimized", true);
@@ -110,7 +110,11 @@ SendCoinsDialog::SendCoinsDialog(const PlatformStyle *platformStyle, QWidget *pa
     if (!settings.contains("fPayOnlyMinFee"))
         settings.setValue("fPayOnlyMinFee", false);
     if (!settings.contains("fAnonSend"))
-      settings.setValue("fAnonSend", false);
+        settings.setValue("fAnonSend", false);
+    if (!settings.contains("sCustomChangeAddress"))
+        settings.setValue("sCustomChangeAddress", "");
+    if (!settings.contains("fUseCustomChangeAddress"))
+        settings.setValue("fUseCustomChangeAddress", false);
     ui->groupFee->setId(ui->radioSmartFee, 0);
     ui->groupFee->setId(ui->radioCustomFee, 1);
     ui->groupFee->button((int)std::max(0, std::min(1, settings.value("nFeeRadio").toInt())))->setChecked(true);
@@ -120,6 +124,8 @@ SendCoinsDialog::SendCoinsDialog(const PlatformStyle *platformStyle, QWidget *pa
     ui->sliderSmartFee->setValue(settings.value("nSmartFeeSliderPosition").toInt());
     ui->customFee->setValue(settings.value("nTransactionFee").toLongLong());
     ui->checkBoxMinimumFee->setChecked(settings.value("fPayOnlyMinFee").toBool());
+    ui->checkBoxCoinControlChange->setChecked(settings.value("fUseCustomChangeAddress").toBool());
+    ui->lineEditCoinControlChange->setText(settings.value("sCustomChangeAddress").toString());
     minimizeFeeSection(settings.value("fFeeSectionMinimized").toBool());
     //ui->anonsendCheckbox->setChecked(settings.value("fAnonSend").toBool());
 
@@ -202,6 +208,11 @@ void SendCoinsDialog::setModel(WalletModel *model)
         updateMinFeeLabel();
         updateSmartFeeLabel();
         updateGlobalFeeVariables();
+
+        // Toggle the checkbox for change address
+        // Which in turn uses model and model->getOptionsModel()
+        // via coinControlChangeEdited
+        coinControlChangeChecked(ui->checkBoxCoinControlChange->isChecked() ? Qt::Checked : Qt::Unchecked);
     }
 }
 
@@ -950,14 +961,24 @@ void SendCoinsDialog::coinControlButtonClicked()
 // Coin Control: checkbox custom change address
 void SendCoinsDialog::coinControlChangeChecked(int state)
 {
+    QSettings settings;
+
     if (state == Qt::Unchecked)
     {
         CoinControlDialog::coinControl->destChange = CNoDestination();
         ui->labelCoinControlChangeLabel->clear();
+
+        // Clear the setting
+        settings.setValue("fUseCustomChangeAddress", false);
     }
     else
+    {
         // use this to re-validate an already entered address
         coinControlChangeEdited(ui->lineEditCoinControlChange->text());
+
+        // Save the setting
+        settings.setValue("fUseCustomChangeAddress", true);
+    }
 
     ui->lineEditCoinControlChange->setEnabled((state == Qt::Checked));
 }
@@ -965,59 +986,75 @@ void SendCoinsDialog::coinControlChangeChecked(int state)
 // Coin Control: custom change address changed
 void SendCoinsDialog::coinControlChangeEdited(const QString& text)
 {
-    if (model && model->getAddressTableModel())
+    // Check for address table and model
+    if (!model || !model->getAddressTableModel())
+        return;
+
+    // We need access to settings
+    QSettings settings;
+
+    // Clear the setting
+    settings.setValue("sCustomChangeAddress", "");
+
+    // Default to no change address until verified
+    CoinControlDialog::coinControl->destChange = CNoDestination();
+    ui->labelCoinControlChangeLabel->setStyleSheet("QLabel{color:red;}");
+
+    CNavCoinAddress addr = CNavCoinAddress(text.toStdString());
+
+    if (text.isEmpty()) // Nothing entered
     {
-        // Default to no change address until verified
-        CoinControlDialog::coinControl->destChange = CNoDestination();
-        ui->labelCoinControlChangeLabel->setStyleSheet("QLabel{color: #66023c;}");
+        ui->labelCoinControlChangeLabel->setText("");
 
-        CElectrumAddress addr = CElectrumAddress(text.toStdString());
+        // Give up!
+        return;
+    }
 
-        if (text.isEmpty()) // Nothing entered
-        {
-            ui->labelCoinControlChangeLabel->setText("");
-        }
-        else if (!addr.IsValid()) // Invalid address
-        {
-            ui->labelCoinControlChangeLabel->setText(tr("Warning: Invalid Electrum address"));
-        }
-        else // Valid address
-        {
-            bool fHaveKey = false;
-            if(addr.IsColdStakingAddress(Params()))
-            {
-                CKeyID stakingId, spendingId;
-                addr.GetStakingKeyID(stakingId);
-                addr.GetSpendingKeyID(spendingId);
-                if(model->havePrivKey(stakingId) || model->havePrivKey(spendingId))
-                    fHaveKey = true;
-            }
-            else
-            {
-                CKeyID keyid;
-                addr.GetKeyID(keyid);
-                if(model->havePrivKey(keyid))
-                    fHaveKey = true;
-            }
+    if (!addr.IsValid()) // Invalid address
+    {
+        ui->labelCoinControlChangeLabel->setText(tr("Warning: Invalid Electrum address"));
 
-            if (!fHaveKey) // Unknown change address
-            {
-                ui->labelCoinControlChangeLabel->setText(tr("Warning: Unknown change address"));
-            }
-            else // Known change address
-            {
-                ui->labelCoinControlChangeLabel->setStyleSheet("QLabel{color:black;}");
+        // Give up!
+        return;
+    }
 
-                // Query label
-                QString associatedLabel = model->getAddressTableModel()->labelForAddress(text);
-                if (!associatedLabel.isEmpty())
-                    ui->labelCoinControlChangeLabel->setText(associatedLabel);
-                else
-                    ui->labelCoinControlChangeLabel->setText(tr("(no label)"));
+    // Save the setting
+    settings.setValue("sCustomChangeAddress", text);
 
-                CoinControlDialog::coinControl->destChange = addr.Get();
-            }
-        }
+    bool fHaveKey = false;
+    if(addr.IsColdStakingAddress(Params()))
+    {
+        CKeyID stakingId, spendingId;
+        addr.GetStakingKeyID(stakingId);
+        addr.GetSpendingKeyID(spendingId);
+        if(model->havePrivKey(stakingId) || model->havePrivKey(spendingId))
+            fHaveKey = true;
+    }
+    else
+    {
+        CKeyID keyid;
+        addr.GetKeyID(keyid);
+        if(model->havePrivKey(keyid))
+            fHaveKey = true;
+    }
+
+    if (!fHaveKey) // Unknown change address
+    {
+        ui->labelCoinControlChangeLabel->setText(tr("Warning: Unknown change address"));
+    }
+    else // Known change address
+    {
+        ui->labelCoinControlChangeLabel->setStyleSheet("QLabel{color:black;}");
+
+        // Query label
+        QString associatedLabel = model->getAddressTableModel()->labelForAddress(text);
+        if (!associatedLabel.isEmpty())
+            ui->labelCoinControlChangeLabel->setText(associatedLabel);
+        else
+            ui->labelCoinControlChangeLabel->setText(tr("(no label)"));
+
+        CoinControlDialog::coinControl->destChange = addr.Get();
+
     }
 }
 
