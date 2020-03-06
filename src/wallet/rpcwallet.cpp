@@ -380,7 +380,7 @@ UniValue getaddressesbyaccount(const UniValue& params, bool fHelp)
 
     // Find all addresses that have the given account
     UniValue ret(UniValue::VARR);
-    for(const PAIRTYPE(CNavCoinAddress, CAddressBookData)& item: pwalletMain->mapAddressBook)
+    for(const PAIRTYPE(CElectrumAddress, CAddressBookData)& item: pwalletMain->mapAddressBook)
     {
         const CElectrumAddress& address = item.first;
         const string& strName = item.second.name;
@@ -1698,7 +1698,7 @@ UniValue ListReceived(const UniValue& params, bool fByAccounts)
     // Reply
     UniValue ret(UniValue::VARR);
     map<string, tallyitem> mapAccountTally;
-    for(const PAIRTYPE(CNavCoinAddress, CAddressBookData)& item: pwalletMain->mapAddressBook)
+    for(const PAIRTYPE(CElectrumAddress, CAddressBookData)& item: pwalletMain->mapAddressBook)
     {
         const CElectrumAddress& address = item.first;
         const string& strAccount = item.second.name;
