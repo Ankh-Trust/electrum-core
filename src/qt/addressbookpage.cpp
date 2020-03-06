@@ -12,7 +12,7 @@
 #include <qt/addresstablemodel.h>
 #include <base58.h>
 #include <main.h>
-#include <qt/navcoingui.h>
+#include <qt/electrumgui.h>
 #include <qt/csvmodelwriter.h>
 #include <qt/editaddressdialog.h>
 #include <qt/guiutil.h>
