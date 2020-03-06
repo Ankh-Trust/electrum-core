@@ -3,7 +3,7 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include <qt/electrumconsensus.h>
+#include <script/electrumconsensus.h>
 
 #include <primitives/transaction.h>
 #include <pubkey.h>
