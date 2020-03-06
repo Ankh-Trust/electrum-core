@@ -1000,7 +1000,7 @@ void SendCoinsDialog::coinControlChangeEdited(const QString& text)
     CoinControlDialog::coinControl->destChange = CNoDestination();
     ui->labelCoinControlChangeLabel->setStyleSheet("QLabel{color:red;}");
 
-    CNavCoinAddress addr = CNavCoinAddress(text.toStdString());
+    CElectrumAddress addr = CElectrumAddress(text.toStdString());
 
     if (text.isEmpty()) // Nothing entered
     {
