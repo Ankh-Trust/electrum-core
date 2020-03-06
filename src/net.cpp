@@ -344,7 +344,7 @@ CNode* FindNode(const CNetAddr& ip)
 CNode* FindNode(const CSubNet& subNet)
 {
     LOCK(cs_vNodes);
-    BOOST_FOREACH(CNode* pnode, vNodes)
+    for(CNode* pnode: vNodes)
     if (subNet.Match((CNetAddr)pnode->addr))
         return (pnode);
     return nullptr;
@@ -662,7 +662,7 @@ CCriticalSection CNode::cs_vWhitelistedRange;
 
 bool CNode::IsWhitelistedRange(const CNetAddr &addr) {
     LOCK(cs_vWhitelistedRange);
-    BOOST_FOREACH(const CSubNet& subnet, vWhitelistedRange) {
+    for(const CSubNet& subnet: vWhitelistedRange) {
         if (subnet.Match(addr))
             return true;
     }
