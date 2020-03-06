@@ -6,7 +6,7 @@
 #include <ui_coincontroldialog.h>
 
 #include <qt/addresstablemodel.h>
-#include <qtelectrumunits.h>
+#include <qt/electrumunits.h>
 #include <qt/guiutil.h>
 #include <qt/optionsmodel.h>
 #include <qt/platformstyle.h>
