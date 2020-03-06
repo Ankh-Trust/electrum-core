@@ -14,7 +14,6 @@
 #include <qt/guiutil.h>
 #include <main.cpp>
 #include <main.h>
-#include <qt/skinize.h>
 #include <sync.h>
 #include <wallet/wallet.h>
 #include <qt/walletmodel.h>
