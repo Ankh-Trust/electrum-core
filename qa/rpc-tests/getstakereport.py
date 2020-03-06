@@ -207,7 +207,34 @@ class GetStakeReport(ElectrumTestFramework):
         assert_equal('0.06666666', avg_last30d)
         assert_equal('0.19354838', avg_last365d)
 
-    def stake_block(self, node):
+        # Disconnect the nodes
+        for node in self.nodes[0].getpeerinfo():
+            self.nodes[0].disconnectnode(node['addr'])
+        time.sleep(2) #disconnecting a node needs a little bit of time
+        assert(self.nodes[0].getpeerinfo() == [])
+
+        # Stake a block on node 0
+        orphaned_block_hash = self.stake_block(self.nodes[0], False)
+
+        # Generate some blocks on node 1
+        self.nodes[1].generate(100)
+
+        # Reconnect the nodes
+        connect_nodes(self.nodes[0], 1)
+        connect_nodes(self.nodes[1], 2)
+        connect_nodes(self.nodes[2], 0)
+
+        # Wait for blocks to sync
+        self.sync_all()
+
+        # Make sure the block was orphaned
+        assert(self.nodes[0].getblock(orphaned_block_hash)['confirmations'] == -1)
+
+        # Check the staked amount
+        # Should be 0 (Zero) as the last staked block is orphaned
+        assert_equal('0.00', self.nodes[0].getstakereport()['Last 7 Days'])
+
+    def stake_block(self, node, mature = True):
         # Get the current block count to check against while we wait for a stake
         blockcount = node.getblockcount()
 
@@ -225,9 +252,17 @@ class GetStakeReport(ElectrumTestFramework):
         # Turn staking off
         node.staking(False)
 
-        # Make sure the blocks are mature before we check the report
-        slow_gen(node, 5, 0.5)
-        self.sync_all()
+        # Get the staked block
+        block_hash = node.getbestblockhash()
+
+        # Only mature the blocks if we asked for it
+        if (mature):
+            # Make sure the blocks are mature before we check the report
+            slow_gen(node, 5, 0.5)
+            self.sync_all()
+
+        # return the block hash to the function caller
+        return block_hash
 
 
 if __name__ == '__main__':
