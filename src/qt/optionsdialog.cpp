@@ -9,7 +9,7 @@
 #include <qt/optionsdialog.h>
 #include <ui_optionsdialog.h>
 
-#include <qt/navcoinunits.h>
+#include <qt/electrumunits.h>
 #include <qt/guiutil.h>
 #include <qt/optionsmodel.h>
 
