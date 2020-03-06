@@ -10,7 +10,7 @@
 #endif
 
 #include <compat.h>
-#include <serialize.h">
+#include <serialize.h>
 
 #include <stdint.h>
 #include <string>
