@@ -7,7 +7,7 @@
 #include <coins.h>
 #include <random.h>
 #include <uint256.h>
-#include <test/test_navcoin.h>
+#include <test/test_electrum.h>
 #include <main.h>
 
 #include <vector>
