@@ -3467,7 +3467,7 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
 
                 bool fv452Fork = (pindex->pprev->nHeight >= Params().GetConsensus().nHeightv452Fork);
 
-                if(block.vtx[0].vout[i].nValue != prequest.nAmount || (fv452Fork && prequest.GetLastState() != CFund::ACCEPTED) || proposal.Address != CNavCoinAddress(address).ToString())
+                if(block.vtx[0].vout[i].nValue != prequest.nAmount || (fv452Fork && prequest.GetLastState() != CFund::ACCEPTED) || proposal.Address != CElectrumAddress(address).ToString())
                     return state.DoS(100, error("CheckBlock() : coinbase output does not match an accepted payment request"));
 
                 CBlockIndex* pblockindex = prequest.GetLastStateBlockIndexForState(CFund::ACCEPTED);
