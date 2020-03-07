@@ -76,7 +76,7 @@ class CommunityFundPaymentRequestExtractFundsTest(ElectrumTestFramework):
         assert(invalid == 0)
 
         assert(self.nodes[0].cfundstats()["funds"]["locked"] == locked_accepted)
-        
+
         end_cycle(self.nodes[0])
 
         # Lets reject one of them with votes
@@ -112,7 +112,7 @@ class CommunityFundPaymentRequestExtractFundsTest(ElectrumTestFramework):
         # the 5 payment requests should be accepted
         allAccepted = True
         for paymentReq in paymentRequests:
-            if self.nodes[0].getpaymentrequest(paymentReq)["state"] != 1:
+            if self.nodes[0].getpaymentrequest(paymentReq)["state"] != 6:
                 allAccepted = False
 
         # all the payment requests should have been validated
