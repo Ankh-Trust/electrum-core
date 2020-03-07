@@ -1501,6 +1501,7 @@
         <source>Label</source>
         <translation>Label</translation>
     </message>
+    </context>    
 <context>
     <name>RecentRequestsTableModel</name>
     <message>
