@@ -1497,7 +1497,6 @@
         <source>Amount</source>
         <translation>Bedrag</translation>
     </message>
-    </context>
     <message>
         <source>Label</source>
         <translation>Label</translation>
@@ -1908,7 +1907,7 @@
     <message>
         <source>Exporting Failed</source>
         <translation>Exporteren mislukt</translation>
-    </message>    
+    </message>
     </context>
 <context>
     <name>UnitDisplayStatusBarControl</name>
