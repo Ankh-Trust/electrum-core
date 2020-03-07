@@ -122,7 +122,7 @@ void CommunityFundDisplayDetailed::setProposalLabels() const
         ui->labelExpiresIn->setText(QString::fromStdString(ss.str().erase(10, 9)));
     }
     if (fLastState== CFund::EXPIRED || proposal.GetState(pindexBestHeader->GetBlockTime()).find("expired") != string::npos) {
-        if (fLastState == CFund::EXPIRED) {{
+        if (fLastState == CFund::EXPIRED) {
             std::string expiry_title = "Expired on: ";
             std::time_t t = static_cast<time_t>(proptime);
             std::stringstream ss;
