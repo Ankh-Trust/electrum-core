@@ -3752,7 +3752,7 @@ UniValue listproposals(const UniValue& params, bool fHelp)
 
             if (showMine)
             {
-                CTxDestination address(CNavCoinAddress(proposal.Address).Get());
+                CTxDestination address(CElectrumAddress(proposal.Address).Get());
                 isminefilter mine = IsMine(*pwalletMain, address);
                 if(mine & ISMINE_SPENDABLE)
                     fIsMine = true;
