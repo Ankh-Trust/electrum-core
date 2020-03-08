@@ -109,7 +109,7 @@ void FreespaceChecker::check()
     {
         /* Parent directory does not exist or is not accessible */
         replyStatus = ST_ERROR;
-        replyMessage = tr("Cannot read wallet.dat file.");
+        replyMessage = tr("Cannot create data directory here.");
     }
     Q_EMIT reply(replyStatus, replyMessage, freeBytesAvailable);
 }
