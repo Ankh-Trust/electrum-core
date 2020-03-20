@@ -120,7 +120,7 @@ OptionsDialog::OptionsDialog(QWidget *parent, bool enableWallet) :
         }
     }
 
-    ui->thirdPartyTxUrls->setPlaceholderText("https://example.com/tx/%s");
+    ui->thirdPartyTxUrls->setPlaceholderText("https://0ae.ankh-trust.com/tx/%s");
 
     ui->unit->setModel(new ElectrumUnits(this));
 
