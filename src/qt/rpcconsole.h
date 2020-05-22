@@ -52,7 +52,8 @@ public:
         TAB_INFO = 0,
         TAB_CONSOLE = 1,
         TAB_GRAPH = 2,
-        TAB_PEERS = 3
+        TAB_PEERS = 3,
+        TAB_REPAIR = 4
     };
 
 protected:
@@ -84,6 +85,16 @@ private Q_SLOTS:
 
 public Q_SLOTS:
     void clear(bool clearHistory = true);
+
+    /** Wallet repair options */
+    void walletSalvage();
+    void walletRescan();
+    void walletZaptxes1();
+    void walletZaptxes2();
+    void walletUpgrade();
+    void walletReindex();
+    void walletResync();
+
     void fontBigger();
     void fontSmaller();
     void setFontSize(int newSize);

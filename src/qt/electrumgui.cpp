@@ -124,7 +124,7 @@ ElectrumGUI::ElectrumGUI(const PlatformStyle *platformStyle, const NetworkStyle 
     sendCoinsMenuAction(0),
     usedSendingAddressesAction(0),
     usedReceivingAddressesAction(0),
-    repairWalletAction(0),
+    //repairWalletAction(0),
     importPrivateKeyAction(0),
     exportMasterPrivateKeyAction(0),
     signMessageAction(0),
@@ -515,22 +515,22 @@ void ElectrumGUI::createActions()
     openGraphAction->setStatusTip(tr("Show network monitor"));
     openPeersAction = new QAction(QIcon(":/icons/connect_4"), tr("&Peers list"), this);
     openPeersAction->setStatusTip(tr("Show peers info"));
-    //openRepairAction = new QAction(QIcon(":/icons/options"), tr("Wallet &Repair"), this);
-    //openRepairAction->setStatusTip(tr("Show wallet repair options"));
+    openRepairAction = new QAction(QIcon(":/icons/options"), tr("Wallet &Repair"), this);
+    openRepairAction->setStatusTip(tr("Show wallet repair options"));
 
     // initially disable the debug window menu item
     openInfoAction->setEnabled(false);
     openRPCConsoleAction->setEnabled(false);
     openGraphAction->setEnabled(false);
     openPeersAction->setEnabled(false);
-    //openRepairAction->setEnabled(false);
+    openRepairAction->setEnabled(false);
 
     usedSendingAddressesAction = new QAction(QIcon(":/icons/address-book"), tr("&Sending addresses..."), this);
     usedSendingAddressesAction->setStatusTip(tr("Show the list of used sending addresses and labels"));
     usedReceivingAddressesAction = new QAction(QIcon(":/icons/address-book"), tr("&Receiving addresses..."), this);
     usedReceivingAddressesAction->setStatusTip(tr("Show the list of used receiving addresses and labels"));
-    repairWalletAction = new QAction(QIcon(":/icons/options"), tr("&Repair wallet"), this);
-    repairWalletAction->setToolTip(tr("Repair wallet transactions"));
+    //repairWalletAction = new QAction(QIcon(":/icons/options"), tr("&Repair wallet"), this);
+    //repairWalletAction->setToolTip(tr("Repair wallet transactions"));
 
     importPrivateKeyAction = new QAction(QIcon(":/icons/key"), tr("&Import private key"), this);
     importPrivateKeyAction->setToolTip(tr("Import private key"));
@@ -560,7 +560,10 @@ void ElectrumGUI::createActions()
     connect(openRPCConsoleAction, SIGNAL(triggered()), this, SLOT(showDebugWindow()));
     connect(openGraphAction, SIGNAL(triggered()), this, SLOT(showGraph()));
     connect(openPeersAction, SIGNAL(triggered()), this, SLOT(showPeers()));
-    //connect(openRepairAction, SIGNAL(triggered()), this, SLOT(showRepair()));
+    connect(openRepairAction, SIGNAL(triggered()), this, SLOT(showRepair()));
+
+    // Get restart command-line parameters and handle restart
+    connect(rpcConsole, SIGNAL(handleRestart(QStringList)), this, SLOT(handleRestart(QStringList)));
 
     // prevents an open debug window from becoming stuck/unusable on client shutdown
     connect(quitAction, SIGNAL(triggered()), rpcConsole, SLOT(hide()));
@@ -578,7 +581,7 @@ void ElectrumGUI::createActions()
         connect(verifyMessageAction, SIGNAL(triggered()), this, SLOT(gotoVerifyMessageTab()));
         connect(usedSendingAddressesAction, SIGNAL(triggered()), walletFrame, SLOT(usedSendingAddresses()));
         connect(usedReceivingAddressesAction, SIGNAL(triggered()), walletFrame, SLOT(usedReceivingAddresses()));
-        connect(repairWalletAction, SIGNAL(triggered()), this, SLOT(repairWallet()));
+        //connect(repairWalletAction, SIGNAL(triggered()), this, SLOT(repairWallet()));
         connect(importPrivateKeyAction, SIGNAL(triggered()), walletFrame, SLOT(importPrivateKey()));
         connect(exportMasterPrivateKeyAction, SIGNAL(triggered()), walletFrame, SLOT(exportMasterPrivateKeyAction()));
         connect(openAction, SIGNAL(triggered()), this, SLOT(openClicked()));
@@ -643,8 +646,8 @@ void ElectrumGUI::createMenuBar()
         tools->addAction(openRPCConsoleAction);
         tools->addAction(openGraphAction);
         tools->addAction(openPeersAction);
-        //tools->addAction(openRepairAction);
-        tools->addAction(repairWalletAction);
+        tools->addAction(openRepairAction);
+        //tools->addAction(repairWalletAction);
         tools->addSeparator();
     }
 
@@ -808,7 +811,7 @@ void ElectrumGUI::setWalletActionsEnabled(bool enabled)
     verifyMessageAction->setEnabled(enabled);
     usedSendingAddressesAction->setEnabled(enabled);
     usedReceivingAddressesAction->setEnabled(enabled);
-    repairWalletAction->setEnabled(enabled);
+    //repairWalletAction->setEnabled(enabled);
     importPrivateKeyAction->setEnabled(enabled);
     openAction->setEnabled(enabled);
 }
@@ -861,8 +864,8 @@ void ElectrumGUI::createTrayIconMenu()
     trayIconMenu->addAction(openRPCConsoleAction);
     trayIconMenu->addAction(openGraphAction);
     trayIconMenu->addAction(openPeersAction);
-    //trayIconMenu->addAction(openRepairAction);
-    trayIconMenu->addAction(repairWalletAction);
+    trayIconMenu->addAction(openRepairAction);
+    //trayIconMenu->addAction(repairWalletAction);
 #ifndef Q_OS_MAC // This is built-in on Mac
     trayIconMenu->addSeparator();
     trayIconMenu->addAction(quitAction);
@@ -956,6 +959,12 @@ void ElectrumGUI::showGraph()
 void ElectrumGUI::showPeers()
 {
     rpcConsole->setTabFocus(RPCConsole::TAB_PEERS);
+    showDebugWindow();
+}
+
+void ElectrumGUI::showRepair()
+{
+    rpcConsole->setTabFocus(RPCConsole::TAB_REPAIR);
     showDebugWindow();
 }
 
@@ -1315,7 +1324,7 @@ void ElectrumGUI::showEvent(QShowEvent *event)
     openRPCConsoleAction->setEnabled(true);
     openGraphAction->setEnabled(true);
     openPeersAction->setEnabled(true);
-    //openRepairAction->setEnabled(true);
+    openRepairAction->setEnabled(true);
     aboutAction->setEnabled(true);
     webInfoAction->setEnabled(true);
     optionsAction->setEnabled(true);
@@ -1549,6 +1558,13 @@ void ElectrumGUI::unsubscribeFromCoreSignals()
     // Disconnect signals from client
     uiInterface.ThreadSafeMessageBox.disconnect(boost::bind(ThreadSafeMessageBox, this, _1, _2, _3));
     uiInterface.ThreadSafeQuestion.disconnect(boost::bind(ThreadSafeMessageBox, this, _1, _3, _4));
+}
+
+/** Get restart command-line parameters and request restart */
+void ElectrumGUI::handleRestart(QStringList args)
+{
+    if (!ShutdownRequested())
+        Q_EMIT requestedRestart(args);
 }
 
 /** When Display Units are changed on OptionsModel it will refresh the display text of the control on the status bar */

@@ -115,7 +115,7 @@ private:
     QAction *sendCoinsMenuAction;
     QAction *usedSendingAddressesAction;
     QAction *usedReceivingAddressesAction;
-    QAction *repairWalletAction;
+    //QAction *repairWalletAction;
     QAction *importPrivateKeyAction;
     QAction *exportMasterPrivateKeyAction;
     QAction *signMessageAction;
@@ -136,7 +136,7 @@ private:
     QAction *openRPCConsoleAction;
     QAction* openGraphAction;
     QAction* openPeersAction;
-    //QAction* openRepairAction;
+    QAction* openRepairAction;
     QAction *openAction;
     QAction *showHelpMessageAction;
     QAction *unlockWalletAction;
@@ -200,12 +200,16 @@ private:
 Q_SIGNALS:
     /** Signal raised when a URI was entered or dragged to the GUI */
     void receivedURI(const QString &uri);
+    /** Restart handling */
+    void requestedRestart(QStringList args);
 
 public Q_SLOTS:
     /** Set number of connections shown in the UI */
     void setNumConnections(int count);
     /** Set number of blocks and last block date shown in the UI */
     void setNumBlocks(int count, const QDateTime& blockDate, double nVerificationProgress, bool headers);
+    /** Get restart command-line parameters and request restart */
+    void handleRestart(QStringList args);
 
     /** Notify the user of an event from the core network or transaction handling code.
        @param[in] title     the message box / notification title
@@ -282,6 +286,7 @@ private Q_SLOTS:
     void showInfo();
     void showGraph();
     void showPeers();
+    void showRepair();
 
     /** Show debug window and set focus to the console */
     void showDebugWindowActivateConsole();
