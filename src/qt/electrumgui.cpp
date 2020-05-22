@@ -156,6 +156,7 @@ ElectrumGUI::ElectrumGUI(const PlatformStyle *platformStyle, const NetworkStyle 
     unlockStakingAction(0),
     lockWalletAction(0),
     toggleStakingAction(0),
+    splitRewardAction(0),
     generateColdStakingAction(0),
     lastDialogShown(0),
     platformStyle(platformStyle),
@@ -426,7 +427,10 @@ void ElectrumGUI::createActions()
     toggleStakingAction = new QAction(QIcon(":/icons/staking"), tr("Toggle &Staking"), this);
     toggleStakingAction->setStatusTip(tr("Toggle Staking"));
 
-    generateColdStakingAction = new QAction(QIcon(":/icons/verify"), tr("&Generate Cold Staking Address"), this);
+    splitRewardAction = new QAction(QIcon(":/icons/staking"), tr("Set up staking rewards"), this);
+    splitRewardAction->setStatusTip(tr("Configure how to split the staking rewards"));
+
+    generateColdStakingAction = new QAction(QIcon(":/icons/staking"), tr("&Generate Cold Staking Address"), this);
     generateColdStakingAction->setStatusTip(tr("Generate Cold Staking Address"));
 
     historyAction = new QAction(QIcon(":/icons/history"), tr("&Transactions"), this);
@@ -461,6 +465,7 @@ void ElectrumGUI::createActions()
     connect(historyAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
     connect(historyAction, SIGNAL(triggered()), this, SLOT(gotoHistoryPage()));
     connect(toggleStakingAction, SIGNAL(triggered()), this, SLOT(toggleStaking()));
+    connect(splitRewardAction, SIGNAL(triggered()), this, SLOT(splitRewards()));
     connect(generateColdStakingAction, SIGNAL(triggered()), this, SLOT(generateColdStaking()));
 #endif // ENABLE_WALLET
 
@@ -633,8 +638,9 @@ void ElectrumGUI::createMenuBar()
         settings->addSeparator();
         settings->addAction(unlockStakingAction);
         settings->addAction(toggleStakingAction);
-        settings->addSeparator();
+        settings->addAction(splitRewardAction);
         settings->addAction(generateColdStakingAction);
+        settings->addSeparator();
         settings->addAction(updatePriceAction);
         settings->addSeparator();
     }
@@ -1600,6 +1606,11 @@ void ElectrumGUI::generateColdStaking()
 {
   ColdStakingWizard wizard;
   wizard.exec();
+}
+
+void ElectrumGUI::splitRewards()
+{
+    walletFrame->splitRewards();
 }
 
 #ifdef ENABLE_WALLET

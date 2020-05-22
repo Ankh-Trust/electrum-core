@@ -6,6 +6,7 @@
 #define ELECTRUM_QT_OVERVIEWPAGE_H
 
 #include <amount.h>
+#include <splitrewards.h>
 
 #include <QWidget>
 #include <QPushButton>

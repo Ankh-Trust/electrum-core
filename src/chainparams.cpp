@@ -116,14 +116,14 @@ public:
         consensus.sigActivationTime = 1567296000;
         consensus.nCoinbaseTimeActivationHeight = 0;
         consensus.nBlockSpreadCFundAccumulation = 500;
-        consensus.nCommunityFundAmount = 0.25 * COIN;
-        consensus.nCommunityFundAmountV2 = 0.5 * COIN;
+        consensus.nCommunityFundAmount = 0.1 * COIN;
+        consensus.nCommunityFundAmountV2 = 0.1 * COIN;
         consensus.nCyclesProposalVoting = 6;
         consensus.nCyclesPaymentRequestVoting = 8;
         consensus.nPaymentRequestMaxVersion = 3;
         consensus.nProposalMaxVersion = 3;
         consensus.nMaxFutureDrift = 60;
-        consensus.nStaticReward = 1 * COIN;
+        consensus.nStaticReward = 1.0 * COIN;
         consensus.nHeightv451Fork = 1;
         consensus.nHeightv452Fork = 2;
         consensus.fDaoClientActivated = false;

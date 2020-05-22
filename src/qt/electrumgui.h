@@ -143,6 +143,7 @@ private:
     QAction *unlockStakingAction;
     QAction *lockWalletAction;
     QAction *toggleStakingAction;
+    QAction *splitRewardAction;
     QAction *generateColdStakingAction;
     QPushButton *topMenu1; // Home
     QPushButton *topMenu2; // Send
@@ -300,6 +301,8 @@ private Q_SLOTS:
     void toggleStaking();
     /** Generate Cold Staking Address **/
     void generateColdStaking();
+    /** Split Stake Rewards **/
+    void splitRewards();
 #ifndef Q_OS_MAC
     /** Handle tray icon clicked */
     void trayIconActivated(QSystemTrayIcon::ActivationReason reason);

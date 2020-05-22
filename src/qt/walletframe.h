@@ -96,6 +96,7 @@ public Q_SLOTS:
     void setStakingStats(QString day, QString week, QString month, QString year, QString all);
 
     void setVotingStatus(QString text);
+    void splitRewards();
 
     /** Show used sending addresses */
     void usedSendingAddresses();
