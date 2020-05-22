@@ -4,11 +4,11 @@
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 
-from test_framework.test_framework import NavCoinTestFramework
+from test_framework.test_framework import ElectrumTestFramework
 from test_framework.util import *
 import urllib.parse
 
-class CFundDBStateHash(NavCoinTestFramework):
+class CFundDBStateHash(ElectrumTestFramework):
     def __init__(self):
         super().__init__()
         self.num_nodes = 2
