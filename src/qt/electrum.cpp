@@ -259,7 +259,7 @@ void ElectrumCore::initialize()
     } catch (const std::exception& e) {
         handleRunawayException(&e);
     } catch (...) {
-        handleRunawayException(NULL);
+        handleRunawayException(nullptr);
     }
 }
 
@@ -281,7 +281,7 @@ void ElectrumCore::restart(QStringList args)
         } catch (std::exception& e) {
             handleRunawayException(&e);
         } catch (...) {
-            handleRunawayException(NULL);
+            handleRunawayException(nullptr);
         }
     }
 }
@@ -299,7 +299,7 @@ void ElectrumCore::shutdown()
     } catch (const std::exception& e) {
         handleRunawayException(&e);
     } catch (...) {
-        handleRunawayException(NULL);
+        handleRunawayException(nullptr);
     }
 }
 
@@ -360,7 +360,7 @@ void ElectrumApplication::createPaymentServer()
 
 void ElectrumApplication::createOptionsModel(bool resetSettings)
 {
-    optionsModel = new OptionsModel(NULL, resetSettings);
+    optionsModel = new OptionsModel(nullptr, resetSettings);
 }
 
 void ElectrumApplication::createWindow(const NetworkStyle *networkStyle)
@@ -580,7 +580,7 @@ int main(int argc, char *argv[])
     // but before showing splash screen.
     if (mapArgs.count("-?") || mapArgs.count("-h") || mapArgs.count("-help") || mapArgs.count("-version"))
     {
-        HelpMessageDialog help(NULL, mapArgs.count("-version"));
+        HelpMessageDialog help(nullptr, mapArgs.count("-version"));
         help.showOrPrint();
         return 1;
     }
@@ -685,7 +685,7 @@ int main(int argc, char *argv[])
         PrintExceptionContinue(&e, "Runaway exception");
         app.handleRunawayException(QString::fromStdString(strMiscWarning));
     } catch (...) {
-        PrintExceptionContinue(NULL, "Runaway exception");
+        PrintExceptionContinue(nullptr, "Runaway exception");
         app.handleRunawayException(QString::fromStdString(strMiscWarning));
     }
     return app.getReturnValue();

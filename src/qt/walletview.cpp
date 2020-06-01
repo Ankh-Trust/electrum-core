@@ -20,9 +20,9 @@
 #include <qt/transactionview.h>
 #include <qt/walletmodel.h>
 
-#include "ui_interface.h"
+#include <ui_interface.h>
 
-#include "main.h"
+#include <main.h>
 
 #include <QAction>
 #include <QActionGroup>

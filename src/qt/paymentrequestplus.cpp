@@ -104,7 +104,7 @@ bool PaymentRequestPlus::getMerchant(X509_STORE* certStore, QString& merchant) c
         }
 
         const unsigned char *data = (const unsigned char *)certChain.certificate(i).data();
-        X509 *cert = d2i_X509(NULL, &data, certChain.certificate(i).size());
+        X509 *cert = d2i_X509(nullptr, &data, certChain.certificate(i).size());
         if (cert)
             certs.push_back(cert);
     }
