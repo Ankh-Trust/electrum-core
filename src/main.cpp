@@ -4783,7 +4783,6 @@ bool ContextualCheckBlock(const CBlock& block, CValidationState& state, CBlockIn
                               ? pindexPrev->GetMedianTimePast()
                               : block.GetBlockTime();
 
-    // Check that all transactions are finalized
     bool fColdStakingEnabled = IsColdStakingEnabled(pindexPrev,Params().GetConsensus());
 
     // Check that all transactions are finalized and no early cold stake
