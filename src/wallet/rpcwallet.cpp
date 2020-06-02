@@ -115,6 +115,42 @@ string AccountFromValue(const UniValue& value)
     return strAccount;
 }
 
+UniValue createrawscriptaddress(const UniValue& params, bool fHelp)
+{
+    if (fHelp || params.size() != 1)
+        throw runtime_error(
+            "createrawscriptaddress \"hex script\"\n"
+            "\nReturns the Electrum address for the specified raw hex script.\n"
+            "\nArguments:\n"
+            "1. \"hex script\"        (string) The hex script to encode in the address.\n"
+            "\nResult:\n"
+            "\"navcoinaddress\"    (string) The  navcoin address\n"
+            "\nExamples:\n"
+            + HelpExampleCli("createrawscriptaddress", "6ac4c5")
+        );
+
+    std::string data = params[0].get_str();
+
+    if (!IsHex(data))
+        throw JSONRPCError(RPC_MISC_ERROR, "the script is not expressed in hexadecimal");
+
+    std::vector<unsigned char> vData = ParseHex(data);
+
+    CScript script(vData.begin(), vData.end());
+
+    std::string strAsm = ScriptToAsmStr(script);
+
+    if (strAsm.find("[error]") != std::string::npos || strAsm.find("OP_UNKNOWN") != std::string::npos)
+        throw JSONRPCError(RPC_MISC_ERROR, "the script includes invalid or unknown op codes");
+
+    CElectrumAddress address(script);
+
+    if (!address.IsValid())
+        throw JSONRPCError(RPC_MISC_ERROR, "the generated address is not valid");
+
+    return address.ToString();
+}
+
 UniValue getnewaddress(const UniValue& params, bool fHelp)
 {
     if (!EnsureWalletIsAvailable(fHelp))
@@ -1874,11 +1910,8 @@ void GetReceived(const COutputEntry& r, const CWalletTx& wtx, const string& strA
         {
             entry.pushKV("category", "receive");
         }
-        if (!wtx.IsCoinStake())
-            entry.pushKV("amount", ValueFromAmount(r.amount));
-        else {
-            entry.pushKV("amount", ValueFromAmount(-nFee));
-        }
+        entry.pushKV("amount", ValueFromAmount(r.amount));
+
         entry.pushKV("canStake", (::IsMine(*pwalletMain, r.destination) & ISMINE_STAKABLE ||
                                           (::IsMine(*pwalletMain, r.destination) & ISMINE_SPENDABLE &&
                                            !CElectrumAddress(r.destination).IsColdStakingAddress(Params()))) ? true : false);
@@ -1936,20 +1969,9 @@ void ListTransactions(const CWalletTx& wtx, const string& strAccount, int nMinDe
     // Received
     if (listReceived.size() > 0 && wtx.GetDepthInMainChain() >= nMinDepth)
     {
-        if (!wtx.IsCoinStake())
+        for(const COutputEntry& r: listReceived)
         {
-            for(const COutputEntry& r: listReceived)
-            {
-                 GetReceived(r, wtx, strAccount, fLong, ret, nFee, fAllAccounts, involvesWatchonly);
-            }
-        }
-        else
-        {
-            // only get the coinstake reward output
-            if (wtx.GetValueOutCFund() == 0)
-                GetReceived(listReceived.back(), wtx, strAccount, fLong, ret, nFee, fAllAccounts, involvesWatchonly);
-            else
-                GetReceived(*std::prev(listReceived.end(),1), wtx, strAccount, fLong, ret, nFee, fAllAccounts, involvesWatchonly);
+            GetReceived(r, wtx, strAccount, fLong, ret, nFee, fAllAccounts, involvesWatchonly);
         }
     }
 }
@@ -3705,6 +3727,7 @@ static const CRPCCommand commands[] =
     { "wallet",             "addmultisigaddress",       &addmultisigaddress,       true  },
     { "wallet",             "addwitnessaddress",        &addwitnessaddress,        true  },
     { "wallet",             "backupwallet",             &backupwallet,             true  },
+    { "wallet",             "createrawscriptaddress",   &createrawscriptaddress,   true  },
     { "wallet",             "dumpprivkey",              &dumpprivkey,              true  },
     { "wallet",             "dumpmasterprivkey",        &dumpmasterprivkey,        true  },
     { "wallet",             "dumpmnemonic",             &dumpmnemonic,             true  },
