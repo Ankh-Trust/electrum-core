@@ -145,11 +145,6 @@ private:
     QAction *toggleStakingAction;
     QAction *splitRewardAction;
     QAction *generateColdStakingAction;
-    QPushButton *topMenu1; // Home
-    QPushButton *topMenu2; // Send
-    QPushButton *topMenu3; // Recieve
-    QPushButton *topMenu4; // Transaction History
-//    QPushButton *topMenu5; // Community Fund
 
     QSystemTrayIcon *trayIcon;
     QMenu *trayIconMenu;
@@ -245,8 +240,8 @@ private Q_SLOTS:
     void gotoOverviewPage();
     /** Switch to history (transactions) page */
     void gotoHistoryPage();
-//    /** Switch to community fund page*/
-//    void gotoCommunityFundPage();
+    /** Switch to community fund page*/
+    // void gotoCommunityFundPage();
     /** Switch to receive coins page */
     void gotoReceiveCoinsPage();
     /** Switch to send coins page */
@@ -273,8 +268,8 @@ private Q_SLOTS:
 #endif // ENABLE_WALLET
     /** Show configuration dialog */
     void optionsClicked();
-//    /** Community Fund related */
-//    void cfundProposalsClicked();
+    /** Community Fund related */
+    void cfundProposalsClicked();
     void cfundPaymentRequestsClicked();
     /** Show about dialog */
     void aboutClicked();

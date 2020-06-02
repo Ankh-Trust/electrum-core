@@ -2584,7 +2584,7 @@ bool DisconnectBlock(const CBlock& block, CValidationState& state, const CBlockI
 
             proposal->fDirty = true;
 
-            LogPrintf("%s: Updated proposal %s votes at height %d: yes(%d) no(%d)\n", __func__, proposal->hash.ToString(), pindex->nHeight, proposal->nVotesYes, proposal->nVotesNo);
+            LogPrintf("%s: Updated proposal %s votes: yes(%d) no(%d)\n", __func__, proposal->hash.ToString(), proposal->nVotesYes, proposal->nVotesNo);
 
             vSeen[pindex->vProposalVotes[i].first]=true;
         }
@@ -2604,7 +2604,7 @@ bool DisconnectBlock(const CBlock& block, CValidationState& state, const CBlockI
             else
                 prequest->nVotesNo = max(prequest->nVotesNo - 1, 0);
 
-            LogPrintf("%s: Updated payment request %s votes at height %d: yes(%d) no(%d)\n", __func__, prequest->hash.ToString(),  pindex->nHeight, prequest->nVotesYes, prequest->nVotesNo);
+            LogPrintf("%s: Updated payment request %s votes: yes(%d) no(%d)\n", __func__, prequest->hash.ToString(), prequest->nVotesYes, prequest->nVotesNo);
 
             prequest->fDirty = true;
 
@@ -3046,7 +3046,7 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
 
                     if(tx.vout[j].IsProposalVote())
                     {
-                        LogPrint("dao", "%s: Checking proposal vote output %s\n", __func__, tx.vout[j].ToString());
+                        LogPrint("dao", "%s: Checking prequest vote output %s\n", __func__, tx.vout[j].ToString());
 
                         if(votes.count(hash) == 0)
                         {
@@ -3088,9 +3088,21 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
 
                                 if (view.GetProposal(prequest.proposalhash, proposal))
                                 {
-                                    CBlockIndex* pblockindex = proposal.GetLastStateBlockIndexForState(CFund::ACCEPTED);
+                                    if (mapBlockIndex.count(proposal.blockhash) == 0)
+                                    {
+                                        LogPrint("dao", "%s: Ignoring vote output, block %s not in main chain\n", __func__, proposal.blockhash.ToString());
+                                        continue;
+                                    }
 
-                                    if(pblockindex && (proposal.CanRequestPayments() || proposal.GetLastState() == CFund::PENDING_VOTING_PREQ)
+                                    CBlockIndex* pblockindex = mapBlockIndex[proposal.blockhash];
+
+                                    if(pblockindex == nullptr)
+                                    {
+                                        LogPrint("dao", "%s: Ignoring vote output, block index %s is null\n", __func__, proposal.blockhash.ToString());
+                                        continue;
+                                    }
+
+                                    if((proposal.CanRequestPayments() || proposal.fState == CFund::PENDING_VOTING_PREQ)
                                             && prequest.CanVote(view)
                                             && pindex->nHeight - pblockindex->nHeight > Params().GetConsensus().nCommunityFundMinAge)
                                     {
@@ -3098,8 +3110,10 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
                                     }
                                     else
                                     {
-                                        LogPrint("dao", "%s: Ignoring vote output, payment request %s can not receive votes\n",
-                                                 __func__, hash.ToString());
+                                        LogPrint("dao", "%s: Ignoring vote output, payment request %s can not receive votes ((%d || %d) && %d && %d)\n",
+                                                 __func__, hash.ToString(), proposal.CanRequestPayments(),
+                                                 proposal.fState == CFund::PENDING_VOTING_PREQ, prequest.CanVote(view),
+                                                 pindex->nHeight - pblockindex->nHeight > Params().GetConsensus().nCommunityFundMinAge);
                                     }
                                 }
                                 else
@@ -3434,22 +3448,29 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
                 if(!fValidAddress)
                     return state.DoS(100, error("CheckBlock() : coinbase cant extract destination from scriptpubkey."));
 
-                bool fv452Fork = (pindex->pprev->nHeight >= Params().GetConsensus().nHeightv452Fork);
+                if (mapBlockIndex.count(prequest.blockhash) == 0)
+                    return state.DoS(100, error("CheckBlock() : cant find payment request block %s", prequest.blockhash.ToString()));
 
-                if(block.vtx[0].vout[i].nValue != prequest.nAmount || (fv452Fork && prequest.GetLastState() != CFund::ACCEPTED) || proposal.Address != CElectrumAddress(address).ToString())
+                CBlockIndex* pblockindex = mapBlockIndex[prequest.blockhash];
+
+                if(pblockindex == nullptr)
+                    return state.DoS(100, error("CheckBlock() : cant find payment request block %s.", prequest.blockhash.ToString()));
+
+                if(!(pindex->pprev->nHeight - pblockindex->nHeight > Params().GetConsensus().nCommunityFundMinAge))
+                    return state.DoS(100, error("CheckBlock() : payment request not mature enough."));
+
+                if(block.vtx[0].vout[i].nValue != prequest.nAmount || prequest.fState != CFund::ACCEPTED || proposal.Address != CElectrumAddress(address).ToString())
                     return state.DoS(100, error("CheckBlock() : coinbase output does not match an accepted payment request"));
 
-                CBlockIndex* pblockindex = prequest.GetLastStateBlockIndexForState(CFund::ACCEPTED);
-
-                if(fv452Fork && !(pindex->pprev->nHeight - pblockindex->nHeight > Params().GetConsensus().nCommunityFundMinAge))
-                    return state.DoS(100, error("CheckBlock() : payment request not mature enough."));
+                if(prequest.paymenthash != uint256() && pindex->pprev->nHeight >= Params().GetConsensus().nHeightv452Fork)
+                    return state.DoS(100, error("CheckBlock() : coinbase output tries to pay an already paid payment request"));
 
                 CPaymentRequestModifier mprequest = view.ModifyPaymentRequest(prid);
 
-                mprequest->SetState(pindex, CFund::PAID);
+                mprequest->paymenthash = block.GetHash();
                 mprequest->fDirty = true;
 
-                LogPrintf("%s: Updated payment request %s at height %d: %s\n", __func__, mprequest->ToString(), pindex->nHeight, mprequest->diff(prequest));
+                LogPrintf("%s: Updated payment request %s: paymenthash => %s\n", __func__, prequest.hash.ToString(), block.GetHash().ToString());
             }
             else
             {
@@ -5367,32 +5388,6 @@ bool CVerifyDB::VerifyDB(const CChainParams& chainparams, CCoinsView *coinsview,
     nCheckLevel = std::max(0, std::min(4, nCheckLevel));
     LogPrintf("Verifying last %i blocks at level %i\n", nCheckDepth, nCheckLevel);
     CCoinsViewCache coins(coinsview);
-    uint256 prevStateHash;
-    if (nCheckLevel >= 4) prevStateHash = coins.GetCFundDBStateHash(chainActive.Tip()->nCFLocked, chainActive.Tip()->nCFSupply);
-    std::string sBefore = "";
-    if (LogAcceptCategory("dao"))
-    {
-        CProposalMap proposalMap;
-        CPaymentRequestMap paymentRequestMap;
-        if (coins.GetAllProposals(proposalMap))
-        {
-            for (auto& it: proposalMap)
-            {
-                UniValue prop(UniValue::VOBJ);
-                it.second.ToJson(prop, coins);
-                sBefore += strprintf("%s\n",prop.write());
-            }
-        }
-        if (coins.GetAllPaymentRequests(paymentRequestMap))
-        {
-            for (auto& it: paymentRequestMap)
-            {
-                UniValue preq(UniValue::VOBJ);
-                it.second.ToJson(preq, true);
-                sBefore += strprintf("%s\n",preq.write());
-            }
-        }
-    }
     CBlockIndex* pindexState = chainActive.Tip();
     CBlockIndex* pindexFailure = nullptr;
     int nGoodTransactions = 0;
@@ -5438,7 +5433,6 @@ bool CVerifyDB::VerifyDB(const CChainParams& chainparams, CCoinsView *coinsview,
             bool fClean = true;
             if (!DisconnectBlock(block, state, pindex, coins, &fClean))
                 return error("VerifyDB(): *** irrecoverable inconsistency in block data at %d, hash=%s", pindex->nHeight, pindex->GetBlockHash().ToString());
-            CFundStep(state, pindex, true, coins);
             pindexState = pindex->pprev;
             if (!fClean) {
                 nGoodTransactions = 0;
@@ -5464,49 +5458,6 @@ bool CVerifyDB::VerifyDB(const CChainParams& chainparams, CCoinsView *coinsview,
                 return error("VerifyDB(): *** ReadBlockFromDisk failed at %d, hash=%s", pindex->nHeight, pindex->GetBlockHash().ToString());
             if (!ConnectBlock(block, state, pindex, coins, chainparams))
                 return error("VerifyDB(): *** found unconnectable block at %d, hash=%s", pindex->nHeight, pindex->GetBlockHash().ToString());
-            CFundStep(state, pindex, false, coins);
-        }
-        uint256 nowStateHash = coins.GetCFundDBStateHash(pindex->nCFLocked, pindex->nCFSupply);
-        if (prevStateHash != nowStateHash)
-        {
-            std::string sExtra = "";
-            std::string sAfter = "";
-            if (LogAcceptCategory("dao"))
-            {
-                CProposalMap proposalMap;
-                CPaymentRequestMap paymentRequestMap;
-                if (coins.GetAllProposals(proposalMap))
-                {
-                    for (auto& it: proposalMap)
-                    {
-                        UniValue prop(UniValue::VOBJ);
-                        it.second.ToJson(prop, coins);
-                        sAfter += strprintf("%s\n",prop.write());
-                    }
-                }
-                if (coins.GetAllPaymentRequests(paymentRequestMap))
-                {
-                    for (auto& it: paymentRequestMap)
-                    {
-                        UniValue preq(UniValue::VOBJ);
-                        it.second.ToJson(preq, true);
-                        sAfter += strprintf("%s\n",preq.write());
-                    }
-                }
-                ofstream file_before;
-                ofstream file_after;
-                file_before.open((GetDataDir() / "listproposals_before.out").string().c_str());
-                file_after.open((GetDataDir() / "listproposals_after.out").string().c_str());
-                if (file_before.is_open() && file_after.is_open())
-                {
-                    file_before << sBefore;
-                    file_after << sAfter;
-                    file_before.close();
-                    file_after.close();
-                    sExtra = " You can find a dump of listproposals after and before the tests in listproposals_before.out and listproposals_after.out in your data folder.";
-                }
-            }
-            return error("VerifyDB(): *** the cfund db state hash differs after reconnecting blocks. it was %d, it is %s after.%s\n", prevStateHash.ToString(), nowStateHash.ToString(), sExtra);
         }
     }
 

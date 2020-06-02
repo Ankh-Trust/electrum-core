@@ -688,18 +688,6 @@ void ElectrumGUI::createToolBars()
         QWidget* containerWidget = new QWidget();
         containerWidget->setLayout(layout);
         setCentralWidget(containerWidget);
-
-/*
- *      topMenu5 = new QPushButton();
- *      walletFrame->menuLayout->addWidget(topMenu5);
- *      topMenu5->setFixedSize(215,94);
- *      topMenu5->setObjectName("topMenu5");
- *      connect(topMenu5, SIGNAL(clicked()), this, SLOT(gotoCommunityFundPage()));
- *      topMenu5->setStyleSheet(
- *                  "#topMenu5 { background: url(:/icons/menu_community_fund_ns) bottom center #eee; border: 0; }"
- *                  "#topMenu5:hover { background: url(:/icons/menu_community_fund_hover) bottom center #ddd; border: 0; }");
- */
-
     }
 #endif // ENABLE_WALLET
 }
@@ -899,24 +887,24 @@ void ElectrumGUI::optionsClicked()
     dlg.exec();
 }
 
-/*
- *  void ElectrumGUI::cfundProposalsClicked()
- *  {
- *      if(!clientModel || !clientModel->getOptionsModel())
- *          return;
- *  }
- */
-    void ElectrumGUI::cfundProposalsOpen(bool fMode)
-    {
-        if(!clientModel || !clientModel->getOptionsModel())
-            return;
-    }
 
-    void ElectrumGUI::cfundPaymentRequestsClicked()
-    {
-        if(!clientModel || !clientModel->getOptionsModel())
-            return;
-    }
+void ElectrumGUI::cfundProposalsClicked()
+{
+    if(!clientModel || !clientModel->getOptionsModel())
+        return;
+}
+
+void ElectrumGUI::cfundProposalsOpen(bool fMode)
+{
+    if(!clientModel || !clientModel->getOptionsModel())
+        return;
+}
+
+void ElectrumGUI::cfundPaymentRequestsClicked()
+{
+    if(!clientModel || !clientModel->getOptionsModel())
+        return;
+}
 
 void ElectrumGUI::aboutClicked()
 {
@@ -1000,30 +988,6 @@ void ElectrumGUI::gotoHistoryPage()
     historyAction->setChecked(true);
     if (walletFrame) walletFrame->gotoHistoryPage();
 }
-
-/*
- * void ElectrumGUI::gotoCommunityFundPage()
- * {
- *  topMenu1->setStyleSheet(
- *     "#topMenu1 { border-image: url(:/icons/menu_home_ns)  0 0 0 0 stretch stretch; border: 0px; }"
- *     "#topMenu1:hover { border-image: url(:/icons/menu_home_hover)  0 0 0 0 stretch stretch; border: 0px; }");
- *  topMenu2->setStyleSheet(
- *              "#topMenu2 { border-image: url(:/icons/menu_send_ns)  0 0 0 0 stretch stretch; border: 0px; }"
- *              "#topMenu2:hover { border-image: url(:/icons/menu_send_hover)  0 0 0 0 stretch stretch; border: 0px; }");
- *  topMenu3->setStyleSheet(
- *              "#topMenu3 { border-image: url(:/icons/menu_receive_ns)  0 0 0 0 stretch stretch; border: 0px; }"
- *              "#topMenu3:hover { border-image: url(:/icons/menu_receive_hover)  0 0 0 0 stretch stretch; border: 0px; }");
- *  topMenu4->setStyleSheet(
- *              "#topMenu4 { border-image: url(:/icons/menu_transaction_ns)  0 0 0 0 stretch stretch; border: 0px; }"
- *              "#topMenu4:hover { border-image: url(:/icons/menu_transaction_hover)  0 0 0 0 stretch stretch; border: 0px; }");
- *
- *  topMenu5->setStyleSheet(
- *              "#topMenu5 { border-image: url(:/icons/menu_community_fund_s)  0 0 0 0 stretch stretch; border: 0px; }");
- *
- *  historyAction->setChecked(true);
- *  if (walletFrame) walletFrame->gotoCommunityFundPage();
- *}
- */
 
 void ElectrumGUI::gotoReceiveCoinsPage()
 {
@@ -1205,7 +1169,7 @@ void ElectrumGUI::showVotingDialog()
 
     QMessageBox msgBox;
     msgBox.setText(tr("Important network notice."));
-    msgBox.setInformativeText(tr("The Nav Coin Network is currently voting on introducing changes on the consensus protocol. As a participant in our network, we value your input and the decision ultimately is yours. Please cast your vote. <br><br>For more information on the proposal, please visit <a href=\"https://electrum.org/community-fund\">this link</a><br><br>Would you like the Nav Coin Network to update the staking rewards to setup a decentralised community fund that will help grow the network?"));
+    msgBox.setInformativeText(tr("The Electrum Network is currently voting on introducing changes on the consensus protocol. As a participant in our network, we value your input and the decision ultimately is yours. Please cast your vote. <br><br>For more information on the proposal, please visit <a href=\"https://electrum.org/community-fund\">this link</a><br><br>Would you like the Electrum Network to update the staking rewards to setup a decentralised community fund that will help grow the network?"));
     QAbstractButton *myYesButton = msgBox.addButton(tr("Yes"), QMessageBox::YesRole);
     msgBox.addButton(trUtf8("No"), QMessageBox::NoRole);
     msgBox.setIcon(QMessageBox::Question);
@@ -1790,7 +1754,7 @@ void ElectrumGUI::updateStakingStatus()
                        CFund::CProposal proposal;
                        if (!pcoinsTip->GetProposal(it_->first, proposal))
                            continue;
-                       if (proposal.GetLastState() != CFund::NIL)
+                       if (proposal.fState != CFund::NIL)
                            continue;
                        auto it = std::find_if( vAddedProposalVotes.begin(), vAddedProposalVotes.end(),
                                                [&proposal](const std::pair<std::string, int>& element){ return element.first == proposal.hash.ToString();} );
@@ -1814,7 +1778,7 @@ void ElectrumGUI::updateStakingStatus()
                         if (!pcoinsTip->GetPaymentRequest(it_->first, prequest))
                             continue;
 
-                        if (prequest.GetLastState() != CFund::NIL)
+                        if (prequest.fState != CFund::NIL)
                             continue;
                         auto it = std::find_if( vAddedPaymentRequestVotes.begin(), vAddedPaymentRequestVotes.end(),
                                                 [&prequest](const std::pair<std::string, int>& element){ return element.first == prequest.hash.ToString();} );
@@ -1847,9 +1811,9 @@ void ElectrumGUI::updateStakingStatus()
                     this->fDontShowAgain = false;
                 }
 
-                //  if (msgbox.clickedButton()==pButtonOpen) {
-                //      gotoCommunityFundPage();
-                //  }
+                //if (msgbox.clickedButton()==pButtonOpen) {
+                //    gotoCommunityFundPage();
+                //}
                 if (msgbox.clickedButton()==pButtonInfo) {
                     QString link = QString("https://electrum.org/en/community-fund/");
                     QDesktopServices::openUrl(QUrl(link));
@@ -1888,6 +1852,7 @@ void ElectrumGUI::updateStakingStatus()
         }
         else
         {
+
             labelStakingIcon->setPixmap(QIcon(":/icons/staking_off").pixmap(STATUSBAR_ICONSIZE,STATUSBAR_ICONSIZE));
             if (pwalletMain && pwalletMain->IsLocked())
                 labelStakingIcon->setToolTip(tr("Staking: Off (because wallet is locked)"));

@@ -1725,8 +1725,8 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
                         fReindexChainState = true;
                     else
                         fReindex = true;
-                    fRequestShutdown = false;
-                } else {
+                        fRequestShutdown = false;
+                    } else {
                     LogPrintf("Aborted block database rebuild. Exiting.\n");
                     return false;
                 }

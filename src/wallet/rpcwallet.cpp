@@ -664,12 +664,11 @@ UniValue createpaymentrequest(const UniValue& params, bool fHelp)
     LOCK2(cs_main, pwalletMain->cs_wallet);
 
     CFund::CProposal proposal;
-    CCoinsViewCache view(pcoinsTip);
 
-    if(!view.GetProposal(uint256S(params[0].get_str()), proposal))
+    if(!pcoinsTip->GetProposal(uint256S(params[0].get_str()), proposal))
         throw JSONRPCError(RPC_TYPE_ERROR, "Invalid proposal hash.");
 
-    if(proposal.GetLastState() != CFund::ACCEPTED)
+    if(proposal.fState != CFund::ACCEPTED)
         throw JSONRPCError(RPC_TYPE_ERROR, "Proposal has not been accepted.");
 
     CElectrumAddress address(proposal.Address);
@@ -3464,23 +3463,22 @@ UniValue proposalvotelist(const UniValue& params, bool fHelp)
     UniValue nullvotes(UniValue::VARR);
 
     CProposalMap mapProposals;
-    CCoinsViewCache view(pcoinsTip);
 
-    if(view.GetAllProposals(mapProposals))
+    if(pcoinsTip->GetAllProposals(mapProposals))
     {
         for (CProposalMap::iterator it_ = mapProposals.begin(); it_ != mapProposals.end(); it_++)
         {
             CFund::CProposal proposal;
 
-            if (!view.GetProposal(it_->first, proposal))
+            if (!pcoinsTip->GetProposal(it_->first, proposal))
                 continue;
 
-            if (proposal.GetLastState() != CFund::NIL)
+            if (proposal.fState != CFund::NIL)
                 continue;
             auto it = std::find_if( vAddedProposalVotes.begin(), vAddedProposalVotes.end(),
                                     [&proposal](const std::pair<std::string, bool>& element){ return element.first == proposal.hash.ToString();} );
             UniValue p(UniValue::VOBJ);
-            proposal.ToJson(p, view);
+            proposal.ToJson(p, *pcoinsTip);
             if (it != vAddedProposalVotes.end()) {
                 if (it->second)
                     yesvotes.push_back(p);
@@ -3593,21 +3591,21 @@ UniValue paymentrequestvotelist(const UniValue& params, bool fHelp)
     CPaymentRequestMap mapPaymentRequests;
     CCoinsViewCache view(pcoinsTip);
 
-    if(view.GetAllPaymentRequests(mapPaymentRequests))
+    if(pcoinsTip->GetAllPaymentRequests(mapPaymentRequests))
     {
         for (CPaymentRequestMap::iterator it_ = mapPaymentRequests.begin(); it_ != mapPaymentRequests.end(); it_++)
         {
             CFund::CPaymentRequest prequest;
 
-            if (!view.GetPaymentRequest(it_->first, prequest))
+            if (!pcoinsTip->GetPaymentRequest(it_->first, prequest))
                 continue;
 
-            if (prequest.GetLastState() != CFund::NIL)
+            if (prequest.fState != CFund::NIL)
                 continue;
             auto it = std::find_if( vAddedPaymentRequestVotes.begin(), vAddedPaymentRequestVotes.end(),
                                     [&prequest](const std::pair<std::string, bool>& element){ return element.first == prequest.hash.ToString();} );
             UniValue p(UniValue::VOBJ);
-            prequest.ToJson(p, false);
+            prequest.ToJson(p);
             if (it != vAddedPaymentRequestVotes.end()) {
                 if (it->second)
                     yesvotes.push_back(p);
@@ -3649,9 +3647,8 @@ UniValue paymentrequestvote(const UniValue& params, bool fHelp)
     bool duplicate = false;
 
     CFund::CPaymentRequest prequest;
-    CCoinsViewCache view(pcoinsTip);
 
-    if (!view.GetPaymentRequest(uint256S(strHash), prequest))
+    if (!pcoinsTip->GetPaymentRequest(uint256S(strHash), prequest))
     {
         return NullUniValue;
     }
@@ -3688,92 +3685,6 @@ UniValue paymentrequestvote(const UniValue& params, bool fHelp)
 
 }
 
-UniValue listproposals(const UniValue& params, bool fHelp)
-{
-    if (fHelp)
-        throw runtime_error(
-                "listproposals \"filter\"\n"
-                "\nList the proposals and all the relating data including payment requests and status.\n"
-                "\nNote passing no argument returns all proposals regardless of state.\n"
-                "\nArguments:\n"
-                "\n1. \"filter\" (string, optional)   \"accepted\" | \"rejected\" | \"expired\" | \"pending\" | \"mine\"\n"
-                "\nExamples:\n"
-                + HelpExampleCli("listproposal", "mine accepted")
-                + HelpExampleCli("listproposal", "accepted")
-                + HelpExampleRpc("listproposal", "")
-                );
-
-    LOCK(cs_main);
-
-    UniValue ret(UniValue::VARR);
-
-    bool showAll = true;
-    bool showAccepted = false;
-    bool showRejected = false;
-    bool showExpired = false;
-    bool showPending = false;
-    bool showMine = false;
-    for(unsigned int i = 0; i < params.size(); i++) {
-        if(params[i].get_str() == "accepted") {
-            showAccepted = true;
-            showAll = false;
-        }
-        else if(params[i].get_str() == "rejected") {
-            showRejected = true;
-            showAll = false;
-        }
-        else if(params[i].get_str() == "expired") {
-            showAll = false;
-            showExpired = true;
-        }
-        else if(params[i].get_str() == "pending") {
-            showAll = false;
-            showPending = true;
-        }
-        else if(params[i].get_str() == "mine") {
-            showAll = false;
-            showMine = true;
-        }
-    }
-
-    CProposalMap mapProposals;
-
-    if(pcoinsTip->GetAllProposals(mapProposals))
-    {
-        for (CProposalMap::iterator it = mapProposals.begin(); it != mapProposals.end(); it++)
-        {
-            CFund::CProposal proposal;
-            if (!pcoinsTip->GetProposal(it->first, proposal))
-                continue;
-
-            flags fLastState = proposal.GetLastState();
-
-            bool fIsMine = false;
-
-            if (showMine)
-            {
-                CTxDestination address(CElectrumAddress(proposal.Address).Get());
-                isminefilter mine = IsMine(*pwalletMain, address);
-                if(mine & ISMINE_SPENDABLE)
-                    fIsMine = true;
-            }
-
-
-            if(showAll
-                    || (showMine && fIsMine)
-                    || (showPending  && (fLastState == CFund::NIL || fLastState == CFund::PENDING_VOTING_PREQ
-                                         || fLastState == CFund::PENDING_FUNDS))
-                    || (showAccepted && (fLastState == CFund::ACCEPTED))
-                    || (showRejected && (fLastState == CFund::REJECTED))
-                    || (showExpired  &&  proposal.IsExpired(pindexBestHeader->GetBlockTime()))) {
-                UniValue o(UniValue::VOBJ);
-                proposal.ToJson(o, *pcoinsTip);
-                ret.push_back(o);
-            }
-        }
-    }
-    return ret;
-}
 extern UniValue dumpprivkey(const UniValue& params, bool fHelp); // in rpcdump.cpp
 extern UniValue dumpmasterprivkey(const UniValue& params, bool fHelp);
 extern UniValue dumpmnemonic(const UniValue& params, bool fHelp);
@@ -3839,7 +3750,6 @@ static const CRPCCommand commands[] =
     { "communityfund",      "proposalvotelist",         &proposalvotelist,         false },
     { "communityfund",      "paymentrequestvote",       &paymentrequestvote,       false },
     { "communityfund",      "paymentrequestvotelist",   &paymentrequestvotelist,   false },
-    { "communityfund",      "listproposals",            &listproposals,            true  },
     { "wallet",             "anonsend",                 &anonsend,                 false },
     { "wallet",             "getanondestination",       &getanondestination,       false },
     { "wallet",             "setaccount",               &setaccount,               true  },

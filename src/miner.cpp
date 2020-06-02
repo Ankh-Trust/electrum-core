@@ -233,15 +233,17 @@ CBlockTemplate* BlockAssembler::CreateNewBlock(const CScript& scriptPubKeyIn, bo
         {
             CFund::CPaymentRequest prequest; CFund::CProposal proposal;
             bool vote = vAddedPaymentRequestVotes[i].second;
-            if(view.GetPaymentRequest(uint256S(vAddedPaymentRequestVotes[i].first), prequest))
+            if(pcoinsTip->GetPaymentRequest(uint256S(vAddedPaymentRequestVotes[i].first), prequest))
             {
-                if(!view.GetProposal(prequest.proposalhash, proposal))
+                if(!pcoinsTip->GetProposal(prequest.proposalhash, proposal))
                     continue;
-                CBlockIndex* pblockindex = proposal.GetLastStateBlockIndexForState(CFund::ACCEPTED);
+                if (mapBlockIndex.count(proposal.blockhash) == 0)
+                    continue;
+                CBlockIndex* pblockindex = mapBlockIndex[proposal.blockhash];
                 if(pblockindex == nullptr)
                     continue;
-                if((proposal.CanRequestPayments() || proposal.GetLastState() == CFund::PENDING_VOTING_PREQ)
-                        && prequest.CanVote(view) && votes.count(prequest.hash) == 0 &&
+                if((proposal.CanRequestPayments() || proposal.fState == CFund::PENDING_VOTING_PREQ)
+                        && prequest.CanVote(*pcoinsTip) && votes.count(prequest.hash) == 0 &&
                         pindexPrev->nHeight - pblockindex->nHeight > Params().GetConsensus().nCommunityFundMinAge)
                 {
                     coinbaseTx.vout.resize(coinbaseTx.vout.size()+1);
@@ -255,23 +257,26 @@ CBlockTemplate* BlockAssembler::CreateNewBlock(const CScript& scriptPubKeyIn, bo
         UniValue strDZeel(UniValue::VARR);
         CPaymentRequestMap mapPaymentRequests;
 
-        if(view.GetAllPaymentRequests(mapPaymentRequests))
+        if(pcoinsTip->GetAllPaymentRequests(mapPaymentRequests))
         {
             for (CPaymentRequestMap::iterator it_ = mapPaymentRequests.begin(); it_ != mapPaymentRequests.end(); it_++)
             {
                 CFund::CPaymentRequest prequest;
 
-                if (!view.GetPaymentRequest(it_->first, prequest))
+                if (!pcoinsTip->GetPaymentRequest(it_->first, prequest))
                     continue;
-                CBlockIndex* pblockindex = prequest.GetLastStateBlockIndexForState(CFund::ACCEPTED);
+
+                if (mapBlockIndex.count(prequest.blockhash) == 0)
+                    continue;
+                CBlockIndex* pblockindex = mapBlockIndex[prequest.blockhash];
                 if(pblockindex == nullptr)
                     continue;
                 if(prequest.hash == uint256())
                     continue;
-                if(prequest.GetLastState() == CFund::ACCEPTED &&
+                if(prequest.fState == CFund::ACCEPTED && prequest.paymenthash == uint256() &&
                         pindexPrev->nHeight - pblockindex->nHeight > Params().GetConsensus().nCommunityFundMinAge) {
                     CFund::CProposal proposal;
-                    if(view.GetProposal(prequest.proposalhash, proposal)) {
+                    if(pcoinsTip->GetProposal(prequest.proposalhash, proposal)) {
                         CElectrumAddress addr(proposal.Address);
                         if (!addr.IsValid())
                             continue;
@@ -979,7 +984,7 @@ bool CheckStake(CBlock* pblock, CWallet& wallet, const CChainParams& chainparams
     CCoinsViewCache view(pcoinsTip);
 
     // verify hash target and signature of coinstake tx
-    if (!CheckProofOfStake(mapBlockIndex[pblock->hashPrevBlock], pblock->vtx[1], pblock->nBits, proofHash, hashTarget, nullptr, view, false))    
+    if (!CheckProofOfStake(mapBlockIndex[pblock->hashPrevBlock], pblock->vtx[1], pblock->nBits, proofHash, hashTarget, nullptr, view, false))
         return error("CheckStake() : proof-of-stake checking failed");
 
     //// debug print
