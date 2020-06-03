@@ -1754,7 +1754,7 @@ void ElectrumGUI::updateStakingStatus()
                        CFund::CProposal proposal;
                        if (!pcoinsTip->GetProposal(it_->first, proposal))
                            continue;
-                       if (proposal.fState != CFund::NIL)
+                       if (proposal.GetLastState() != CFund::NIL)
                            continue;
                        auto it = std::find_if( vAddedProposalVotes.begin(), vAddedProposalVotes.end(),
                                                [&proposal](const std::pair<std::string, int>& element){ return element.first == proposal.hash.ToString();} );
@@ -1778,7 +1778,7 @@ void ElectrumGUI::updateStakingStatus()
                         if (!pcoinsTip->GetPaymentRequest(it_->first, prequest))
                             continue;
 
-                        if (prequest.fState != CFund::NIL)
+                        if (prequest.GetLastState() != CFund::NIL)
                             continue;
                         auto it = std::find_if( vAddedPaymentRequestVotes.begin(), vAddedPaymentRequestVotes.end(),
                                                 [&prequest](const std::pair<std::string, int>& element){ return element.first == prequest.hash.ToString();} );

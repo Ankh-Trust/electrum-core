@@ -273,6 +273,7 @@ bool CCoinsViewCache::AddProposal(const CProposal& proposal) const {
         cacheProposals[proposal.hash]=proposal;
     else
         cacheProposals.insert(std::make_pair(proposal.hash, proposal));
+
     return true;
 }
 
