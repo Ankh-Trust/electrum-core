@@ -250,6 +250,8 @@ void PrepareShutdown()
     /// module was initialized.
     RenameThread("electrum-shutoff");
     mempool.AddTransactionsUpdated(1);
+    // Changes to mempool should also be made to Dandelion stempool
+    stempool.AddTransactionsUpdated(1);
 
     StopHTTPRPC();
     StopREST();
@@ -1130,6 +1132,8 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
     int ratio = std::min<int>(std::max<int>(GetArg("-checkmempool", chainparams.DefaultConsistencyChecks() ? 1 : 0), 0), 1000000);
     if (ratio != 0) {
         mempool.setSanityCheck(1.0 / ratio);
+        // Changes to mempool should also be made to Dandelion stempool
+        stempool.setSanityCheck(1.0 / ratio);        
     }
     fCheckBlockIndex = GetBoolArg("-checkblockindex", chainparams.DefaultConsistencyChecks());
     fCheckpointsEnabled = GetBoolArg("-checkpoints", DEFAULT_CHECKPOINTS_ENABLED);
