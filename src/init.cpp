@@ -961,7 +961,7 @@ void DownloadBlockchain(std::string url)
 /** Initialize electrum.
  *  @pre Parameters should be parsed and config file should be read.
  */
-bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
+bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler, const std::string& wordlist)
 {
     // ********************************************************* Step 0: download bootstrap
     std::string sBootstrap = GetArg("-bootstrap","");
@@ -1133,7 +1133,7 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
     if (ratio != 0) {
         mempool.setSanityCheck(1.0 / ratio);
         // Changes to mempool should also be made to Dandelion stempool
-        stempool.setSanityCheck(1.0 / ratio);        
+        stempool.setSanityCheck(1.0 / ratio);
     }
     fCheckBlockIndex = GetBoolArg("-checkblockindex", chainparams.DefaultConsistencyChecks());
     fCheckpointsEnabled = GetBoolArg("-checkpoints", DEFAULT_CHECKPOINTS_ENABLED);
@@ -1763,7 +1763,7 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
         pwalletMain = nullptr;
         LogPrintf("Wallet disabled!\n");
     } else {
-        CWallet::InitLoadWallet();
+        CWallet::InitLoadWallet(wordlist);
         if (!pwalletMain)
             return false;
     }

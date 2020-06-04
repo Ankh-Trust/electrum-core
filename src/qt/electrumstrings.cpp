@@ -383,6 +383,7 @@ QT_TRANSLATE_NOOP("electrum-core", "Min. number of valid requests to NTP servers
 QT_TRANSLATE_NOOP("electrum-core", "Need to specify a port with -whitebind: '%s'"),
 QT_TRANSLATE_NOOP("electrum-core", "Node relay options:"),
 QT_TRANSLATE_NOOP("electrum-core", "Not enough file descriptors available."),
+QT_TRANSLATE_NOOP("electrum-core", "Old data base structure detected"),
 QT_TRANSLATE_NOOP("electrum-core", "Only connect to nodes in network <net> (ipv4, ipv6 or onion)"),
 QT_TRANSLATE_NOOP("electrum-core", "Options:"),
 QT_TRANSLATE_NOOP("electrum-core", "Password for JSON-RPC connections"),
