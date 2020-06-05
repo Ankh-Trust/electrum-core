@@ -151,7 +151,7 @@ class ElectrumCore: public QObject
 {
     Q_OBJECT
 public:
-    explicit NavCoinCore(std::string& wordlist);
+    explicit ElectrumCore(std::string& wordlist);
 
 public Q_SLOTS:
     void initialize();
@@ -173,7 +173,6 @@ private:
 
     /// Pass fatal exception message to UI thread
     void handleRunawayException(const std::exception *e);
-    std::string words;
     std::string words;
 };
 
@@ -392,7 +391,7 @@ bool ElectrumApplication::setupMnemonicWords(std::string& wordlist) {
     return false;
 }
 
-bool NavCoinApplication::createWindow(const NetworkStyle *networkStyle)
+bool ElectrumApplication::createWindow(const NetworkStyle *networkStyle)
 {
     if (!setupMnemonicWords(wordlist)) {
         if (wordlist.empty()) return false;

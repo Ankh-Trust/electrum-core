@@ -7,8 +7,8 @@
 #include <startoptionsrestore.h>
 #include <ui_startoptionsrestore.h>
 
-QString editLineCorrectCss = "QLineEdit{; border:1px solid #7578A2;}";
-QString editLineInvalidCss = "QLineEdit{ border:1px solid red;}";
+QString editLineCorrectCss = "QLineEdit{; border:1px solid #000000;}";
+QString editLineInvalidCss = "QLineEdit{ border:1px solid #800000;}";
 
 StartOptionsRestore::StartOptionsRestore(QStringList _wordList, int rows,
                                          QWidget *parent)
@@ -21,7 +21,7 @@ StartOptionsRestore::StartOptionsRestore(QStringList _wordList, int rows,
             QLineEdit *label = new QLineEdit(this);
             label->setStyleSheet(
                 "QLabel{background-color: blue; padding:0px; margin:0px"
-                "; font-size: 18px; font-weight: thin; color: #7578A2;}");
+                "; font-size: 18px; font-weight: thin; color: #000000;}");
             label->setMinimumSize(80, 36);
             label->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
             label->setContentsMargins(0, 0, 0, 0);

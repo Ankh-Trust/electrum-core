@@ -15,9 +15,9 @@ StartOptions::StartOptions(QWidget *parent)
     ui->setupUi(this);
 
     ui->welcomeLabel2->setStyleSheet(
-            "QLabel{font-size: 30px; color: #7578A2;}");
+            "QLabel{font-size: 30px; color: #transparent;}");
     ui->welcomeLabel2->setText(tr(
-        "Welcome to Navcoin!"));
+        "Welcome to Electrum!"));
 
 }
 
