@@ -5,7 +5,7 @@
  * ==========================(LICENSE BEGIN)============================
  *
  * Copyright (c) 2007-2010  Projet RNRT SAPHIR
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
  * "Software"), to deal in the Software without restriction, including
@@ -13,10 +13,10 @@
  * distribute, sublicense, and/or sell copies of the Software, and to
  * permit persons to whom the Software is furnished to do so, subject to
  * the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be
  * included in all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
@@ -370,7 +370,7 @@ static const sph_u64 T1[] = {
 	C64e(0x32324f7d2b7d642b), C64e(0xe6e642a495a4d795),
 	C64e(0xc0c03bfba0fb9ba0), C64e(0x1919aab398b33298),
 	C64e(0x9e9ef668d16827d1), C64e(0xa3a322817f815d7f),
-	C64e(0x4484eeaa66aa8866), C64e(0x5454d6827e82a87e),
+	C64e(0x4444eeaa66aa8866), C64e(0x5454d6827e82a87e),
 	C64e(0x3b3bdde6abe676ab), C64e(0x0b0b959e839e1683),
 	C64e(0x8c8cc945ca4503ca), C64e(0xc7c7bc7b297b9529),
 	C64e(0x6b6b056ed36ed6d3), C64e(0x28286c443c44503c),
@@ -501,7 +501,7 @@ static const sph_u64 T2[] = {
 	C64e(0x2b32324f7d2b7d64), C64e(0x95e6e642a495a4d7),
 	C64e(0xa0c0c03bfba0fb9b), C64e(0x981919aab398b332),
 	C64e(0xd19e9ef668d16827), C64e(0x7fa3a322817f815d),
-	C64e(0x664484eeaa66aa88), C64e(0x7e5454d6827e82a8),
+	C64e(0x664444eeaa66aa88), C64e(0x7e5454d6827e82a8),
 	C64e(0xab3b3bdde6abe676), C64e(0x830b0b959e839e16),
 	C64e(0xca8c8cc945ca4503), C64e(0x29c7c7bc7b297b95),
 	C64e(0xd36b6b056ed36ed6), C64e(0x3c28286c443c4450),
@@ -632,7 +632,7 @@ static const sph_u64 T3[] = {
 	C64e(0x642b32324f7d2b7d), C64e(0xd795e6e642a495a4),
 	C64e(0x9ba0c0c03bfba0fb), C64e(0x32981919aab398b3),
 	C64e(0x27d19e9ef668d168), C64e(0x5d7fa3a322817f81),
-	C64e(0x88664484eeaa66aa), C64e(0xa87e5454d6827e82),
+	C64e(0x88664444eeaa66aa), C64e(0xa87e5454d6827e82),
 	C64e(0x76ab3b3bdde6abe6), C64e(0x16830b0b959e839e),
 	C64e(0x03ca8c8cc945ca45), C64e(0x9529c7c7bc7b297b),
 	C64e(0xd6d36b6b056ed36e), C64e(0x503c28286c443c44),
@@ -765,7 +765,7 @@ static const sph_u64 T4[] = {
 	C64e(0x7d642b32324f7d2b), C64e(0xa4d795e6e642a495),
 	C64e(0xfb9ba0c0c03bfba0), C64e(0xb332981919aab398),
 	C64e(0x6827d19e9ef668d1), C64e(0x815d7fa3a322817f),
-	C64e(0xaa88664484eeaa66), C64e(0x82a87e5454d6827e),
+	C64e(0xaa88664444eeaa66), C64e(0x82a87e5454d6827e),
 	C64e(0xe676ab3b3bdde6ab), C64e(0x9e16830b0b959e83),
 	C64e(0x4503ca8c8cc945ca), C64e(0x7b9529c7c7bc7b29),
 	C64e(0x6ed6d36b6b056ed3), C64e(0x44503c28286c443c),
@@ -898,7 +898,7 @@ static const sph_u64 T5[] = {
 	C64e(0x2b7d642b32324f7d), C64e(0x95a4d795e6e642a4),
 	C64e(0xa0fb9ba0c0c03bfb), C64e(0x98b332981919aab3),
 	C64e(0xd16827d19e9ef668), C64e(0x7f815d7fa3a32281),
-	C64e(0x66aa88664484eeaa), C64e(0x7e82a87e5454d682),
+	C64e(0x66aa88664444eeaa), C64e(0x7e82a87e5454d682),
 	C64e(0xabe676ab3b3bdde6), C64e(0x839e16830b0b959e),
 	C64e(0xca4503ca8c8cc945), C64e(0x297b9529c7c7bc7b),
 	C64e(0xd36ed6d36b6b056e), C64e(0x3c44503c28286c44),
@@ -1029,7 +1029,7 @@ static const sph_u64 T6[] = {
 	C64e(0x7d2b7d642b32324f), C64e(0xa495a4d795e6e642),
 	C64e(0xfba0fb9ba0c0c03b), C64e(0xb398b332981919aa),
 	C64e(0x68d16827d19e9ef6), C64e(0x817f815d7fa3a322),
-	C64e(0xaa66aa88664484ee), C64e(0x827e82a87e5454d6),
+	C64e(0xaa66aa88664444ee), C64e(0x827e82a87e5454d6),
 	C64e(0xe6abe676ab3b3bdd), C64e(0x9e839e16830b0b95),
 	C64e(0x45ca4503ca8c8cc9), C64e(0x7b297b9529c7c7bc),
 	C64e(0x6ed36ed6d36b6b05), C64e(0x443c44503c28286c),
@@ -1160,7 +1160,7 @@ static const sph_u64 T7[] = {
 	C64e(0x4f7d2b7d642b3232), C64e(0x42a495a4d795e6e6),
 	C64e(0x3bfba0fb9ba0c0c0), C64e(0xaab398b332981919),
 	C64e(0xf668d16827d19e9e), C64e(0x22817f815d7fa3a3),
-	C64e(0xeeaa66aa88664484), C64e(0xd6827e82a87e5454),
+	C64e(0xeeaa66aa88664444), C64e(0xd6827e82a87e5454),
 	C64e(0xdde6abe676ab3b3b), C64e(0x959e839e16830b0b),
 	C64e(0xc945ca4503ca8c8c), C64e(0xbc7b297b9529c7c7),
 	C64e(0x056ed36ed6d36b6b), C64e(0x6c443c44503c2828),
@@ -1838,7 +1838,7 @@ static const sph_u32 T1up[] = {
 	C32e(0x93936af9), C32e(0x5555580d), C32e(0xfcfc619d), C32e(0x7a7ab3c9),
 	C32e(0xc8c827ef), C32e(0xbaba8832), C32e(0x32324f7d), C32e(0xe6e642a4),
 	C32e(0xc0c03bfb), C32e(0x1919aab3), C32e(0x9e9ef668), C32e(0xa3a32281),
-	C32e(0x4484eeaa), C32e(0x5454d682), C32e(0x3b3bdde6), C32e(0x0b0b959e),
+	C32e(0x4444eeaa), C32e(0x5454d682), C32e(0x3b3bdde6), C32e(0x0b0b959e),
 	C32e(0x8c8cc945), C32e(0xc7c7bc7b), C32e(0x6b6b056e), C32e(0x28286c44),
 	C32e(0xa7a72c8b), C32e(0xbcbc813d), C32e(0x16163127), C32e(0xadad379a),
 	C32e(0xdbdb964d), C32e(0x64649efa), C32e(0x7474a6d2), C32e(0x14143622),
@@ -1972,7 +1972,7 @@ static const sph_u32 T2up[] = {
 	C32e(0x5793936a), C32e(0xf2555558), C32e(0x82fcfc61), C32e(0x477a7ab3),
 	C32e(0xacc8c827), C32e(0xe7baba88), C32e(0x2b32324f), C32e(0x95e6e642),
 	C32e(0xa0c0c03b), C32e(0x981919aa), C32e(0xd19e9ef6), C32e(0x7fa3a322),
-	C32e(0x664484ee), C32e(0x7e5454d6), C32e(0xab3b3bdd), C32e(0x830b0b95),
+	C32e(0x664444ee), C32e(0x7e5454d6), C32e(0xab3b3bdd), C32e(0x830b0b95),
 	C32e(0xca8c8cc9), C32e(0x29c7c7bc), C32e(0xd36b6b05), C32e(0x3c28286c),
 	C32e(0x79a7a72c), C32e(0xe2bcbc81), C32e(0x1d161631), C32e(0x76adad37),
 	C32e(0x3bdbdb96), C32e(0x5664649e), C32e(0x4e7474a6), C32e(0x1e141436),
@@ -2106,7 +2106,7 @@ static const sph_u32 T3up[] = {
 	C32e(0x3d579393), C32e(0xaaf25555), C32e(0xe382fcfc), C32e(0xf4477a7a),
 	C32e(0x8bacc8c8), C32e(0x6fe7baba), C32e(0x642b3232), C32e(0xd795e6e6),
 	C32e(0x9ba0c0c0), C32e(0x32981919), C32e(0x27d19e9e), C32e(0x5d7fa3a3),
-	C32e(0x88664484), C32e(0xa87e5454), C32e(0x76ab3b3b), C32e(0x16830b0b),
+	C32e(0x88664444), C32e(0xa87e5454), C32e(0x76ab3b3b), C32e(0x16830b0b),
 	C32e(0x03ca8c8c), C32e(0x9529c7c7), C32e(0xd6d36b6b), C32e(0x503c2828),
 	C32e(0x5579a7a7), C32e(0x63e2bcbc), C32e(0x2c1d1616), C32e(0x4176adad),
 	C32e(0xad3bdbdb), C32e(0xc8566464), C32e(0xe84e7474), C32e(0x281e1414),

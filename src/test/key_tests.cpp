@@ -18,12 +18,12 @@
 
 using namespace std;
 
-static const string strSecret1     ("PHSecPt927qh8bVhLhv4Rr66JMUYWRcaQfsdPnP8nucyhE4Lhc8b");
-static const string strSecret2     ("PEc7Ctgscq6fJCCBAsmi9NQr2W2dLfpraVJgYqSEhacGP4YwqaDF");
+static const string strSecret1     ("PG6tQ6aB2UwYqfsHYce2aRW1D6CxMJqYpfLZ23TpUNjkHdosbGJv");
+static const string strSecret2     ("PD9RvTeGujPGS9s9dAEBkk7BJmm4zEkZcScMa9AHedtqdkCw3GYS");
 //static const string strSecret1C    ("Kwr371tjA9u2rFSMZjTNun2PXXP3WPZu2afRHTcta6KxEUdm1vEw");
 //static const string strSecret2C    ("L3Hq7a8FEQwJkW1M2GNKDW28546Vp5miewcCzSqUD9kCAXrJdS3g");
-static const CElectrumAddress addr1 ("NfWVKf7BxmvNCm8e82eegeKeHyFM2Dy2Nv");
-static const CElectrumAddress addr2 ("NMxJRcqfcgfQvzhKy42zHVSzTfrnS2HLQo");
+static const CElectrumAddress addr1 ("EdBLYD92uGD3BhETGCezKMesYgrzDsfr5p");
+static const CElectrumAddress addr2 ("ELorMwBoTxfc88DtS9LXHQJ4ZmZGhMwecB");
 //static const CElectrumAddress addr1C("1NoJrossxPBKfCHuJXT4HadJrXRE9Fxiqs");
 //static const CElectrumAddress addr2C("1CRj2HyM1CXWzHAXLQtiGLyggNT9WQqsDs");
 

@@ -522,6 +522,7 @@ struct sortByCoinAgeDescending
     }
 };
 
+
 /** Private key that includes an expiration date in case it never gets used. */
 class CWalletKey
 {

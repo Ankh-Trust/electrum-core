@@ -96,9 +96,6 @@ public:
     /** Show progress e.g. for verifychain */
     boost::signals2::signal<void (const std::string &title, int nProgress)> ShowProgress;
 
-    /** Set progress break action (possible "cancel button" triggers that action) */
-    boost::signals2::signal<void(std::function<void(void)> action)> SetProgressBreakAction;
-
     /** New block has been accepted */
     boost::signals2::signal<void (bool, const CBlockIndex *)> NotifyBlockTip;
 
@@ -119,4 +116,4 @@ std::string AmountErrMsg(const char* const optname, const std::string& strValue)
 
 extern CClientUIInterface uiInterface;
 
-#endif // ELETRUM_UI_INTERFACE_H
+#endif // ELECTRUM_UI_INTERFACE_H

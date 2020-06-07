@@ -556,7 +556,7 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
 
                         splitMap[address] = pair.second.get_real();
                     }
-               }
+                }
 
             } catch (const UniValue& objError) {
                 return error("%s: Failed to read JSON from -stakingaddress argument", __func__);
@@ -1221,7 +1221,7 @@ bool CWallet::GetAccountPubkey(CPubKey &pubKey, std::string strAccount, bool bFo
             for (map<uint256, CWalletTx>::iterator it = mapWallet.begin();
                  it != mapWallet.end() && account.vchPubKey.IsValid();
                  ++it)
-               for(const CTxOut& txout: (*it).second.vout)
+                for(const CTxOut& txout: (*it).second.vout)
                     if (txout.scriptPubKey == scriptPubKey) {
                         bForceNew = true;
                         break;
@@ -2289,6 +2289,7 @@ bool CWalletTx::InMempool() const
     }
     return false;
 }
+
 
 bool CWalletTx::InStempool() const
 {

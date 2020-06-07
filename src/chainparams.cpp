@@ -55,14 +55,14 @@ static CBlock CreateGenesisBlock(const char* pszTimestamp, const CScript& genesi
  */
 static CBlock CreateGenesisBlock(uint32_t nTime, uint32_t nNonce, uint32_t nBits, int32_t nVersion, const CAmount& genesisReward)
 {
-    const char* pszTimestamp = "BBC News 20 Sep: Trump denies promise that led to formal complaint from intelligence official";
+    const char* pszTimestamp = "Important to Understand That We Are the Majority, Growing Fast, United and Getting Stronger";
     const CScript genesisOutputScript = CScript() << ParseHex("0464c57bba1ef866f7551bada31f6320da513fea13d56c7926d03e8449981b4f64f301043b509b7f98bce6180e93884e530f5a56333d7ac84a26f6a25f0dd09a77") << OP_CHECKSIG;
     return CreateGenesisBlock(pszTimestamp, genesisOutputScript, nTime, nNonce, nBits, nVersion, genesisReward);
 }
 
 static CBlock CreateGenesisBlockTestnet(uint32_t nTime, uint32_t nNonce, uint32_t nBits, int32_t nVersion, const CAmount& genesisReward)
 {
-    const char* pszTimestamp = "BBC News 20 Sep: Climate change: Arctic expedition to drift in sea-ice for a year";
+    const char* pszTimestamp = "People are awake and see what is happening";
     const CScript genesisOutputScript = CScript() << ParseHex("043ebea3223e70f2c8205ecf2c32f567fbca8bf8e74e1138f6090c4cd442589c69f719199b4a12a42bd8022eed0541e43744e387bff564dd28dba51da146170626") << OP_CHECKSIG;
     return CreateGenesisBlock(pszTimestamp, genesisOutputScript, nTime, nNonce, nBits, nVersion, genesisReward);
 }
@@ -87,7 +87,7 @@ public:
         consensus.nMajorityRejectBlockOutdated = 950;
         consensus.nMajorityWindow = 1000;
         consensus.BIP34Height = 0;
-        consensus.BIP34Hash = uint256S("0x00007db8870afcd774ef9851107340256e899d58b0db163bc782f2128a4c33ed");
+        consensus.BIP34Hash = uint256S("0x0000f0d459b7ed3d0a004e1b0553359620462599ab373e8d8285d76ca26ffda7");
         consensus.powLimit = ArithToUint256(~arith_uint256(0) >> 16);
         consensus.nPowTargetTimespan = 30;
         consensus.nPowTargetSpacing = 30;
@@ -213,10 +213,10 @@ public:
         nPruneAfterHeight = 100000;
         bnProofOfWorkLimit = arith_uint256(~arith_uint256() >> 16);
 
-        uint32_t nTimestamp = 1569005000;
-        uint256 hashGenesisBlock = uint256S("0x00007db8870afcd774ef9851107340256e899d58b0db163bc782f2128a4c33ed");
-        uint256 hashMerkleRoot = uint256S("0x77242bb9675ba1000fb144eb0bc92542c4fc9a34a9d1ee328dbbd987a3de7e2c");
-        uint32_t nNonce = 2043738044;
+        uint32_t nTimestamp = 1591550000;
+        uint256 hashGenesisBlock = uint256S("0x0000f0d459b7ed3d0a004e1b0553359620462599ab373e8d8285d76ca26ffda7");
+        uint256 hashMerkleRoot = uint256S("0x6e2a2463d34d6432fe1de23c2d327e65bc03a22d7b2ff1b72a3f842d6c80bd64");
+        uint32_t nNonce = 2043744308;
 
         genesis = CreateGenesisBlock(nTimestamp, nNonce, 0x1f00ffff, 1, 0);
 	consensus.hashGenesisBlock = genesis.GetHash();
@@ -257,8 +257,8 @@ public:
 
         checkpointData = (CCheckpointData) {
             boost::assign::map_list_of
-            ( 0, uint256S("0x00007db8870afcd774ef9851107340256e899d58b0db163bc782f2128a4c33ed"))
-            ( 250, uint256S("0x668e05f32eaa6ff639b157abfaf9fe4972770a92ed7c69d566b3f4ec00d8d015"))
+            ( 0, uint256S("0x0000f0d459b7ed3d0a004e1b0553359620462599ab373e8d8285d76ca26ffda7")),
+            /*( 250, uint256S("0x668e05f32eaa6ff639b157abfaf9fe4972770a92ed7c69d566b3f4ec00d8d015"))
             ( 500, uint256S("0xa6dd84d1f35b15aae402e72a7ff4f18dca08ac001f2b95cbb4588bdfa16eeb08"))
             ( 1000, uint256S("0x8a75993a531726f54542bdcaffbfed023bfe97f99d9c4f025eb749c4d2ded54e"))
             ( 2500, uint256S("0x5951c151346fb911a77a9247e0a2bfa4fd6af39dc53c64f7e0221c55b8d7bf7c"))
@@ -267,7 +267,8 @@ public:
             ( 25000, uint256S("0xf2ea9180b7a93aa3529db3991e719673ea9d76bf876caf2f5fcb29b87b80c5e0"))
             ( 50000, uint256S("0x7a25b61cb771d98c71f91452e3af628c69d9d8055ea6d776c49c09d1763ecd3c"))
             ( 100000, uint256S("0xaabf04d3961c67fc6dbb09c7b898bde1523d035d5f5ed26db739659152a89d11"))
-            ( 250000, uint256S("0xaabf04d3961c67fc6dbb09c7b898bde1523d035d5f5ed26db739659152a89d11")),
+            ( 250000, uint256S("0xaabf04d3961c67fc6dbb09c7b898bde1523d035d5f5ed26db739659152a89d11"))
+            ( 500000, uint256S("0x7b1d1487143d99b1b0b43a4578f32543ba2b4497ff4909acbc6b97ca951319bb")),*/
             1569005000, // * UNIX timestamp of last checkpoint block
             0,          // * total number of transactions between genesis and last checkpoint
                         //   (the tx=... number in the SetBestChain debug.log lines)
@@ -289,7 +290,7 @@ public:
         consensus.nMajorityRejectBlockOutdated = 950;
         consensus.nMajorityWindow = 1000;
         consensus.BIP34Height = 0;
-        consensus.BIP34Hash = uint256S("0x00003a40545d761d6727b925c0d187b47335295b43163d075287fa7ff931e4fb");
+        consensus.BIP34Hash = uint256S("0x00005f888962021a71637ea8bfa0d49399ff3bf26aa29dee7df96f063150032b");
         consensus.powLimit = ArithToUint256(~arith_uint256(0) >> 16);
         consensus.nPowTargetTimespan = 30;
         consensus.nPowTargetSpacing = 30;
@@ -404,10 +405,10 @@ public:
         nPruneAfterHeight = 1000;
         bnProofOfWorkLimit = arith_uint256(~arith_uint256() >> 16);
 
-        uint32_t nTimestamp = 1569005000;
-        uint256 hashGenesisBlock = uint256S("0x00003a40545d761d6727b925c0d187b47335295b43163d075287fa7ff931e4fb");
-        uint256 hashMerkleRoot = uint256S("0x82248aea7886a8a448e42cad754ceae4a25d95b024923f6b4dfb208bb479e27a");
-        uint32_t nNonce = 2043802847;
+        uint32_t nTimestamp = 1591550000;
+        uint256 hashGenesisBlock = uint256S("0x00005f888962021a71637ea8bfa0d49399ff3bf26aa29dee7df96f063150032b");
+        uint256 hashMerkleRoot = uint256S("0x6bd8b59d27457f9f75eb7bfdf8b634174fe07c0d938515f7e4b792f00ce1eb7f");
+        uint32_t nNonce = 2043805165;
 
         genesis = CreateGenesisBlockTestnet(nTimestamp, nNonce, 0x1d00ffff, 1, 0);
         consensus.hashGenesisBlock = genesis.GetHash();
@@ -471,7 +472,7 @@ public:
         consensus.nMajorityRejectBlockOutdated = 950;
         consensus.nMajorityWindow = 1000;
         consensus.BIP34Height = 0;
-        consensus.BIP34Hash = uint256S("0x0000af88d8cae858d9e3e22d5931871e9eefd411984dc241e9bc2de1b7d88326");
+        consensus.BIP34Hash = uint256S("0x0000688255a67a949db9906e9ca54dbf8df258ac38d58143dfbb5af39a3113f3");
         consensus.powLimit = ArithToUint256(~arith_uint256(0) >> 16);
         consensus.nPowTargetTimespan = 30;
         consensus.nPowTargetSpacing = 30;
@@ -589,13 +590,13 @@ public:
         // To create a new devnet:
         //
         // 1) Replace nTimestamp with current timestamp.
-        uint32_t nTimestamp = 1569005000;
+        uint32_t nTimestamp = 1591550000;
         // 2) Rebuild
         // 3) Launch daemon. It'll calculate the new parameters.
         // 4) Update the following variables with the new values:
-        uint256 hashGenesisBlock = uint256S("0x0000af88d8cae858d9e3e22d5931871e9eefd411984dc241e9bc2de1b7d88326");
-        uint256 hashMerkleRoot = uint256S("0x82248aea7886a8a448e42cad754ceae4a25d95b024923f6b4dfb208bb479e27a");
-        uint32_t nNonce = 2043685926;
+        uint256 hashGenesisBlock = uint256S("0x0000688255a67a949db9906e9ca54dbf8df258ac38d58143dfbb5af39a3113f3");
+        uint256 hashMerkleRoot = uint256S("0x6bd8b59d27457f9f75eb7bfdf8b634174fe07c0d938515f7e4b792f00ce1eb7f");
+        uint32_t nNonce = 2043687215;
         // 5) Rebuild. Launch daemon.
         // 6) Generate first block using RPC command "./electrum-cli generate 1"
 
