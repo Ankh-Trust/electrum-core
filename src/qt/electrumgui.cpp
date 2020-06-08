@@ -165,7 +165,7 @@ ElectrumGUI::ElectrumGUI(const PlatformStyle *platformStyle, const NetworkStyle 
 {
     GUIUtil::restoreWindowGeometry("nWindow", QSize(1152, 576), this);
     setMinimumSize(QSize(1152, 576));
-    QString windowTitle = tr("Electrum Core") + "";
+    QString windowTitle = tr("Electrum Core test") + "";
 #ifdef ENABLE_WALLET
     /* if compiled with wallet support, -disablewallet can still disable the wallet */
     enableWallet = !GetBoolArg("-disablewallet", false);

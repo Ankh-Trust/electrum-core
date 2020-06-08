@@ -1695,7 +1695,7 @@ CPubKey CWallet::ImportMnemonic(word_list mnemonic, dictionary lang)
 
     key.Set(vKey.begin(), vKey.end(), false);
 
-    int64_t nCreationTime = GetTime();
+    int64_t nCreationTime = GetArg("-importmnemonicfromtime", chainActive.Genesis()->GetBlockTime());
     CKeyMetadata metadata(nCreationTime);
 
     // calculate the pubkey
@@ -1711,6 +1711,9 @@ CPubKey CWallet::ImportMnemonic(word_list mnemonic, dictionary lang)
 
         // mem store the metadata
         mapKeyMetadata[pubkey.GetID()] = metadata;
+
+        if (!nTimeFirstKey || nCreationTime < nTimeFirstKey)
+            nTimeFirstKey = nCreationTime;
 
         // write the key&metadata to the database
         if (!AddKeyPubKey(key, pubkey))
@@ -4341,7 +4344,7 @@ bool CMerkleTx::AcceptToMemoryPool(bool fLimitFree, CAmount nAbsurdFee)
 {
     CValidationState state;
     bool ret;
-    if (GetBoolArg("-dandelion", true)) {
+    if (GetBoolArg("-dandelion", true) && !(GetBoolArg("-devnet", false) && vNodes.size() == 0)) {
         ret = ::AcceptToMemoryPool(stempool, state, *this, fLimitFree /* pfMissingInputs */,
                                    nullptr /* plTxnReplaced */, false /* bypass_limits */, nAbsurdFee);
     } else {

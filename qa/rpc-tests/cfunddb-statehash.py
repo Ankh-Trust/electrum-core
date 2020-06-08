@@ -62,7 +62,7 @@ class CFundDBStateHash(ElectrumTestFramework):
         assert(self.nodes[0].getcfunddbstatehash() != self.nodes[1].getcfunddbstatehash())
 
 
-        connect_nodes(self.nodes[0], 1)
+        connect_nodes_bi(self.nodes, 0, 1)
 
         self.sync_all()
 
