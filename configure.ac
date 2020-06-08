@@ -808,6 +808,7 @@ if test x$use_pkgconfig = xyes; then
       if test x$use_qr != xno; then
         ELECTRUM_QT_CHECK([PKG_CHECK_MODULES([QR], [libqrencode], [have_qrencode=yes], [have_qrencode=no])])
       fi
+      ELECTRUM_QT_CHECK([PKG_CHECK_MODULES([CHARTS], [Qt5Charts],,[ELECTRUM_QT_FAIL(qtcharts not found)])])
       if test x$build_electrum_utils$build_electrumd$electrum_enable_qt$use_tests != xnononono; then
         PKG_CHECK_MODULES([EVENT], [libevent],, [AC_MSG_ERROR(libevent not found.)])
         if test x$TARGET_OS != xwindows; then
@@ -867,6 +868,7 @@ else
   fi
 
   ELECTRUM_QT_CHECK(AC_CHECK_LIB([protobuf] ,[main],[PROTOBUF_LIBS=-lprotobuf], ELECTRUM_QT_FAIL(libprotobuf not found)))
+  ELECTRUM_QT_CHECK([AC_CHECK_LIB([Qt5Charts], [main],[CHARTS_LIBS=-lQt5Charts], ELECTRUM_QT_FAIL(charts not found))])
   if test x$use_qr != xno; then
     ELECTRUM_QT_CHECK([AC_CHECK_LIB([qrencode], [main],[QR_LIBS=-lqrencode], [have_qrencode=no])])
     ELECTRUM_QT_CHECK([AC_CHECK_HEADER([qrencode.h],, have_qrencode=no)])
@@ -1213,4 +1215,6 @@ echo "  CXX           = $CXX"
 echo "  CXXFLAGS      = $HARDENED_CXXFLAGS $CXXFLAGS"
 echo "  LDFLAGS       = $HARDENED_LDFLAGS $LDFLAGS"
 echo "  ARFLAGS       = $ARFLAGS"
+echo "  CHARTS_LIBS   = $CHARTS_LIBS "
+echo "  CHARTS_CFLAGS = $CHARTS_CFLAGS "
 echo
