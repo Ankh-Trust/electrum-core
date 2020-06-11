@@ -153,13 +153,12 @@ ELECTRUM_CORE_H = \
   versionbits.h \
   wallet/crypter.h \
   wallet/db.h \
-  wallet/navtech.h \
   wallet/rpcwallet.h \
   wallet/wallet.h \
   wallet/walletdb.h \
   mnemonic/dictionary.h \
   mnemonic/mnemonic.h \
-	mnemonic/generateseed.h \
+  mnemonic/generateseed.h \
   mnemonic/arrayslice.h \
   zmq/zmqabstractnotifier.h \
   zmq/zmqconfig.h\
@@ -198,7 +197,7 @@ libelectrum_server_a_SOURCES = \
   policy/policy.cpp \
   pow.cpp \
   pos.cpp \
-	random.cpp \
+  random.cpp \
   rest.cpp \
   rpc/blockchain.cpp \
   rpc/mining.cpp \
@@ -237,10 +236,9 @@ libelectrum_wallet_a_SOURCES = \
   consensus/cfund.cpp \
   mnemonic/dictionary.cpp \
   mnemonic/mnemonic.cpp \
-	mnemonic/generateseed.cpp \
+  mnemonic/generateseed.cpp \
   wallet/crypter.cpp \
   wallet/db.cpp \
-  wallet/navtech.cpp \
   wallet/rpcdump.cpp \
   wallet/rpcwallet.cpp \
   wallet/wallet.cpp \
@@ -254,7 +252,7 @@ crypto_libelectrum_crypto_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 crypto_libelectrum_crypto_a_SOURCES = \
   crypto/aes.cpp \
   crypto/aes.h \
-	crypto/chacha20.cpp \
+  crypto/chacha20.cpp \
   crypto/chacha20.h \
   crypto/common.h \
   crypto/hmac_sha256.cpp \
@@ -374,6 +372,7 @@ libelectrum_util_a_CPPFLAGS = $(AM_CPPFLAGS) $(ELECTRUM_INCLUDES)
 libelectrum_util_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 libelectrum_util_a_SOURCES = \
   support/pagelocker.cpp \
+  uint256.cpp \
   chainparamsbase.cpp \
   clientversion.cpp \
   compat/glibc_sanity.cpp \
