@@ -1,4 +1,4 @@
-// Copyright (c) 2018 The NAVcoin Core developers
+// Copyright (c) 2018 The Navcoin Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -14,6 +14,8 @@ double GetDifficulty(const CBlockIndex* blockindex);
 double GetPoWMHashPS();
 
 double GetPoSKernelPS();
+
+std::pair<CAmount, std::pair<CAmount, CAmount>> GetStakingCoins();
 
 extern uint64_t nLastCoinStakeSearchInterval;
 

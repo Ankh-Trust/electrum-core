@@ -66,8 +66,6 @@ static const bool DEFAULT_WALLETBROADCAST = true;
 //! if set, all keys will be derived by using BIP32
 static const bool DEFAULT_USE_HD_WALLET = true;
 
-extern const char * DEFAULT_WALLET_DAT;
-
 class CBlockIndex;
 class CCoinControl;
 class COutput;
@@ -84,7 +82,7 @@ enum WalletFeature
     FEATURE_WALLETCRYPT = 40000, // wallet encryption
     FEATURE_COMPRPUBKEY = 60000, // compressed public keys
 
-    FEATURE_HD = 101000, // Hierarchical key derivation after BIP32 (HD Wallet)
+    FEATURE_HD = 130000, // Hierarchical key derivation after BIP32 (HD Wallet)
     FEATURE_LATEST = FEATURE_COMPRPUBKEY // HD is optional, use FEATURE_COMPRPUBKEY as latest version
 };
 
@@ -471,6 +469,7 @@ public:
 
 
     bool InMempool() const;
+    bool InStempool() const;
     bool IsTrusted() const;
 
     int64_t GetTxTime() const;
@@ -486,9 +485,7 @@ struct CRecipient
     CScript scriptPubKey;
     CAmount nAmount;
     bool fSubtractFeeFromAmount;
-    std::string strDZeel;
 };
-
 
 class COutput
 {
@@ -513,7 +510,13 @@ public:
     std::string ToString() const;
 };
 
-
+struct sortByCoinAgeDescending
+{
+    inline bool operator() (const COutput& cOutput1, const COutput& cOutput2)
+    {
+        return (cOutput1.tx->nTime > cOutput2.tx->nTime);
+    }
+};
 
 
 /** Private key that includes an expiration date in case it never gets used. */
@@ -638,7 +641,6 @@ private:
      */
     bool SelectCoins(const std::vector<COutput>& vAvailableCoins, const CAmount& nTargetValue, std::set<std::pair<const CWalletTx*,unsigned int> >& setCoinsRet, CAmount& nValueRet, const CCoinControl *coinControl = NULL) const;
     bool SelectCoinsForStaking(int64_t nTargetValue, unsigned int nSpendTime, std::set<std::pair<const CWalletTx*,unsigned int> >& setCoinsRet, int64_t& nValueRet) const;
-    void AvailableCoinsForStaking(std::vector<COutput>& vCoins, unsigned int nSpendTime) const;
 
     CWalletDB *pwalletdbEncryption;
 
@@ -755,6 +757,7 @@ public:
      * populate vCoins with vector of available COutputs.
      */
     void AvailableCoins(std::vector<COutput>& vCoins, bool fOnlyConfirmed=true, const CCoinControl *coinControl = NULL, bool fIncludeZeroValue=false, bool fIncludeColdStaking=false) const;
+    void AvailableCoinsForStaking(std::vector<COutput>& vCoins, unsigned int nSpendTime) const;
 
     /**
      * Shuffle and select coins until nTargetValue is reached while avoiding
@@ -772,7 +775,7 @@ public:
     void UnlockAllCoins();
     void ListLockedCoins(std::vector<COutPoint>& vOutpts);
     uint64_t GetStakeWeight() const;
-    bool CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int64_t nSearchInterval, int64_t nFees, CMutableTransaction& txNew, CKey& key);
+    bool CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int64_t nSearchInterval, int64_t nFees, CMutableTransaction& txNew, CKey& key, CScript& kernelScriptPubKey);
     int64_t GetStake() const;
     int64_t GetNewMint() const;
 
@@ -854,7 +857,7 @@ public:
      * @note passing nChangePosInOut as -1 will result in setting a random position
      */
     bool CreateTransaction(const std::vector<CRecipient>& vecSend, CWalletTx& wtxNew, CReserveKey& reservekey, CAmount& nFeeRet, int& nChangePosInOut,
-                           std::string& strFailReason, const CCoinControl *coinControl = NULL, bool sign = true, std::string strDZeel = "");
+                           std::string& strFailReason, const CCoinControl *coinControl = NULL, bool sign = true);
     bool CommitTransaction(CWalletTx& wtxNew, CReserveKey& reservekey);
 
     bool AddAccountingEntry(const CAccountingEntry&, CWalletDB & pwalletdb);
@@ -989,7 +992,7 @@ public:
     static std::string GetWalletHelpString(bool showDebug);
 
     /* Initializes the wallet, returns a new CWallet instance or a null pointer in case of an error */
-    static bool InitLoadWallet();
+    static bool InitLoadWallet(const std::string& wordlist, const std::string& password);
 
     /* Wallets parameter interaction */
     static bool ParameterInteraction();

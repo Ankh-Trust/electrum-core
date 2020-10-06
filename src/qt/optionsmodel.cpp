@@ -72,18 +72,12 @@ void OptionsModel::Init(bool resetSettings)
     nDisplayUnit = settings.value("nDisplayUnit").toInt();
 
     if (!settings.contains("strThirdPartyTxUrls"))
-        settings.setValue("strThirdPartyTxUrls", "https://0ae.ankh-trust.com/tx/%s");
-    strThirdPartyTxUrls = settings.value("strThirdPartyTxUrls", "https://0ae.ankh-trust.com/tx/%s").toString();
+        settings.setValue("strThirdPartyTxUrls", "https://www.navexplorer.com/tx/%s");
+    strThirdPartyTxUrls = settings.value("strThirdPartyTxUrls", "https://www.navexplorer.com/tx/%s").toString();
 
-#ifdef ENABLE_WALLET
     if (!settings.contains("fCoinControlFeatures"))
         settings.setValue("fCoinControlFeatures", false);
     fCoinControlFeatures = settings.value("fCoinControlFeatures", false).toBool();
-
-    if (!settings.contains("digits"))
-        settings.setValue("digits", "2");
-
-#endif // ENABLE_WALLET
 
     // These are shared with the core or have a command-line parameter
     // and we want command-line parameters to overwrite the GUI settings.
@@ -142,6 +136,18 @@ void OptionsModel::Init(bool resetSettings)
         addOverriddenOption("-onion");
     else if(!settings.value("fUseSeparateProxyTor").toBool() && !GetArg("-onion", "").empty())
         addOverriddenOption("-onion");
+
+    // Theme
+    if (!settings.contains("theme"))
+        settings.setValue("theme", "light");
+
+    theme = settings.value("theme").toString();
+
+    // UI Scaling
+    if (!settings.contains("nScaling"))
+        settings.setValue("nScaling", 100);
+
+    nScaling = settings.value("nScaling").toInt();
 
     // Display
     if (!settings.contains("language"))
@@ -223,19 +229,19 @@ QVariant OptionsModel::data(const QModelIndex & index, int role) const
 #ifdef ENABLE_WALLET
         case SpendZeroConfChange:
             return settings.value("bSpendZeroConfChange");
-#endif // ENABLE_WALLET
+#endif
         case DisplayUnit:
             return nDisplayUnit;
         case ThirdPartyTxUrls:
             return strThirdPartyTxUrls;
+        case Theme:
+            return theme;
+        case Scaling:
+            return nScaling;
         case Language:
             return settings.value("language");
-#ifdef ENABLE_WALLET
-        case Digits:
-            return settings.value("digits");
         case CoinControlFeatures:
             return fCoinControlFeatures;
-#endif // ENABLE_WALLET
         case DatabaseCache:
             return settings.value("nDatabaseCache");
         case ThreadsScriptVerif:
@@ -264,7 +270,7 @@ bool OptionsModel::setData(const QModelIndex & index, const QVariant & value, in
         case HideTrayIcon:
             fHideTrayIcon = value.toBool();
             settings.setValue("fHideTrayIcon", fHideTrayIcon);
-    		Q_EMIT hideTrayIconChanged(fHideTrayIcon);
+            Q_EMIT hideTrayIconChanged(fHideTrayIcon);
             break;
         case MinimizeToTray:
             fMinimizeToTray = value.toBool();
@@ -361,14 +367,20 @@ bool OptionsModel::setData(const QModelIndex & index, const QVariant & value, in
                 setRestartRequired(true);
             }
             break;
-#ifdef ENABLE_WALLET
-        case Digits:
-            if (settings.value("digits") != value) {
-                settings.setValue("digits", value);
+        case Theme:
+            if (theme != value.toString()) {
+                theme = value.toString();
+                settings.setValue("theme", value);
                 setRestartRequired(true);
             }
-        break;
-#endif // ENABLE_WALLET
+            break;
+        case Scaling:
+            if (nScaling != value.toInt()) {
+                nScaling = value.toInt();
+                settings.setValue("nScaling", value);
+                setRestartRequired(true);
+            }
+            break;
         case Language:
             if (settings.value("language") != value) {
                 settings.setValue("language", value);
@@ -376,9 +388,7 @@ bool OptionsModel::setData(const QModelIndex & index, const QVariant & value, in
             }
             break;
         case CoinControlFeatures:
-            fCoinControlFeatures = value.toBool();
-            settings.setValue("fCoinControlFeatures", fCoinControlFeatures);
-            Q_EMIT coinControlFeaturesChanged(fCoinControlFeatures);
+            setCoinControlFeatures(value.toBool());
             break;
         case DatabaseCache:
             if (settings.value("nDatabaseCache") != value) {
@@ -420,6 +430,17 @@ void OptionsModel::setDisplayUnit(const QVariant &value)
     }
 }
 
+void OptionsModel::setCoinControlFeatures(const bool enabled)
+{
+    if (enabled == fCoinControlFeatures)
+        return;
+
+    QSettings settings;
+    fCoinControlFeatures = enabled;
+    settings.setValue("fCoinControlFeatures", fCoinControlFeatures);
+    Q_EMIT coinControlFeaturesChanged(fCoinControlFeatures);
+}
+
 bool OptionsModel::getProxySettings(QNetworkProxy& proxy) const
 {
     // Directly query current base proxy, because
@@ -448,6 +469,16 @@ bool OptionsModel::isRestartRequired()
 {
     QSettings settings;
     return settings.value("fRestartRequired", false).toBool();
+}
+
+void OptionsModel::setDirty(bool dirty)
+{
+    fDirty = dirty;
+}
+
+bool OptionsModel::isDirty()
+{
+    return fDirty;
 }
 
 void OptionsModel::checkAndMigrate()

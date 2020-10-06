@@ -588,9 +588,6 @@
     </message>
 </context>
 <context>
-    <name>NavTechInit</name>
-    </context>
-<context>
     <name>OpenURIDialog</name>
     <message>
         <source>Open URI</source>
@@ -1681,6 +1678,17 @@
     </message>
     </context>
 <context>
+    <name>getAddressToReceive</name>
+    <message>
+        <source>Form</source>
+        <translation>フォーム</translation>
+    </message>
+    <message>
+        <source>QR Code</source>
+        <translation>QR コード</translation>
+    </message>
+    </context>
+<context>
     <name>electrum-core</name>
     <message>
         <source>Options:</source>
@@ -2520,18 +2528,4 @@
         <translation>エラー</translation>
     </message>
 </context>
-<context>
-    <name>navtechitem</name>
-    <message>
-        <source>Form</source>
-        <translation>フォーム</translation>
-    </message>
-    </context>
-<context>
-    <name>navtechsetup</name>
-    <message>
-        <source>Remove</source>
-        <translation>削除</translation>
-    </message>
-    </context>
 </TS>

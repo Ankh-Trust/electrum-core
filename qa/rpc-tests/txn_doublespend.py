@@ -31,7 +31,7 @@ class TxnMallTest(ElectrumTestFramework):
         for i in range(4):
             assert_equal(self.nodes[i].getbalance(), starting_balance)
             self.nodes[i].getnewaddress("")  # bug workaround, coins generated assigned to first getnewaddress!
-
+        
         # Assign coins to foo and bar accounts:
         node0_address_foo = self.nodes[0].getnewaddress("foo")
         fund_foo_txid = self.nodes[0].sendfrom("", node0_address_foo, 1219)
@@ -68,7 +68,7 @@ class TxnMallTest(ElectrumTestFramework):
         # Create two spends using 1 50 0AE coin each
         txid1 = self.nodes[0].sendfrom("foo", node1_address, 40, 0)
         txid2 = self.nodes[0].sendfrom("bar", node1_address, 20, 0)
-
+        
         # Have node0 mine a block:
         if (self.options.mine_block):
             self.nodes[0].generate(1)
@@ -77,7 +77,7 @@ class TxnMallTest(ElectrumTestFramework):
         tx1 = self.nodes[0].gettransaction(txid1)
         tx2 = self.nodes[0].gettransaction(txid2)
 
-        # Node0's balance should be starting balance, plus 50 0AE for another
+        # Node0's balance should be starting balance, plus 500AE for another
         # matured block, minus 40, minus 20, and minus transaction fees:
         expected = starting_balance + fund_foo_tx["fee"] + fund_bar_tx["fee"]
         if self.options.mine_block: expected += 50
@@ -97,7 +97,7 @@ class TxnMallTest(ElectrumTestFramework):
         else:
             assert_equal(tx1["confirmations"], 0)
             assert_equal(tx2["confirmations"], 0)
-
+        
         # Now give doublespend and its parents to miner:
         self.nodes[2].sendrawtransaction(fund_foo_tx["hex"])
         self.nodes[2].sendrawtransaction(fund_bar_tx["hex"])
@@ -119,7 +119,7 @@ class TxnMallTest(ElectrumTestFramework):
         assert_equal(tx1["confirmations"], -2)
         assert_equal(tx2["confirmations"], -2)
 
-        # Node0's total balance should be starting balance, plus 100 0AE for 
+        # Node0's total balance should be starting balance, plus 1000AE for 
         # two more matured blocks, minus 1240 for the double-spend, plus fees (which are
         # negative):
         expected = starting_balance + 100 - 1240 + fund_foo_tx["fee"] + fund_bar_tx["fee"] + doublespend_fee
@@ -144,3 +144,4 @@ class TxnMallTest(ElectrumTestFramework):
 
 if __name__ == '__main__':
     TxnMallTest().main()
+

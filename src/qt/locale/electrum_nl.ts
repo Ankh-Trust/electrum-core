@@ -766,9 +766,6 @@
     </message>
 </context>
 <context>
-    <name>NavTechInit</name>
-    </context>
-<context>
     <name>OpenURIDialog</name>
     <message>
         <source>Open URI</source>
@@ -1501,7 +1498,7 @@
         <source>Label</source>
         <translation>Label</translation>
     </message>
-    </context>    
+    </context>
 <context>
     <name>RecentRequestsTableModel</name>
     <message>
@@ -1936,6 +1933,17 @@
     <message>
         <source>Export the data in the current tab to a file</source>
         <translation>Exporteer de data in de huidige tab naar een bestand</translation>
+    </message>
+    </context>
+<context>
+    <name>getAddressToReceive</name>
+    <message>
+        <source>Form</source>
+        <translation>Vorm</translation>
+    </message>
+    <message>
+        <source>QR Code</source>
+        <translation>QR-code</translation>
     </message>
     </context>
 <context>
@@ -2741,18 +2749,4 @@
         <translation>Fout</translation>
     </message>
 </context>
-<context>
-    <name>navtechitem</name>
-    <message>
-        <source>Form</source>
-        <translation>Vorm</translation>
-    </message>
-    </context>
-<context>
-    <name>navtechsetup</name>
-    <message>
-        <source>Remove</source>
-        <translation>Verwijder</translation>
-    </message>
-    </context>
 </TS>

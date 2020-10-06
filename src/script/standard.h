@@ -36,7 +36,7 @@ extern unsigned nMaxDatacarrierBytes;
  * them to be valid. (but old blocks may not comply with) Currently just P2SH,
  * but in the future other flags may be added, such as a soft-fork to enforce
  * strict DER encoding.
- *
+ * 
  * Failing one of these tests may trigger a DoS ban - see CheckInputs() for
  * details.
  */
@@ -58,7 +58,17 @@ enum txnouttype
     TX_PAYMENTREQUESTYESVOTE,
     TX_PROPOSALNOVOTE,
     TX_PAYMENTREQUESTNOVOTE,
+    TX_PROPOSALABSVOTE,
+    TX_PAYMENTREQUESTABSVOTE,
+    TX_PROPOSALREMOVEVOTE,
+    TX_PAYMENTREQUESTREMOVEVOTE,
+    TX_DAOSUPPORT,
+    TX_DAOSUPPORTREMOVE,
+    TX_CONSULTATIONVOTE,
+    TX_CONSULTATIONVOTEREMOVE,
+    TX_CONSULTATIONVOTEABSTENTION,
     TX_COLDSTAKING,
+    TX_COLDSTAKING_V2,
     TX_POOL
 };
 
@@ -68,15 +78,16 @@ public:
     friend bool operator<(const CNoDestination &a, const CNoDestination &b) { return true; }
 };
 
-/**
+/** 
  * A txout script template with a specific destination. It is either:
  *  * CNoDestination: no destination set
  *  * CKeyID: TX_PUBKEYHASH destination
  *  * CScriptID: TX_SCRIPTHASH destination
  *  * Pair of two CKeyID: TX_COLDSTAKING destination
+ *  * Pair of one CKeyID and one pair of two CKeyID: TX_COLDSTAKING_V2 destination
  *  A CTxDestination is the internal data type encoded in a CElectrumAddress
  */
-typedef boost::variant<CNoDestination, CKeyID, CScriptID, pair<CKeyID, CKeyID>> CTxDestination;
+typedef boost::variant<CNoDestination, CKeyID, CScriptID, std::pair<CKeyID, CKeyID>, std::pair<CKeyID, std::pair<CKeyID, CKeyID>>, CScript> CTxDestination;
 
 const char* GetTxnOutputType(txnouttype t);
 

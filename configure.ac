@@ -1,13 +1,13 @@
 dnl require autoconf 2.60 (AS_ECHO/AS_ECHO_N)
 AC_PREREQ([2.60])
-define(_CLIENT_VERSION_MAJOR, 1)
-define(_CLIENT_VERSION_MINOR, 1)
-define(_CLIENT_VERSION_REVISION, 0)
+define(_CLIENT_VERSION_MAJOR, 5)
+define(_CLIENT_VERSION_MINOR, 0)
+define(_CLIENT_VERSION_REVISION, 1)
 define(_CLIENT_VERSION_BUILD, 0)
 define(_CLIENT_VERSION_IS_RELEASE, true)
 define(_CLIENT_BUILD_IS_TEST_RELEASE, false)
 define(_CLIENT_BUILD_IS_RELEASE_CANDIDATE, false)
-define(_COPYRIGHT_YEAR, 2018)
+define(_COPYRIGHT_YEAR, 2020)
 define(_COPYRIGHT_HOLDERS,[The %s developers])
 define(_COPYRIGHT_HOLDERS_SUBSTITUTION,[[Electrum Core]])
 AC_INIT([Electrum Core],[_CLIENT_VERSION_MAJOR._CLIENT_VERSION_MINOR._CLIENT_VERSION_REVISION],[https://github.com/electrum/electrum-core/issues],[electrum],[https://electrum.org/])
@@ -28,6 +28,17 @@ if test "x${ARFLAGS+set}" != "xset"; then
 fi
 
 AC_CANONICAL_HOST
+
+AC_MSG_NOTICE([------------------------------------])
+AC_MSG_NOTICE([------------------------------------])
+AC_MSG_NOTICE([               __                   ])
+AC_MSG_NOTICE([     |\ | _   /   _ . _             ])
+AC_MSG_NOTICE([     | \|(_|\/\__(_)|| |            ])
+AC_MSG_NOTICE([                                    ])
+AC_MSG_NOTICE([     Setting up build for           ])
+AC_MSG_NOTICE([     $host                          ])
+AC_MSG_NOTICE([------------------------------------])
+AC_MSG_NOTICE([------------------------------------])
 
 sleep 1
 
@@ -264,25 +275,25 @@ case $host in
      use_pkgconfig=no
 
      TARGET_OS=windows
-     AC_CHECK_LIB([mingwthrd],      [main],, AC_MSG_ERROR(lib missing))
-     AC_CHECK_LIB([kernel32],      [main],, AC_MSG_ERROR(lib missing))
-     AC_CHECK_LIB([user32],      [main],, AC_MSG_ERROR(lib missing))
-     AC_CHECK_LIB([gdi32],      [main],, AC_MSG_ERROR(lib missing))
-     AC_CHECK_LIB([comdlg32],      [main],, AC_MSG_ERROR(lib missing))
-     AC_CHECK_LIB([winspool],      [main],, AC_MSG_ERROR(lib missing))
-     AC_CHECK_LIB([winmm],      [main],, AC_MSG_ERROR(lib missing))
-     AC_CHECK_LIB([shell32],      [main],, AC_MSG_ERROR(lib missing))
-     AC_CHECK_LIB([comctl32],      [main],, AC_MSG_ERROR(lib missing))
-     AC_CHECK_LIB([ole32],      [main],, AC_MSG_ERROR(lib missing))
-     AC_CHECK_LIB([oleaut32],      [main],, AC_MSG_ERROR(lib missing))
+     AC_CHECK_LIB([mingwthrd], [main],, AC_MSG_ERROR(lib missing))
+     AC_CHECK_LIB([kernel32],  [main],, AC_MSG_ERROR(lib missing))
+     AC_CHECK_LIB([user32],    [main],, AC_MSG_ERROR(lib missing))
+     AC_CHECK_LIB([gdi32],     [main],, AC_MSG_ERROR(lib missing))
+     AC_CHECK_LIB([comdlg32],  [main],, AC_MSG_ERROR(lib missing))
+     AC_CHECK_LIB([winspool],  [main],, AC_MSG_ERROR(lib missing))
+     AC_CHECK_LIB([winmm],     [main],, AC_MSG_ERROR(lib missing))
+     AC_CHECK_LIB([shell32],   [main],, AC_MSG_ERROR(lib missing))
+     AC_CHECK_LIB([comctl32],  [main],, AC_MSG_ERROR(lib missing))
+     AC_CHECK_LIB([ole32],     [main],, AC_MSG_ERROR(lib missing))
+     AC_CHECK_LIB([oleaut32],  [main],, AC_MSG_ERROR(lib missing))
      AC_CHECK_LIB([uuid],      [main],, AC_MSG_ERROR(lib missing))
-     AC_CHECK_LIB([rpcrt4],      [main],, AC_MSG_ERROR(lib missing))
-     AC_CHECK_LIB([advapi32],      [main],, AC_MSG_ERROR(lib missing))
-     AC_CHECK_LIB([ws2_32],      [main],, AC_MSG_ERROR(lib missing))
-     AC_CHECK_LIB([mswsock],      [main],, AC_MSG_ERROR(lib missing))
-     AC_CHECK_LIB([shlwapi],      [main],, AC_MSG_ERROR(lib missing))
-     AC_CHECK_LIB([iphlpapi],      [main],, AC_MSG_ERROR(lib missing))
-     AC_CHECK_LIB([crypt32],      [main],, AC_MSG_ERROR(lib missing))
+     AC_CHECK_LIB([rpcrt4],    [main],, AC_MSG_ERROR(lib missing))
+     AC_CHECK_LIB([advapi32],  [main],, AC_MSG_ERROR(lib missing))
+     AC_CHECK_LIB([ws2_32],    [main],, AC_MSG_ERROR(lib missing))
+     AC_CHECK_LIB([mswsock],   [main],, AC_MSG_ERROR(lib missing))
+     AC_CHECK_LIB([shlwapi],   [main],, AC_MSG_ERROR(lib missing))
+     AC_CHECK_LIB([iphlpapi],  [main],, AC_MSG_ERROR(lib missing))
+     AC_CHECK_LIB([crypt32],   [main],, AC_MSG_ERROR(lib missing))
 
      # -static is interpreted by libtool, where it has a different meaning.
      # In libtool-speak, it's -all-static.
@@ -600,6 +611,49 @@ if test x$use_reduce_exports = xyes; then
   [AC_MSG_ERROR([Cannot set default symbol visibility. Use --disable-reduce-exports.])])
 fi
 
+dnl LevelDB platform checks
+AC_MSG_CHECKING(for fdatasync)
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <unistd.h>]],
+ [[ fdatasync(0); ]])],
+ [ AC_MSG_RESULT(yes); HAVE_FDATASYNC=1 ],
+ [ AC_MSG_RESULT(no); HAVE_FDATASYNC=0 ]
+)
+
+AC_MSG_CHECKING(for F_FULLFSYNC)
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <fcntl.h>]],
+ [[ fcntl(0, F_FULLFSYNC, 0); ]])],
+ [ AC_MSG_RESULT(yes); HAVE_FULLFSYNC=1 ],
+ [ AC_MSG_RESULT(no); HAVE_FULLFSYNC=0 ]
+)
+
+AC_MSG_CHECKING(for O_CLOEXEC)
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <fcntl.h>]],
+ [[ open("", O_CLOEXEC); ]])],
+ [ AC_MSG_RESULT(yes); HAVE_O_CLOEXEC=1 ],
+ [ AC_MSG_RESULT(no); HAVE_O_CLOEXEC=0 ]
+)
+
+dnl crc32c platform checks
+AC_MSG_CHECKING(for __builtin_prefetch)
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[ ]], [[
+  char data = 0;
+  const char* address = &data;
+  __builtin_prefetch(address, 0, 0);
+  ]])],
+ [ AC_MSG_RESULT(yes); HAVE_BUILTIN_PREFETCH=1 ],
+ [ AC_MSG_RESULT(no); HAVE_BUILTIN_PREFETCH=0 ]
+)
+
+AC_MSG_CHECKING(for _mm_prefetch)
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <xmmintrin.h>]], [[
+  char data = 0;
+  const char* address = &data;
+  _mm_prefetch(address, _MM_HINT_NTA);
+  ]])],
+ [ AC_MSG_RESULT(yes); HAVE_MM_PREFETCH=1 ],
+ [ AC_MSG_RESULT(no); HAVE_MM_PREFETCH=0 ]
+)
+
 LEVELDB_CPPFLAGS=
 LIBLEVELDB=
 LIBMEMENV=
@@ -808,6 +862,7 @@ if test x$use_pkgconfig = xyes; then
       if test x$use_qr != xno; then
         ELECTRUM_QT_CHECK([PKG_CHECK_MODULES([QR], [libqrencode], [have_qrencode=yes], [have_qrencode=no])])
       fi
+      ELECTRUM_QT_CHECK([PKG_CHECK_MODULES([CHARTS], [Qt5Charts],,[ELECTRUM_QT_FAIL(qtcharts not found)])])
       if test x$build_electrum_utils$build_electrumd$electrum_enable_qt$use_tests != xnononono; then
         PKG_CHECK_MODULES([EVENT], [libevent],, [AC_MSG_ERROR(libevent not found.)])
         if test x$TARGET_OS != xwindows; then
@@ -867,6 +922,7 @@ else
   fi
 
   ELECTRUM_QT_CHECK(AC_CHECK_LIB([protobuf] ,[main],[PROTOBUF_LIBS=-lprotobuf], ELECTRUM_QT_FAIL(libprotobuf not found)))
+  ELECTRUM_QT_CHECK([AC_CHECK_LIB([Qt5Charts], [main],[CHARTS_LIBS=-lQt5Charts], ELECTRUM_QT_FAIL(charts not found))])
   if test x$use_qr != xno; then
     ELECTRUM_QT_CHECK([AC_CHECK_LIB([qrencode], [main],[QR_LIBS=-lqrencode], [have_qrencode=no])])
     ELECTRUM_QT_CHECK([AC_CHECK_HEADER([qrencode.h],, have_qrencode=no)])
@@ -1064,21 +1120,28 @@ if test x$build_electrum_utils$build_electrum_libs$build_electrumd$electrum_enab
   AC_MSG_ERROR([No targets! Please specify at least one of: --with-utils --with-libs --with-daemon --with-gui or --enable-tests])
 fi
 
-AM_CONDITIONAL([TARGET_DARWIN], [test x$TARGET_OS = xdarwin])
-AM_CONDITIONAL([BUILD_DARWIN], [test x$BUILD_OS = xdarwin])
-AM_CONDITIONAL([TARGET_WINDOWS], [test x$TARGET_OS = xwindows])
-AM_CONDITIONAL([ENABLE_WALLET],[test x$enable_wallet = xyes])
-AM_CONDITIONAL([ENABLE_TESTS],[test x$BUILD_TEST = xyes])
-AM_CONDITIONAL([ENABLE_QT],[test x$electrum_enable_qt = xyes])
-AM_CONDITIONAL([ENABLE_QT_TESTS],[test x$BUILD_TEST_QT = xyes])
-AM_CONDITIONAL([ENABLE_BENCH],[test x$use_bench = xyes])
-AM_CONDITIONAL([USE_QRCODE], [test x$use_qr = xyes])
-AM_CONDITIONAL([HAVE_UNBOUND], [test x$have_unbound = xyes])
-AM_CONDITIONAL([USE_LCOV],[test x$use_lcov = xyes])
-AM_CONDITIONAL([USE_COMPARISON_TOOL],[test x$use_comparison_tool != xno])
-AM_CONDITIONAL([USE_COMPARISON_TOOL_REORG_TESTS],[test x$use_comparison_tool_reorg_test != xno])
-AM_CONDITIONAL([GLIBC_BACK_COMPAT],[test x$use_glibc_compat = xyes])
-AM_CONDITIONAL([HARDEN],[test x$use_hardening = xyes])
+AM_CONDITIONAL([TARGET_DARWIN],                   [test x$TARGET_OS = xdarwin])
+AM_CONDITIONAL([BUILD_DARWIN],                    [test x$BUILD_OS = xdarwin])
+AM_CONDITIONAL([TARGET_WINDOWS],                  [test x$TARGET_OS = xwindows])
+AM_CONDITIONAL([ENABLE_WALLET],                   [test x$enable_wallet = xyes])
+AM_CONDITIONAL([ENABLE_TESTS],                    [test x$BUILD_TEST = xyes])
+AM_CONDITIONAL([ENABLE_QT],                       [test x$electrum_enable_qt = xyes])
+AM_CONDITIONAL([ENABLE_QT_TESTS],                 [test x$BUILD_TEST_QT = xyes])
+AM_CONDITIONAL([ENABLE_BENCH],                    [test x$use_bench = xyes])
+AM_CONDITIONAL([USE_QRCODE],                      [test x$use_qr = xyes])
+AM_CONDITIONAL([HAVE_UNBOUND],                    [test x$have_unbound = xyes])
+AM_CONDITIONAL([USE_LCOV],                        [test x$use_lcov = xyes])
+AM_CONDITIONAL([USE_COMPARISON_TOOL],             [test x$use_comparison_tool != xno])
+AM_CONDITIONAL([USE_COMPARISON_TOOL_REORG_TESTS], [test x$use_comparison_tool_reorg_test != xno])
+AM_CONDITIONAL([GLIBC_BACK_COMPAT],               [test x$use_glibc_compat = xyes])
+AM_CONDITIONAL([HARDEN],                          [test x$use_hardening = xyes])
+AM_CONDITIONAL([ENABLE_SSE42],                    [test x$enable_sse42 = xyes])
+AM_CONDITIONAL([ENABLE_SSE41],                    [test x$enable_sse41 = xyes])
+AM_CONDITIONAL([ENABLE_AVX2],                     [test x$enable_avx2 = xyes])
+AM_CONDITIONAL([ENABLE_SHANI],                    [test x$enable_shani = xyes])
+AM_CONDITIONAL([ENABLE_ARM_CRC],                  [test x$enable_arm_crc = xyes])
+AM_CONDITIONAL([USE_ASM],                         [test x$use_asm = xyes])
+AM_CONDITIONAL([WORDS_BIGENDIAN],                 [test x$ac_cv_c_bigendian = xyes])
 
 AC_DEFINE(CLIENT_VERSION_MAJOR, _CLIENT_VERSION_MAJOR, [Major version])
 AC_DEFINE(CLIENT_VERSION_MINOR, _CLIENT_VERSION_MINOR, [Minor version])
@@ -1132,6 +1195,13 @@ AC_SUBST(EVENT_PTHREADS_LIBS)
 AC_SUBST(ZMQ_LIBS)
 AC_SUBST(PROTOBUF_LIBS)
 AC_SUBST(QR_LIBS)
+# AC_SUBST(HAVE_GMTIME_R)
+AC_SUBST(HAVE_FDATASYNC)
+AC_SUBST(HAVE_FULLFSYNC)
+# AC_SUBST(HAVE_O_CLOEXEC)
+AC_SUBST(HAVE_BUILTIN_PREFETCH)
+AC_SUBST(HAVE_MM_PREFETCH)
+
 AC_CONFIG_FILES([Makefile src/Makefile share/setup.nsi share/qt/Info.plist src/test/buildenv.py])
 AC_CONFIG_FILES([qa/pull-tester/run-electrumd-for-test.sh],[chmod +x qa/pull-tester/run-electrumd-for-test.sh])
 AC_CONFIG_FILES([qa/pull-tester/tests_config.py],[chmod +x qa/pull-tester/tests_config.py])
@@ -1213,4 +1283,6 @@ echo "  CXX           = $CXX"
 echo "  CXXFLAGS      = $HARDENED_CXXFLAGS $CXXFLAGS"
 echo "  LDFLAGS       = $HARDENED_LDFLAGS $LDFLAGS"
 echo "  ARFLAGS       = $ARFLAGS"
+echo "  CHARTS_LIBS   = $CHARTS_LIBS "
+echo "  CHARTS_CFLAGS = $CHARTS_CFLAGS "
 echo

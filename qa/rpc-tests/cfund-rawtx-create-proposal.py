@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2018 The NAVcoin Core developers
+# Copyright (c) 2018 The Navcoin Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -207,7 +207,7 @@ class CommunityFundRawTXCreateProposalTest(ElectrumTestFramework):
         assert (proposal['hash'] == self.goodPropHash)
         assert (float(proposal['requestedAmount']) == float(self.goodAmount))
         assert (float(proposal['notPaidYet']) == float(self.goodAmount))
-        assert (float(proposal['userPaidFee']) == float(1))
+        assert (float(proposal['userPaidFee']) == float(1000))
 
 
     def send_raw_proposalrequest(self, address, amount, time, description):
@@ -217,7 +217,7 @@ class CommunityFundRawTXCreateProposalTest(ElectrumTestFramework):
         # Create a raw proposal tx
         raw_proposal_tx = self.nodes[0].createrawtransaction(
             [],
-            {"6ac1": 1},
+            {"6ac1": 1000},
             json.dumps({"v": 2, "n": amount, "a": address,  "d": time, "s": description})
         )
 
@@ -270,7 +270,7 @@ class CommunityFundRawTXCreateProposalTest(ElectrumTestFramework):
         self.descTxtAllCharsSymbol3 = "♩ ♪ ♫ ♬ ♭ ♮ ♯  ⌨ ⏏ ⎗ ⎘ ⎙ ⎚ ⌥ ⎇ ⌘ ⌦ ⌫ ⌧ ♲ ♳ ♴ ♵ ♶ ♷ ♸ ♹ ♺ ♻ ♼ ♽ ⁌ ⁍ ⎌ ⌇ ⌲ ⍝ ⍟ ⍣ ⍤ ⍥ ⍨ ⍩ ⎋ ♃ ♄ ♅ ♆ ♇ ♈ ♉ ♊ ♋ ♌ ♍ ♎ ♏ ♐ ♑ ♒ ♓ ⏚ ⏛"
 
 
-        self.descTxtWhiteSpace = '''I
+        self.descTxtWhiteSpace = '''I 
 Have
 Enters
 

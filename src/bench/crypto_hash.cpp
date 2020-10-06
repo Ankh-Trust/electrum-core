@@ -4,7 +4,7 @@
 
 #include <iostream>
 
-#include <bench.h>
+#include <bench/bench.h>
 #include <bloom.h>
 #include <hash.h>
 #include <uint256.h>

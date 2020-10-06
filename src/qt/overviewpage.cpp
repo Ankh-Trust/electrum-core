@@ -16,14 +16,14 @@
 #include <qt/walletmodel.h>
 #include <qt/walletframe.h>
 #include <qt/askpassphrasedialog.h>
+#include <main.h>
 #include <util.h>
-
 
 #include <QAbstractItemDelegate>
 #include <QPainter>
 
-#define DECORATION_SIZE 17
-#define NUM_ITEMS 7
+#define DECORATION_SIZE 30
+#define NUM_ITEMS 25
 
 class TxViewDelegate : public QAbstractItemDelegate
 {
@@ -43,14 +43,13 @@ public:
 
         QIcon icon = qvariant_cast<QIcon>(index.data(TransactionTableModel::RawDecorationRole));
         QRect mainRect = option.rect;
-        QRect decorationRect(mainRect.left(), mainRect.top()+DECORATION_SIZE, DECORATION_SIZE, DECORATION_SIZE);
-        int xspace = DECORATION_SIZE + 6;
-        int ypad = 1;
-        int halfheight = (mainRect.height() - 3*ypad - 4)/3 ;
-        QRect amountRect(mainRect.left() + xspace, mainRect.top()+ypad+halfheight, 150, DECORATION_SIZE);
-        QRect addressRect(mainRect.left() + xspace, mainRect.top()+ypad, 300, DECORATION_SIZE);
-        QRect dateRect(mainRect.left() + xspace, mainRect.top()+ypad+halfheight*2, 150, DECORATION_SIZE);
-        icon = platformStyle->SingleColorIcon(icon);
+        int xspace = DECORATION_SIZE + 8;
+        int ypad = 6;
+        int halfheight = (mainRect.height() - 2*ypad)/2;
+        QRect decorationRect(mainRect.left(), mainRect.top()+ypad, DECORATION_SIZE, DECORATION_SIZE);
+        QRect amountRect(mainRect.left() + xspace, mainRect.top()+ypad, mainRect.width() - xspace - 10, halfheight);
+        QRect addressRect(mainRect.left() + xspace, mainRect.top()+ypad+halfheight, mainRect.width() - xspace, halfheight);
+        icon = platformStyle->Icon(icon);
         icon.paint(painter, decorationRect);
 
         QDateTime date = index.data(TransactionTableModel::DateRole).toDateTime();
@@ -59,7 +58,8 @@ public:
         bool confirmed = index.data(TransactionTableModel::ConfirmedRole).toBool();
         QVariant value = index.data(Qt::ForegroundRole);
         QColor foreground = option.palette.color(QPalette::Text);
-        if (value.canConvert<QBrush>()) {
+        if(value.canConvert<QBrush>())
+        {
             QBrush brush = qvariant_cast<QBrush>(value);
             foreground = brush.color();
         }
@@ -89,21 +89,20 @@ public:
         }
         painter->setPen(foreground);
         QString amountText = ElectrumUnits::formatWithUnit(unit, amount, true, ElectrumUnits::separatorAlways);
-        if(!confirmed)
-        {
-            amountText = QString("[") + amountText + QString("]");
-        }
-        painter->drawText(amountRect, Qt::AlignLeft|Qt::AlignVCenter, amountText);
+        painter->drawText(amountRect, Qt::AlignRight|Qt::AlignVCenter, amountText);
 
-        painter->setPen(COLOR_BAREADDRESS);
-        painter->drawText(dateRect, Qt::AlignLeft|Qt::AlignVCenter, GUIUtil::dateTimeStr(date));
+        painter->setPen(option.palette.color(QPalette::Text));
+        painter->drawText(amountRect, Qt::AlignLeft|Qt::AlignVCenter, GUIUtil::dateTimeStr(date));
+
+        painter->setPen(COLOR_UNCONFIRMED);
+        painter->drawLine(mainRect.bottomLeft(), mainRect.bottomRight());
 
         painter->restore();
     }
 
     inline QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
     {
-        return QSize(DECORATION_SIZE, DECORATION_SIZE*2.9 + 4);
+        return QSize(DECORATION_SIZE, DECORATION_SIZE*1.4);
     }
 
     int unit;
@@ -135,17 +134,11 @@ OverviewPage::OverviewPage(const PlatformStyle *platformStyle, QWidget *parent) 
     // Recent transactions
     ui->listTransactions->setItemDelegate(txdelegate);
     ui->listTransactions->setIconSize(QSize(DECORATION_SIZE, DECORATION_SIZE));
-    ui->listTransactions->setMinimumHeight(NUM_ITEMS * 3 * (DECORATION_SIZE + 2));
     ui->listTransactions->setAttribute(Qt::WA_MacShowFocusRect, false);
 
     connect(ui->listTransactions, SIGNAL(clicked(QModelIndex)), this, SLOT(handleTransactionClicked(QModelIndex)));
 
-    // init "out of sync" warning labels
-    ui->labelWalletStatus->setText("(" + tr("out of sync") + ")");
-    ui->labelTransactionsStatus->setText("(" + tr("out of sync") + ")");
-
     // start with displaying the "out of sync" warnings
-    showOutOfSyncWarning(true);
     updateStakeReportNow();
 }
 
@@ -153,11 +146,6 @@ void OverviewPage::handleTransactionClicked(const QModelIndex &index)
 {
     if(filter)
         Q_EMIT transactionClicked(filter->mapToSource(index));
-}
-
-void OverviewPage::handleOutOfSyncWarningClicks()
-{
-    Q_EMIT outOfSyncWarningClicked();
 }
 
 OverviewPage::~OverviewPage()
@@ -172,15 +160,16 @@ void OverviewPage::setStakingStats(QString day, QString week, QString month, QSt
     ui->label30dStakingStats->setText(month);
 }
 
-void OverviewPage::setVotingStatus(QString text)
-{
-    ui->votingStatusLabel->setText(text);
-}
-
-void OverviewPage::setBalance(const CAmount& balance, const CAmount& unconfirmedBalance, const CAmount& stakingBalance, const CAmount& immatureBalance,
-                              const CAmount& watchOnlyBalance, const CAmount& watchUnconfBalance, const CAmount& watchImmatureBalance,
-                              const CAmount& coldStakingBalance)
-{
+void OverviewPage::setBalance(
+    const CAmount& balance,
+    const CAmount& unconfirmedBalance,
+    const CAmount& stakingBalance, // This is actually staked immature
+    const CAmount& immatureBalance,
+    const CAmount& watchOnlyBalance,
+    const CAmount& watchUnconfBalance,
+    const CAmount& watchImmatureBalance,
+    const CAmount& coldStakingBalance
+) {
     int unit = walletModel->getOptionsModel()->getDisplayUnit();
     currentBalance = balance;
     currentUnconfirmedBalance = unconfirmedBalance;
@@ -192,39 +181,16 @@ void OverviewPage::setBalance(const CAmount& balance, const CAmount& unconfirmed
     currentWatchUnconfBalance = watchUnconfBalance;
     currentWatchImmatureBalance = watchImmatureBalance;
     currentWatchOnlyTotalBalance = watchOnlyBalance + watchUnconfBalance + watchImmatureBalance;
-    ui->labelBalance->setText(ElectrumUnits::floorHtmlWithUnit(unit, balance, false, ElectrumUnits::separatorAlways));
-    ui->labelUnconfirmed->setText(ElectrumUnits::floorHtmlWithUnit(unit, unconfirmedBalance, false, ElectrumUnits::separatorAlways));
-    ui->labelStaking->setText(ElectrumUnits::floorHtmlWithUnit(unit, stakingBalance, false, ElectrumUnits::separatorAlways));
-    ui->labelColdStaking->setText(ElectrumUnits::floorHtmlWithUnit(unit, coldStakingBalance, false, ElectrumUnits::separatorAlways));
-    ui->labelImmature->setText(ElectrumUnits::floorHtmlWithUnit(unit, immatureBalance, false, ElectrumUnits::separatorAlways));
-    ui->labelWatchedBalance->setText(ElectrumUnits::floorHtmlWithUnit(unit, currentWatchOnlyTotalBalance, false, ElectrumUnits::separatorAlways));
-    ui->labelTotal->setText(ElectrumUnits::floorHtmlWithUnit(unit, currentTotalBalance + currentWatchOnlyTotalBalance, false, ElectrumUnits::separatorAlways));
+    ui->labelBalance->setText(ElectrumUnits::formatWithUnit(unit, balance, false, ElectrumUnits::separatorAlways));
+    ui->labelUnconfirmed->setText(ElectrumUnits::formatWithUnit(unit, unconfirmedBalance, false, ElectrumUnits::separatorAlways));
+    ui->labelColdStaking->setText(ElectrumUnits::formatWithUnit(unit, currentColdStakingBalance, false, ElectrumUnits::separatorAlways));
+    ui->labelImmature->setText(ElectrumUnits::formatWithUnit(unit, currentImmatureBalance, false, ElectrumUnits::separatorAlways));
+    ui->labelWatchedBalance->setText(ElectrumUnits::formatWithUnit(unit, currentWatchOnlyTotalBalance, false, ElectrumUnits::separatorAlways));
+    ui->labelTotal->setText(ElectrumUnits::formatWithUnit(unit, currentTotalBalance + currentWatchOnlyTotalBalance, false, ElectrumUnits::separatorAlways));
 
     updateStakeReportNow();
 
-    bool showStaking = stakingBalance != 0;
-
-    ui->labelStaking->setVisible(showStaking);
-    ui->labelStakingText->setVisible(showStaking);
-
-    bool showColdStaking = coldStakingBalance != 0;
-
-    ui->labelColdStaking->setVisible(showColdStaking);
-    ui->labelColdStakingText->setVisible(showColdStaking);
-
-    bool showWatchOnly = currentWatchOnlyTotalBalance != 0;
-
-    ui->labelWatchedBalance->setVisible(showWatchOnly);
-    ui->labelWatchedBalanceText->setVisible(showWatchOnly);
-
-    // only show immature (newly mined) balance if it's non-zero, so as not to complicate things
-    // for the non-mining users
-    bool showImmature = false;
-    bool showWatchOnlyImmature = watchImmatureBalance != 0;
-
-    // for symmetry reasons also show immature label when the watch-only one is shown
-    ui->labelImmature->setVisible(false);
-    ui->labelImmatureText->setVisible(false);
+    uiInterface.SetBalance(currentBalance, currentUnconfirmedBalance, currentImmatureBalance);
 }
 
 // show/hide watch-only labels
@@ -236,12 +202,6 @@ void OverviewPage::updateWatchOnlyLabels(bool showWatchOnly)
 void OverviewPage::setClientModel(ClientModel *model)
 {
     this->clientModel = model;
-    if(model)
-    {
-        // Show warning if this is a prerelease version
-        connect(model, SIGNAL(alertsChanged(QString)), this, SLOT(updateAlerts(QString)));
-        updateAlerts(model->getStatusBarWarnings());
-    }
 }
 
 void OverviewPage::setWalletModel(WalletModel *model)
@@ -265,8 +225,8 @@ void OverviewPage::setWalletModel(WalletModel *model)
         setBalance(model->getBalance(), model->getUnconfirmedBalance(), model->getStake(), model->getImmatureBalance(),
                    model->getWatchBalance(), model->getWatchUnconfirmedBalance(), model->getWatchImmatureBalance(),
                    model->getColdStakingBalance());
-        connect(model, SIGNAL(balanceChanged(CAmount,CAmount,CAmount,CAmount,CAmount,CAmount,CAmount,CAmount)), this, SLOT(setBalance(CAmount,CAmount,CAmount,CAmount,CAmount,CAmount,CAmount,CAmount)));
-        connect(model, SIGNAL(balanceChanged(CAmount, CAmount, CAmount, CAmount,CAmount,CAmount,CAmount,CAmount)), this, SLOT(updateStakeReportbalanceChanged(CAmount, CAmount, CAmount,CAmount, CAmount,CAmount,CAmount)));
+        connect(model, SIGNAL(balanceChanged(CAmount, CAmount, CAmount, CAmount, CAmount, CAmount, CAmount, CAmount)), this, SLOT(setBalance(CAmount, CAmount, CAmount, CAmount, CAmount, CAmount, CAmount, CAmount)));
+        connect(model, SIGNAL(balanceChanged(CAmount, CAmount, CAmount, CAmount, CAmount, CAmount, CAmount, CAmount)), this, SLOT(updateStakeReportbalanceChanged(CAmount, CAmount, CAmount, CAmount, CAmount, CAmount, CAmount, CAmount)));
 
         connect(model->getOptionsModel(), SIGNAL(displayUnitChanged(int)), this, SLOT(updateDisplayUnit()));
 
@@ -293,30 +253,6 @@ void OverviewPage::updateDisplayUnit()
     }
 }
 
-void OverviewPage::unlockWalletStaking()
-{
-    if(!walletModel)
-        return;
-    // Unlock wallet when requested by wallet model
-    if (walletModel->getEncryptionStatus() == WalletModel::Locked)
-    {
-        AskPassphraseDialog dlg(AskPassphraseDialog::UnlockStaking, this);
-        dlg.setModel(walletModel);
-        dlg.exec();
-    }
-}
-
-void OverviewPage::updateAlerts(const QString &warnings)
-{
-    this->ui->labelAlerts->setVisible(!warnings.isEmpty());
-    this->ui->labelAlerts->setText(warnings);
-}
-
-void OverviewPage::showOutOfSyncWarning(bool fShow)
-{
-    ui->labelWalletStatus->setVisible(fShow);
-    ui->labelTransactionsStatus->setVisible(fShow);
-}
 
 using namespace boost;
 using namespace std;
@@ -336,42 +272,52 @@ extern int GetsStakeSubTotal(vStakePeriodRange_T& aRange);
 
 void OverviewPage::updateStakeReport(bool fImmediate=false)
 {
+    LOCK(cs_main);
+    if (!walletModel || !walletModel->getOptionsModel())
+        return;
+
     static vStakePeriodRange_T aRange;
     int nItemCounted=0;
 
     if (fImmediate) nLastReportUpdate = 0;
 
-    if (this->isHidden())
-        return;
-
-    int64_t nTook = GetTimeMillis();
-
     // Skip report recalc if not immediate or before 5 minutes from last
     if (GetTime() - nLastReportUpdate > 300)
     {
-
+        // Load the range
         aRange = PrepareRangeForStakeReport();
 
-        // get subtotal calc
+        // Get the subtotals
         nItemCounted = GetsStakeSubTotal(aRange);
 
+        // Save the last update
         nLastReportUpdate = GetTime();
-
-        nTook = GetTimeMillis() - nTook;
-
     }
-
-    //int64_t nTook2 = GetTimeMillis();
-
-    int i=30;
 
     int unit = walletModel->getOptionsModel()->getDisplayUnit();
 
-    ui->label24hStakingStats->setText(ElectrumUnits::floorHtmlWithUnit(unit, aRange[i++].Total, false, ElectrumUnits::separatorAlways));
-    ui->label7dStakingStats->setText(ElectrumUnits::floorHtmlWithUnit(unit, aRange[i++].Total, false, ElectrumUnits::separatorAlways));
-    ui->label30dStakingStats->setText(ElectrumUnits::floorHtmlWithUnit(unit, aRange[i++].Total, false, ElectrumUnits::separatorAlways));
-    ui->label1yStakingStats->setText(ElectrumUnits::floorHtmlWithUnit(unit, aRange[i++].Total, false, ElectrumUnits::separatorAlways));
-    ui->labelallStakingStats->setText(ElectrumUnits::floorHtmlWithUnit(unit, aRange[i++].Total, false, ElectrumUnits::separatorAlways));
+    CAmount amount24h = aRange[30].Total;
+    CAmount amount7d  = aRange[31].Total;
+    CAmount amount30d = aRange[32].Total;
+    CAmount amount1y  = aRange[33].Total;
+    CAmount amountAll = aRange[34].Total;
+
+    CStateViewCache view(pcoinsTip);
+
+    uint64_t nWeight = pwalletMain ? pwalletMain->GetStakeWeight() : 0;
+    uint64_t nNetworkWeight = GetPoSKernelPS();
+    bool staking = nLastCoinStakeSearchInterval && nWeight;
+    uint64_t nExpectedTime = staking ? (GetTargetSpacing(pindexBestHeader->nHeight) * nNetworkWeight / nWeight) : 0;
+    CAmount nExpectedDailyReward = staking ? ((double) 86400 / (nExpectedTime + 1)) * GetStakingRewardPerBlock(view) : 0.0;
+
+    ui->label24hStakingStats->setText(ElectrumUnits::formatWithUnit(unit, amount24h, false, ElectrumUnits::separatorAlways));
+    ui->label7dStakingStats->setText(ElectrumUnits::formatWithUnit(unit, amount7d, false, ElectrumUnits::separatorAlways));
+    ui->label30dStakingStats->setText(ElectrumUnits::formatWithUnit(unit, amount30d, false, ElectrumUnits::separatorAlways));
+    ui->label1yStakingStats->setText(ElectrumUnits::formatWithUnit(unit, amount1y, false, ElectrumUnits::separatorAlways));
+    ui->labelallStakingStats->setText(ElectrumUnits::formatWithUnit(unit, amountAll, false, ElectrumUnits::separatorAlways));
+    ui->labelExpectedStakingStats->setText(ElectrumUnits::formatWithUnit(unit, nExpectedDailyReward, false, ElectrumUnits::separatorAlways));
+
+    uiInterface.SetStaked(amountAll, amount24h, amount7d);
 }
 
 
@@ -383,4 +329,11 @@ void OverviewPage::updateStakeReportbalanceChanged(CAmount, CAmount, CAmount, CA
 void OverviewPage::updateStakeReportNow()
 {
     updateStakeReport(true);
+}
+
+void OverviewPage::on_showStakingSetup_clicked()
+{
+    SplitRewardsDialog dlg(this);
+    dlg.setModel(walletModel);
+    dlg.exec();
 }

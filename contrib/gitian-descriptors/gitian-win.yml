@@ -1,5 +1,5 @@
 ---
-name: "electrum-win-1.0.0"
+name: "electrum-win-4.0.0"
 enable_cache: true
 distro: "ubuntu"
 suites:

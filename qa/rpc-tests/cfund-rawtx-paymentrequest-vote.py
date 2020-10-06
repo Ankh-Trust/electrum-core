@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2018 The NAVcoin Core developers
+# Copyright (c) 2018 The Navcoin Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -36,6 +36,8 @@ class CommunityFundVotePaymentrequestRawTX(ElectrumTestFramework):
         start_new_cycle(self.nodes[0])
         self.nodes[0].proposalvote(proposalid0, "remove")
         slow_gen(self.nodes[0], 5)
+
+        end_cycle(self.nodes[0])
 
         # Proposal should be accepted
         assert (self.nodes[0].getproposal(proposalid0)["state"] == 1)

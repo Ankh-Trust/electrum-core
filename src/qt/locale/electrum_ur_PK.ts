@@ -122,9 +122,6 @@
     </message>
     </context>
 <context>
-    <name>NavTechInit</name>
-    </context>
-<context>
     <name>OpenURIDialog</name>
     </context>
 <context>
@@ -255,6 +252,9 @@
     </message>
     </context>
 <context>
+    <name>getAddressToReceive</name>
+    </context>
+<context>
     <name>electrum-core</name>
     <message>
         <source>Insufficient funds</source>
@@ -265,10 +265,4 @@
         <translation>نقص</translation>
     </message>
 </context>
-<context>
-    <name>navtechitem</name>
-    </context>
-<context>
-    <name>navtechsetup</name>
-    </context>
 </TS>

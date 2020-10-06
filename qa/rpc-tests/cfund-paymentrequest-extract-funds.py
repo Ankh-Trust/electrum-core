@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2018 The NAVcoin Core developers
+# Copyright (c) 2018 The Navcoin Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -76,7 +76,7 @@ class CommunityFundPaymentRequestExtractFundsTest(ElectrumTestFramework):
         assert(invalid == 0)
 
         assert(self.nodes[0].cfundstats()["funds"]["locked"] == locked_accepted)
-
+        
         end_cycle(self.nodes[0])
 
         # Lets reject one of them with votes

@@ -6,6 +6,7 @@
 #define ELECTRUM_QT_WALLETVIEW_H
 
 #include <amount.h>
+#include <splitrewards.h>
 
 #include <QStackedWidget>
 #include <QPushButton>
@@ -13,7 +14,8 @@
 class ElectrumGUI;
 class ClientModel;
 class OverviewPage;
-class CommunityFundPage;
+class OptionsDialog;
+class DaoPage;
 class PlatformStyle;
 class ReceiveCoinsDialog;
 class SendCoinsDialog;
@@ -21,6 +23,7 @@ class SendCoinsRecipient;
 class TransactionView;
 class WalletModel;
 class AddressBookPage;
+class getAddressToReceive;
 
 QT_BEGIN_NAMESPACE
 class QModelIndex;
@@ -54,17 +57,17 @@ public:
 
     bool handlePaymentRequest(const SendCoinsRecipient& recipient);
 
-    void showOutOfSyncWarning(bool fShow);
-
 private:
     ClientModel *clientModel;
     WalletModel *walletModel;
 
     OverviewPage *overviewPage;
     QWidget *transactionsPage;
+    OptionsDialog *settingsPage;
     ReceiveCoinsDialog *receiveCoinsPage;
     SendCoinsDialog *sendCoinsPage;
-    CommunityFundPage *communityFundPage;
+    DaoPage *daoPage;
+    getAddressToReceive *requestPaymentPage;
     AddressBookPage *usedSendingAddressesPage;
     AddressBookPage *usedReceivingAddressesPage;
 
@@ -78,12 +81,15 @@ public Q_SLOTS:
     void gotoOverviewPage();
     /** Switch to history (transactions) page */
     void gotoHistoryPage();
+    /** Switch to settings page */
+    void gotoSettingsPage();
     /** Switch to community fund page */
     void gotoCommunityFundPage();
     /** Switch to receive coins page */
     void gotoReceiveCoinsPage();
     /** Switch to send coins page */
     void gotoSendCoinsPage(QString addr = "");
+    void gotoRequestPaymentPage();
 
     /** Show Sign/Verify Message dialog and switch to sign message tab */
     void gotoSignMessageTab(QString addr = "");
@@ -107,6 +113,9 @@ public Q_SLOTS:
     void lockWallet();
     void importPrivateKey();
     void exportMasterPrivateKeyAction();
+    void exportMnemonicAction();
+
+    void splitRewards();
 
     /** Show used sending addresses */
     void usedSendingAddresses();
@@ -122,10 +131,10 @@ public Q_SLOTS:
     /** User has requested more information about the out of sync state */
     void requestedSyncWarningInfo();
 
-    void setVotingStatus(QString text);
-
     void setStakingStats(QString day, QString week, QString month, QString year, QString all);
     void requestAddressHistory();
+
+    void onDaoEntriesChanged(int count);
 
 Q_SIGNALS:
     /** Signal that we want to show the main window */
@@ -134,12 +143,12 @@ Q_SIGNALS:
     void message(const QString &title, const QString &message, unsigned int style);
     /** Encryption status of wallet changed */
     void encryptionStatusChanged(int status);
-    /** HD-Enabled status of wallet changed (only possible during startup) */
-    void hdEnabledStatusChanged(int hdEnabled);
     /** Notify that a new transaction appeared */
     void incomingTransaction(const QString& date, int unit, const CAmount& amount, const QString& type, const QString& address, const QString& label);
     /** Notify that the out of sync warning icon has been pressed */
     void outOfSyncWarningClicked();
+
+    void daoEntriesChanged(int count);
 
     void openAddressHistory();
 

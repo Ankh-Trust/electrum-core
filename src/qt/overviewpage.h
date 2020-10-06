@@ -6,6 +6,7 @@
 #define ELECTRUM_QT_OVERVIEWPAGE_H
 
 #include <amount.h>
+#include <splitrewards.h>
 
 #include <QWidget>
 #include <QPushButton>
@@ -37,7 +38,6 @@ public:
 
     void setClientModel(ClientModel *clientModel);
     void setWalletModel(WalletModel *walletModel);
-    void showOutOfSyncWarning(bool fShow);
 
 public Q_SLOTS:
     void setBalance(const CAmount& balance, const CAmount& unconfirmedBalance, const CAmount& stakingBalance, const CAmount& immatureBalance,
@@ -47,8 +47,7 @@ public Q_SLOTS:
     void setStakingStats(QString day, QString week, QString month, QString year, QString all);
     void updateStakeReportNow();
     void updateStakeReportbalanceChanged(CAmount, CAmount, CAmount, CAmount, CAmount, CAmount, CAmount);
-    void setVotingStatus(QString text);
-
+    void on_showStakingSetup_clicked();
 
 Q_SIGNALS:
     void transactionClicked(const QModelIndex &index);
@@ -77,10 +76,7 @@ private:
 private Q_SLOTS:
     void updateDisplayUnit();
     void handleTransactionClicked(const QModelIndex &index);
-    void updateAlerts(const QString &warnings);
     void updateWatchOnlyLabels(bool showWatchOnly);
-    void unlockWalletStaking();
-    void handleOutOfSyncWarningClicks();
 };
 
 #endif // ELECTRUM_QT_OVERVIEWPAGE_H

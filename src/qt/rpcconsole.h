@@ -84,10 +84,19 @@ private Q_SLOTS:
 
 public Q_SLOTS:
     void clear(bool clearHistory = true);
+
+    /** Wallet repair options */
+    void walletSalvage();
+    void walletRescan();
+    void walletZaptxes1();
+    void walletZaptxes2();
+    void walletUpgrade();
+    void walletReindex();
+    void walletResync();
+
     void fontBigger();
     void fontSmaller();
     void setFontSize(int newSize);
-
     /** Append the message to the message widget */
     void message(int category, const QString &message, bool html = false);
     /** Set number of connections shown in the UI */
@@ -104,15 +113,7 @@ public Q_SLOTS:
     void peerSelected(const QItemSelection &selected, const QItemSelection &deselected);
     /** Handle updated peer information */
     void peerLayoutChanged();
-    /** Switch to info tab and show */
-    void showInfo();
-    /** Switch to console tab and show */
-    void showConsole();
-    /** Switch to network tab and show */
-    void showNetwork();
-    /** Switch to peers tab and show */
-    void showPeers();
-    /** Switch to wallet-repair tab and show */
+    /** Disconnect a selected node on the Peers tab */
     void disconnectSelectedNode();
     /** Ban a selected node on the Peers tab */
     void banSelectedNode(int bantime);

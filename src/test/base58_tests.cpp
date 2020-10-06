@@ -13,7 +13,7 @@
 #include <uint256.h>
 #include <util.h>
 #include <utilstrencodings.h>
-#include <test/test_navcoin.h>
+#include <test/test_electrum.h>
 
 #include <boost/test/unit_test.hpp>
 
@@ -86,6 +86,10 @@ public:
     bool operator()(const pair<CKeyID, CKeyID> &id) const
     {
         return (exp_addrType == "coldstaking");
+    }
+    bool operator()(const pair<CKeyID, pair<CKeyID, CKeyID>> &id) const
+    {
+        return (exp_addrType == "coldstaking_v2");
     }
     bool operator()(const CScriptID &id) const
     {
@@ -275,3 +279,4 @@ BOOST_AUTO_TEST_CASE(base58_keys_invalid)
 
 
 BOOST_AUTO_TEST_SUITE_END()
+

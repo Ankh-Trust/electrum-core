@@ -280,7 +280,7 @@ int ElectrumUnits::decimals(int unit)
     }
 }
 
-QString ElectrumUnits::format(int unit, const CAmount& nIn, bool fPlus, SeparatorStyle separators)
+QString ElectrumUnits::format(int unit, const CAmount& nIn, bool fPlus, SeparatorStyle separators, bool fPretty)
 {
     // Note: not using straight sprintf here because we do NOT want
     // localized number formatting.
@@ -290,13 +290,12 @@ QString ElectrumUnits::format(int unit, const CAmount& nIn, bool fPlus, Separato
     qint64 coin = factor(unit);
     int num_decimals = decimals(unit);
     qint64 n_abs = (n > 0 ? n : -n);
-    double quotient = 0;
+    qint64 quotient = 0;
     double quotientD = 0;
     qint64 remainder;
 
     // Check if we have a coin
-    if (coin > 0)
-    {
+    if (coin > 0) {
         quotient = n_abs / coin;
         quotientD = (double) n_abs / (double) coin;
     }
@@ -309,7 +308,7 @@ QString ElectrumUnits::format(int unit, const CAmount& nIn, bool fPlus, Separato
     std::getline(in, wholePart, '.');
     in >> remainder;
 
-    QString quotient_str = QString::number((qint64)quotient);
+    QString quotient_str = QString::number(quotient);
     QString remainder_str = QString::number(remainder).rightJustified(num_decimals, '0');
 
     // Use SI-style thin space separators as these are locale independent and can't be
@@ -325,12 +324,18 @@ QString ElectrumUnits::format(int unit, const CAmount& nIn, bool fPlus, Separato
     else if (fPlus && n > 0)
         quotient_str.insert(0, '+');
 
-    if (num_decimals <= 0)
-                return quotient_str;
+    // Check if we want auto adjust for decimals
+    if (fPretty && (quotient >= 10 || quotientD == 0.0f)) {
+        remainder_str.chop(4);
+    }
 
     return quotient_str + QString(".") + remainder_str;
 }
 
+QString ElectrumUnits::pretty(int unit, const CAmount& nIn, bool fPlus, SeparatorStyle separators)
+{
+    return format(unit, nIn, fPlus, separators, true);
+}
 
 // NOTE: Using formatWithUnit in an HTML context risks wrapping
 // quantities at the thousands separator. More subtly, it also results
@@ -339,37 +344,23 @@ QString ElectrumUnits::format(int unit, const CAmount& nIn, bool fPlus, Separato
 //
 // Please take care to use formatHtmlWithUnit instead, when
 // appropriate.
-
 QString ElectrumUnits::formatWithUnit(int unit, const CAmount& amount, bool plussign, SeparatorStyle separators)
 {
-    return format(unit, amount, plussign, separators) + QString(" ") + name(unit);
+    return QString("%1 %2").arg(format(unit, amount, plussign, separators), name(unit));
 }
 
-QString ElectrumUnits::formatHtmlWithUnit(int unit, const CAmount& amount, bool plussign, SeparatorStyle separators)
+QString ElectrumUnits::prettyWithUnit(int unit, const CAmount& amount, bool plussign, SeparatorStyle separators)
+{
+    return QString("%1 %2").arg(pretty(unit, amount, plussign, separators), name(unit));
+}
+
+QString ElectrumUnits::formatHtmlWithUnit(int unit, const CAmount& amount, bool plussign, SeparatorStyle separators, bool removeTrailing)
 {
     QString str(formatWithUnit(unit, amount, plussign, separators));
     str.replace(QChar(THIN_SP_CP), QString(THIN_SP_HTML));
     return QString("<span style='white-space: nowrap;'>%1</span>").arg(str);
 }
 
-QString ElectrumUnits::floorWithUnit(int unit, const CAmount& amount, bool plussign, SeparatorStyle separators)
-{
-    QSettings settings;
-    int digits = settings.value("digits").toInt();
-
-    QString result = format(unit, amount, plussign, separators);
-    if (decimals(unit) > digits)
-        result.chop(decimals(unit) - digits);
-
-    return result + QString(" ") + name(unit);
-}
-
-QString ElectrumUnits::floorHtmlWithUnit(int unit, const CAmount& amount, bool plussign, SeparatorStyle separators)
-{
-    QString str(floorWithUnit(unit, amount, plussign, separators));
-    str.replace(QChar(THIN_SP_CP), QString(THIN_SP_HTML));
-    return QString("<span style='white-space: nowrap;'>%1</span>").arg(str);
-}
 
 bool ElectrumUnits::parse(int unit, const QString &value, CAmount *val_out)
 {

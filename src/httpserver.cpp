@@ -12,6 +12,7 @@
 #include <sync.h>
 #include <ui_interface.h>
 
+#include <deque>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -287,7 +288,7 @@ static void http_request_cb(struct evhttp_request* req, void* arg)
             item.release(); /* if true, queue took ownership */
         else {
             LogPrintf("WARNING: request rejected because http work queue depth exceeded, it can be increased with the -rpcworkqueue= setting\n");
-            item->req->WriteReply(HTTP_INTERNAL, "Work queue depth exceeded");
+            item->req->WriteReply(HTTP_SERVICE_U0AEAILABLE, "Work queue depth exceeded");
         }
     } else {
         hreq->WriteReply(HTTP_NOTFOUND);
@@ -418,7 +419,7 @@ bool InitHTTPServer()
     evhttp_set_timeout(http, GetArg("-rpcservertimeout", DEFAULT_HTTP_SERVER_TIMEOUT));
     evhttp_set_max_headers_size(http, MAX_HEADERS_SIZE);
     evhttp_set_max_body_size(http, MAX_SIZE);
-    evhttp_set_gencb(http, http_request_cb, NULL);
+    evhttp_set_gencb(http, http_request_cb, nullptr);
 
     if (!HTTPBindAddresses(http)) {
         LogPrintf("Unable to bind any endpoint for RPC server\n");

@@ -34,6 +34,9 @@ IntroPage::IntroPage(QWidget *parent)
                           "      coins sent to the cold staking address.<br>"
                           " - a spending address: this address will be authorised to spend the<br>"
                           "      coins sent to the cold staking address.<br>"
+                          "You can optionally specify a third address, which would hold the<br>"
+                          "voting rights. This address should belong to a wallet compatible<br>"
+                          "with the light wallet voting features like NavCash.<br>"
                           "These addresses will be used to generate a cold staking address."));
     label->setWordWrap(true);
 
@@ -55,7 +58,11 @@ GetAddressesPage::GetAddressesPage(QWidget *parent)
     spendingAddressLineEdit = new QLineEdit;
     spendingAddressLabel->setBuddy(spendingAddressLineEdit);
 
-    descriptionLabel = new QLabel(tr("Your Spending address and Staking address must be different."));
+    votingAddressLabel = new QLabel(tr("&Voting Address:"));
+    votingAddressLineEdit = new QLineEdit;
+    votingAddressLabel->setBuddy(votingAddressLineEdit);
+
+    descriptionLabel = new QLabel(tr("Your spending address and staking address must be different. Specifying a voting address is optional."));
     errorLabel = new QLabel();
     errorLabel->setStyleSheet("QLabel { color : red }");
 
@@ -64,24 +71,29 @@ GetAddressesPage::GetAddressesPage(QWidget *parent)
     layout->addWidget(stakingAddressLineEdit, 0, 1);
     layout->addWidget(spendingAddressLabel, 1, 0);
     layout->addWidget(spendingAddressLineEdit, 1, 1);
-    layout->addWidget(descriptionLabel, 2, 0, 1, 2);
-    layout->addWidget(errorLabel, 3, 0, 1, 2);
+    layout->addWidget(votingAddressLabel, 2, 0);
+    layout->addWidget(votingAddressLineEdit, 2, 1);
+    layout->addWidget(descriptionLabel, 3, 0, 1, 2);
+    layout->addWidget(errorLabel, 4, 0, 1, 2);
     setLayout(layout);
 
     registerField("stakingAddress*", stakingAddressLineEdit);
     registerField("spendingAddress*", spendingAddressLineEdit);
+    registerField("votingAddress", votingAddressLineEdit);
 }
 
 bool GetAddressesPage::validatePage()
 {
     QString stakingAddressStr = field("stakingAddress").toString();
     QString spendingAddressStr = field("spendingAddress").toString();
+    QString votingAddressStr = field("votingAddress").toString();
 
     CElectrumAddress stakingAddress(stakingAddressStr.toStdString());
     CElectrumAddress spendingAddress(spendingAddressStr.toStdString());
 
     CKeyID stakingKeyID;
     CKeyID spendingKeyID;
+
     if (field("stakingAddress").toString() == field("spendingAddress").toString())  {
         errorLabel->setText(tr("The addresses can't be the same!"));
         return false;
@@ -94,6 +106,17 @@ bool GetAddressesPage::validatePage()
         errorLabel->setText("The spending address is not valid.");
         return false;
     }
+    if (votingAddressStr != "") {
+        CElectrumAddress votingAddress(votingAddressStr.toStdString());
+        CKeyID votingKeyID;
+        if(!(votingAddress.IsValid() && votingAddress.GetKeyID(votingKeyID))) {
+            errorLabel->setText("The voting address is not valid.");
+            return false;
+        }
+    }
+
+    errorLabel->setText("");
+
     return true;
 }
 
@@ -104,10 +127,18 @@ ColdStakingAddressPage::ColdStakingAddressPage(QWidget *parent)
     setTitle(tr("Generated address"));
 
     image = new QRImageWidget;
+    image->setObjectName("lblQRCode");
+    image->setAlignment(Qt::AlignCenter);
+
+    address = new QLineEdit();
+    address->setReadOnly(true);
+    address->setAlignment(Qt::AlignCenter);
+
     button = new QPushButton("&Copy to Clipboard");
 
     QVBoxLayout *layout = new QVBoxLayout;
     layout->addWidget(image);
+    layout->addWidget(address);
     layout->addWidget(button);
     setLayout(layout);
 
@@ -118,6 +149,7 @@ void ColdStakingAddressPage::initializePage()
 {
     QString stakingAddressStr = field("stakingAddress").toString();
     QString spendingAddressStr = field("spendingAddress").toString();
+    QString votingAddressStr = field("votingAddress").toString();
 
 
     CElectrumAddress stakingAddress(stakingAddressStr.toStdString());
@@ -128,7 +160,17 @@ void ColdStakingAddressPage::initializePage()
     CKeyID spendingKeyID;
     spendingAddress.GetKeyID(spendingKeyID);
 
-    coldStakingAddress = QString::fromStdString(CElectrumAddress(stakingKeyID, spendingKeyID).ToString());
+    if (votingAddressStr != "")
+    {
+        CElectrumAddress votingAddress(votingAddressStr.toStdString());
+        CKeyID votingKeyID;
+        votingAddress.GetKeyID(votingKeyID);
+        coldStakingAddress = QString::fromStdString(CElectrumAddress(stakingKeyID, spendingKeyID, votingKeyID).ToString());
+    }
+    else
+    {
+        coldStakingAddress = QString::fromStdString(CElectrumAddress(stakingKeyID, spendingKeyID).ToString());
+    }
 
 #ifdef USE_QRCODE
     QString uri = "electrum:" + coldStakingAddress;
@@ -159,19 +201,14 @@ void ColdStakingAddressPage::initializePage()
             }
             QRcode_free(code);
 
-            QImage qrAddrImage = QImage(QR_IMAGE_SIZE*2, QR_IMAGE_SIZE+20, QImage::Format_RGB32);
-            qrAddrImage.fill(0xffffff);
-            QPainter painter(&qrAddrImage);
-            painter.drawImage(QR_IMAGE_SIZE/2, 0, qrImage.scaled(QR_IMAGE_SIZE, QR_IMAGE_SIZE));
-            QFont font = GUIUtil::fixedPitchFont();
-            font.setPixelSize(12);
-            painter.setFont(font);
-            QRect paddedRect = qrAddrImage.rect();
-            paddedRect.setHeight(QR_IMAGE_SIZE+12);
-            painter.drawText(paddedRect, Qt::AlignBottom|Qt::AlignCenter, coldStakingAddress);
-            painter.end();
+            // Size of the qr code scaled
+            int qrSize = QR_IMAGE_SIZE * GUIUtil::scale();
 
-            image->setPixmap(QPixmap::fromImage(qrAddrImage));
+            // Set the image
+            image->setPixmap(QPixmap::fromImage(qrImage.scaled(qrSize, qrSize)));
+
+            // Set the address
+            address->setText(coldStakingAddress);
         }
     }
 #endif

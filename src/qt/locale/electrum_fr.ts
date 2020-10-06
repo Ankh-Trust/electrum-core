@@ -188,8 +188,8 @@
         <translation>Confirmez le cryptage du portefeuille</translation>
     </message>
     <message>
-        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR ELECTRA&lt;/b&gt;!</source>
-        <translation>Attention: Si vous cryptez votre portefeuille et perdez votre mot de passe, &lt;b&gt;VOUS PERDREZ TOUS VOS ELECTRA&lt;/b&gt;!</translation>
+        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR ELECTRUMS&lt;/b&gt;!</source>
+        <translation>Attention: Si vous cryptez votre portefeuille et perdez votre mot de passe, &lt;b&gt;VOUS PERDREZ TOUS VOS ELECTRUMS&lt;/b&gt;!</translation>
     </message>
     <message>
         <source>Are you sure you wish to encrypt your wallet?</source>
@@ -200,8 +200,8 @@
         <translation>Portefeuille crypté</translation>
     </message>
     <message>
-        <source>%1 will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your electra from being stolen by malware infecting your computer.</source>
-        <translation>%1 va fermer pour finaliser la procédure d'encryptage. Rappelez vous qu'encrypter votre portefeuille ne protègera pas entièrement vos electra d'être soutirés par un logiciel malveillant ayant infecté votre ordinateur.</translation>
+        <source>%1 will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your electrums from being stolen by malware infecting your computer.</source>
+        <translation>%1 va fermer pour finaliser la procédure d'encryptage. Rappelez vous qu'encrypter votre portefeuille ne protègera pas entièrement vos electrums d'être soutirés par un logiciel malveillant ayant infecté votre ordinateur.</translation>
     </message>
     <message>
         <source>IMPORTANT: Any previous backups you have made of your wallet file should be replaced with the newly generated, encrypted wallet file. For security reasons, previous backups of the unencrypted wallet file will become useless as soon as you start using the new, encrypted wallet.</source>
@@ -1073,8 +1073,8 @@
         <translation>Notification importante du réseau.</translation>
     </message>
     <message>
-        <source>The Electrum Network is currently voting on introducing changes on the consensus protocol. As a participant in our network, we value your input and the decision ultimately is yours. Please cast your vote. &lt;br&gt;&lt;br&gt;For more information on the proposal, please visit &lt;a href="https://navcoin.org/community-fund"&gt;this link&lt;/a&gt;&lt;br&gt;&lt;br&gt;Would you like the Electrum Network to update the staking rewards to setup a decentralised community fund that will help grow the network?</source>
-        <translation>Le réseau Electrum vote pour l'introduction de changement sur le protocole du consensus. En tant que participant dans notre réseau, nous estimons votre contribution et la décision finale vous reviens. Veuillez exprimer votre vote. &lt;br&gt;&lt;br&gt;Pour plus d'information sur la proposition, veuillez cliquer sur &lt;a href="https://navcoin.org/community-fund"&gt;ce lien&lt;/a&gt;&lt;br&gt;&lt;br&gt;Souhaitez vous que le réseau Electrum mette à jour le système de récompenses par le staking pour configurer un fond communautaire qui aidera à l'évolution du réseau ?</translation>
+        <source>The Nav Coin Network is currently voting on introducing changes on the consensus protocol. As a participant in our network, we value your input and the decision ultimately is yours. Please cast your vote. &lt;br&gt;&lt;br&gt;For more information on the proposal, please visit &lt;a href="https://electrum.org/community-fund"&gt;this link&lt;/a&gt;&lt;br&gt;&lt;br&gt;Would you like the Nav Coin Network to update the staking rewards to setup a decentralised community fund that will help grow the network?</source>
+        <translation>Le réseau Electrum vote pour l'introduction de changement sur le protocole du consensus. En tant que participant dans notre réseau, nous estimons votre contribution et la décision finale vous reviens. Veuillez exprimer votre vote. &lt;br&gt;&lt;br&gt;Pour plus d'information sur la proposition, veuillez cliquer sur &lt;a href="https://electrum.org/community-fund"&gt;ce lien&lt;/a&gt;&lt;br&gt;&lt;br&gt;Souhaitez vous que le réseau Electrum mette à jour le système de récompenses par le staking pour configurer un fond communautaire qui aidera à l'évolution du réseau ?</translation>
     </message>
     <message>
         <source>Yes</source>
@@ -1161,33 +1161,6 @@
     <message>
         <source>Wallet is &lt;b&gt;encrypted&lt;/b&gt; and currently &lt;b&gt;locked&lt;/b&gt;</source>
         <translation>Le porte-monnaie est &lt;b&gt;chiffré&lt;/b&gt; et actuellement &lt;b&gt;verrouillé&lt;/b&gt;</translation>
-    </message>
-</context>
-<context>
-    <name>NavTechInit</name>
-    <message>
-        <source>NavTech Setup</source>
-        <translation>Configuration NavTech</translation>
-    </message>
-    <message>
-        <source>Electrum uses an unique parallel cluster of nodes called NavTech to protect the privacy of your transactions.</source>
-        <translation>Electrum utilise une passerelle unique de regroupement de nœuds appelées NavTech afin de protéger l'anonymat de vos transactions.</translation>
-    </message>
-    <message>
-        <source>You will find below the list of the Electrum Foundation Servers. Feel free to modify this list to include your prefered servers:</source>
-        <translation>Vous trouverez ci-dessous une liste de serveurs de la fondation Electrum. Soyez libre de modifier cette liste pour y inclure vos serveurs préférés.</translation>
-    </message>
-    <message>
-        <source>95.183.52.55:3000
-95.183.52.28:3000
-95.183.52.29:3000
-95.183.53.184:3000
-</source>
-        <translation>95.183.52.55:3000
-95.183.52.28:3000
-95.183.52.29:3000
-95.183.53.184:3000
-</translation>
     </message>
 </context>
 <context>
@@ -2298,16 +2271,16 @@
         <translation>(Les frais intelligents ne sont pas encore initialisés. Ceci prend habituellement quelques blocs...)</translation>
     </message>
     <message>
-        <source>You don't have any NAVTech server added. </source>
-        <translation>Vous n'avez aucun serveur NAVTech ajouté.</translation>
+        <source>You don't have any 0AETech server added. </source>
+        <translation>Vous n'avez aucun serveur 0AETech ajouté.</translation>
     </message>
     <message>
         <source>Private payment</source>
         <translation>Paiement anonyme</translation>
     </message>
     <message>
-        <source>Manage NAVTech servers</source>
-        <translation>Configurer les serveurs NAVTech</translation>
+        <source>Manage 0AETech servers</source>
+        <translation>Configurer les serveurs 0AETech</translation>
     </message>
     <message>
         <source>Use full amount</source>
@@ -2374,8 +2347,8 @@
         <translation>Copier les changements</translation>
     </message>
     <message>
-        <source>NAVTech server returned a different number of addresses.</source>
-        <translation>Le serveur NAVTech a décelé un nombre différent d'adresses.</translation>
+        <source>0AETech server returned a different number of addresses.</source>
+        <translation>Le serveur 0AETech a décelé un nombre différent d'adresses.</translation>
     </message>
     <message>
         <source>Something went wrong:</source>
@@ -2423,11 +2396,11 @@
     </message>
     <message>
         <source>Navtech server fee:</source>
-        <translation>Taxe du serveur NAVTech :</translation>
+        <translation>Taxe du serveur 0AETech :</translation>
     </message>
     <message>
         <source>will be deducted as Navtech fee.</source>
-        <translation>sera déduit pour la taxe de NAVTech.</translation>
+        <translation>sera déduit pour la taxe de 0AETech.</translation>
     </message>
     <message>
         <source>Total Amount %1</source>
@@ -2606,8 +2579,8 @@
         <translation>&amp;Signer le message</translation>
     </message>
     <message>
-        <source>You can sign messages/agreements with your addresses to prove you can receive electra sent to them. Be careful not to sign anything vague or random, as phishing attacks may try to trick you into signing your identity over to them. Only sign fully-detailed statements you agree to.</source>
-        <translation>Vous pouvez signer des messages/accords avec vos adresses pour prouver que vous pouvez recevoir des electra à ces dernières. Faites attention de ne rien signer de vague ou au hasard, car des attaques d'hameçonnage pourraient essayer de vous faire signer avec votre identité afin de l'usurper. Ne signez que des déclarations entièrement détaillées et avec lesquelles vous êtes d'accord.</translation>
+        <source>You can sign messages/agreements with your addresses to prove you can receive electrums sent to them. Be careful not to sign anything vague or random, as phishing attacks may try to trick you into signing your identity over to them. Only sign fully-detailed statements you agree to.</source>
+        <translation>Vous pouvez signer des messages/accords avec vos adresses pour prouver que vous pouvez recevoir des electrums à ces dernières. Faites attention de ne rien signer de vague ou au hasard, car des attaques d'hameçonnage pourraient essayer de vous faire signer avec votre identité afin de l'usurper. Ne signez que des déclarations entièrement détaillées et avec lesquelles vous êtes d'accord.</translation>
     </message>
     <message>
         <source>The Electrum address to sign the message with</source>
@@ -3128,8 +3101,8 @@
         <translation>Copier l'adresse</translation>
     </message>
     <message>
-        <source>Alt+P</source>
-        <translation>Alt+P</translation>
+        <source>Copy label</source>
+        <translation>Copier l'étiquette</translation>
     </message>
     <message>
         <source>Copy amount</source>
@@ -3314,6 +3287,53 @@
     <message>
         <source>Private key correctly added!</source>
         <translation>Clef privée correctement ajoutée!</translation>
+    </message>
+</context>
+<context>
+    <name>getAddressToReceive</name>
+    <message>
+        <source>Form</source>
+        <translation>Formulaire</translation>
+    </message>
+    <message>
+        <source>Use the following address to receive Electrums:</source>
+        <translation>Utiliser l'adresse suivante pour recevoir des Electrums:</translation>
+    </message>
+    <message>
+        <source>QR Code</source>
+        <translation>Code QR</translation>
+    </message>
+    <message>
+        <source>Copy to clipboard</source>
+        <translation>Copier dans le presse-papier</translation>
+    </message>
+    <message>
+        <source>Generate a new address</source>
+        <translation>Générer une nouvelle adresse</translation>
+    </message>
+    <message>
+        <source>Create a Cold Staking address</source>
+        <translation>Créer une adresse en cold staking</translation>
+    </message>
+    <message>
+        <source>Request payment</source>
+        <translation>Demande de paiement</translation>
+    </message>
+    <message>
+        <source>List old addresses</source>
+        <translation>Liste de toutes les adresses</translation>
+    </message>
+    <message>
+        <source>Action not available</source>
+        <translation>Action non disponible</translation>
+    </message>
+    <message>
+        <source>Resulting URI too long, try to reduce the text for label / message.</source>
+        <translation>Si l'URI résultante est trop longue, essayez de réduire le texte de l'étiquette/du message.</translation>
+    </message>
+    <message>
+        <source>Error encoding URI into QR Code.</source>
+        <translation>Erreur d'encodage d'URI dans le QR Code.</translation>
     </message>
 </context>
 <context>
@@ -4265,100 +4285,6 @@
     <message>
         <source>Error</source>
         <translation>Erreur</translation>
-    </message>
-</context>
-<context>
-    <name>navtechitem</name>
-    <message>
-        <source>Form</source>
-        <translation>Formulaire</translation>
-    </message>
-    <message>
-        <source>Server Name</source>
-        <translation>Nom du serveur</translation>
-    </message>
-    <message>
-        <source>127.0.0.1:3000</source>
-        <translation>127.0.0.1:3000</translation>
-    </message>
-    <message>
-        <source>Get Info</source>
-        <translation>Obtenir Informations</translation>
-    </message>
-    <message>
-        <source>Delete</source>
-        <translation>Supprimer</translation>
-    </message>
-</context>
-<context>
-    <name>navtechsetup</name>
-    <message>
-        <source>Dialog</source>
-        <translation>Dialog</translation>
-    </message>
-    <message>
-        <source>List of Navtech servers currently configured in your wallet to process private payments:</source>
-        <translation>Liste des serveurs Navtech actuellement configurés dans votre portefeuille pour procéder à des paiements anonymes:</translation>
-    </message>
-    <message>
-        <source>When performing a private payment, a random server from this list will be used.</source>
-        <translation>Lorsque que vous utilisez le service de paiement anonyme, un serveur aléatoire de la liste sera utilisé.</translation>
-    </message>
-    <message>
-        <source>Get Info</source>
-        <translation>Obtenir Informations</translation>
-    </message>
-    <message>
-        <source>Remove</source>
-        <translation>Enlever</translation>
-    </message>
-    <message>
-        <source>Server address</source>
-        <translation>Adresse du serveur</translation>
-    </message>
-    <message>
-        <source>Add new</source>
-        <translation>Ajouter nouveau</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation>Sauvegarder</translation>
-    </message>
-    <message>
-        <source>Remove Navtech server</source>
-        <translation>Supprimer serveur Navtech</translation>
-    </message>
-    <message>
-        <source>You are about to remove the following Navtech server: </source>
-        <translation>Vous êtes sur le point de supprimer le serveur Navtech suivant:</translation>
-    </message>
-    <message>
-        <source>Are you sure?</source>
-        <translation>Êtes vous sûr ?</translation>
-    </message>
-    <message>
-        <source>Removed.</source>
-        <translation>Supprimé.</translation>
-    </message>
-    <message>
-        <source>Navtech server</source>
-        <translation>Serveur Navtech</translation>
-    </message>
-    <message>
-        <source>Address: </source>
-        <translation>Adresse:</translation>
-    </message>
-    <message>
-        <source>Min amount: </source>
-        <translation>Montant min:</translation>
-    </message>
-    <message>
-        <source>Max amount: </source>
-        <translation>Montant max:</translation>
-    </message>
-    <message>
-        <source>Tx fee: </source>
-        <translation>Frais tx:</translation>
     </message>
 </context>
 </TS>

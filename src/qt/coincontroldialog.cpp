@@ -120,12 +120,12 @@ CoinControlDialog::CoinControlDialog(const PlatformStyle *platformStyle, QWidget
     ui->treeWidget->headerItem()->setText(COLUMN_CHECKBOX, QString());
 
     ui->treeWidget->setColumnWidth(COLUMN_CHECKBOX, 84);
-    ui->treeWidget->setColumnWidth(COLUMN_AMOUNT, 120);
-    ui->treeWidget->setColumnWidth(COLUMN_LABEL, 240);
-    ui->treeWidget->setColumnWidth(COLUMN_ADDRESS, 320);
-    ui->treeWidget->setColumnWidth(COLUMN_DATE, 124);
-    ui->treeWidget->setColumnWidth(COLUMN_CONFIRMATIONS, 124);
-    ui->treeWidget->setColumnWidth(COLUMN_PRIORITY, 124);
+    ui->treeWidget->setColumnWidth(COLUMN_AMOUNT, 100);
+    ui->treeWidget->setColumnWidth(COLUMN_LABEL, 170);
+    ui->treeWidget->setColumnWidth(COLUMN_ADDRESS, 290);
+    ui->treeWidget->setColumnWidth(COLUMN_DATE, 110);
+    ui->treeWidget->setColumnWidth(COLUMN_CONFIRMATIONS, 100);
+    ui->treeWidget->setColumnWidth(COLUMN_PRIORITY, 100);
     ui->treeWidget->setColumnHidden(COLUMN_TXHASH, true);              // store transaction hash in this column, but don't show it
     ui->treeWidget->setColumnHidden(COLUMN_VOUT_INDEX, true);          // store vout index in this column, but don't show it
     ui->treeWidget->setColumnHidden(COLUMN_AMOUNT_INT64, true);        // store amount int64 in this column, but don't show it
@@ -278,7 +278,7 @@ void CoinControlDialog::lockCoin()
     COutPoint outpt(uint256S(contextMenuItem->text(COLUMN_TXHASH).toStdString()), contextMenuItem->text(COLUMN_VOUT_INDEX).toUInt());
     model->lockCoin(outpt);
     contextMenuItem->setDisabled(true);
-    contextMenuItem->setIcon(COLUMN_CHECKBOX, platformStyle->SingleColorIcon(":/icons/lock_closed"));
+    contextMenuItem->setIcon(COLUMN_CHECKBOX, platformStyle->Icon(":/icons/lock_closed"));
     updateLabelLocked();
 }
 
@@ -640,9 +640,9 @@ void CoinControlDialog::updateLabels(WalletModel *model, QDialog* dialog)
     }
 
     // turn labels "red"
-    l5->setStyleSheet((nBytes >= MAX_FREE_TRANSACTION_CREATE_SIZE) ? "color: #66023c;" : "");// Bytes >= 1000
-    l6->setStyleSheet((dPriority > 0 && !fAllowFree) ? "color: #66023c;" : "");              // Priority < "medium"
-    l7->setStyleSheet((fDust) ? "color: #66023c;" : "");                                     // Dust = "yes"
+    l5->setStyleSheet((nBytes >= MAX_FREE_TRANSACTION_CREATE_SIZE) ? "color:red;" : "");// Bytes >= 1000
+    l6->setStyleSheet((dPriority > 0 && !fAllowFree) ? "color:red;" : "");              // Priority < "medium"
+    l7->setStyleSheet((fDust) ? "color:red;" : "");                                     // Dust = "yes"
 
     // tool tips
     QString toolTip1 = tr("This label turns red if the transaction size is greater than 1000 bytes.") + "<br /><br />";
@@ -804,7 +804,7 @@ void CoinControlDialog::updateView()
                 COutPoint outpt(txhash, out.i);
                 coinControl->UnSelect(outpt); // just to be sure
                 itemOutput->setDisabled(true);
-                itemOutput->setIcon(COLUMN_CHECKBOX, platformStyle->SingleColorIcon(":/icons/lock_closed"));
+                itemOutput->setIcon(COLUMN_CHECKBOX, platformStyle->Icon(":/icons/lock_closed"));
             }
 
             // set checkbox

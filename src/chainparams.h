@@ -47,10 +47,12 @@ public:
     enum Base58Type {
         PUBKEY_ADDRESS,
         SCRIPT_ADDRESS,
+        RAW_SCRIPT_ADDRESS,
         SECRET_KEY,
         EXT_PUBLIC_KEY,
         EXT_SECRET_KEY,
         COLDSTAKING_ADDRESS,
+        COLDSTAKING_ADDRESS_V2,
 
         MAX_BASE58_TYPES
     };

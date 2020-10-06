@@ -32,7 +32,7 @@ std::string StringifySeconds(uint64_t n);
 static std::vector<std::string> vDefaultNtpServers = {"de.pool.ntp.org",
                   "jp.pool.ntp.org", "id.pool.ntp.org", "in.pool.ntp.org",
                   "0.de.pool.ntp.org", "1.de.pool.ntp.org", "2.de.pool.ntp.org",
-                  "3.de.pool.ntp.org", "cn.pool.ntp.org", "time.google.com",
+                  "3.de.ntp.org", "cn.pool.ntp.org", "time.google.com",
                   "ntp0.fau.de", "ntps1-0.uni-erlangen.de", "ntps1-0.cs.tu-berlin.de",
                   "ptbtime1.ptb.de", "rustime01.rus.uni-stuttgart.de",
                   "time1.google.com", "time2.google.com", "time3.google.com", "time4.google.com",
@@ -41,8 +41,6 @@ static std::vector<std::string> vDefaultNtpServers = {"de.pool.ntp.org",
                   "dk.pool.ntp.org", "fi.pool.ntp.org", "fr.pool.ntp.org", "hu.pool.ntp.org",
                   "nl.pool.ntp.org", "no.pool.ntp.org", "pl.pool.ntp.org", "ru.pool.ntp.org",
                   "uk.pool.ntp.org", "ca.pool.ntp.org", "us.pool.ntp.org", "au.pool.ntp.org",
-                  "nz.pool.ntp.org", "br.pool.ntp.org", "ntp.se", "gbg1.ntp.se",
-                  "gbg2.ntp.se", "mmo1.ntp.se", "mmo2.ntp.se", "sth1.ntp.se",
-                  "sth2.ntp.se", "svl1.ntp.se", "svl2.ntp.se"};
+                  "nz.pool.ntp.org", "br.pool.ntp.org"};
 
 #endif // ELECTRUM_UTILTIME_H

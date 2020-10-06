@@ -310,7 +310,7 @@
     </message>
     <message>
         <source>Open &amp;URI...</source>
-        <translation>Abrir &amp;URI...</translation>
+        <translation>Abrir &amp;URL...</translation>
     </message>
     <message>
         <source>Reindexing blocks on disk...</source>
@@ -413,9 +413,6 @@
         <translation>La cartera esta &lt;b&gt;encriptada&lt;/b&gt; y &lt;b&gt;bloqueada&lt;/b&gt; actualmente </translation>
     </message>
 </context>
-<context>
-    <name>NavTechInit</name>
-    </context>
 <context>
     <name>OpenURIDialog</name>
     </context>
@@ -715,6 +712,13 @@
     </message>
     </context>
 <context>
+    <name>getAddressToReceive</name>
+    <message>
+        <source>Form</source>
+        <translation>Formulario</translation>
+    </message>
+    </context>
+<context>
     <name>electrum-core</name>
     <message>
         <source>Options:</source>
@@ -769,14 +773,4 @@
         <translation>Error</translation>
     </message>
 </context>
-<context>
-    <name>navtechitem</name>
-    <message>
-        <source>Form</source>
-        <translation>Formulario</translation>
-    </message>
-    </context>
-<context>
-    <name>navtechsetup</name>
-    </context>
 </TS>

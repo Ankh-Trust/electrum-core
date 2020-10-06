@@ -93,7 +93,10 @@ ELECTRUM_CORE_H = \
   compat/endian.h \
   compat/sanity.h \
   compressor.h \
-  consensus/cfund.h \
+  consensus/dao.h \
+  consensus/daoconsensusparams.h \
+  consensus/dao/flags.h \
+  daoversionbit.h \
   consensus/consensus.h \
   core_io.h \
   core_memusage.h \
@@ -153,12 +156,12 @@ ELECTRUM_CORE_H = \
   versionbits.h \
   wallet/crypter.h \
   wallet/db.h \
-  wallet/navtech.h \
   wallet/rpcwallet.h \
   wallet/wallet.h \
   wallet/walletdb.h \
   mnemonic/dictionary.h \
   mnemonic/mnemonic.h \
+  mnemonic/generateseed.h \
   mnemonic/arrayslice.h \
   zmq/zmqabstractnotifier.h \
   zmq/zmqconfig.h\
@@ -181,7 +184,8 @@ libelectrum_server_a_SOURCES = \
   blockencodings.cpp \
   chain.cpp \
   checkpoints.cpp \
-  consensus/cfund.cpp \
+  daoversionbit.cpp \
+  consensus/dao.cpp \
   httprpc.cpp \
   httpserver.cpp \
   kernel.cpp \
@@ -197,6 +201,7 @@ libelectrum_server_a_SOURCES = \
   policy/policy.cpp \
   pow.cpp \
   pos.cpp \
+  random.cpp \
   rest.cpp \
   rpc/blockchain.cpp \
   rpc/mining.cpp \
@@ -232,17 +237,18 @@ endif
 libelectrum_wallet_a_CPPFLAGS = $(AM_CPPFLAGS) $(ELECTRUM_INCLUDES)
 libelectrum_wallet_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 libelectrum_wallet_a_SOURCES = \
-  consensus/cfund.cpp \
+  consensus/dao.cpp \
   mnemonic/dictionary.cpp \
   mnemonic/mnemonic.cpp \
+  mnemonic/generateseed.cpp \
   wallet/crypter.cpp \
   wallet/db.cpp \
-  wallet/navtech.cpp \
   wallet/rpcdump.cpp \
   wallet/rpcwallet.cpp \
   wallet/wallet.cpp \
   wallet/walletdb.cpp \
   policy/rbf.cpp \
+  daoversionbit.cpp \
   $(ELECTRUM_CORE_H)
 
 # crypto primitives library
@@ -251,6 +257,8 @@ crypto_libelectrum_crypto_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 crypto_libelectrum_crypto_a_SOURCES = \
   crypto/aes.cpp \
   crypto/aes.h \
+  crypto/chacha20.cpp \
+  crypto/chacha20.h \
   crypto/common.h \
   crypto/hmac_sha256.cpp \
   crypto/hmac_sha256.h \
@@ -369,6 +377,7 @@ libelectrum_util_a_CPPFLAGS = $(AM_CPPFLAGS) $(ELECTRUM_INCLUDES)
 libelectrum_util_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 libelectrum_util_a_SOURCES = \
   support/pagelocker.cpp \
+  uint256.cpp \
   chainparamsbase.cpp \
   clientversion.cpp \
   compat/glibc_sanity.cpp \
@@ -538,6 +547,7 @@ endif
 	$(AM_V_GEN) $(PROTOC) --cpp_out=$(@D) --proto_path=$(<D) $<
 
 if EMBEDDED_LEVELDB
+include Makefile.crc32c.include
 include Makefile.leveldb.include
 endif
 

@@ -170,10 +170,10 @@ void DoTest(const CScript& scriptPubKey, const CScript& scriptSig, const CScript
     CDataStream stream(SER_NETWORK, PROTOCOL_VERSION);
     stream << tx2;
     if (flags & electrumconsensus_SCRIPT_FLAGS_VERIFY_WITNESS) {
-        BOOST_CHECK_MESSAGE(navcoinconsensus_verify_script_with_amount(begin_ptr(scriptPubKey), scriptPubKey.size(), txCredit.vout[0].nValue, (const unsigned char*)&stream[0], stream.size(), 0, flags, nullptr) == expect, message);
+        BOOST_CHECK_MESSAGE(electrumconsensus_verify_script_with_amount(begin_ptr(scriptPubKey), scriptPubKey.size(), txCredit.vout[0].nValue, (const unsigned char*)&stream[0], stream.size(), 0, flags, nullptr) == expect, message);
     } else {
-        BOOST_CHECK_MESSAGE(navcoinconsensus_verify_script_with_amount(begin_ptr(scriptPubKey), scriptPubKey.size(), 0, (const unsigned char*)&stream[0], stream.size(), 0, flags, nullptr) == expect, message);
-        BOOST_CHECK_MESSAGE(navcoinconsensus_verify_script(begin_ptr(scriptPubKey), scriptPubKey.size(), (const unsigned char*)&stream[0], stream.size(), 0, flags, nullptr) == expect,message);
+        BOOST_CHECK_MESSAGE(electrumconsensus_verify_script_with_amount(begin_ptr(scriptPubKey), scriptPubKey.size(), 0, (const unsigned char*)&stream[0], stream.size(), 0, flags, nullptr) == expect, message);
+        BOOST_CHECK_MESSAGE(electrumconsensus_verify_script(begin_ptr(scriptPubKey), scriptPubKey.size(), (const unsigned char*)&stream[0], stream.size(), 0, flags, nullptr) == expect,message);
     }
 #endif
 }

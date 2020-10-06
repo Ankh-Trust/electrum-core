@@ -40,7 +40,8 @@ public:
         ProxyPortTor,           // int
         DisplayUnit,            // ElectrumUnits::Unit
         ThirdPartyTxUrls,       // QString
-        Digits,                 // QString
+        Theme,                  // QString
+        Scaling,                // int
         Language,               // QString
         CoinControlFeatures,    // bool
         ThreadsScriptVerif,     // int
@@ -56,8 +57,10 @@ public:
     int rowCount(const QModelIndex & parent = QModelIndex()) const;
     QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
     bool setData(const QModelIndex & index, const QVariant & value, int role = Qt::EditRole);
+    void setDirty(bool dirty);
     /** Updates current unit in memory, settings and emits displayUnitChanged(newUnit) signal */
     void setDisplayUnit(const QVariant &value);
+    void setCoinControlFeatures(const bool enabled);
 
     /* Explicit getters */
     bool getHideTrayIcon() { return fHideTrayIcon; }
@@ -72,16 +75,20 @@ public:
     /* Restart flag helper */
     void setRestartRequired(bool fRequired);
     bool isRestartRequired();
+    bool isDirty();
 
 private:
     /* Qt-only settings */
     bool fHideTrayIcon;
     bool fMinimizeToTray;
     bool fMinimizeOnClose;
+    QString theme;
+    int nScaling;
     QString language;
     int nDisplayUnit;
     QString strThirdPartyTxUrls;
     bool fCoinControlFeatures;
+    bool fDirty = false;
     /* settings that were overriden by command-line */
     QString strOverriddenByCommandLine;
 

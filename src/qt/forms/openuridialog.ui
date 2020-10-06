@@ -7,11 +7,14 @@
     <x>0</x>
     <y>0</y>
     <width>564</width>
-    <height>109</height>
+    <height>144</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Open URI</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true"/>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -31,12 +34,19 @@
       </widget>
      </item>
      <item>
-      <widget class="QValidatedLineEdit" name="uriEdit"/>
+      <widget class="QValidatedLineEdit" name="uriEdit">
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QPushButton" name="selectFileButton">
        <property name="toolTip">
         <string>Select payment request file</string>
+       </property>
+       <property name="styleSheet">
+        <string notr="true"/>
        </property>
        <property name="text">
         <string notr="true">…</string>
@@ -63,6 +73,9 @@
    </item>
    <item>
     <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>

@@ -15,3 +15,4 @@ struct WalletTestingSetup: public TestingSetup {
 };
 
 #endif
+

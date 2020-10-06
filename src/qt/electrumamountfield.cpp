@@ -26,7 +26,6 @@ class AmountSpinBox: public QAbstractSpinBox
 public:
     explicit AmountSpinBox(QWidget *parent):
         QAbstractSpinBox(parent),
-        currentUnit(ElectrumUnits::_AE),
         singleStep(100000) // satoshis
     {
         setAlignment(Qt::AlignRight);
@@ -50,7 +49,7 @@ public:
         CAmount val = parse(input, &valid);
         if(valid)
         {
-            input = ElectrumUnits::format(currentUnit, val, false, ElectrumUnits::separatorAlways);
+            input = ElectrumUnits::format(ElectrumUnits::_AE, val, false, ElectrumUnits::separatorAlways);
             lineEdit()->setText(input);
         }
     }
@@ -60,9 +59,9 @@ public:
         return parse(text(), valid_out);
     }
 
-    void setValue(const CAmount& value)
+    void setValue(CAmount val)
     {
-        lineEdit()->setText(ElectrumUnits::format(currentUnit, value, false, ElectrumUnits::separatorAlways));
+        lineEdit()->setText(ElectrumUnits::format(ElectrumUnits::_AE, val, false, ElectrumUnits::separatorAlways));
         Q_EMIT valueChanged();
     }
 
@@ -73,19 +72,6 @@ public:
         val = val + steps * singleStep;
         val = qMin(qMax(val, CAmount(0)), ElectrumUnits::maxMoney());
         setValue(val);
-    }
-
-    void setDisplayUnit(int unit)
-    {
-        bool valid = false;
-        CAmount val = value(&valid);
-
-        //currentUnit = unit;
-
-        if(valid)
-            setValue(val);
-        else
-            clear();
     }
 
     void setSingleStep(const CAmount& step)
@@ -127,7 +113,6 @@ public:
     }
 
 private:
-    int currentUnit;
     CAmount singleStep;
     mutable QSize cachedMinimumSizeHint;
 
@@ -139,7 +124,7 @@ private:
     CAmount parse(const QString &text, bool *valid_out=0) const
     {
         CAmount val = 0;
-        bool valid = ElectrumUnits::parse(0, text, &val);
+        bool valid = ElectrumUnits::parse(ElectrumUnits::_AE, text, &val);
         if(valid)
         {
             if(val < 0 || val > ElectrumUnits::maxMoney())
@@ -200,13 +185,11 @@ ElectrumAmountField::ElectrumAmountField(QWidget *parent) :
     amount = new AmountSpinBox(this);
     amount->setLocale(QLocale::c());
     amount->installEventFilter(this);
-    amount->setMaximumWidth(170);
 
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->addWidget(amount);
     unit = new QLabel(this);
     layout->addWidget(unit);
-    layout->addStretch(1);
     layout->setContentsMargins(0,0,0,0);
 
     setLayout(layout);
@@ -217,13 +200,11 @@ ElectrumAmountField::ElectrumAmountField(QWidget *parent) :
     // If one if the widgets changes, the combined content changes as well
     connect(amount, SIGNAL(valueChanged()), this, SIGNAL(valueChanged()));
     connect(amount, SIGNAL(valueChanged()), this, SLOT(valueDidChange()));
-
 }
 
 void ElectrumAmountField::clear()
 {
     amount->clear();
-    unit->setText("0 EUR / 0 USD / 0 BTC");
 }
 
 void ElectrumAmountField::setEnabled(bool fEnabled)
@@ -274,28 +255,24 @@ void ElectrumAmountField::setValue(const CAmount& value)
     amount->setValue(value);
 }
 
-void ElectrumAmountField::valueDidChange()
-{
-    QSettings settings;
-    bool valid;
-    unit->setText(QString("%1 EUR / ").arg(value(&valid) / settings.value("eurFactor", 0).toFloat()).append("%2 USD / ").arg(value(&valid) / settings.value("usdFactor", 0).toFloat()).append("%3 BTC").arg(value(&valid) / settings.value("btcFactor", 0).toFloat()));
-}
-
 void ElectrumAmountField::setReadOnly(bool fReadOnly)
 {
     amount->setReadOnly(fReadOnly);
 }
 
-void ElectrumAmountField::unitChanged(int idx)
-{
-
-}
-
 void ElectrumAmountField::setDisplayUnit(int newUnit)
 {
-    amount->setDisplayUnit(newUnit);
+    nCurrentUnit = newUnit;
+    valueDidChange();
 }
 
+void ElectrumAmountField::valueDidChange()
+{
+    if (nCurrentUnit != ElectrumUnits::_AE)
+        unit->setText(" " + tr("or") + " " + ElectrumUnits::formatWithUnit(nCurrentUnit, value()));
+    else
+        unit->setText(" " + tr("or") + " " + ElectrumUnits::formatWithUnit(ElectrumUnits::BTC, value()));
+}
 
 void ElectrumAmountField::setSingleStep(const CAmount& step)
 {

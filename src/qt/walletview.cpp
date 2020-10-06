@@ -6,12 +6,15 @@
 
 #include <qt/addressbookpage.h>
 #include <qt/askpassphrasedialog.h>
-#include <qt/electrumgui.h>
 #include <qt/clientmodel.h>
+#include <qt/communityfundpage.h>
+#include <qt/daopage.h>
+#include <qt/getaddresstoreceive.h>
 #include <qt/guiutil.h>
+#include <qt/electrumgui.h>
+#include <qt/optionsdialog.h>
 #include <qt/optionsmodel.h>
 #include <qt/overviewpage.h>
-#include <qt/communityfundpage.h>
 #include <qt/platformstyle.h>
 #include <qt/receivecoinsdialog.h>
 #include <qt/sendcoinsdialog.h>
@@ -20,9 +23,9 @@
 #include <qt/transactionview.h>
 #include <qt/walletmodel.h>
 
-#include "ui_interface.h"
+#include <ui_interface.h>
 
-#include "main.h"
+#include <main.h>
 
 #include <QAction>
 #include <QActionGroup>
@@ -42,6 +45,8 @@ WalletView::WalletView(const PlatformStyle *platformStyle, QWidget *parent):
     // Create tabs
     overviewPage = new OverviewPage(platformStyle);
 
+    settingsPage = new OptionsDialog(platformStyle);
+
     transactionsPage = new QWidget(this);
     QVBoxLayout *vbox = new QVBoxLayout();
     QHBoxLayout *hbox_buttons = new QHBoxLayout();
@@ -49,24 +54,28 @@ WalletView::WalletView(const PlatformStyle *platformStyle, QWidget *parent):
     vbox->addWidget(transactionView);
     QPushButton *exportButton = new QPushButton(tr("&Export"), this);
     exportButton->setToolTip(tr("Export the data in the current tab to a file"));
+    exportButton->setDefault(true);
     hbox_buttons->addStretch();
     hbox_buttons->addWidget(exportButton);
     vbox->addLayout(hbox_buttons);
     transactionsPage->setLayout(vbox);
 
-    communityFundPage = new CommunityFundPage(platformStyle);
+    daoPage = new DaoPage(platformStyle);
 
     receiveCoinsPage = new ReceiveCoinsDialog(platformStyle);
     sendCoinsPage = new SendCoinsDialog(platformStyle);
+    requestPaymentPage = new getAddressToReceive();
 
     usedSendingAddressesPage = new AddressBookPage(platformStyle, AddressBookPage::ForEditing, AddressBookPage::SendingTab, this);
     usedReceivingAddressesPage = new AddressBookPage(platformStyle, AddressBookPage::ForEditing, AddressBookPage::ReceivingTab, this);
 
     addWidget(overviewPage);
+    addWidget(settingsPage);
     addWidget(transactionsPage);
     addWidget(receiveCoinsPage);
     addWidget(sendCoinsPage);
-    addWidget(communityFundPage);
+    addWidget(requestPaymentPage);
+    addWidget(daoPage);
 
     // Clicking on a transaction on the overview pre-selects the transaction on the transaction history page
     connect(overviewPage, SIGNAL(transactionClicked(QModelIndex)), transactionView, SLOT(focusTransaction(QModelIndex)));
@@ -84,6 +93,10 @@ WalletView::WalletView(const PlatformStyle *platformStyle, QWidget *parent):
     connect(sendCoinsPage, SIGNAL(message(QString,QString,unsigned int)), this, SIGNAL(message(QString,QString,unsigned int)));
     // Pass through messages from transactionView
     connect(transactionView, SIGNAL(message(QString,QString,unsigned int)), this, SIGNAL(message(QString,QString,unsigned int)));
+    connect(requestPaymentPage, SIGNAL(requestPayment()), this, SLOT(gotoReceiveCoinsPage()));
+    connect(requestPaymentPage, SIGNAL(requestAddressHistory()), this, SLOT(requestAddressHistory()));
+
+    connect(daoPage, SIGNAL(daoEntriesChanged(int)), this, SLOT(onDaoEntriesChanged(int)));
 }
 
 WalletView::~WalletView()
@@ -105,9 +118,6 @@ void WalletView::setElectrumGUI(ElectrumGUI *gui)
 
         // Pass through transaction notifications
         connect(this, SIGNAL(incomingTransaction(QString,int,CAmount,QString,QString,QString)), gui, SLOT(incomingTransaction(QString,int,CAmount,QString,QString,QString)));
-
-        // Connect HD enabled state signal
-        connect(this, SIGNAL(hdEnabledStatusChanged(int)), gui, SLOT(setHDStatus(int)));
     }
 }
 
@@ -117,6 +127,9 @@ void WalletView::setClientModel(ClientModel *clientModel)
 
     overviewPage->setClientModel(clientModel);
     sendCoinsPage->setClientModel(clientModel);
+    daoPage->setClientModel(clientModel);
+
+    settingsPage->setModel(clientModel->getOptionsModel());
 }
 
 void WalletView::requestAddressHistory()
@@ -131,8 +144,10 @@ void WalletView::setWalletModel(WalletModel *walletModel)
     // Put transaction list in tabs
     transactionView->setModel(walletModel);
     overviewPage->setWalletModel(walletModel);
-    communityFundPage->setWalletModel(walletModel);
+    daoPage->setWalletModel(walletModel);
     receiveCoinsPage->setModel(walletModel);
+    requestPaymentPage->setModel(walletModel);
+    requestPaymentPage->showQR();
     sendCoinsPage->setModel(walletModel);
     usedReceivingAddressesPage->setModel(walletModel->getAddressTableModel());
     usedSendingAddressesPage->setModel(walletModel->getAddressTableModel());
@@ -145,9 +160,6 @@ void WalletView::setWalletModel(WalletModel *walletModel)
         // Handle changes in encryption status
         connect(walletModel, SIGNAL(encryptionStatusChanged(int)), this, SIGNAL(encryptionStatusChanged(int)));
         updateEncryptionStatus();
-
-        // update HD status
-        Q_EMIT hdEnabledStatusChanged(walletModel->hdEnabled());
 
         // Balloon pop-up for new transaction
         connect(walletModel->getTransactionTableModel(), SIGNAL(rowsInserted(QModelIndex,int,int)),
@@ -185,23 +197,42 @@ void WalletView::gotoOverviewPage()
 {
     setCurrentWidget(overviewPage);
     overviewPage->updateStakeReportNow();
+    daoPage->setActive(false);
 }
 
 void WalletView::gotoHistoryPage()
 {
     setCurrentWidget(transactionsPage);
+    daoPage->setActive(false);
+}
+
+void WalletView::gotoSettingsPage()
+{
+    // We need to update the settings if it was modified externally
+    // This fixes a bug where coin control was enabled on the send page
+    // but was not shown as enabled on the setting spage
+    settingsPage->setModel(this->clientModel->getOptionsModel());
+
+    setCurrentWidget(settingsPage);
+    daoPage->setActive(false);
 }
 
 void WalletView::gotoCommunityFundPage()
 {
     // Change to CommunityFund UI
-    setCurrentWidget(communityFundPage);
-    communityFundPage->refreshTab();
+    setCurrentWidget(daoPage);
+    daoPage->setActive(true);
 }
 
 void WalletView::gotoReceiveCoinsPage()
 {
     setCurrentWidget(receiveCoinsPage);
+    daoPage->setActive(false);
+}
+
+void WalletView::gotoRequestPaymentPage(){
+    setCurrentWidget(requestPaymentPage);
+    daoPage->setActive(false);
 }
 
 void WalletView::gotoSendCoinsPage(QString addr)
@@ -210,11 +241,8 @@ void WalletView::gotoSendCoinsPage(QString addr)
 
     if (!addr.isEmpty())
         sendCoinsPage->setAddress(addr);
-}
 
-void WalletView::setVotingStatus(QString text)
-{
-    overviewPage->setVotingStatus(text);
+    daoPage->setActive(false);
 }
 
 void WalletView::gotoSignMessageTab(QString addr)
@@ -227,6 +255,8 @@ void WalletView::gotoSignMessageTab(QString addr)
 
     if (!addr.isEmpty())
         signVerifyMessageDialog->setAddress_SM(addr);
+
+    daoPage->setActive(false);
 }
 
 void WalletView::gotoVerifyMessageTab(QString addr)
@@ -244,11 +274,6 @@ void WalletView::gotoVerifyMessageTab(QString addr)
 bool WalletView::handlePaymentRequest(const SendCoinsRecipient& recipient)
 {
     return sendCoinsPage->handlePaymentRequest(recipient);
-}
-
-void WalletView::showOutOfSyncWarning(bool fShow)
-{
-    overviewPage->showOutOfSyncWarning(fShow);
 }
 
 void WalletView::updateEncryptionStatus()
@@ -311,6 +336,13 @@ void WalletView::unlockWallet()
     }
 }
 
+void WalletView::splitRewards()
+{
+    SplitRewardsDialog dlg(this);
+    dlg.setModel(walletModel);
+    dlg.exec();
+}
+
 void WalletView::exportMasterPrivateKeyAction()
 {
     LOCK2(cs_main, pwalletMain->cs_wallet);
@@ -346,6 +378,58 @@ void WalletView::exportMasterPrivateKeyAction()
              tr("Unable to retrieve HD master private key"));
      }
 
+}
+
+void WalletView::exportMnemonicAction()
+{
+    LOCK2(cs_main, pwalletMain->cs_wallet);
+
+    WalletModel::UnlockContext ctx(walletModel->requestUnlock());
+    if(!ctx.isValid())
+    {
+        // Unlock wallet was cancelled
+        return;
+    }
+
+    CKeyID masterKeyID = pwalletMain->GetHDChain().masterKeyID;
+    if (!pwalletMain->IsHDEnabled())
+    {
+        QMessageBox::critical(0, tr(PACKAGE_NAME),
+                tr("Wallet is not a HD wallet."));
+    }
+
+    CKey key;
+    if (pwalletMain->GetKey(masterKeyID, key))
+    {
+        std::vector<unsigned char> keyData;
+        const unsigned char* ptrKeyData = key.begin();
+        for (int i = 0; ptrKeyData != key.end(); i++) {
+            unsigned char byte = *ptrKeyData;
+            keyData.push_back(byte);
+            ptrKeyData++;
+        }
+
+        std::string mnemonic;
+
+        // TODO: Add language support for the key
+        //       Currently will only export the key in english
+        word_list mnemonic_words = create_mnemonic(keyData, string_to_lexicon("english"));
+        for (auto it = mnemonic_words.begin(); it != mnemonic_words.end();) {
+            const auto word = *it;
+            mnemonic += word;
+            ++it;
+            if (it == mnemonic_words.end())
+                break;
+            mnemonic += " ";
+        }
+
+        QMessageBox::information(this, tr("Show Mnemonic"),
+                tr("Mnemonic:<br><br>%1").arg(QString::fromStdString(mnemonic)));
+    } else // Could not get the master key
+    {
+        QMessageBox::critical(0, tr(PACKAGE_NAME),
+                tr("Unable to retrieve mnemonic"));
+    }
 }
 
 void WalletView::importPrivateKey()
@@ -490,4 +574,9 @@ void WalletView::showProgress(const QString &title, int nProgress)
 void WalletView::requestedSyncWarningInfo()
 {
     Q_EMIT outOfSyncWarningClicked();
+}
+
+void WalletView::onDaoEntriesChanged(int count)
+{
+    Q_EMIT daoEntriesChanged(count);
 }

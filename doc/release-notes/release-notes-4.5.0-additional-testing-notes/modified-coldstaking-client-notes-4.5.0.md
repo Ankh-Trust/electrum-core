@@ -33,32 +33,32 @@ At the time of writing, the changes can be viewed here:
 2018-12-05 02:07:28 CheckStake() : new proof-of-stake block found hash: 9ec735c1ea6c020fe5b55de17898b4fbd67091eefd27f5afde8797e7612ecb06
 2018-12-05 02:07:28 UpdateTip: new best=9ec735c1ea6c020fe5b55de17898b4fbd67091eefd27f5afde8797e7612ecb06 height=69274 version=0x710171f1 log2_work=85.821494 tx=134912 date='2018-12-05 02:07:28' progress=1.000000 cache=0.0MiB(29tx)
 2018-12-05 02:07:28 AddToWallet 597c8f7bdb79c7d906b0fd15bda4f8039fdc2e01d07e9381f1d83359650bc548  new
-2018-12-05 02:07:29 connect() to [2403:4d00:301:10:d99a:d453:b9cf:6196]:45556 failed: Network is unreachable (101)
-2018-12-05 02:07:29 connect() to [2403:4d00:301:10:7ee3:755a:be36:a5c0]:45556 failed: Network is unreachable (101)
-2018-12-05 02:07:31 connect() to [2403:4d00:301:10:7ee3:755a:be36:a5c0]:45556 failed: Network is unreachable (101)
-2018-12-05 02:07:32 connect() to 103.247.155.206:45556 failed after select(): Connection refused (111)
-2018-12-05 02:07:33 connect() to [2403:4d00:301:10:7ee3:755a:be36:a5c0]:45556 failed: Network is unreachable (101)
-2018-12-05 02:07:37 connect() to 103.247.155.206:45556 failed after select(): Connection refused (111)
-2018-12-05 02:07:40 connect() to [2403:4d00:301:10:7ee3:755a:be36:a5c0]:45556 failed: Network is unreachable (101)
-2018-12-05 02:07:50 connect() to 103.247.155.206:45556 failed after select(): Connection refused (111)
-2018-12-05 02:07:52 connect() to [2403:4d00:301:10:7ee3:755a:be36:a5c0]:45556 failed: Network is unreachable (101)
-2018-12-05 02:07:53 connect() to 103.247.155.206:45556 failed after select(): Connection refused (111)
-2018-12-05 02:07:54 connect() to [2403:4d00:301:10:d99a:d453:b9cf:6196]:45556 failed: Network is unreachable (101)
-2018-12-05 02:07:55 connect() to 103.247.155.206:45556 failed after select(): Connection refused (111)
-2018-12-05 02:07:57 connect() to [2403:4d00:301:10:d99a:d453:b9cf:6196]:45556 failed: Network is unreachable (101)
-2018-12-05 02:08:01 connect() to 103.247.155.206:45556 failed after select(): Connection refused (111)
-2018-12-05 02:08:02 connect() to 103.247.155.206:45556 failed after select(): Connection refused (111)
-2018-12-05 02:08:04 connect() to 103.247.155.206:45556 failed after select(): Connection refused (111)
-2018-12-05 02:08:05 connect() to [2403:4d00:301:10:7ee3:755a:be36:a5c0]:45556 failed: Network is unreachable (101)
-2018-12-05 02:08:05 connect() to [2403:4d00:301:10:7ee3:755a:be36:a5c0]:45556 failed: Network is unreachable (101)
-2018-12-05 02:08:06 connect() to [2403:4d00:301:10:d99a:d453:b9cf:6196]:45556 failed: Network is unreachable (101)
-2018-12-05 02:08:07 connect() to [2403:4d00:301:10:d99a:d453:b9cf:6196]:45556 failed: Network is unreachable (101)
-2018-12-05 02:08:09 connect() to 103.247.155.206:45556 failed after select(): Connection refused (111)
-2018-12-05 02:08:09 connect() to [2403:4d00:301:10:d99a:d453:b9cf:6196]:45556 failed: Network is unreachable (101)
-2018-12-05 02:08:11 connect() to [2403:4d00:301:10:7ee3:755a:be36:a5c0]:45556 failed: Network is unreachable (101)
+2018-12-05 02:07:29 connect() to [2403:4d00:301:10:d99a:d453:b9cf:6196]:15556 failed: Network is unreachable (101)
+2018-12-05 02:07:29 connect() to [2403:4d00:301:10:7ee3:755a:be36:a5c0]:15556 failed: Network is unreachable (101)
+2018-12-05 02:07:31 connect() to [2403:4d00:301:10:7ee3:755a:be36:a5c0]:15556 failed: Network is unreachable (101)
+2018-12-05 02:07:32 connect() to 103.247.155.206:15556 failed after select(): Connection refused (111)
+2018-12-05 02:07:33 connect() to [2403:4d00:301:10:7ee3:755a:be36:a5c0]:15556 failed: Network is unreachable (101)
+2018-12-05 02:07:37 connect() to 103.247.155.206:15556 failed after select(): Connection refused (111)
+2018-12-05 02:07:40 connect() to [2403:4d00:301:10:7ee3:755a:be36:a5c0]:15556 failed: Network is unreachable (101)
+2018-12-05 02:07:50 connect() to 103.247.155.206:15556 failed after select(): Connection refused (111)
+2018-12-05 02:07:52 connect() to [2403:4d00:301:10:7ee3:755a:be36:a5c0]:15556 failed: Network is unreachable (101)
+2018-12-05 02:07:53 connect() to 103.247.155.206:15556 failed after select(): Connection refused (111)
+2018-12-05 02:07:54 connect() to [2403:4d00:301:10:d99a:d453:b9cf:6196]:15556 failed: Network is unreachable (101)
+2018-12-05 02:07:55 connect() to 103.247.155.206:15556 failed after select(): Connection refused (111)
+2018-12-05 02:07:57 connect() to [2403:4d00:301:10:d99a:d453:b9cf:6196]:15556 failed: Network is unreachable (101)
+2018-12-05 02:08:01 connect() to 103.247.155.206:15556 failed after select(): Connection refused (111)
+2018-12-05 02:08:02 connect() to 103.247.155.206:15556 failed after select(): Connection refused (111)
+2018-12-05 02:08:04 connect() to 103.247.155.206:15556 failed after select(): Connection refused (111)
+2018-12-05 02:08:05 connect() to [2403:4d00:301:10:7ee3:755a:be36:a5c0]:15556 failed: Network is unreachable (101)
+2018-12-05 02:08:05 connect() to [2403:4d00:301:10:7ee3:755a:be36:a5c0]:15556 failed: Network is unreachable (101)
+2018-12-05 02:08:06 connect() to [2403:4d00:301:10:d99a:d453:b9cf:6196]:15556 failed: Network is unreachable (101)
+2018-12-05 02:08:07 connect() to [2403:4d00:301:10:d99a:d453:b9cf:6196]:15556 failed: Network is unreachable (101)
+2018-12-05 02:08:09 connect() to 103.247.155.206:15556 failed after select(): Connection refused (111)
+2018-12-05 02:08:09 connect() to [2403:4d00:301:10:d99a:d453:b9cf:6196]:15556 failed: Network is unreachable (101)
+2018-12-05 02:08:11 connect() to [2403:4d00:301:10:7ee3:755a:be36:a5c0]:15556 failed: Network is unreachable (101)
 2018-12-05 02:08:12 socket recv error Connection reset by peer (104)
-2018-12-05 02:08:14 connect() to [2403:4d00:301:10:7ee3:755a:be36:a5c0]:45556 failed: Network is unreachable (101)
-2018-12-05 02:08:14 connect() to [2403:4d00:301:10:7ee3:755a:be36:a5c0]:45556 failed: Network is unreachable (101)
+2018-12-05 02:08:14 connect() to [2403:4d00:301:10:7ee3:755a:be36:a5c0]:15556 failed: Network is unreachable (101)
+2018-12-05 02:08:14 connect() to [2403:4d00:301:10:7ee3:755a:be36:a5c0]:15556 failed: Network is unreachable (101)
 ```
 
 #### Conclusion:
@@ -154,7 +154,7 @@ At the time of writing, the changes can be viewed here:
 - The modified staking wallet will continue to stake and create its own blockchain.
 - Log record:
 ```
-2018-12-04 04:13:40 connect() to 103.247.155.206:45556 failed after select(): Connection refused (111)
+2018-12-04 04:13:40 connect() to 103.247.155.206:15556 failed after select(): Connection refused (111)
 2018-12-04 04:13:52 UpdateTip: new best=0012bb917db9e27c7705e31bb428f4f9f4620814d3ca2f5f7b0ec217ee4aee9e height=66689 version=0x710171f1 log2_work=85.821494 tx=129739 date='2018-12-04 04:13:52' progress=1.000000 cache=0.0MiB(19tx)
 2018-12-04 04:14:01 keypool reserve 4
 2018-12-04 04:14:01 CommitTransaction:
@@ -168,14 +168,14 @@ CTransaction(hash=0e86a8f71b8a3b580935cb790c1fce039d9243b867f29564a76ee316f3c8f5
 2018-12-04 04:14:02 Relaying wtx 0e86a8f71b8a3b580935cb790c1fce039d9243b867f29564a76ee316f3c8f593
 2018-12-04 04:14:04 socket recv error Connection reset by peer (104)
 2018-12-04 04:14:09 UpdateTip: new best=6157ee14743db35d1de569c1a39cc4e1b1137f3b87c9fb75dc74fa7d72133c06 height=66690 version=0x710171f1 log2_work=85.821494 tx=129741 date='2018-12-04 04:14:08' progress=0.999999 cache=0.0MiB(22tx)
-2018-12-04 04:18:25 receive version message: /Electrum:4.4.0/: version 70020, blocks=66690, us=[2403:4d00:301:10:7ee3:755a:be36:a5c0]:45556, peer=5
-2018-12-04 04:18:25 AdvertiseLocal: advertising address [2403:4d00:301:10:7ee3:755a:be36:a5c0]:45556
+2018-12-04 04:18:25 receive version message: /Electrum:4.4.0/: version 70020, blocks=66690, us=[2403:4d00:301:10:7ee3:755a:be36:a5c0]:15556, peer=5
+2018-12-04 04:18:25 AdvertiseLocal: advertising address [2403:4d00:301:10:7ee3:755a:be36:a5c0]:15556
 2018-12-04 04:18:26 CheckStake() : new proof-of-stake block found hash: 7679f66ced702c32db7f20227f56fae863a4d093758458daf3643a84976962ee
 2018-12-04 04:18:26 UpdateTip: new best=7679f66ced702c32db7f20227f56fae863a4d093758458daf3643a84976962ee height=66691 version=0x7101f1f1 log2_work=85.821494 tx=129744 date='2018-12-04 04:18:24' progress=0.999999 cache=0.0MiB(25tx)
 2018-12-04 04:18:26 AddToWallet 641c0f39d60eb92661b65b413db56122d32562576c7ad77a1a04745eab52ac78  new
 2018-12-04 04:18:26 AddToWallet 0e86a8f71b8a3b580935cb790c1fce039d9243b867f29564a76ee316f3c8f593  update
 2018-12-04 04:23:22 socket recv error Connection reset by peer (104)
-2018-12-04 04:23:40 connect() to 103.247.155.206:45556 failed after select(): Connection refused (111)
+2018-12-04 04:23:40 connect() to 103.247.155.206:15556 failed after select(): Connection refused (111)
 2018-12-04 04:24:04 socket recv error Connection reset by peer (104)
 ```
 

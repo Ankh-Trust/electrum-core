@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2018 The NAVcoin Core developers
+# Copyright (c) 2018 The Navcoin Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -70,9 +70,13 @@ class PaymentRequest452(ElectrumTestFramework):
 
         # vote yes for the payment request and generate until paid out
 
+        end_cycle(self.nodes[0])
+
         self.nodes[0].paymentrequestvote(paymentReq, "yes")
 
+        slow_gen(self.nodes[0], 1)
         start_new_cycle(self.nodes[0])
+
         assert(self.nodes[0].getpaymentrequest(paymentReq)["state"] == 1)
         assert(self.nodes[0].getpaymentrequest(paymentReq)["stateChangedOnBlock"] != "0000000000000000000000000000000000000000000000000000000000000000")
 
