@@ -138,7 +138,13 @@ ui_*.h
 .vscode
 *.cflags
 *.cxxflags
+*.creator.*
 
+# QT Creator files
+*.config
+*.creator
+*.files
+*.includes
 
 # VS Code
 *.code-workspace
