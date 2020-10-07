@@ -579,7 +579,7 @@ boost::filesystem::path GetDefaultDataDir()
     return pathRet / "Library/Application Support/Electrum";
 #else
     // Unix
-    return pathRet / ".Electrum";
+    return pathRet / ".electrum";
 #endif
 #endif
 }
