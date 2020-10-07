@@ -30,7 +30,7 @@ build-aux/compile
 build-aux/test-driver
 config.log
 config.status
-//configure
+configure
 libtool
 src/config/electrum-config.h
 src/config/electrum-config.h.in
@@ -56,7 +56,7 @@ ui_*.h
 *.pyc
 *.o
 *.o-*
-//*.patch
+*.patch
 .electrum
 *.a
 *.pb.cc
