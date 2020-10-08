@@ -208,6 +208,7 @@ public:
         // Deployment of Static Reward
         consensus.vDeployments[Consensus::DEPLOYMENT_STATIC_REWARD].bit = 15;
         consensus.vDeployments[Consensus::DEPLOYMENT_STATIC_REWARD].nStartTime = 1559390400; // Jun 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_STATIC_REWARD].nTimeout = 1622548800; // Jun 1st, 2021
 
         // Deployment of Quorum reduction for the Community Fund
         consensus.vDeployments[Consensus::DEPLOYMENT_QUORUM_CFUND].bit = 17;
