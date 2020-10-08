@@ -106,7 +106,7 @@ public:
         consensus.nDailyBlockCount =  (24 * 60 * 60) / consensus.nTargetSpacing;
         consensus.nModifierInterval = 10 * 60; // time to elapse before new modifier is computed
         consensus.nTargetTimespan = 25 * 30;
-        consensus.nLastPOWBlock = 20000;
+        consensus.nLastPOWBlock = 500000;
         consensus.nMinimumQuorumFirstHalf = 2 / 3;
         consensus.nMinimumQuorumSecondHalf = 2 / 3;
         consensus.nCommunityFundMinAge = 50;
