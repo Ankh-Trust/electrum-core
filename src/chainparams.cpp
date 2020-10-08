@@ -283,7 +283,7 @@ public:
 
         checkpointData = (CCheckpointData) {
             boost::assign::map_list_of
-            ( 0, uint256S("0x00006a4e3e18c71c6d48ad6c261e2254fa764cf29607a4357c99b712dfbb8e6a"))
+            ( 0, uint256S("0x00006a4e3e18c71c6d48ad6c261e2254fa764cf29607a4357c99b712dfbb8e6a")),
             /*( 250, uint256S("0x668e05f32eaa6ff639b157abfaf9fe4972770a92ed7c69d566b3f4ec00d8d015"))
             ( 500, uint256S("0xa6dd84d1f35b15aae402e72a7ff4f18dca08ac001f2b95cbb4588bdfa16eeb08"))
             ( 1000, uint256S("0x8a75993a531726f54542bdcaffbfed023bfe97f99d9c4f025eb749c4d2ded54e"))
