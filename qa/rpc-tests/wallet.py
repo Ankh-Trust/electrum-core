@@ -6,7 +6,7 @@
 from test_framework.test_framework import ElectrumTestFramework
 from test_framework.util import *
 
-BLOCK_REWARD = 50
+BLOCK_REWARD = 1
 
 class WalletTest (ElectrumTestFramework):
 
@@ -40,13 +40,13 @@ class WalletTest (ElectrumTestFramework):
         self.sync_all()
 
         walletinfo = self.nodes[0].getwalletinfo()
-        assert_equal(walletinfo['immature_balance'], 50000000)
+        assert_equal(walletinfo['immature_balance'], 1000000)
         assert_equal(walletinfo['balance'], 0)
 
         slow_gen(self.nodes[1], 56)
         self.sync_all()
 
-        assert_equal(self.nodes[0].getbalance(), 50000000)
+        assert_equal(self.nodes[0].getbalance(), 1000000)
         assert_equal(self.nodes[1].getbalance(), 2550)
         assert_equal(self.nodes[2].getbalance(), 0)
 
@@ -179,7 +179,7 @@ class WalletTest (ElectrumTestFramework):
         #4. check if recipient (node0) can list the zero value tx
         usp = self.nodes[1].listunspent()
         inputs = [{"txid":usp[0]['txid'], "vout":usp[0]['vout']}]
-        outputs = {self.nodes[1].getnewaddress(): 49.998, self.nodes[0].getnewaddress(): 11.11}
+        outputs = {self.nodes[1].getnewaddress(): 0.998, self.nodes[0].getnewaddress(): 11.11}
 
         rawTx = self.nodes[1].createrawtransaction(inputs, outputs).replace("c0833842", "00000000") #replace 11.11 with 0.0 (int32)
         decRawTx = self.nodes[1].decoderawtransaction(rawTx)

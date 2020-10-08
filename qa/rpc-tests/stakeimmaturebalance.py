@@ -11,7 +11,7 @@ node0 checks that immature balance does not affect stake weight
 '''
 
 SENDING_FEE= 0.003393
-BLOCK_REWARD = 50
+BLOCK_REWARD = 1
 
 logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO, stream=sys.stdout)
 class StakeImmatureBalance(ElectrumTestFramework):
@@ -38,4 +38,3 @@ class StakeImmatureBalance(ElectrumTestFramework):
 
 if __name__ == '__main__':
     StakeImmatureBalance().main()
-

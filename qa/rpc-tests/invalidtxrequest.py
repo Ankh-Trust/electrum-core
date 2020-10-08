@@ -16,7 +16,7 @@ In this test we connect to one node over p2p, and test tx requests.
 # Use the ComparisonTestFramework with 1 node: only use --testbinary.
 class InvalidTxRequestTest(ComparisonTestFramework):
 
-    ''' Can either run this test as 1 node with expected answers, or two and compare them. 
+    ''' Can either run this test as 1 node with expected answers, or two and compare them.
         Change the "outcome" variable from each TestInstance object to only do the comparison. '''
     def __init__(self):
         super().__init__()
@@ -63,7 +63,7 @@ class InvalidTxRequestTest(ComparisonTestFramework):
 
         # b'\x64' is OP_NOTIF
         # Transaction will be rejected with code 16 (REJECT_INVALID)
-        tx1 = create_transaction(self.block1.vtx[0], 0, b'\x64', 50 * COIN - 12000)
+        tx1 = create_transaction(self.block1.vtx[0], 0, b'\x64', 1 * COIN - 12000)
         yield TestInstance([[tx1, RejectResult(16, b'mandatory-script-verify-flag-failed')]])
 
         # TODO: test further transactions...

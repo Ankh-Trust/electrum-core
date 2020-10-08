@@ -49,11 +49,11 @@ class TxnMallTest(ElectrumTestFramework):
         # Coins are sent to node1_address
         node1_address = self.nodes[1].getnewaddress("from0")
 
-        # Send tx1, and another transaction tx2 that won't be cloned 
+        # Send tx1, and another transaction tx2 that won't be cloned
         txid1 = self.nodes[0].sendfrom("foo", node1_address, 40, 0)
         txid2 = self.nodes[0].sendfrom("bar", node1_address, 20, 0)
 
-        # Construct a clone of tx1, to be malleated 
+        # Construct a clone of tx1, to be malleated
         rawtx1 = self.nodes[0].getrawtransaction(txid1,1)
         clone_inputs = [{"txid":rawtx1["vin"][0]["txid"],"vout":rawtx1["vin"][0]["vout"]}]
         clone_outputs = {rawtx1["vout"][0]["scriptPubKey"]["addresses"][0]:rawtx1["vout"][0]["value"],
@@ -86,10 +86,10 @@ class TxnMallTest(ElectrumTestFramework):
         tx1 = self.nodes[0].gettransaction(txid1)
         tx2 = self.nodes[0].gettransaction(txid2)
 
-        # Node0's balance should be starting balance, plus 500AE for another
+        # Node0's balance should be starting balance, plus 1 0AE for another
         # matured block, minus tx1 and tx2 amounts, and minus transaction fees:
         expected = starting_balance + fund_foo_tx["fee"] + fund_bar_tx["fee"]
-        if self.options.mine_block: expected += 50
+        if self.options.mine_block: expected += 1
         expected += tx1["amount"] + tx1["fee"]
         expected += tx2["amount"] + tx2["fee"]
         assert_equal(self.nodes[0].getbalance(), expected)
@@ -124,7 +124,7 @@ class TxnMallTest(ElectrumTestFramework):
         tx1 = self.nodes[0].gettransaction(txid1)
         tx1_clone = self.nodes[0].gettransaction(txid1_clone)
         tx2 = self.nodes[0].gettransaction(txid2)
-        
+
         # Verify expected confirmations
         assert_equal(tx1["confirmations"], -2)
         assert_equal(tx1_clone["confirmations"], 2)
@@ -132,9 +132,9 @@ class TxnMallTest(ElectrumTestFramework):
 
         # Check node0's total balance; should be same as before the clone, + 100 0AE for 2 matured,
         # less possible orphaned matured subsidy
-        expected += 100
-        if (self.options.mine_block): 
-            expected -= 50
+        expected += 2
+        if (self.options.mine_block):
+            expected -= 1
         assert_equal(self.nodes[0].getbalance(), expected)
         assert_equal(self.nodes[0].getbalance("*", 0), expected)
 
@@ -156,4 +156,3 @@ class TxnMallTest(ElectrumTestFramework):
 
 if __name__ == '__main__':
     TxnMallTest().main()
-
