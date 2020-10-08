@@ -254,12 +254,28 @@ public:
         nPruneAfterHeight = 100000;
         bnProofOfWorkLimit = arith_uint256(~arith_uint256() >> 16);
 
-        genesis = CreateGenesisBlock(1460561040, 6945, 0x1f00ffff, 1, 0);
+        uint32_t nTimestamp = 1595810000;
+        uint256 hashGenesisBlock = uint256S("0x00005b233f31fba828c68de4358d5eb935ff26441ccca5c38b092f9f0e0fec4d");
+        uint256 hashMerkleRoot = uint256S("0xc5ffb94893d8747433e1839e094dda04fed88cec3a0b9804b80c074df352389d");
+        uint32_t nNonce = 2043786909;
 
+        genesis = CreateGenesisBlock(nTimestamp, nNonce, 0x1f00ffff, 1, 0);
 	      consensus.hashGenesisBlock = genesis.GetHash();
 
-        assert(consensus.hashGenesisBlock == uint256S("0x00006a4e3e18c71c6d48ad6c261e2254fa764cf29607a4357c99b712dfbb8e6a"));
-        assert(genesis.hashMerkleRoot == uint256S("0xc507eec6ccabfd5432d764afceafba42d2d946594b8a60570cb2358a7392c61a"));
+        if (true && (genesis.GetHash() != hashGenesisBlock || genesis.hashMerkleRoot != hashMerkleRoot))
+        {
+            printf("recalculating params for mainnet.\n");
+            printf("old mainnet genesis nonce: %d\n", genesis.nNonce);
+            printf("old mainnet genesis hash:  %s\n", hashGenesisBlock.ToString().c_str());
+            // deliberately empty for loop finds nonce value.
+            for(; genesis.GetHash() > consensus.powLimit; genesis.nNonce++){ }
+            printf("new mainnet genesis merkle root: %s\n", genesis.hashMerkleRoot.ToString().c_str());
+            printf("new mainnet genesis nonce: %d\n", genesis.nNonce);
+            printf("new mainnet genesis hash: %s\n", genesis.GetHash().ToString().c_str());
+        }
+
+        assert(consensus.hashGenesisBlock == hashGenesisBlock);
+        assert(genesis.hashMerkleRoot == hashMerkleRoot);
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,33);
         base58Prefixes[COLDSTAKING_ADDRESS] = std::vector<unsigned char>(1,21); // cold staking addresses start with 'X'
