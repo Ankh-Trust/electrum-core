@@ -29,7 +29,7 @@ class ZapWalletTXesTest (ElectrumTestFramework):
         slow_gen(self.nodes[1], 101)
         self.sync_all()
         
-        assert_equal(self.nodes[0].getbalance(), 59800000)
+        assert_equal(self.nodes[0].getbalance(), 50000000)
         
         txid0 = self.nodes[0].sendtoaddress(self.nodes[2].getnewaddress(), 11)
         txid1 = self.nodes[0].sendtoaddress(self.nodes[2].getnewaddress(), 10)

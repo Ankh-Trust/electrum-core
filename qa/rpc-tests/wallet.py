@@ -40,13 +40,13 @@ class WalletTest (ElectrumTestFramework):
         self.sync_all()
 
         walletinfo = self.nodes[0].getwalletinfo()
-        assert_equal(walletinfo['immature_balance'], 59800000)
+        assert_equal(walletinfo['immature_balance'], 50000000)
         assert_equal(walletinfo['balance'], 0)
 
         slow_gen(self.nodes[1], 56)
         self.sync_all()
 
-        assert_equal(self.nodes[0].getbalance(), 59800000)
+        assert_equal(self.nodes[0].getbalance(), 50000000)
         assert_equal(self.nodes[1].getbalance(), 2550)
         assert_equal(self.nodes[2].getbalance(), 0)
 
