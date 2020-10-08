@@ -4,7 +4,7 @@ This is the working repository for Electrum Core, our fork of bitcoin-core 0.13.
 
 For more information please visit the website:
 
- https://electrum.org/en/roadmap 
+ https://electrum.org/en/roadmap
 
 [![Build Status](https://travis-ci.org/electrum/electrum-core.svg?branch=master)](https://travis-ci.org/electrum/electrum-core)
 
@@ -20,9 +20,9 @@ For building the wallet see the markdown files in [doc](doc) folder
 |:-----------|:-----------|
 | Block Spacing | `30 seconds` |
 | Stake Minimum Age | `2 hours` |
- | Stake Reward | `2 0AE per block` | 
-| Port | `44440` |
-| RPC Port | `44444` |
+ | Stake Reward | `2 0AE per block` |
+| Port | `44840` |
+| RPC Port | `44844` |
 
 ## Social Channels
 
