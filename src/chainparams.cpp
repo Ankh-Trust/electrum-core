@@ -504,8 +504,8 @@ public:
             printf("new testnet genesis hash: %s\n", genesis.GetHash().ToString().c_str());
         }
 
-        vSeeds.push_back(CDNSSeedData("", ""));
-        vSeeds.push_back(CDNSSeedData("", ""));
+        // vSeeds.push_back(CDNSSeedData("", ""));
+        // vSeeds.push_back(CDNSSeedData("", ""));
 
         assert(consensus.hashGenesisBlock == hashGenesisBlock);
         assert(genesis.hashMerkleRoot == hashMerkleRoot);
@@ -734,8 +734,8 @@ public:
             printf("use the new values to update CDevNetParams class in src/chainparams.cpp\n");
         }
 
-        vSeeds.push_back(CDNSSeedData("", ""));
-        vSeeds.push_back(CDNSSeedData("", ""));
+        // vSeeds.push_back(CDNSSeedData("", ""));
+        // vSeeds.push_back(CDNSSeedData("", ""));
 
         assert(consensus.hashGenesisBlock == hashGenesisBlock);
         assert(genesis.hashMerkleRoot == hashMerkleRoot);
@@ -952,8 +952,8 @@ public:
             hashMerkleRoot = genesis.hashMerkleRoot;
         }
 
-        vSeeds.push_back(CDNSSeedData("", ""));
-        vSeeds.push_back(CDNSSeedData("", ""));
+        // vSeeds.push_back(CDNSSeedData("", ""));
+        // vSeeds.push_back(CDNSSeedData("", ""));
 
         consensus.hashGenesisBlock = genesis.GetHash();
 
