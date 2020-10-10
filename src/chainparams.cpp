@@ -146,7 +146,7 @@ public:
         consensus.vParameters[Consensus::CONSENSUS_PARAM_CONSULTATION_MAX_SUPPORT_CYCLES].value = 4;
         consensus.vParameters[Consensus::CONSENSUS_PARAM_CONSULTATION_REFLECTION_LENGTH].value = 1;
         consensus.vParameters[Consensus::CONSENSUS_PARAM_GENERATION_PER_BLOCK].value = 1.0 * COIN;
-        consensus.vParameters[Consensus::CONSENSUS_PARAM_0AENS_FEE].value = 100 * COIN;
+        consensus.vParameters[Consensus::CONSENSUS_PARAM_0AENS_FEE].value = 1 * COIN;
         consensus.vParameters[Consensus::CONSENSUS_PARAMS_DAO_VOTE_LIGHT_MIN_FEE].value = 0.1 * COIN;
 
         /** Coinbase transaction outputs can only be spent after this number of new blocks (network rule) */
@@ -390,7 +390,7 @@ public:
         consensus.vParameters[Consensus::CONSENSUS_PARAM_CONSULTATION_MAX_SUPPORT_CYCLES].value = 4;
         consensus.vParameters[Consensus::CONSENSUS_PARAM_CONSULTATION_REFLECTION_LENGTH].value = 1;
         consensus.vParameters[Consensus::CONSENSUS_PARAM_GENERATION_PER_BLOCK].value = 1.0 * COIN;
-        consensus.vParameters[Consensus::CONSENSUS_PARAM_0AENS_FEE].value = 100 * COIN;
+        consensus.vParameters[Consensus::CONSENSUS_PARAM_0AENS_FEE].value = 1 * COIN;
         consensus.vParameters[Consensus::CONSENSUS_PARAMS_DAO_VOTE_LIGHT_MIN_FEE].value = 0.1 * COIN;
 
         /** Coinbase transaction outputs can only be spent after this number of new blocks (network rule) */
@@ -610,7 +610,7 @@ public:
         consensus.vParameters[Consensus::CONSENSUS_PARAM_CONSULTATION_MAX_SUPPORT_CYCLES].value = 4;
         consensus.vParameters[Consensus::CONSENSUS_PARAM_CONSULTATION_REFLECTION_LENGTH].value = 1;
         consensus.vParameters[Consensus::CONSENSUS_PARAM_GENERATION_PER_BLOCK].value = 1.0 * COIN;
-        consensus.vParameters[Consensus::CONSENSUS_PARAM_0AENS_FEE].value = 100 * COIN;
+        consensus.vParameters[Consensus::CONSENSUS_PARAM_0AENS_FEE].value = 1 * COIN;
         consensus.vParameters[Consensus::CONSENSUS_PARAMS_DAO_VOTE_LIGHT_MIN_FEE].value = 0.1 * COIN;
 
         /** Coinbase transaction outputs can only be spent after this number of new blocks (network rule) */
@@ -840,7 +840,7 @@ public:
         consensus.vParameters[Consensus::CONSENSUS_PARAM_CONSULTATION_MAX_SUPPORT_CYCLES].value = 4;
         consensus.vParameters[Consensus::CONSENSUS_PARAM_CONSULTATION_REFLECTION_LENGTH].value = 1;
         consensus.vParameters[Consensus::CONSENSUS_PARAM_GENERATION_PER_BLOCK].value = 1.0 * COIN;
-        consensus.vParameters[Consensus::CONSENSUS_PARAM_0AENS_FEE].value = 100 * COIN;
+        consensus.vParameters[Consensus::CONSENSUS_PARAM_0AENS_FEE].value = 1 * COIN;
         consensus.vParameters[Consensus::CONSENSUS_PARAMS_DAO_VOTE_LIGHT_MIN_FEE].value = 0.1 * COIN;
 
         /** Coinbase transaction outputs can only be spent after this number of new blocks (network rule) */
