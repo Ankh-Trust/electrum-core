@@ -107,8 +107,8 @@ public:
         consensus.nModifierInterval = 10 * 60; // time to elapse before new modifier is computed
         consensus.nTargetTimespan = 25 * 30;
         consensus.nLastPOWBlock = 20000;
-        consensus.nMinimumQuorumFirstHalf = 0.5;
-        consensus.nMinimumQuorumSecondHalf = 0.4;
+        consensus.nMinimumQuorumFirstHalf = 2 / 3;
+        consensus.nMinimumQuorumSecondHalf = 2 / 3;
         consensus.nCommunityFundMinAge = 50;
         consensus.sigActivationTime = 1512990000;
         consensus.nCoinbaseTimeActivationHeight = 20000;
@@ -125,7 +125,7 @@ public:
         consensus.nConsensusChangeMinAccept = 7500;
 
         consensus.vParameters[Consensus::CONSENSUS_PARAM_VOTING_CYCLE_LENGTH].value = 2880 * 7; // 7 Days
-        consensus.vParameters[Consensus::CONSENSUS_PARAM_PROPOSAL_MIN_QUORUM].value = 5000;
+        consensus.vParameters[Consensus::CONSENSUS_PARAM_PROPOSAL_MIN_QUORUM].value = 10000 * 2 / 3;
         consensus.vParameters[Consensus::CONSENSUS_PARAM_PAYMENT_REQUEST_MIN_QUORUM].value = 5000;
         consensus.vParameters[Consensus::CONSENSUS_PARAM_CONSULTATION_MIN_SUPPORT].value = 150;
         consensus.vParameters[Consensus::CONSENSUS_PARAM_CONSULTATION_ANSWER_MIN_SUPPORT].value = 150;
@@ -351,8 +351,8 @@ public:
         consensus.nModifierInterval = 10 * 60; // time to elapse before new modifier is computed
         consensus.nTargetTimespan = 25 * 30;
         consensus.nLastPOWBlock = 1000000;
-        consensus.nMinimumQuorumFirstHalf = 0.5;
-        consensus.nMinimumQuorumSecondHalf = 0.4;
+        consensus.nMinimumQuorumFirstHalf = 2 / 3;
+        consensus.nMinimumQuorumSecondHalf = 2 / 3;
         consensus.nCommunityFundMinAge = 5;
         consensus.sigActivationTime = 1512826692;
         consensus.nCoinbaseTimeActivationHeight = 30000;
@@ -369,7 +369,7 @@ public:
         consensus.nConsensusChangeMinAccept = 7500;
 
         consensus.vParameters[Consensus::CONSENSUS_PARAM_VOTING_CYCLE_LENGTH].value = 180;
-        consensus.vParameters[Consensus::CONSENSUS_PARAM_PROPOSAL_MIN_QUORUM].value = 5000;
+        consensus.vParameters[Consensus::CONSENSUS_PARAM_PROPOSAL_MIN_QUORUM].value = 10000 * 2 / 3;
         consensus.vParameters[Consensus::CONSENSUS_PARAM_PAYMENT_REQUEST_MIN_QUORUM].value = 5000;
         consensus.vParameters[Consensus::CONSENSUS_PARAM_CONSULTATION_MIN_SUPPORT].value = 150;
         consensus.vParameters[Consensus::CONSENSUS_PARAM_CONSULTATION_ANSWER_MIN_SUPPORT].value = 150;
@@ -571,8 +571,8 @@ public:
         consensus.nModifierInterval = 10 * 60; // time to elapse before new modifier is computed
         consensus.nTargetTimespan = 25 * 30;
         consensus.nLastPOWBlock = 100000;
-        consensus.nMinimumQuorumFirstHalf = 0.5;
-        consensus.nMinimumQuorumSecondHalf = 0.4;
+        consensus.nMinimumQuorumFirstHalf = 2 / 3;
+        consensus.nMinimumQuorumSecondHalf = 2 / 3;
         consensus.nCommunityFundMinAge = 5;
         consensus.sigActivationTime = 1512826692;
         consensus.nCoinbaseTimeActivationHeight = 0;
@@ -589,7 +589,7 @@ public:
         consensus.nConsensusChangeMinAccept = 7500;
 
         consensus.vParameters[Consensus::CONSENSUS_PARAM_VOTING_CYCLE_LENGTH].value = 10;
-        consensus.vParameters[Consensus::CONSENSUS_PARAM_PROPOSAL_MIN_QUORUM].value = 5000;
+        consensus.vParameters[Consensus::CONSENSUS_PARAM_PROPOSAL_MIN_QUORUM].value = 10000 * 2 / 3;
         consensus.vParameters[Consensus::CONSENSUS_PARAM_PAYMENT_REQUEST_MIN_QUORUM].value = 5000;
         consensus.vParameters[Consensus::CONSENSUS_PARAM_CONSULTATION_MIN_SUPPORT].value = 150;
         consensus.vParameters[Consensus::CONSENSUS_PARAM_CONSULTATION_ANSWER_MIN_SUPPORT].value = 150;
@@ -801,8 +801,8 @@ public:
         consensus.nModifierInterval = 10 * 60; // time to elapse before new modifier is computed
         consensus.nTargetTimespan = 25 * 30;
         consensus.nLastPOWBlock = 100000;
-        consensus.nMinimumQuorumFirstHalf = 0.5;
-        consensus.nMinimumQuorumSecondHalf = 0.4;
+        consensus.nMinimumQuorumFirstHalf = 2 / 3;
+        consensus.nMinimumQuorumSecondHalf = 2 / 3;
         consensus.nCommunityFundMinAge = 5;
         consensus.sigActivationTime = 0;
         consensus.nCoinbaseTimeActivationHeight = 0;
@@ -819,7 +819,7 @@ public:
         consensus.nConsensusChangeMinAccept = 7500;
 
         consensus.vParameters[Consensus::CONSENSUS_PARAM_VOTING_CYCLE_LENGTH].value = 180;
-        consensus.vParameters[Consensus::CONSENSUS_PARAM_PROPOSAL_MIN_QUORUM].value = 5000;
+        consensus.vParameters[Consensus::CONSENSUS_PARAM_PROPOSAL_MIN_QUORUM].value = 10000 * 2 / 3;
         consensus.vParameters[Consensus::CONSENSUS_PARAM_PAYMENT_REQUEST_MIN_QUORUM].value = 5000;
         consensus.vParameters[Consensus::CONSENSUS_PARAM_CONSULTATION_MIN_SUPPORT].value = 150;
         consensus.vParameters[Consensus::CONSENSUS_PARAM_CONSULTATION_ANSWER_MIN_SUPPORT].value = 150;
