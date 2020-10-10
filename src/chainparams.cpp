@@ -99,7 +99,7 @@ public:
         consensus.fPowNoRetargeting = false;
         consensus.nRuleChangeActivationThreshold = 15120; // 75% of 20160
         consensus.nMinerConfirmationWindow = 20160;
-        consensus.nStakeMinAge = 60 * 60 * 2;	// minimum for coin age: 2 hours
+        consensus.nStakeMinAge = 60 * 60 * 2 / 720;	// minimum for coin age: 2 hours ( / 720 = 10 sec)
         consensus.nTargetSpacing = 30; // Blocktime: 30 secs
         consensus.nStakeCombineThreshold = 1000 * COIN;
         consensus.nStakeSplitThreshold = 2 * consensus.nStakeCombineThreshold;
@@ -145,7 +145,7 @@ public:
         consensus.vParameters[Consensus::CONSENSUS_PARAM_CONSULTATION_MAX_VOTING_CYCLES].value = 4;
         consensus.vParameters[Consensus::CONSENSUS_PARAM_CONSULTATION_MAX_SUPPORT_CYCLES].value = 4;
         consensus.vParameters[Consensus::CONSENSUS_PARAM_CONSULTATION_REFLECTION_LENGTH].value = 1;
-        consensus.vParameters[Consensus::CONSENSUS_PARAM_GENERATION_PER_BLOCK].value = 2.5 * COIN;
+        consensus.vParameters[Consensus::CONSENSUS_PARAM_GENERATION_PER_BLOCK].value = 1.0 * COIN;
         consensus.vParameters[Consensus::CONSENSUS_PARAM_0AENS_FEE].value = 100 * COIN;
         consensus.vParameters[Consensus::CONSENSUS_PARAMS_DAO_VOTE_LIGHT_MIN_FEE].value = 0.1 * COIN;
 
@@ -389,7 +389,7 @@ public:
         consensus.vParameters[Consensus::CONSENSUS_PARAM_CONSULTATION_MAX_VOTING_CYCLES].value = 4;
         consensus.vParameters[Consensus::CONSENSUS_PARAM_CONSULTATION_MAX_SUPPORT_CYCLES].value = 4;
         consensus.vParameters[Consensus::CONSENSUS_PARAM_CONSULTATION_REFLECTION_LENGTH].value = 1;
-        consensus.vParameters[Consensus::CONSENSUS_PARAM_GENERATION_PER_BLOCK].value = 2.5 * COIN;
+        consensus.vParameters[Consensus::CONSENSUS_PARAM_GENERATION_PER_BLOCK].value = 1.0 * COIN;
         consensus.vParameters[Consensus::CONSENSUS_PARAM_0AENS_FEE].value = 100 * COIN;
         consensus.vParameters[Consensus::CONSENSUS_PARAMS_DAO_VOTE_LIGHT_MIN_FEE].value = 0.1 * COIN;
 
@@ -609,7 +609,7 @@ public:
         consensus.vParameters[Consensus::CONSENSUS_PARAM_CONSULTATION_MAX_VOTING_CYCLES].value = 4;
         consensus.vParameters[Consensus::CONSENSUS_PARAM_CONSULTATION_MAX_SUPPORT_CYCLES].value = 4;
         consensus.vParameters[Consensus::CONSENSUS_PARAM_CONSULTATION_REFLECTION_LENGTH].value = 1;
-        consensus.vParameters[Consensus::CONSENSUS_PARAM_GENERATION_PER_BLOCK].value = 2.5 * COIN;
+        consensus.vParameters[Consensus::CONSENSUS_PARAM_GENERATION_PER_BLOCK].value = 1.0 * COIN;
         consensus.vParameters[Consensus::CONSENSUS_PARAM_0AENS_FEE].value = 100 * COIN;
         consensus.vParameters[Consensus::CONSENSUS_PARAMS_DAO_VOTE_LIGHT_MIN_FEE].value = 0.1 * COIN;
 
@@ -839,7 +839,7 @@ public:
         consensus.vParameters[Consensus::CONSENSUS_PARAM_CONSULTATION_MAX_VOTING_CYCLES].value = 4;
         consensus.vParameters[Consensus::CONSENSUS_PARAM_CONSULTATION_MAX_SUPPORT_CYCLES].value = 4;
         consensus.vParameters[Consensus::CONSENSUS_PARAM_CONSULTATION_REFLECTION_LENGTH].value = 1;
-        consensus.vParameters[Consensus::CONSENSUS_PARAM_GENERATION_PER_BLOCK].value = 2.5 * COIN;
+        consensus.vParameters[Consensus::CONSENSUS_PARAM_GENERATION_PER_BLOCK].value = 1.0 * COIN;
         consensus.vParameters[Consensus::CONSENSUS_PARAM_0AENS_FEE].value = 100 * COIN;
         consensus.vParameters[Consensus::CONSENSUS_PARAMS_DAO_VOTE_LIGHT_MIN_FEE].value = 0.1 * COIN;
 
