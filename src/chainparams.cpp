@@ -139,7 +139,7 @@ public:
         consensus.vParameters[Consensus::CONSENSUS_PARAM_CONSULTATION_MIN_FEE].value = 10000000000;
         consensus.vParameters[Consensus::CONSENSUS_PARAM_CONSULTATION_ANSWER_MIN_FEE].value = 5000000000;
         consensus.vParameters[Consensus::CONSENSUS_PARAM_FUND_SPREAD_ACCUMULATION].value = 500;
-        consensus.vParameters[Consensus::CONSENSUS_PARAM_FUND_PERCENT_PER_BLOCK].value = 2000;
+        consensus.vParameters[Consensus::CONSENSUS_PARAM_FUND_PERCENT_PER_BLOCK].value = 1000;
         consensus.vParameters[Consensus::CONSENSUS_PARAM_PROPOSAL_MAX_VOTING_CYCLES].value = 6;
         consensus.vParameters[Consensus::CONSENSUS_PARAM_PAYMENT_REQUEST_MAX_VOTING_CYCLES].value = 8;
         consensus.vParameters[Consensus::CONSENSUS_PARAM_CONSULTATION_MAX_VOTING_CYCLES].value = 4;
