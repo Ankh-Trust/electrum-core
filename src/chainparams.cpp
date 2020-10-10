@@ -111,20 +111,20 @@ public:
         consensus.nMinimumQuorumSecondHalf = 2 / 3;
         consensus.nCommunityFundMinAge = 50;
         consensus.sigActivationTime = 1512990000;
-        consensus.nCoinbaseTimeActivationHeight = 20000;
+        consensus.nCoinbaseTimeActivationHeight = 0;
         consensus.nCommunityFundAmount = 0.25 * COIN;
         consensus.nPaymentRequestMaxVersion = CPaymentRequest::ALL_VERSION;
         consensus.nProposalMaxVersion = CProposal::ALL_VERSION;
         consensus.nConsultationMaxVersion = CConsultation::ALL_VERSION;
         consensus.nConsultationAnswerMaxVersion = CConsultationAnswer::ALL_VERSION;
         consensus.nMaxFutureDrift = 60;
-        consensus.nHeightv451Fork = 2722100;
-        consensus.nHeightv452Fork = 2882875;
+        consensus.nHeightv451Fork = 100;
+        consensus.nHeightv452Fork = 100;
         consensus.fDaoClientActivated = true;
 
         consensus.nConsensusChangeMinAccept = 7500;
 
-        consensus.vParameters[Consensus::CONSENSUS_PARAM_VOTING_CYCLE_LENGTH].value = 2880 * 7; // 7 Days
+        consensus.vParameters[Consensus::CONSENSUS_PARAM_VOTING_CYCLE_LENGTH].value = 50; // 2880 * 7; // 7 Days
         consensus.vParameters[Consensus::CONSENSUS_PARAM_PROPOSAL_MIN_QUORUM].value = 10000 * 2 / 3;
         consensus.vParameters[Consensus::CONSENSUS_PARAM_PAYMENT_REQUEST_MIN_QUORUM].value = 5000;
         consensus.vParameters[Consensus::CONSENSUS_PARAM_CONSULTATION_MIN_SUPPORT].value = 150;
