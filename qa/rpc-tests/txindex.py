@@ -63,8 +63,8 @@ class TxIndexTest(ElectrumTestFramework):
 
         # Check verbose raw transaction results
         verbose = self.nodes[3].getrawtransaction(unspent[0]["txid"], 1)
-        assert_equal(verbose["vout"][0]["valueSat"], 100000000);
-        assert_equal(verbose["vout"][0]["value"], 1);
+        assert_equal(verbose["vout"][0]["valueSat"], 5000000000);
+        assert_equal(verbose["vout"][0]["value"], 50);
 
         print("Passed\n")
 

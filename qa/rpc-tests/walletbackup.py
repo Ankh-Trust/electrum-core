@@ -10,8 +10,8 @@ Test case is:
 4 nodes. 1 2 and 3 send transactions between each other,
 fourth node is a miner.
 1 2 3 each mine a block to start, then
-Miner creates 100 blocks so 1 2 3 each have 1 mature
-coin to spend.
+Miner creates 100 blocks so 1 2 3 each have 50 mature
+coins to spend.
 Then 5 iterations of 1/2/3 sending coins amongst
 themselves to get transactions in the wallets,
 and the miner mining one block.
@@ -23,7 +23,7 @@ Miner then generates 101 more blocks, so any
 transaction fees paid mature.
 
 Sanity check:
-  Sum(1,2,3,4 balances) == 114*1
+  Sum(1,2,3,4 balances) == 114*50
 
 1/2/3 are shutdown, and their wallets erased.
 Then restore using wallet.dat backup. And
@@ -111,9 +111,9 @@ class WalletBackupTest(ElectrumTestFramework):
         self.nodes[3].generate(100)
         sync_blocks(self.nodes)
 
-        assert_equal(self.nodes[0].getbalance(), 1)
-        assert_equal(self.nodes[1].getbalance(), 1)
-        assert_equal(self.nodes[2].getbalance(), 1)
+        assert_equal(self.nodes[0].getbalance(), 50)
+        assert_equal(self.nodes[1].getbalance(), 50)
+        assert_equal(self.nodes[2].getbalance(), 50)
         assert_equal(self.nodes[3].getbalance(), 0)
 
         logging.info("Creating transactions")
@@ -145,8 +145,8 @@ class WalletBackupTest(ElectrumTestFramework):
         total = balance0 + balance1 + balance2 + balance3
 
         # At this point, there are 214 blocks (103 for setup, then 10 rounds, then 101.)
-        # 114 are mature, so the sum of all wallets should be 114 * 1 = 114.
-        assert_equal(total, 114)
+        # 114 are mature, so the sum of all wallets should be 114 * 50 = 5700.
+        assert_equal(total, 5700)
 
         ##
         # Test restoring spender wallets from backups

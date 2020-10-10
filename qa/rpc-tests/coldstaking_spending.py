@@ -28,7 +28,7 @@ class ColdStakingSpending(ElectrumTestFramework):
         # declare transaction-related constants
         SENDING_FEE= 0.00010000
         MIN_COLDSTAKING_SENDING_FEE = 0.0033947
-        BLOCK_REWARD = 1
+        BLOCK_REWARD = 50
         # generate address owned by the wallet
         spending_address_public_key = self.nodes[0].getnewaddress()
         spending_address_private_key = self.nodes[0].dumpprivkey(spending_address_public_key)
