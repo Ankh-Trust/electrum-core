@@ -39,7 +39,7 @@ class SendToAddressTest (ElectrumTestFramework):
         self.sync_all()
 
         # Assert correct amount of 0AE generated
-        assert_equal(self.nodes[0].getbalance(), 50000000)
+        assert_equal(self.nodes[0].getbalance(), 59800000)
         assert_equal(self.nodes[1].getbalance(), 1250)
 
         # Make transactions to valid addresses
