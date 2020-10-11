@@ -552,7 +552,7 @@ public:
         consensus.nMajorityRejectBlockOutdated = 950;
         consensus.nMajorityWindow = 1000;
         consensus.BIP34Height = 0;
-        consensus.BIP34Hash = uint256S("0x");
+        consensus.BIP34Hash = uint256S("0x00004af9c877c3192098476de6b8791532de41c7730da6db942c4348f27324d0");
         consensus.powLimit = ArithToUint256(~arith_uint256(0) >> 16);
         consensus.nPowTargetTimespan = 30;
         consensus.nPowTargetSpacing = 30;
@@ -711,9 +711,9 @@ public:
         // 2) Rebuild
         // 3) Launch daemon. It'll calculate the new parameters.
         // 4) Update the following variables with the new values:
-        uint256 hashGenesisBlock = uint256S("0x");
-        uint256 hashMerkleRoot = uint256S("0x");
-        uint32_t nNonce = 2043698526;
+        uint256 hashGenesisBlock = uint256S("0x00004af9c877c3192098476de6b8791532de41c7730da6db942c4348f27324d0");
+        uint256 hashMerkleRoot = uint256S("0x40094a94314751dcba31bc70e726ce158152e7dc90302d24f11328cb60c500b5");
+        uint32_t nNonce = 2043810603;
         // 5) Rebuild. Launch daemon.
         // 6) Generate first block using RPC command "./electrum-cli generate 1"
 
