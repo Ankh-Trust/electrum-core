@@ -2056,7 +2056,7 @@ CAmount GetBlockSubsidy(int nHeight, const Consensus::Params& consensusParams)
     }
 
     if (nHeight <= Params().GetConsensus().nLastPOWBlock)
-        return CAmount(0.1984 * COIN);
+        return CAmount(0 * COIN);
 
     return 0;
 }
