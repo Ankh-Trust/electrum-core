@@ -255,8 +255,8 @@ public:
         bnProofOfWorkLimit = arith_uint256(~arith_uint256() >> 16);
 
         uint32_t nTimestamp = 1602443000;
-        uint256 hashGenesisBlock = uint256S("0x28299c1ee06bb5e236befb6fc559c374d4e20439dd23899f5577004535ccea9d");
-        uint256 hashMerkleRoot = uint256S("0xc5ffb94893d8747433e1839e094dda04fed88cec3a0b9804b80c074df352389d");
+        uint256 hashGenesisBlock = uint256S("0x000016a54f295c4f070b28711991a531008b331d5caf970fc3b54103da7221bc");
+        uint256 hashMerkleRoot = uint256S("0x28299c1ee06bb5e236befb6fc559c374d4e20439dd23899f5577004535ccea9d");
         uint32_t nNonce = 2043831202;
 
         genesis = CreateGenesisBlock(nTimestamp, nNonce, 0x1f00ffff, 1, 0);
