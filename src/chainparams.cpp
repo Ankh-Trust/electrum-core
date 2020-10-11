@@ -402,7 +402,7 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_CSV].nTimeout = 1622548800; // Jun 1st, 2021
 
         // Deployment of Cold Staking
-        consensus.vDeployments[Consensus::DEPLOYMENT_COLDSTAKING].bit = 6;
+        consensus.vDeployments[Consensus::DEPLOYMENT_COLDSTAKING].bit = 3;
         consensus.vDeployments[Consensus::DEPLOYMENT_COLDSTAKING].nStartTime = 1559390400; // Jun 1st, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_COLDSTAKING].nTimeout = 1622548800; // Jun 1st, 2021
 
