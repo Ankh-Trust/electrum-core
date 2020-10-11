@@ -153,67 +153,67 @@ public:
         consensus.nCoinbaseMaturity = 50;
 
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].bit = 28;
-        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = 1199145601; // January 1, 2008
-        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nTimeout = 1230767999; // December 31, 2008
+        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = 1559390400; // Jun 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nTimeout = 1622548800; // Jun 1st, 2021
 
         // Deployment of BIP68, BIP112, and BIP113.
         consensus.vDeployments[Consensus::DEPLOYMENT_CSV].bit = 0;
-        consensus.vDeployments[Consensus::DEPLOYMENT_CSV].nStartTime = 1462060800; // May 1st, 2016
-        consensus.vDeployments[Consensus::DEPLOYMENT_CSV].nTimeout = 1525132800; // May 1st, 2017
+        consensus.vDeployments[Consensus::DEPLOYMENT_CSV].nStartTime = 1559390400; // Jun 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_CSV].nTimeout = 1622548800; // Jun 1st, 2021
 
         // Deployment of SegWit (BIP141 and BIP143)
         consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT_LEGACY].bit = 1;
-        consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT_LEGACY].nStartTime = 1493424000; // May 1st, 2017
-        consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT_LEGACY].nTimeout = 1525132800; // May 1st, 2018
+        consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT_LEGACY].nStartTime = 1559390400; // Jun 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT_LEGACY].nTimeout = 1622548800; // Jun 1st, 2021
 
         consensus.vDeployments[Consensus::DEPLOYMENT_CSV_LEGACY].bit = 2;
-        consensus.vDeployments[Consensus::DEPLOYMENT_CSV_LEGACY].nStartTime = 1462060800; // May 1st, 2016
-        consensus.vDeployments[Consensus::DEPLOYMENT_CSV_LEGACY].nTimeout = 1525132800; // May 1st, 2018
+        consensus.vDeployments[Consensus::DEPLOYMENT_CSV_LEGACY].nStartTime = 1559390400; // Jun 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_CSV_LEGACY].nTimeout = 1622548800; // Jun 1st, 2021
 
         // Deployment of Cold Staking
         consensus.vDeployments[Consensus::DEPLOYMENT_COLDSTAKING].bit = 3;
-        consensus.vDeployments[Consensus::DEPLOYMENT_COLDSTAKING].nStartTime = 1525132800; // May 1st, 2018
-        consensus.vDeployments[Consensus::DEPLOYMENT_COLDSTAKING].nTimeout = 1556712000; // May 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_COLDSTAKING].nStartTime = 1559390400; // Jun 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_COLDSTAKING].nTimeout = 1622548800; // Jun 1st, 2021
 
         // Deployment of SegWit (BIP141 and BIP143)
         consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].bit = 4;
-        consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].nStartTime = 1493424000; // May 1st, 2017
-        consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].nTimeout = 1525132800; // May 1st, 2018
+        consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].nStartTime = 1559390400; // Jun 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].nTimeout = 1622548800; // Jun 1st, 2021
 
         // Deployment of Community Fund
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND].bit = 6;
-        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND].nStartTime = 1493424000; // May 1st, 2017
-        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND].nTimeout = 1556668800; // May 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND].nStartTime = 1559390400; // Jun 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND].nTimeout = 1622548800; // Jun 1st, 2021
 
         // Deployment of Community Fund Accumulation
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION].bit = 7;
-        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION].nStartTime = 1525132800; // May 1st, 2018
-        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION].nTimeout = 1556712000; // May 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION].nStartTime = 1559390400; // Jun 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION].nTimeout = 1622548800; // Jun 1st, 2021
 
         // Deployment of NTP Sync
         consensus.vDeployments[Consensus::DEPLOYMENT_NTPSYNC].bit = 8;
-        consensus.vDeployments[Consensus::DEPLOYMENT_NTPSYNC].nStartTime = 1525132800; // May 1st, 2018
-        consensus.vDeployments[Consensus::DEPLOYMENT_NTPSYNC].nTimeout = 1556712000; // May 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_NTPSYNC].nStartTime = 1559390400; // Jun 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_NTPSYNC].nTimeout = 1622548800; // Jun 1st, 2021
 
         // Deployment of Community Fund Accumulation Spread(NPIP-0003)
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION_SPREAD].bit = 14;
-        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION_SPREAD].nStartTime = 1525132800; // May 1st, 2018
-        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION_SPREAD].nTimeout = 1556712000; // May 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION_SPREAD].nStartTime = 1559390400; // Jun 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION_SPREAD].nTimeout = 1622548800; // Jun 1st, 2021
 
         // Increase in Community Fund Accumulation Amount (NPIP-0004)
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_AMOUNT_V2].bit = 16;
-        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_AMOUNT_V2].nStartTime = 1533081600; // Aug 1st, 2018
-        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_AMOUNT_V2].nTimeout = 1564617600; // Aug 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_AMOUNT_V2].nStartTime = 1559390400; // Jun 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_AMOUNT_V2].nTimeout = 1622548800; // Jun 1st, 2021
 
         // Deployment of Static Reward
         consensus.vDeployments[Consensus::DEPLOYMENT_STATIC_REWARD].bit = 15;
-        consensus.vDeployments[Consensus::DEPLOYMENT_STATIC_REWARD].nStartTime = 1533081600; // August 1st, 2018
-        consensus.vDeployments[Consensus::DEPLOYMENT_STATIC_REWARD].nTimeout = 1564617600; // August 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_STATIC_REWARD].nStartTime = 1559390400; // Jun 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_STATIC_REWARD].nTimeout = 1622548800; // Jun 1st, 2021
 
         // Deployment of Quorum reduction for the Community Fund
         consensus.vDeployments[Consensus::DEPLOYMENT_QUORUM_CFUND].bit = 17;
-        consensus.vDeployments[Consensus::DEPLOYMENT_QUORUM_CFUND].nStartTime = 1543622400; // Dec 1st, 2018
-        consensus.vDeployments[Consensus::DEPLOYMENT_QUORUM_CFUND].nTimeout = 1575158400; // Dec 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_QUORUM_CFUND].nStartTime = 1559390400; // Jun 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_QUORUM_CFUND].nTimeout = 1622548800; // Jun 1st, 2021
 
         // Deployment of VOTING STATE CACHE for the Community Fund
         consensus.vDeployments[Consensus::DEPLOYMENT_VOTE_STATE_CACHE].bit = 22;
@@ -341,7 +341,7 @@ public:
         consensus.nRuleChangeActivationThreshold = 300; // 75% of 400
         consensus.nMinerConfirmationWindow = 400;
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].bit = 28;
-        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = 1199145601; // January 1, 2008
+        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = 1559390400; // Jun 1st, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nTimeout = 1230767999; // December 31, 2008
         consensus.nStakeMinAge = 2;	// minimum for coin age: 2 seconds
         consensus.nTargetSpacing = 30; // Blocktime: 30 secs
@@ -398,52 +398,52 @@ public:
 
         // Deployment of BIP68, BIP112, and BIP113.
         consensus.vDeployments[Consensus::DEPLOYMENT_CSV].bit = 0;
-        consensus.vDeployments[Consensus::DEPLOYMENT_CSV].nStartTime = 1462060800; // May 1st, 2016
+        consensus.vDeployments[Consensus::DEPLOYMENT_CSV].nStartTime = 1559390400; // Jun 1st, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_CSV].nTimeout = 1622548800; // Jun 1st, 2021
 
         // Deployment of Cold Staking
         consensus.vDeployments[Consensus::DEPLOYMENT_COLDSTAKING].bit = 6;
-        consensus.vDeployments[Consensus::DEPLOYMENT_COLDSTAKING].nStartTime = 1525132800; // May 1st, 2018
+        consensus.vDeployments[Consensus::DEPLOYMENT_COLDSTAKING].nStartTime = 1559390400; // Jun 1st, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_COLDSTAKING].nTimeout = 1622548800; // Jun 1st, 2021
 
         // Deployment of SegWit (BIP141 and BIP143)
         consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].bit = 4;
-        consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].nStartTime = 1493424000; // May 1st, 2017
+        consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].nStartTime = 1559390400; // Jun 1st, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].nTimeout = 1622548800; // Jun 1st, 2021
 
         // Deployment of Community Fund
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND].bit = 6;
-        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND].nStartTime = 1493424000; // May 1st, 2017
+        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND].nStartTime = 1559390400; // Jun 1st, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND].nTimeout = 1622548800; // Jun 1st, 2021
 
         // Deployment of Community Fund Accumulation
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION].bit = 7;
-        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION].nStartTime = 1525132800; // May 1st, 2018
+        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION].nStartTime = 1559390400; // Jun 1st, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION].nTimeout = 1622548800; // Jun 1st, 2021
 
         // Deployment of NTP Sync
         consensus.vDeployments[Consensus::DEPLOYMENT_NTPSYNC].bit = 8;
-        consensus.vDeployments[Consensus::DEPLOYMENT_NTPSYNC].nStartTime = 1525132800; // May 1st, 2018
+        consensus.vDeployments[Consensus::DEPLOYMENT_NTPSYNC].nStartTime = 1559390400; // Jun 1st, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_NTPSYNC].nTimeout = 1556712000; // 1622548800; // Jun 1st, 2021
 
         // Deployment of Community Fund Accumulation Spread(NPIP-0003)
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION_SPREAD].bit = 14;
-        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION_SPREAD].nStartTime = 1525132800; // May 1st, 2018
+        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION_SPREAD].nStartTime = 1559390400; // Jun 1st, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION_SPREAD].nTimeout = 1622548800; // Jun 1st, 2021
 
         // Increate in Community Fund Accumulation Ammonut (NPIP-0004)
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_AMOUNT_V2].bit = 16;
-        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_AMOUNT_V2].nStartTime = 1533081600; // Aug 1st, 2018
+        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_AMOUNT_V2].nStartTime = 1559390400; // Jun 1st, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_AMOUNT_V2].nTimeout = 1622548800; // Jun 1st, 2021
 
         // Deployment of Static Reward
         consensus.vDeployments[Consensus::DEPLOYMENT_STATIC_REWARD].bit = 15;
-        consensus.vDeployments[Consensus::DEPLOYMENT_STATIC_REWARD].nStartTime = 1533081600; // August 1st, 2018
+        consensus.vDeployments[Consensus::DEPLOYMENT_STATIC_REWARD].nStartTime = 1559390400; // Jun 1st, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_STATIC_REWARD].nTimeout = 1622548800; // Jun 1st, 2021
 
         // Deployment of Quorum reduction for the Community Fund
         consensus.vDeployments[Consensus::DEPLOYMENT_QUORUM_CFUND].bit = 17;
-        consensus.vDeployments[Consensus::DEPLOYMENT_QUORUM_CFUND].nStartTime = 1543622400; // Dec 1st, 2018
+        consensus.vDeployments[Consensus::DEPLOYMENT_QUORUM_CFUND].nStartTime = 1559390400; // Jun 1st, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_QUORUM_CFUND].nTimeout = 1622548800; // Jun 1st, 2021
 
         // Deployment of VOTING STATE CACHE for the Community Fund
@@ -561,8 +561,8 @@ public:
         consensus.nRuleChangeActivationThreshold = 75; // 75% of 400
         consensus.nMinerConfirmationWindow = 100;
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].bit = 28;
-        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = 1199145601; // January 1, 2008
-        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nTimeout = 1230767999; // December 31, 2008
+        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = 1559390400; // Jun 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nTimeout = 1622548800; // Jun 1st, 2021
         consensus.nStakeMinAge = 2;	// minimum for coin age: 2 seconds
         consensus.nTargetSpacing = 5; // Blocktime: 5 secs
         consensus.nStakeCombineThreshold = 1000 * COIN;
@@ -618,53 +618,53 @@ public:
 
         // Deployment of BIP68, BIP112, and BIP113.
         consensus.vDeployments[Consensus::DEPLOYMENT_CSV].bit = 0;
-        consensus.vDeployments[Consensus::DEPLOYMENT_CSV].nStartTime = 1462060800; // May 1st, 2016
-        consensus.vDeployments[Consensus::DEPLOYMENT_CSV].nTimeout = 1651363200; // May 1st, 2022
+        consensus.vDeployments[Consensus::DEPLOYMENT_CSV].nStartTime = 1559390400; // Jun 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_CSV].nTimeout = 1622548800; // Jun 1st, 2021
 
         // Deployment of Cold Staking
         consensus.vDeployments[Consensus::DEPLOYMENT_COLDSTAKING].bit = 3;
-        consensus.vDeployments[Consensus::DEPLOYMENT_COLDSTAKING].nStartTime = 1525132800; // May 1st, 2018
-        consensus.vDeployments[Consensus::DEPLOYMENT_COLDSTAKING].nTimeout = 1651363200; // May 1st, 2022
+        consensus.vDeployments[Consensus::DEPLOYMENT_COLDSTAKING].nStartTime = 1559390400; // Jun 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_COLDSTAKING].nTimeout = 1622548800; // Jun 1st, 2021
 
         // Deployment of SegWit (BIP141 and BIP143)
         consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].bit = 5;
-        consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].nStartTime = 1493424000; // May 1st, 2017
-        consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].nTimeout = 1651363200; // May 1st, 2022
+        consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].nStartTime = 1559390400; // Jun 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].nTimeout = 1622548800; // Jun 1st, 2021
 
         // Deployment of Community Fund
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND].bit = 6;
-        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND].nStartTime = 1493424000; // May 1st, 2017
-        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND].nTimeout = 1651363200; // May 1st, 2022
+        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND].nStartTime = 1559390400; // Jun 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND].nTimeout = 1622548800; // Jun 1st, 2021
 
         // Deployment of NTP Sync
         consensus.vDeployments[Consensus::DEPLOYMENT_NTPSYNC].bit = 8;
-        consensus.vDeployments[Consensus::DEPLOYMENT_NTPSYNC].nStartTime = 1525132800; // May 1st, 2018
-        consensus.vDeployments[Consensus::DEPLOYMENT_NTPSYNC].nTimeout = 1651363200; // May 1st, 2022
+        consensus.vDeployments[Consensus::DEPLOYMENT_NTPSYNC].nStartTime = 1559390400; // Jun 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_NTPSYNC].nTimeout = 1622548800; // Jun 1st, 2021
 
         // Deployment of Community Fund Accumulation
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION].bit = 7;
-        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION].nStartTime = 1525132800; // May 1st, 2018
-        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION].nTimeout = 1651363200; // May 1st, 2022
+        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION].nStartTime = 1559390400; // Jun 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION].nTimeout = 1622548800; // Jun 1st, 2021
 
         // Deployment of Community Fund Accumulation Spread(NPIP-0003)
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION_SPREAD].bit = 14;
-        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION_SPREAD].nStartTime = 1525132800; // May 1st, 2018
-        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION_SPREAD].nTimeout = 1651363200; // May 1st, 2022
+        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION_SPREAD].nStartTime = 1559390400; // Jun 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION_SPREAD].nTimeout = 1622548800; // Jun 1st, 2021
 
         // Increate in Community Fund Accumulation Ammonut (NPIP-0004)
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_AMOUNT_V2].bit = 16;
-        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_AMOUNT_V2].nStartTime = 1533081600; // Aug 1st, 2018
-        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_AMOUNT_V2].nTimeout = 1651363200; // May 1st, 2022
+        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_AMOUNT_V2].nStartTime = 1559390400; // Jun 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_AMOUNT_V2].nTimeout = 1622548800; // Jun 1st, 2021
 
         // Deployment of Static Reward
         consensus.vDeployments[Consensus::DEPLOYMENT_STATIC_REWARD].bit = 15;
-        consensus.vDeployments[Consensus::DEPLOYMENT_STATIC_REWARD].nStartTime = 1533081600; // August 1st, 2018
-        consensus.vDeployments[Consensus::DEPLOYMENT_STATIC_REWARD].nTimeout = 1651363200; // May 1st, 2022
+        consensus.vDeployments[Consensus::DEPLOYMENT_STATIC_REWARD].nStartTime = 1559390400; // Jun 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_STATIC_REWARD].nTimeout = 1622548800; // Jun 1st, 2021
 
         // Deployment of Quorum reduction for the Community Fund
         consensus.vDeployments[Consensus::DEPLOYMENT_QUORUM_CFUND].bit = 17;
-        consensus.vDeployments[Consensus::DEPLOYMENT_QUORUM_CFUND].nStartTime = 1543622400; // Dec 1st, 2018
-        consensus.vDeployments[Consensus::DEPLOYMENT_QUORUM_CFUND].nTimeout = 1651363200; // May 1st, 2022
+        consensus.vDeployments[Consensus::DEPLOYMENT_QUORUM_CFUND].nStartTime = 1559390400; // Jun 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_QUORUM_CFUND].nTimeout = 1622548800; // Jun 1st, 2021
 
         // Deployment of VOTING STATE CACHE for the Community Fund
         consensus.vDeployments[Consensus::DEPLOYMENT_VOTE_STATE_CACHE].bit = 22;
@@ -688,7 +688,7 @@ public:
 
         // Deployment of Cold Staking Pool Fee
         consensus.vDeployments[Consensus::DEPLOYMENT_POOL_FEE].bit = 18;
-        consensus.vDeployments[Consensus::DEPLOYMENT_POOL_FEE].nStartTime = 1559390400; // Jun 1st, 2018
+        consensus.vDeployments[Consensus::DEPLOYMENT_POOL_FEE].nStartTime = 1559390400; // Jun 1st, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_POOL_FEE].nTimeout = 1622548800; // Jun 1st, 2021
 
         /**
@@ -853,8 +853,8 @@ public:
 
         // Deployment of Cold Staking
         consensus.vDeployments[Consensus::DEPLOYMENT_COLDSTAKING].bit = 3;
-        consensus.vDeployments[Consensus::DEPLOYMENT_COLDSTAKING].nStartTime = 1525132800; // May 1st, 2018
-        consensus.vDeployments[Consensus::DEPLOYMENT_COLDSTAKING].nTimeout = 1556712000; // May 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_COLDSTAKING].nStartTime = 1559390400; // Jun 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_COLDSTAKING].nTimeout = 1622548800; // Jun 1st, 2021
 
         // Deployment of SegWit (BIP141 and BIP143)
         consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].bit = 5;
@@ -878,23 +878,23 @@ public:
 
         // Deployment of Community Fund Accumulation Spread(NPIP-0003)
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION_SPREAD].bit = 14;
-        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION_SPREAD].nStartTime = 1525132800; // May 1st, 2018
-        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION_SPREAD].nTimeout = 1556712000; // May 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION_SPREAD].nStartTime = 1559390400; // Jun 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION_SPREAD].nTimeout = 1622548800; // Jun 1st, 2021
 
         // Increate in Community Fund Accumulation Ammonut (NPIP-0004)
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_AMOUNT_V2].bit = 16;
-        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_AMOUNT_V2].nStartTime = 1533081600; // Aug 1st, 2018
-        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_AMOUNT_V2].nTimeout = 1564617600; // Aug 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_AMOUNT_V2].nStartTime = 1559390400; // Jun 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_AMOUNT_V2].nTimeout = 1622548800; // Jun 1st, 2021
 
         // Deployment of Static Reward
         consensus.vDeployments[Consensus::DEPLOYMENT_STATIC_REWARD].bit = 15;
-        consensus.vDeployments[Consensus::DEPLOYMENT_STATIC_REWARD].nStartTime = 1533081600; // August 1st, 2018
-        consensus.vDeployments[Consensus::DEPLOYMENT_STATIC_REWARD].nTimeout = 1564617600; // August 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_STATIC_REWARD].nStartTime = 1559390400; // Jun 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_STATIC_REWARD].nTimeout = 1622548800; // Jun 1st, 2021
 
         // Deployment of Quorum reduction for the Community Fund
         consensus.vDeployments[Consensus::DEPLOYMENT_QUORUM_CFUND].bit = 17;
-        consensus.vDeployments[Consensus::DEPLOYMENT_QUORUM_CFUND].nStartTime = 1543622400; // Dec 1st, 2018
-        consensus.vDeployments[Consensus::DEPLOYMENT_QUORUM_CFUND].nTimeout = 1575158400; // Dec 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_QUORUM_CFUND].nStartTime = 1559390400; // Jun 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_QUORUM_CFUND].nTimeout = 1622548800; // Jun 1st, 2021
 
         // Deployment of VOTING STATE CACHE for the Community Fund
         consensus.vDeployments[Consensus::DEPLOYMENT_VOTE_STATE_CACHE].bit = 22;
@@ -918,7 +918,7 @@ public:
 
         // Deployment of Cold Staking Pool Fee
         consensus.vDeployments[Consensus::DEPLOYMENT_POOL_FEE].bit = 18;
-        consensus.vDeployments[Consensus::DEPLOYMENT_POOL_FEE].nStartTime = 1559390400; // Jun 1st, 2018
+        consensus.vDeployments[Consensus::DEPLOYMENT_POOL_FEE].nStartTime = 1559390400; // Jun 1st, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_POOL_FEE].nTimeout = 1622548800; // Jun 1st, 2021
 
         /**
