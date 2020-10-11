@@ -91,7 +91,7 @@ public:
         consensus.nMajorityRejectBlockOutdated = 950;
         consensus.nMajorityWindow = 1000;
         consensus.BIP34Height = 0;
-        consensus.BIP34Hash = uint256S("0x00005b233f31fba828c68de4358d5eb935ff26441ccca5c38b092f9f0e0fec4d");
+        consensus.BIP34Hash = uint256S("0x000016a54f295c4f070b28711991a531008b331d5caf970fc3b54103da7221bc");
         consensus.powLimit = ArithToUint256(~arith_uint256(0) >> 16);
         consensus.nPowTargetTimespan = 30;
         consensus.nPowTargetSpacing = 30;
@@ -255,9 +255,9 @@ public:
         bnProofOfWorkLimit = arith_uint256(~arith_uint256() >> 16);
 
         uint32_t nTimestamp = 1602443000;
-        uint256 hashGenesisBlock = uint256S("0x00005b233f31fba828c68de4358d5eb935ff26441ccca5c38b092f9f0e0fec4d");
+        uint256 hashGenesisBlock = uint256S("0x28299c1ee06bb5e236befb6fc559c374d4e20439dd23899f5577004535ccea9d");
         uint256 hashMerkleRoot = uint256S("0xc5ffb94893d8747433e1839e094dda04fed88cec3a0b9804b80c074df352389d");
-        uint32_t nNonce = 2043786909;
+        uint32_t nNonce = 2043831202;
 
         genesis = CreateGenesisBlock(nTimestamp, nNonce, 0x1f00ffff, 1, 0);
 	      consensus.hashGenesisBlock = genesis.GetHash();
@@ -299,7 +299,7 @@ public:
 
         checkpointData = (CCheckpointData) {
             boost::assign::map_list_of
-            ( 0, uint256S("0x00005b233f31fba828c68de4358d5eb935ff26441ccca5c38b092f9f0e0fec4d")),
+            ( 0, uint256S("0x000016a54f295c4f070b28711991a531008b331d5caf970fc3b54103da7221bc")),
             /*( 250, uint256S("0x668e05f32eaa6ff639b157abfaf9fe4972770a92ed7c69d566b3f4ec00d8d015"))
             ( 500, uint256S("0xa6dd84d1f35b15aae402e72a7ff4f18dca08ac001f2b95cbb4588bdfa16eeb08"))
             ( 1000, uint256S("0x8a75993a531726f54542bdcaffbfed023bfe97f99d9c4f025eb749c4d2ded54e"))
@@ -484,7 +484,7 @@ public:
         nPruneAfterHeight = 1000;
         bnProofOfWorkLimit = arith_uint256(~arith_uint256() >> 16);
 
-        uint32_t nTimestamp = 1595810000;
+        uint32_t nTimestamp = 1602443000;
         uint256 hashGenesisBlock = uint256S("0x");
         uint256 hashMerkleRoot = uint256S("0x");
         uint32_t nNonce = 2043860830;
@@ -707,7 +707,7 @@ public:
         // To create a new devnet:
         //
         // 1) Replace nTimestamp with current timestamp.
-        uint32_t nTimestamp = 1595810000;
+        uint32_t nTimestamp = 1602443000;
         // 2) Rebuild
         // 3) Launch daemon. It'll calculate the new parameters.
         // 4) Update the following variables with the new values:
