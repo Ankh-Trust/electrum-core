@@ -112,7 +112,7 @@ public:
         consensus.nCommunityFundMinAge = 50;
         consensus.sigActivationTime = 1512990000;
         consensus.nCoinbaseTimeActivationHeight = 0;
-        consensus.nCommunityFundAmount = 0.25 * COIN;
+        consensus.nCommunityFundAmount = 0 * COIN;
         consensus.nPaymentRequestMaxVersion = CPaymentRequest::ALL_VERSION;
         consensus.nProposalMaxVersion = CProposal::ALL_VERSION;
         consensus.nConsultationMaxVersion = CConsultation::ALL_VERSION;
@@ -356,7 +356,7 @@ public:
         consensus.nCommunityFundMinAge = 5;
         consensus.sigActivationTime = 1512826692;
         consensus.nCoinbaseTimeActivationHeight = 30000;
-        consensus.nCommunityFundAmount = 0.25 * COIN;
+        consensus.nCommunityFundAmount = 0 * COIN;
         consensus.nPaymentRequestMaxVersion = CPaymentRequest::ALL_VERSION;
         consensus.nProposalMaxVersion = CProposal::ALL_VERSION;
         consensus.nConsultationMaxVersion = CConsultation::ALL_VERSION;
@@ -576,7 +576,7 @@ public:
         consensus.nCommunityFundMinAge = 5;
         consensus.sigActivationTime = 1512826692;
         consensus.nCoinbaseTimeActivationHeight = 0;
-        consensus.nCommunityFundAmount = 0.25 * COIN;
+        consensus.nCommunityFundAmount = 0 * COIN;
         consensus.nPaymentRequestMaxVersion = CPaymentRequest::ALL_VERSION;
         consensus.nProposalMaxVersion = CProposal::ALL_VERSION;
         consensus.nConsultationMaxVersion = CConsultation::ALL_VERSION;
@@ -806,7 +806,7 @@ public:
         consensus.nCommunityFundMinAge = 5;
         consensus.sigActivationTime = 0;
         consensus.nCoinbaseTimeActivationHeight = 0;
-        consensus.nCommunityFundAmount = 0.25 * COIN;
+        consensus.nCommunityFundAmount = 0 * COIN;
         consensus.nPaymentRequestMaxVersion = CPaymentRequest::ALL_VERSION;
         consensus.nProposalMaxVersion = CProposal::ALL_VERSION;
         consensus.nConsultationMaxVersion = CConsultation::ALL_VERSION;
