@@ -82,7 +82,7 @@ static std::string sConsensusParamsDesc[Consensus::MAX_CONSENSUS_PARAMS] = {
     "Percentage of generated 0AE going to the Fund",
 
     "Amount of 0AE generated per block",
-    "Yearly fee for registering a name in NavNS",
+    "Yearly fee for registering a name in 0AENS",
     "Minimum fee as a fund contribution to submit a DAO vote using a light wallet"
 };
 
