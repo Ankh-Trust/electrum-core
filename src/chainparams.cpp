@@ -108,7 +108,7 @@ public:
         consensus.nTargetTimespan = 25 * 30;
         consensus.nLastPOWBlock = 20000;
         consensus.nMinimumQuorumFirstHalf = 2 / 3;
-        consensus.nMinimumQuorumSecondHalf = 2 / 3;
+        consensus.nMinimumQuorumSecondHalf = 8 / 15;
         consensus.nCommunityFundMinAge = 50;
         consensus.sigActivationTime = 1602444000; // genesisTimestamp+
         consensus.nCoinbaseTimeActivationHeight = 0;
