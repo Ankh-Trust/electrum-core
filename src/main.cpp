@@ -5565,156 +5565,105 @@ static bool CheckIndexAgainstCheckpoint(const CBlockIndex* pindexPrev, CValidati
 
 bool IsWitnessEnabled(const CBlockIndex* pindexPrev, const Consensus::Params& params)
 {
-    //return true;
-    ///*
     LOCK(cs_main);
     return (VersionBitsState(pindexPrev, params, Consensus::DEPLOYMENT_SEGWIT, versionbitscache) == THRESHOLD_ACTIVE);
-    //*/
 }
 
 bool IsWitnessLocked(const CBlockIndex* pindexPrev, const Consensus::Params& params)
 {
-    //return true;
-    ///*
     LOCK(cs_main);
     return (VersionBitsState(pindexPrev, params, Consensus::DEPLOYMENT_SEGWIT, versionbitscache) == THRESHOLD_LOCKED_IN);
-    //*/
 }
 
 bool IsCommunityFundEnabled(const CBlockIndex* pindexPrev, const Consensus::Params& params)
 {
-    //return true;
-    ///*
     LOCK(cs_main);
     return (VersionBitsState(pindexPrev, params, Consensus::DEPLOYMENT_COMMUNITYFUND, versionbitscache) == THRESHOLD_ACTIVE);
-    //*/
 }
 
 bool IsReducedCFundQuorumEnabled(const CBlockIndex* pindexPrev, const Consensus::Params& params)
 {
-    //return true;
-    ///*
     LOCK(cs_main);
     return (VersionBitsState(pindexPrev, params, Consensus::DEPLOYMENT_QUORUM_CFUND, versionbitscache) == THRESHOLD_ACTIVE);
-    //*/
 }
 
 bool IsCommunityFundAccumulationEnabled(const CBlockIndex* pindexPrev, const Consensus::Params& params, bool fStrict)
 {
-    //return true;
-    ///*
     LOCK(cs_main);
     return (IsCommunityFundEnabled(pindexPrev, params) && !fStrict) ||
           (VersionBitsState(pindexPrev, params, Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION, versionbitscache) == THRESHOLD_ACTIVE);
-    //*/
 }
 
 bool IsCommunityFundAmountV2Enabled(const CBlockIndex* pindexPrev, const Consensus::Params& params)
 {
-    //return true;
-    ///*
     LOCK(cs_main);
     return (VersionBitsState(pindexPrev, params, Consensus::DEPLOYMENT_COMMUNITYFUND_AMOUNT_V2, versionbitscache) == THRESHOLD_ACTIVE);
-    //*/
 }
 
 bool IsCommunityFundAccumulationSpreadEnabled(const CBlockIndex* pindexPrev, const Consensus::Params& params)
 {
-    //return true;
-    ///*
     LOCK(cs_main);
     return (VersionBitsState(pindexPrev, params, Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION_SPREAD, versionbitscache) == THRESHOLD_ACTIVE);
-    //*/
 }
 
 bool IsNtpSyncEnabled(const CBlockIndex* pindexPrev, const Consensus::Params& params)
 {
-    //return true;
-    ///*
     LOCK(cs_main);
     return (VersionBitsState(pindexPrev, params, Consensus::DEPLOYMENT_NTPSYNC, versionbitscache) == THRESHOLD_ACTIVE);
-    //*/
 }
 
 bool IsCommunityFundLocked(const CBlockIndex* pindexPrev, const Consensus::Params& params)
 {
-    //return true;
-    ///*
     LOCK(cs_main);
     return (VersionBitsState(pindexPrev, params, Consensus::DEPLOYMENT_COMMUNITYFUND, versionbitscache) == THRESHOLD_LOCKED_IN);
-    //*/
 }
 
 bool IsColdStakingEnabled(const CBlockIndex* pindexPrev, const Consensus::Params& params)
 {
-    //return true;
-    ///*
     LOCK(cs_main);
     return (VersionBitsState(pindexPrev, params, Consensus::DEPLOYMENT_COLDSTAKING, versionbitscache) == THRESHOLD_ACTIVE);
-    //*/
 }
 
 bool IsColdStakingv2Enabled(const CBlockIndex* pindexPrev, const Consensus::Params& params)
 {
-    //return true;
-    ///*
     LOCK(cs_main);
     return (VersionBitsState(pindexPrev, params, Consensus::DEPLOYMENT_COLDSTAKING_V2, versionbitscache) == THRESHOLD_ACTIVE);
-    //*/
 }
 
 bool IsVoteCacheStateEnabled(const CBlockIndex* pindexPrev, const Consensus::Params& params)
 {
-    //return true;
-    ///*
     LOCK(cs_main);
     return (VersionBitsState(pindexPrev, params, Consensus::DEPLOYMENT_VOTE_STATE_CACHE, versionbitscache) == THRESHOLD_ACTIVE);
-    //*/
 }
 
 bool IsDAOEnabled(const CBlockIndex* pindexPrev, const Consensus::Params& params)
 {
-    //return true;
-    ///*
     LOCK(cs_main);
     return (VersionBitsState(pindexPrev, params, Consensus::DEPLOYMENT_CONSULTATIONS, versionbitscache) == THRESHOLD_ACTIVE);
-    //*/
 }
 
 bool IsColdStakingPoolFeeEnabled(const CBlockIndex* pindexPrev, const Consensus::Params& params)
 {
-    //return true;
-    ///*
     LOCK(cs_main);
     return (VersionBitsState(pindexPrev, params, Consensus::DEPLOYMENT_POOL_FEE, versionbitscache) == THRESHOLD_ACTIVE);
-    //*/
 }
 
 bool IsStaticRewardLocked(const CBlockIndex* pindexPrev, const Consensus::Params& params)
 {
-    //return true;
-    ///*
     LOCK(cs_main);
     return (VersionBitsState(pindexPrev, params, Consensus::DEPLOYMENT_STATIC_REWARD, versionbitscache) == THRESHOLD_LOCKED_IN);
-    //*/
 }
 
 bool IsStaticRewardEnabled(const CBlockIndex* pindexPrev, const Consensus::Params& params)
 {
-    //return true;
-    ///*
     LOCK(cs_main);
     return (VersionBitsState(pindexPrev, params, Consensus::DEPLOYMENT_STATIC_REWARD, versionbitscache) == THRESHOLD_ACTIVE);
-    //*/
 }
 
 bool IsDaoConsensusEnabled(const CBlockIndex* pindexPrev, const Consensus::Params& params)
 {
-    //return true;
-    ///*
     LOCK(cs_main);
     return (VersionBitsState(pindexPrev, params, Consensus::DEPLOYMENT_DAO_CONSENSUS, versionbitscache) == THRESHOLD_ACTIVE);
-    //*/
 }
 
 // Compute at which vout of the block's coinbase transaction the witness
