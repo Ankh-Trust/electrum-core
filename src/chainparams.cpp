@@ -110,7 +110,7 @@ public:
         consensus.nMinimumQuorumFirstHalf = 2 / 3;
         consensus.nMinimumQuorumSecondHalf = 2 / 3;
         consensus.nCommunityFundMinAge = 50;
-        consensus.sigActivationTime = 1602443000;
+        consensus.sigActivationTime = 1602444000;
         consensus.nCoinbaseTimeActivationHeight = 0;
         consensus.nCommunityFundAmount = 0 * COIN;
         consensus.nPaymentRequestMaxVersion = CPaymentRequest::ALL_VERSION;
