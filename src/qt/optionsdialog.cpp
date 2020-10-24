@@ -184,8 +184,8 @@ void OptionsDialog::setModel(OptionsModel *model)
     connect(ui->connectSocksTor, SIGNAL(clicked(bool)), this, SLOT(showRestartWarning()));
     /* Display */
     connect(ui->lang, SIGNAL(valueChanged()), this, SLOT(showRestartWarning()));
-    connect(ui->theme, SIGNAL(valueChanged()), this, SLOT(showRestartWarning()));
-    connect(ui->scaling, SIGNAL(valueChanged(int)), this, SLOT(showRestartWarning()));
+    // connect(ui->theme, SIGNAL(valueChanged()), this, SLOT(showRestartWarning()));
+    // connect(ui->scaling, SIGNAL(valueChanged(int)), this, SLOT(showRestartWarning()));
     connect(ui->thirdPartyTxUrls, SIGNAL(textChanged(const QString &)), this, SLOT(showRestartWarning()));
 
     /* Main */
@@ -219,8 +219,8 @@ void OptionsDialog::setModel(OptionsModel *model)
     /* Display */
     connect(ui->lang, SIGNAL(valueChanged()), this, SLOT(markModelDirty()));
     connect(ui->unit, SIGNAL(valueChanged()), this, SLOT(markModelDirty()));
-    connect(ui->theme, SIGNAL(valueChanged()), this, SLOT(markModelDirty()));
-    connect(ui->scaling, SIGNAL(valueChanged(int)), this, SLOT(markModelDirty()));
+    // connect(ui->theme, SIGNAL(valueChanged()), this, SLOT(markModelDirty()));
+    // connect(ui->scaling, SIGNAL(valueChanged(int)), this, SLOT(markModelDirty()));
     connect(ui->thirdPartyTxUrls, SIGNAL(textChanged(const QString &)), this, SLOT(markModelDirty()));
 }
 
@@ -257,8 +257,8 @@ void OptionsDialog::setMapper()
     /* Display */
     mapper->addMapping(ui->lang, OptionsModel::Language);
     mapper->addMapping(ui->unit, OptionsModel::DisplayUnit);
-    mapper->addMapping(ui->theme, OptionsModel::Theme);
-    mapper->addMapping(ui->scaling, OptionsModel::Scaling);
+    // mapper->addMapping(ui->theme, OptionsModel::Theme);
+    // mapper->addMapping(ui->scaling, OptionsModel::Scaling);
     mapper->addMapping(ui->thirdPartyTxUrls, OptionsModel::ThirdPartyTxUrls);
 }
 
