@@ -278,7 +278,6 @@ ElectrumGUI::ElectrumGUI(const PlatformStyle *platformStyle, const NetworkStyle 
     labelStakingIcon->setProperty("class", "status-icon");
     labelPrice = new QLabel();
     labelPrice->setProperty("class", "StatusPrice");
-    labelConnectionsIcon = new QLabel();
     labelWalletHDStatusIcon = new QLabel();
     labelConnectionsIcon = new QPushButton();
     labelConnectionsIcon->setFlat(true); // Make the button look like a label, but clickable
