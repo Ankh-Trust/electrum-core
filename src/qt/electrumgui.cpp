@@ -254,14 +254,19 @@ ElectrumGUI::ElectrumGUI(const PlatformStyle *platformStyle, const NetworkStyle 
     // Create status bar
     statusBar();
 
-    // Disable size grip because it looks ugly and nobody needs it
-    statusBar()->setSizeGripEnabled(false);
+    // Set size grip
+    statusBar()->setSizeGripEnabled(true);
 
     // Status bar notification icons
+    QFrame *frameBlocks = new QFrame();
+    frameBlocks->setContentsMargins(0,0,0,0);
+    frameBlocks->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+    QHBoxLayout *frameBlocksLayout = new QHBoxLayout(frameBlocks);
+    frameBlocksLayout->setContentsMargins(3,0,3,0);
+    frameBlocksLayout->setSpacing(3);
     unitDisplayControl = new QComboBox();
     unitDisplayControl->setEditable(true);
     unitDisplayControl->setInsertPolicy(QComboBox::NoInsert);
-    unitDisplayControl->setFixedHeight(25 * scale());
     for(ElectrumUnits::Unit u: ElectrumUnits::availableUnits())
     {
         unitDisplayControl->addItem(QString(ElectrumUnits::name(u)), u);
