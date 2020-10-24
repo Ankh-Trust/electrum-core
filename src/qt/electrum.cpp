@@ -568,13 +568,6 @@ void ElectrumApplication::initializeResult(int retval)
         }
         Q_EMIT splashFinished(window);
 
-        //specify a new font.
-        int id = QFontDatabase::addApplicationFont(":/icons/roboto-medium");
-        QString family = QFontDatabase::applicationFontFamilies(id).at(0);
-        QFont newFont(family,10);        //set font of application
-        newFont.setStyleStrategy(QFont::PreferAntialias);
-        QApplication::setFont(newFont);
-
 #ifdef ENABLE_WALLET
         // Now that initialization/startup is done, process any command-line
         // electrum: URIs or payment requests:
@@ -630,8 +623,9 @@ int main(int argc, char *argv[])
 
     // Load the app
     ElectrumApplication app(argc, argv);
-
+if QT_VERSION > 0x050100
     // Generate high-dpi pixmaps
+#endif
     QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 #if QT_VERSION >= 0x050600
     QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
@@ -650,6 +644,7 @@ int main(int argc, char *argv[])
     //   Need to pass name here as CAmount is a typedef (see http://qt-project.org/doc/qt-5/qmetatype.html#qRegisterMetaType)
     //   IMPORTANT if it is no longer a typedef use the normal variant above
     qRegisterMetaType< CAmount >("CAmount");
+    qRegisterMetaType<std::function<void(void)> >("std::function<void(void)>");    
 
     /// 3. Application identification
     // must be set before OptionsModel is initialized or translations are loaded,

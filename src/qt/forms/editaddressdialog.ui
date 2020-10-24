@@ -7,14 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>457</width>
-    <height>136</height>
+    <height>126</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Edit Address</string>
-  </property>
-  <property name="styleSheet">
-   <string notr="true"/>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -37,9 +34,6 @@
        <property name="toolTip">
         <string>The label associated with this address list entry</string>
        </property>
-       <property name="styleSheet">
-        <string notr="true"/>
-       </property>
       </widget>
      </item>
      <item row="1" column="0">
@@ -57,18 +51,12 @@
        <property name="toolTip">
         <string>The address associated with this address list entry. This can only be modified for sending addresses.</string>
        </property>
-       <property name="styleSheet">
-        <string notr="true"/>
-       </property>
       </widget>
      </item>
     </layout>
    </item>
    <item>
     <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="styleSheet">
-      <string notr="true"/>
-     </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
