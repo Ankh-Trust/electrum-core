@@ -747,7 +747,7 @@ void ElectrumGUI::createToolBars()
     for (unsigned i = 0; i < 6; ++i)
     {
         // Create the icon
-        QIcon icon = QIcon(":/icons/" + btnNamesIcon[i], COLOR_WHITE);
+        QIcon icon = platformStyle->Icon(":/icons/" + btnNamesIcon[i], COLOR_WHITE);
 
         // Update the disabled icon pixmap to use the same as QIcon::Normal
         icon.addPixmap(icon.pixmap(iconSize, QIcon::Normal, QIcon::On), QIcon::Disabled);
