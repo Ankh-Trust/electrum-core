@@ -1235,16 +1235,6 @@ void ElectrumGUI::gotoReceiveCoinsPage()
     if (walletFrame) walletFrame->gotoReceiveCoinsPage();
 }
 
-void ElectrumGUI::gotoRequestPaymentPage()
-{
-    if (!checkSettingsSaved())
-        return;
-
-    setActiveMenu(2);
-    receiveCoinsAction->setChecked(true);
-    if (walletFrame) walletFrame->gotoRequestPaymentPage();
-}
-
 void ElectrumGUI::gotoSendCoinsPage(QString addr)
 {
     if (!checkSettingsSaved())
