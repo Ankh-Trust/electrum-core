@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>640</width>
-    <height>404</height>
+    <height>385</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -66,7 +66,7 @@
              <item>
               <widget class="QLabel" name="infoText">
                <property name="text">
-                <string>The displayed information may be out of date. Your wallet automatically synchronizes with the Electrum network after a connection is established, but this process has not completed yet. This means that recent transactions will not be visible, and the balance will not be up-to-date until this process has completed.</string>
+                <string>Recent transactions may not yet be visible, and therefore your wallet's balance might be incorrect. This information will be correct once your wallet has finished synchronizing with the electrum network, as detailed below.</string>
                </property>
                <property name="textFormat">
                 <enum>Qt::RichText</enum>
@@ -85,7 +85,7 @@
                 </font>
                </property>
                <property name="text">
-                <string>Spending 0AE may not be possible during that phase!</string>
+                <string>Attempting to spend electrums that are affected by not-yet-displayed transactions will not be accepted by the network.</string>
                </property>
                <property name="textFormat">
                 <enum>Qt::RichText</enum>
@@ -286,6 +286,12 @@
             <widget class="QPushButton" name="closeButton">
              <property name="text">
               <string>Hide</string>
+             </property>
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+             <property name="default">
+              <bool>true</bool>
              </property>
             </widget>
            </item>

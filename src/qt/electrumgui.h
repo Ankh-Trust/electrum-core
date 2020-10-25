@@ -24,7 +24,6 @@
 #include <QToolButton>
 #include <QSystemTrayIcon>
 #include <QtNetwork>
-#include <QWizard>
 
 #ifdef Q_OS_MAC
 #include <qt/macappnapinhibitor.h>
@@ -124,9 +123,8 @@ private:
     WalletFrame *walletFrame;
 
     QComboBox *unitDisplayControl;
-    QLabel* labelWalletHDStatusIcon;
     QLabel *labelEncryptionIcon;
-    QPushButton *labelConnectionsIcon;
+    QLabel *labelConnectionsIcon;
     GUIUtil::ClickableLabel* labelBlocksIcon;
     QLabel *labelStakingIcon;
     QLabel *labelPrice;
@@ -159,7 +157,7 @@ private:
     QAction *signMessageAction;
     QAction *verifyMessageAction;
     QAction *aboutAction;
-    QAction *webInfoAction;
+    QAction *infoAction;
     QAction *receiveCoinsAction;
     QAction *receiveCoinsMenuAction;
     QAction *optionsAction;
@@ -170,18 +168,13 @@ private:
     QAction *backupWalletAction;
     QAction *changePassphraseAction;
     QAction *aboutQtAction;
-    QAction* openInfoAction;
     QAction *openRPCConsoleAction;
-    QAction* openGraphAction;
-    QAction* openPeersAction;
     QAction *openAction;
     QAction *showHelpMessageAction;
     QAction *unlockWalletAction;
-    QAction *unlockStakingAction;
     QAction *lockWalletAction;
-    //QAction *toggleStakingAction;
-    //QAction *splitRewardAction;
-    QAction *generateColdStakingAction;
+    QAction *toggleStakingAction;
+    QAction *splitRewardAction;
     QToolButton *menuBtns[6];
     QLabel *menuBubbles[6];
     QLabel *notifications[3];
@@ -216,6 +209,8 @@ private:
     void createActions();
     /** Create the menu bar and sub-menus. */
     void createMenuBar();
+    /** Create the header widgets */
+    void createHeaderWidgets();
     /** Create the toolbars */
     void createToolBars();
     /** Create system tray icon and notification */
@@ -236,6 +231,7 @@ private:
     void updateWeight();
 
     void cfundProposalsOpen(bool fMode);
+
 
 
 Q_SIGNALS:
@@ -262,13 +258,6 @@ public Q_SLOTS:
     void message(const QString &title, const QString &message, unsigned int style, bool *ret = NULL);
 
 #ifdef ENABLE_WALLET
-    /** Set the hd-enabled status as shown in the UI.
-    @param[in] status            current hd enabled status
-    @see WalletModel::EncryptionStatus
-    */
-    void setHDStatus(int hdEnabled);
-
-
     /** Set the encryption status as shown in the UI.
        @param[in] status            current encryption status
        @see WalletModel::EncryptionStatus
@@ -295,7 +284,7 @@ private Q_SLOTS:
     void gotoReceiveCoinsPage();
     /** Switch to send coins page */
     void gotoSendCoinsPage(QString addr = "");
-    // void gotoRequestPaymentPage();
+    void gotoRequestPaymentPage();
 
     /** Show Sign/Verify Message dialog and switch to sign message tab */
     void gotoSignMessageTab(QString addr = "");
@@ -329,13 +318,9 @@ private Q_SLOTS:
     /** Show about dialog */
     void aboutClicked();
     /** Open Electrum Knowledge base */
-    void webIfoClicked();
+    void infoClicked();
     /** Show debug window */
     void showDebugWindow();
-    /** Show debug window and set focus to the appropriate tab */
-    void showInfo();
-    void showGraph();
-    void showPeers();
     /** Show debug window and set focus to the console */
     void showDebugWindowActivateConsole();
     /** Show help message dialog */
@@ -346,9 +331,7 @@ private Q_SLOTS:
     void updateDisplayUnit(int unit);
     /** Toggle Staking **/
     void toggleStaking();
-    //void splitRewards();
-    /** Generate Cold Staking Address **/
-    void generateColdStaking();
+    void splitRewards();
 #ifndef Q_OS_MAC
     /** Handle tray icon clicked */
     void trayIconActivated(QSystemTrayIcon::ActivationReason reason);

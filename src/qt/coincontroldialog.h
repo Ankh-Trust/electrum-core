@@ -66,7 +66,7 @@ private:
 
     enum
     {
-        COLUMN_CHECKBOX = 0,
+        COLUMN_CHECKBOX,
         COLUMN_AMOUNT,
         COLUMN_LABEL,
         COLUMN_ADDRESS,

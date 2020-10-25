@@ -6,12 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1100</width>
+    <width>1000</width>
     <height>500</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Coin Selection</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true"/>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -360,6 +363,9 @@
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
           <property name="text">
            <string>(un)select all</string>
           </property>
@@ -427,6 +433,9 @@
      <property name="contextMenuPolicy">
       <enum>Qt::CustomContextMenu</enum>
      </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
      <property name="sortingEnabled">
       <bool>false</bool>
      </property>
@@ -447,9 +456,6 @@
      <column>
       <property name="text">
        <string>Amount</string>
-      </property>
-      <property name="textAlignment">
-       <set>AlignTrailing|AlignVCenter</set>
       </property>
      </column>
      <column>
@@ -473,9 +479,6 @@
       </property>
       <property name="toolTip">
        <string>Confirmed</string>
-      </property>
-      <property name="textAlignment">
-       <set>AlignTrailing|AlignVCenter</set>
       </property>
      </column>
      <column>
@@ -512,6 +515,15 @@
    </item>
    <item>
     <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>

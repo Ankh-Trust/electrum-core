@@ -10,8 +10,8 @@
     <height>400</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string notr="true">Electrum - Command-line options</string>
+  <property name="styleSheet">
+   <string notr="true"/>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout_2">
    <property name="spacing">
@@ -78,6 +78,9 @@
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
       <widget class="QTextEdit" name="helpMessage">
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
        <property name="readOnly">
         <bool>true</bool>
        </property>
@@ -95,6 +98,14 @@
         <bool>true</bool>
        </property>
        <widget class="QWidget" name="scrollAreaWidgetContents">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>718</width>
+          <height>111</height>
+         </rect>
+        </property>
         <layout class="QVBoxLayout" name="verticalLayout_2">
          <item>
           <widget class="QLabel" name="aboutMessage">
@@ -137,6 +148,9 @@
      </item>
      <item>
       <widget class="QDialogButtonBox" name="okButton">
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
@@ -149,9 +163,7 @@
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="../electrum.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>okButton</sender>

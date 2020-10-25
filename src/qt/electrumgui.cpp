@@ -11,7 +11,6 @@
 #include <qt/electrumunits.h>
 #include <clientversion.h>
 #include <qt/clientmodel.h>
-#include <coldstakingwizard.h>
 #include <qt/guiconstants.h>
 #include <qt/guiutil.h>
 #include <qt/modaloverlay.h>
@@ -110,7 +109,6 @@ ElectrumGUI::ElectrumGUI(const PlatformStyle *platformStyle, const NetworkStyle 
     walletFrame(0),
     unitDisplayControl(0),
     labelEncryptionIcon(0),
-    labelWalletHDStatusIcon(0),
     labelConnectionsIcon(0),
     labelBlocksIcon(0),
     labelStakingIcon(0),
@@ -139,7 +137,7 @@ ElectrumGUI::ElectrumGUI(const PlatformStyle *platformStyle, const NetworkStyle 
     signMessageAction(0),
     verifyMessageAction(0),
     aboutAction(0),
-    webInfoAction(0),
+    infoAction(0),
     receiveCoinsAction(0),
     receiveCoinsMenuAction(0),
     optionsAction(0),
@@ -162,16 +160,14 @@ ElectrumGUI::ElectrumGUI(const PlatformStyle *platformStyle, const NetworkStyle 
     spinnerFrame(0),
     unlockWalletAction(0),
     lockWalletAction(0),
-    //toggleStakingAction(0),
-    //splitRewardAction(0),
-    generateColdStakingAction(0),
+    toggleStakingAction(0),
+    splitRewardAction(0),
     platformStyle(platformStyle),
     updatePriceAction(0),
     fShowingVoting(0)
 {
-    GUIUtil::restoreWindowGeometry("nWindow", QSize(1152, 576), this);
-    setMinimumSize(QSize(1152, 576));
-    QString windowTitle = tr("Electrum Core") + "";
+    GUIUtil::restoreWindowGeometry("nWindow", QSize(800, 600), this);
+    QString windowTitle = tr(PACKAGE_NAME) + " - ";
 #ifdef ENABLE_WALLET
     /* if compiled with wallet support, -disablewallet can still disable the wallet */
     enableWallet = !GetBoolArg("-disablewallet", false);
@@ -180,7 +176,7 @@ ElectrumGUI::ElectrumGUI(const PlatformStyle *platformStyle, const NetworkStyle 
 #endif // ENABLE_WALLET
     if(enableWallet)
     {
-        windowTitle += tr("");
+        windowTitle += tr("Wallet");
     } else {
         windowTitle += tr("Node");
     }
@@ -220,9 +216,9 @@ ElectrumGUI::ElectrumGUI(const PlatformStyle *platformStyle, const NetworkStyle 
 #ifdef ENABLE_WALLET
     if(enableWallet)
     {
-        /** Create wallet frame*/
+        /** Create wallet frame and make it the central widget */
         walletFrame = new WalletFrame(platformStyle, this);
-        //setCentralWidget(walletFrame);
+        setCentralWidget(walletFrame);
     } else
 #endif // ENABLE_WALLET
     {
@@ -274,20 +270,13 @@ ElectrumGUI::ElectrumGUI(const PlatformStyle *platformStyle, const NetworkStyle 
     labelPrice = new QLabel();
     labelPrice->setProperty("class", "StatusPrice");
     labelConnectionsIcon = new QLabel();
-    labelWalletHDStatusIcon = new QLabel();
-    labelConnectionsIcon = new QPushButton();
-    labelConnectionsIcon->setFlat(true); // Make the button look like a label, but clickable
-    labelConnectionsIcon->setMaximumSize(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE);
-    // Jump to peers tab by clicking on connections icon
-    connect(labelConnectionsIcon, SIGNAL(clicked()), this, SLOT(showPeers()));
-
+    labelConnectionsIcon->setProperty("class", "status-icon");
     labelBlocksIcon = new GUIUtil::ClickableLabel();
     labelBlocksIcon->setProperty("class", "status-icon");
     if(enableWallet)
     {
         walletFrame->statusLayout->addWidget(labelPrice);
         walletFrame->statusLayout->addWidget(labelEncryptionIcon);
-        walletFrame->statusLayout->addWidget(labelWalletHDStatusIcon);
         walletFrame->statusLayout->addWidget(labelStakingIcon);
     }
     walletFrame->statusLayout->addWidget(labelConnectionsIcon);
@@ -312,13 +301,10 @@ ElectrumGUI::ElectrumGUI(const PlatformStyle *platformStyle, const NetworkStyle 
         info("Automatic price update turned OFF");
     }
 
-    if (GetBoolArg("-staking", true))
-    {
-        QTimer *timerStakingIcon = new QTimer(labelStakingIcon);
-        connect(timerStakingIcon, SIGNAL(timeout()), this, SLOT(updateStakingStatus()));
-        timerStakingIcon->start(45 * 1000);
-        updateStakingStatus();
-    }
+    QTimer *timerStakingIcon = new QTimer(labelStakingIcon);
+    connect(timerStakingIcon, SIGNAL(timeout()), this, SLOT(updateStakingStatus()));
+    timerStakingIcon->start(45 * 1000);
+    updateStakingStatus();
 
     if (GetArg("-zapwallettxes",0) == 2 && GetArg("-repairwallet",0) == 1)
     {
@@ -332,10 +318,10 @@ ElectrumGUI::ElectrumGUI(const PlatformStyle *platformStyle, const NetworkStyle 
 
     // Progress bar and label for blocks download
     progressBarLabel = new QLabel();
-    progressBarLabel->setVisible(true);
+    progressBarLabel->setVisible(false);
     progressBar = new GUIUtil::ProgressBar();
     progressBar->setAlignment(Qt::AlignCenter);
-    progressBar->setVisible(true);
+    progressBar->setVisible(false);
 
     // Override style sheet for progress bar for styles that have a segmented progress bar,
     // as they make the text unreadable (workaround for issue #1071)
@@ -396,79 +382,63 @@ void ElectrumGUI::createActions()
 {
     QActionGroup *tabGroup = new QActionGroup(this);
 
-    overviewAction = new QAction(QIcon(":/icons/overview"), tr("&Overview"), this);
+    overviewAction = new QAction(platformStyle->Icon(":/icons/electrum"), tr("&Overview"), this);
     overviewAction->setStatusTip(tr("Show general overview of wallet"));
     overviewAction->setToolTip(overviewAction->statusTip());
     overviewAction->setCheckable(true);
-    #ifdef Q_OS_MAC
-        overviewAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_1));
-    #else
     overviewAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_1));
-    #endif
     tabGroup->addAction(overviewAction);
 
-    sendCoinsAction = new QAction(QIcon(":/icons/send"), tr("&Send"), this);
+    sendCoinsAction = new QAction(platformStyle->Icon(":/icons/send"), tr("&Send"), this);
     sendCoinsAction->setStatusTip(tr("Send coins to a Electrum address"));
     sendCoinsAction->setToolTip(sendCoinsAction->statusTip());
     sendCoinsAction->setCheckable(true);
-    #ifdef Q_OS_MAC
-        sendCoinsAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_2));
-    #else
     sendCoinsAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_2));
-    #endif
     tabGroup->addAction(sendCoinsAction);
 
-    sendCoinsMenuAction = new QAction(QIcon(":/icons/send"), sendCoinsAction->text(), this);
+    sendCoinsMenuAction = new QAction(platformStyle->IconAlt(":/icons/send"), sendCoinsAction->text(), this);
     sendCoinsMenuAction->setStatusTip(sendCoinsAction->statusTip());
     sendCoinsMenuAction->setToolTip(sendCoinsMenuAction->statusTip());
 
-    receiveCoinsAction = new QAction(QIcon(":/icons/receiving_addresses"), tr("&Receive"), this);
+    receiveCoinsAction = new QAction(platformStyle->Icon(":/icons/receiving_addresses"), tr("&Receive"), this);
     receiveCoinsAction->setStatusTip(tr("Request payments (generates QR codes and electrum: URIs)"));
     receiveCoinsAction->setToolTip(receiveCoinsAction->statusTip());
     receiveCoinsAction->setCheckable(true);
-    #ifdef Q_OS_MAC
-        receiveCoinsAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_3));
-    #else
     receiveCoinsAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_3));
-    #endif
     tabGroup->addAction(receiveCoinsAction);
 
-    receiveCoinsMenuAction = new QAction(QIcon(":/icons/receiving_addresses"), receiveCoinsAction->text(), this);
+    receiveCoinsMenuAction = new QAction(platformStyle->IconAlt(":/icons/receiving_addresses"), receiveCoinsAction->text(), this);
     receiveCoinsMenuAction->setStatusTip(receiveCoinsAction->statusTip());
     receiveCoinsMenuAction->setToolTip(receiveCoinsMenuAction->statusTip());
 
-    // toggleStakingAction = new QAction(tr("Toggle &Staking"), this);
-    // toggleStakingAction->setStatusTip(tr("Toggle Staking"));
+    toggleStakingAction = new QAction(tr("Toggle &Staking"), this);
+    toggleStakingAction->setStatusTip(tr("Toggle Staking"));
 
-    generateColdStakingAction = new QAction(QIcon(":/icons/verify"), tr("&Generate Cold Staking Address"), this);
-    generateColdStakingAction->setStatusTip(tr("Generate Cold Staking Address"));
+    splitRewardAction = new QAction(tr("Set up staking rewards"), this);
+    splitRewardAction->setStatusTip(tr("Configure how to split the staking rewards"));
 
-    historyAction = new QAction(QIcon(":/icons/history"), tr("&Transactions"), this);
+    historyAction = new QAction(platformStyle->Icon(":/icons/transactions"), tr("&Transactions"), this);
     historyAction->setStatusTip(tr("Browse transaction history"));
     historyAction->setToolTip(historyAction->statusTip());
     historyAction->setCheckable(true);
-    #ifdef Q_OS_MAC
-        historyAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_4));
-    #else
-        historyAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_4));
-    #endif
+    historyAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_4));
     tabGroup->addAction(historyAction);
 
-    daoAction = new QAction(QIcon(":/icons/dao"), tr("&Transactions"), this);
+    daoAction = new QAction(platformStyle->Icon(":/icons/dao"), tr("&Transactions"), this);
     daoAction->setStatusTip(tr("Participate in the DAO"));
     daoAction->setToolTip(daoAction->statusTip());
     daoAction->setCheckable(true);
     daoAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_5));
     tabGroup->addAction(daoAction);
 
-    settingsAction = new QAction(QIcon(":/icons/options"), tr("&Settings"), this);
+    settingsAction = new QAction(platformStyle->Icon(":/icons/options"), tr("&Settings"), this);
     settingsAction->setStatusTip(tr("Update settings"));
     settingsAction->setToolTip(settingsAction->statusTip());
     settingsAction->setCheckable(true);
     settingsAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_6));
     tabGroup->addAction(settingsAction);
 
-    updatePriceAction  = new QAction(QIcon(":/icons/verify"), tr("Update exchange prices"), this);
+    updatePriceAction  = new QAction(tr("Update exchange prices"), this);
     updatePriceAction->setStatusTip(tr("Update exchange prices"));
 
     connect(updatePriceAction, SIGNAL(triggered()), this, SLOT(updatePrice()));
@@ -483,103 +453,87 @@ void ElectrumGUI::createActions()
     connect(sendCoinsMenuAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
     connect(sendCoinsMenuAction, SIGNAL(triggered()), this, SLOT(gotoSendCoinsPage()));
     connect(receiveCoinsAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
-    connect(receiveCoinsAction, SIGNAL(triggered()), this, SLOT(gotoRequestCoinsPage()));
+    connect(receiveCoinsAction, SIGNAL(triggered()), this, SLOT(gotoRequestPaymentPage()));
     connect(receiveCoinsMenuAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
-    connect(receiveCoinsMenuAction, SIGNAL(triggered()), this, SLOT(gotoRequestCoinsPage()));
+    connect(receiveCoinsMenuAction, SIGNAL(triggered()), this, SLOT(gotoRequestPaymentPage()));
     connect(historyAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
     connect(historyAction, SIGNAL(triggered()), this, SLOT(gotoHistoryPage()));
     connect(settingsAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
     connect(settingsAction, SIGNAL(triggered()), this, SLOT(gotoSettingsPage()));
-    //connect(toggleStakingAction, SIGNAL(triggered()), this, SLOT(toggleStaking()));
-    //connect(splitRewardAction, SIGNAL(triggered()), this, SLOT(splitRewards()));
-    connect(generateColdStakingAction, SIGNAL(triggered()), this, SLOT(generateColdStaking()));
+    connect(toggleStakingAction, SIGNAL(triggered()), this, SLOT(toggleStaking()));
+    connect(splitRewardAction, SIGNAL(triggered()), this, SLOT(splitRewards()));
 #endif // ENABLE_WALLET
 
-    quitAction = new QAction(QIcon(":/icons/quit"), tr("E&xit"), this);
+    quitAction = new QAction(platformStyle->IconAlt(":/icons/quit"), tr("E&xit"), this);
     quitAction->setStatusTip(tr("Quit application"));
     quitAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q));
     quitAction->setMenuRole(QAction::QuitRole);
-    aboutAction = new QAction(QIcon(":/icons/about"), tr("&About %1").arg(tr(PACKAGE_NAME)), this);
+    aboutAction = new QAction(platformStyle->IconAlt(":/icons/about"), tr("&About %1").arg(tr(PACKAGE_NAME)), this);
     aboutAction->setStatusTip(tr("Show information about %1").arg(tr(PACKAGE_NAME)));
     aboutAction->setMenuRole(QAction::AboutRole);
     aboutAction->setEnabled(false);
-    webInfoAction = new QAction(QApplication::style()->standardIcon(QStyle::SP_MessageBoxInformation), tr("Electrum &Knowledge Base"), this);
-    webInfoAction->setStatusTip(tr("Open the Electrum Knowledge Base in your browser"));
-    webInfoAction->setMenuRole(QAction::NoRole);
-    webInfoAction->setEnabled(false);
-    aboutQtAction = new QAction(QIcon(":/icons/about_qt"), tr("About &Qt"), this);
+    infoAction = new QAction(platformStyle->IconAlt(":/icons/address-book"), tr("%1 &Knowledge Base").arg(tr(PACKAGE_NAME)), this);
+    infoAction->setStatusTip(tr("Open the %1 Knowledge Base in your browser").arg(tr(PACKAGE_NAME)));
+    infoAction->setMenuRole(QAction::NoRole);
+    infoAction->setEnabled(false);
+    aboutQtAction = new QAction(platformStyle->IconAlt(":/icons/about_qt"), tr("About &Qt"), this);
     aboutQtAction->setStatusTip(tr("Show information about Qt"));
     aboutQtAction->setMenuRole(QAction::AboutQtRole);
-    optionsAction = new QAction(QIcon(":/icons/options"), tr("&Options..."), this);
+    optionsAction = new QAction(platformStyle->IconAlt(":/icons/options"), tr("&Options..."), this);
     optionsAction->setStatusTip(tr("Modify configuration options for %1").arg(tr(PACKAGE_NAME)));
     optionsAction->setMenuRole(QAction::PreferencesRole);
     optionsAction->setEnabled(false);
     cfundProposalsAction = new QAction(tr("Vote for Proposals"), this);
     cfundPaymentRequestsAction = new QAction(tr("Vote for Payment Requests"), this);
-    toggleHideAction = new QAction(QIcon(":/icons/about"), tr("&Show / Hide"), this);
+    toggleHideAction = new QAction(platformStyle->IconAlt(":/icons/about"), tr("&Show / Hide"), this);
     toggleHideAction->setStatusTip(tr("Show or hide the main Window"));
 
-    encryptWalletAction = new QAction(QIcon(":/icons/lock_closed"), tr("&Encrypt Wallet..."), this);
+    encryptWalletAction = new QAction(platformStyle->IconAlt(":/icons/lock_closed"), tr("&Encrypt Wallet..."), this);
     encryptWalletAction->setStatusTip(tr("Encrypt the private keys that belong to your wallet"));
     encryptWalletAction->setCheckable(true);
-    unlockWalletAction = new QAction(QIcon(":/icons/lock_open"), tr("&Unlock Wallet ..."), this);
+    unlockWalletAction = new QAction(tr("&Unlock Wallet for Staking..."), this);
     unlockWalletAction->setToolTip(tr("Unlock wallet for Staking"));
-    unlockStakingAction = new QAction(QIcon(":/icons/staking"), tr("Unlock Wallet for &Staking..."), this);
-    unlockStakingAction->setToolTip(tr("Unlock wallet for Staking"));
-    lockWalletAction = new QAction(QIcon(":/icons/lock_closed"), tr("&Lock Wallet"), this);
-    lockWalletAction->setToolTip(tr("Lock wallet"));
-    backupWalletAction = new QAction(QIcon(":/icons/filesave"), tr("&Backup Wallet..."), this);
+    backupWalletAction = new QAction(platformStyle->IconAlt(":/icons/filesave"), tr("&Backup Wallet..."), this);
     backupWalletAction->setStatusTip(tr("Backup wallet to another location"));
-    changePassphraseAction = new QAction(QIcon(":/icons/key"), tr("&Change Passphrase..."), this);
+    changePassphraseAction = new QAction(platformStyle->IconAlt(":/icons/key"), tr("&Change Passphrase..."), this);
     changePassphraseAction->setStatusTip(tr("Change the passphrase used for wallet encryption"));
 
-    signMessageAction = new QAction(QIcon(":/icons/edit"), tr("Sign &message..."), this);
+    signMessageAction = new QAction(platformStyle->IconAlt(":/icons/edit"), tr("Sign &message..."), this);
     signMessageAction->setStatusTip(tr("Sign messages with your Electrum addresses to prove you own them"));
-    verifyMessageAction = new QAction(QIcon(":/icons/verify"), tr("&Verify message..."), this);
+    verifyMessageAction = new QAction(platformStyle->IconAlt(":/icons/verify"), tr("&Verify message..."), this);
     verifyMessageAction->setStatusTip(tr("Verify messages to ensure they were signed with specified Electrum addresses"));
 
-    openRPCConsoleAction = new QAction(platformStyle->TextColorIcon(":/icons/debugwindow"), tr("&Debug window"), this);
-    openInfoAction = new QAction(QApplication::style()->standardIcon(QStyle::SP_MessageBoxInformation), tr("&Information"), this);
-    openInfoAction->setStatusTip(tr("Show diagnostic information"));
-    openRPCConsoleAction = new QAction(QIcon(":/icons/debugwindow"), tr("&Debug window"), this);
+    openRPCConsoleAction = new QAction(platformStyle->IconAlt(":/icons/debugwindow"), tr("&Debug window"), this);
     openRPCConsoleAction->setStatusTip(tr("Open debugging and diagnostic console"));
-    openGraphAction = new QAction(QIcon(":/icons/connect_4"), tr("&Network Monitor"), this);
-    openGraphAction->setStatusTip(tr("Show network monitor"));
-    openPeersAction = new QAction(QIcon(":/icons/connect_4"), tr("&Peers list"), this);
-    openPeersAction->setStatusTip(tr("Show peers info"));
-
     // initially disable the debug window menu item
-    openInfoAction->setEnabled(false);
     openRPCConsoleAction->setEnabled(false);
-    openGraphAction->setEnabled(false);
-    openPeersAction->setEnabled(false);
 
-    usedSendingAddressesAction = new QAction(QIcon(":/icons/address-book"), tr("&Sending addresses..."), this);
+    usedSendingAddressesAction = new QAction(platformStyle->IconAlt(":/icons/address-book"), tr("&Sending addresses..."), this);
     usedSendingAddressesAction->setStatusTip(tr("Show the list of used sending addresses and labels"));
-    usedReceivingAddressesAction = new QAction(QIcon(":/icons/address-book"), tr("&Receiving addresses..."), this);
+    usedReceivingAddressesAction = new QAction(platformStyle->IconAlt(":/icons/address-book"), tr("&Receiving addresses..."), this);
     usedReceivingAddressesAction->setStatusTip(tr("Show the list of used receiving addresses and labels"));
-    repairWalletAction = new QAction(QIcon(":/icons/options"), tr("&Repair wallet"), this);
+    repairWalletAction = new QAction(tr("&Repair wallet"), this);
     repairWalletAction->setToolTip(tr("Repair wallet transactions"));
 
-    importPrivateKeyAction = new QAction(QIcon(":/icons/key"), tr("&Import private key"), this);
+    importPrivateKeyAction = new QAction(tr("&Import private key"), this);
     importPrivateKeyAction->setToolTip(tr("Import private key"));
 
-    exportMasterPrivateKeyAction = new QAction(QIcon(":/icons/key"), tr("Show &master private key"), this);
+    exportMasterPrivateKeyAction = new QAction(tr("Show &master private key"), this);
     exportMasterPrivateKeyAction->setToolTip(tr("Show master private key"));
 
-    exportMnemonicAction = new QAction(QIcon(":/icons/options"), tr("Show m&nemonic"), this);
+    exportMnemonicAction = new QAction(tr("Show m&nemonic"), this);
     exportMnemonicAction->setToolTip(tr("Show mnemonic"));
 
-    openAction = new QAction(QIcon(":/icons/open"), tr("Open &URI..."), this);
+    openAction = new QAction(platformStyle->IconAlt(":/icons/open"), tr("Open &URI..."), this);
     openAction->setStatusTip(tr("Open a electrum: URI or payment request"));
 
-    showHelpMessageAction = new QAction(QApplication::style()->standardIcon(QStyle::SP_MessageBoxInformation), tr("&Command-line options"), this);
+    showHelpMessageAction = new QAction(platformStyle->IconAlt(":/icons/info"), tr("&Command-line options"), this);
     showHelpMessageAction->setMenuRole(QAction::NoRole);
     showHelpMessageAction->setStatusTip(tr("Show the %1 help message to get a list with possible Electrum command-line options").arg(tr(PACKAGE_NAME)));
 
     connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
     connect(aboutAction, SIGNAL(triggered()), this, SLOT(aboutClicked()));
-    connect(webInfoAction, SIGNAL(triggered()), this, SLOT(webInfoClicked()));
+    connect(infoAction, SIGNAL(triggered()), this, SLOT(infoClicked()));
     connect(aboutQtAction, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
     connect(optionsAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
     connect(optionsAction, SIGNAL(triggered()), this, SLOT(gotoSettingsPage()));
@@ -587,12 +541,7 @@ void ElectrumGUI::createActions()
     connect(cfundPaymentRequestsAction, SIGNAL(triggered()), this, SLOT(cfundPaymentRequestsClicked()));
     connect(toggleHideAction, SIGNAL(triggered()), this, SLOT(toggleHidden()));
     connect(showHelpMessageAction, SIGNAL(triggered()), this, SLOT(showHelpMessageClicked()));
-
-    // Jump directly to tabs in RPC-console
-    connect(openInfoAction, SIGNAL(triggered()), this, SLOT(showInfo()));
     connect(openRPCConsoleAction, SIGNAL(triggered()), this, SLOT(showDebugWindow()));
-    connect(openGraphAction, SIGNAL(triggered()), this, SLOT(showGraph()));
-    connect(openPeersAction, SIGNAL(triggered()), this, SLOT(showPeers()));
 
     // Get restart command-line parameters and handle restart
     connect(rpcConsole, SIGNAL(handleRestart(QStringList)), this, SLOT(handleRestart(QStringList)));
@@ -604,12 +553,9 @@ void ElectrumGUI::createActions()
     if(walletFrame)
     {
         connect(encryptWalletAction, SIGNAL(triggered(bool)), walletFrame, SLOT(encryptWallet(bool)));
-        //connect(unlockWalletAction, SIGNAL(triggered()), walletFrame, SLOT(unlockWalletStaking()));
+        connect(unlockWalletAction, SIGNAL(triggered()), walletFrame, SLOT(unlockWalletStaking()));
         connect(backupWalletAction, SIGNAL(triggered()), walletFrame, SLOT(backupWallet()));
         connect(changePassphraseAction, SIGNAL(triggered()), walletFrame, SLOT(changePassphrase()));
-        connect(unlockWalletAction, SIGNAL(triggered()), walletFrame, SLOT(unlockWallet()));
-        connect(unlockStakingAction, SIGNAL(triggered()), walletFrame, SLOT(unlockWalletStaking()));
-        connect(lockWalletAction, SIGNAL(triggered()), walletFrame, SLOT(lockWallet()));
         connect(signMessageAction, SIGNAL(triggered()), this, SLOT(gotoSignMessageTab()));
         connect(verifyMessageAction, SIGNAL(triggered()), this, SLOT(gotoVerifyMessageTab()));
         connect(usedSendingAddressesAction, SIGNAL(triggered()), walletFrame, SLOT(usedSendingAddresses()));
@@ -622,12 +568,8 @@ void ElectrumGUI::createActions()
     }
 #endif // ENABLE_WALLET
 
-    new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_I), this, SLOT(showInfo()));
     new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_C), this, SLOT(showDebugWindowActivateConsole()));
     new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_D), this, SLOT(showDebugWindow()));
-    new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_G), this, SLOT(showGraph()));
-    new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_P), this, SLOT(showPeers()));
-    new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_R), this, SLOT(showRepair()));
 }
 
 void ElectrumGUI::createMenuBar()
@@ -652,8 +594,8 @@ void ElectrumGUI::createMenuBar()
         file->addAction(usedSendingAddressesAction);
         file->addAction(usedReceivingAddressesAction);
         file->addSeparator();
-        //file->addAction(repairWalletAction);
-        //file->addSeparator();
+        file->addAction(repairWalletAction);
+        file->addSeparator();
         file->addAction(importPrivateKeyAction);
         file->addAction(exportMasterPrivateKeyAction);
         file->addAction(exportMnemonicAction);
@@ -664,37 +606,208 @@ void ElectrumGUI::createMenuBar()
     if(walletFrame)
     {
         settings->addAction(encryptWalletAction);
-        //settings->addAction(unlockWalletAction);
-        settings->addAction(changePassphraseAction);
         settings->addAction(unlockWalletAction);
-        settings->addAction(lockWalletAction);
-        settings->addAction(unlockStakingAction);
+        settings->addAction(changePassphraseAction);
         settings->addSeparator();
-        //settings->addAction(splitRewardAction);
-        //settings->addSeparator();
-        settings->addAction(generateColdStakingAction);
-        //settings->addAction(toggleStakingAction);
+        settings->addAction(toggleStakingAction);
+        settings->addAction(splitRewardAction);
+        settings->addSeparator();
         settings->addAction(updatePriceAction);
-        settings->addSeparator();
     }
     settings->addAction(optionsAction);
 
-    QMenu* tools = appMenuBar->addMenu(tr("&Tools"));
-    if (walletFrame) {
-        tools->addAction(openInfoAction);
-        tools->addAction(openRPCConsoleAction);
-        tools->addAction(openGraphAction);
-        tools->addAction(openPeersAction);
-        tools->addAction(repairWalletAction);
-        tools->addSeparator();
-    }
-
     QMenu *help = appMenuBar->addMenu(tr("&Help"));
-    help->addAction(webInfoAction);
+    if(walletFrame)
+    {
+        help->addAction(openRPCConsoleAction);
+    }
     help->addAction(showHelpMessageAction);
     help->addSeparator();
     help->addAction(aboutAction);
+    help->addAction(infoAction);
     help->addAction(aboutQtAction);
+}
+
+void ElectrumGUI::createHeaderWidgets()
+{
+    // Notifications layout vertical
+    QVBoxLayout* notificationLayout = new QVBoxLayout();
+    notificationLayout->setContentsMargins(0, 0, 0, 0);
+    notificationLayout->setSpacing(0);
+    notificationLayout->setAlignment(Qt::AlignVCenter);
+
+    // Add a spacer to header to create a background
+    QWidget* headerSpacer = new QWidget();
+    headerSpacer->setObjectName("HeaderSpacer");
+    headerSpacer->setLayout(notificationLayout);
+
+    // Build each new notification
+    for (unsigned i = 0; i < notifs_count; ++i)
+    {
+        // Add notifications
+        notifications[i] = new QLabel();
+        notifications[i]->hide();
+        notifications[i]->setWordWrap(true);
+        notifications[i]->setText(tr(notifs[i].text));
+        if (notifs[i].error == true)
+            notifications[i]->setProperty("class", "alert alert-danger");
+        else
+            notifications[i]->setProperty("class", "alert alert-warning");
+
+        // Add to notification layout
+        notificationLayout->addWidget(notifications[i]);
+    }
+
+    QWidget* balanceContainer = new QWidget();
+    balanceContainer->setObjectName("balanceContainer");
+    QWidget* stakedContainer = new QWidget();
+    stakedContainer->setObjectName("stakedContainer");
+
+    QVBoxLayout* balanceLayout = new QVBoxLayout();
+    balanceLayout->setContentsMargins(0, 0, 20 * GUIUtil::scale(), 0);
+    balanceLayout->setSpacing(5 * GUIUtil::scale());
+    balanceContainer->setLayout(balanceLayout);
+
+    QVBoxLayout* stakedLayout = new QVBoxLayout();
+    stakedLayout->setContentsMargins(20 * GUIUtil::scale(), 0, 0, 0);
+    stakedLayout->setSpacing(5 * GUIUtil::scale());
+    stakedContainer->setLayout(stakedLayout);
+
+    // Containers for the subbalance layouts
+    QWidget* balanceAvailContainer = new QWidget();
+    balanceAvailContainer->setObjectName("balanceAvailContainer");
+    QWidget* balancePendiContainer = new QWidget();
+    balancePendiContainer->setObjectName("balancePendiContainer");
+    QWidget* balanceImmatContainer = new QWidget();
+    balanceImmatContainer->setObjectName("balanceImmatContainer");
+
+    QWidget* stakedAvailContainer = new QWidget();
+    stakedAvailContainer->setObjectName("stakedAvailContainer");
+    QWidget* stakedPendiContainer = new QWidget();
+    stakedPendiContainer->setObjectName("stakedPendiContainer");
+    QWidget* stakedImmatContainer = new QWidget();
+    stakedImmatContainer->setObjectName("stakedImmatContainer");
+
+    // Layouts for the sub balance sections
+    QVBoxLayout* balanceAvailLayout = new QVBoxLayout();
+    balanceAvailLayout->setContentsMargins(0, 0, 0, 0);
+    balanceAvailLayout->setSpacing(0);
+    QVBoxLayout* balancePendiLayout = new QVBoxLayout();
+    balancePendiLayout->setContentsMargins(0, 0, 10 * GUIUtil::scale(), 0);
+    balancePendiLayout->setSpacing(0);
+    QVBoxLayout* balanceImmatLayout = new QVBoxLayout();
+    balanceImmatLayout->setContentsMargins(0, 0, 0, 0);
+    balanceImmatLayout->setSpacing(0);
+
+    // Layouts for the sub staked sections
+    QVBoxLayout* stakedAvailLayout = new QVBoxLayout();
+    stakedAvailLayout->setContentsMargins(0, 0, 0, 0);
+    stakedAvailLayout->setSpacing(0);
+    QVBoxLayout* stakedPendiLayout = new QVBoxLayout();
+    stakedPendiLayout->setContentsMargins(0, 0, 10 * GUIUtil::scale(), 0);
+    stakedPendiLayout->setSpacing(0);
+    QVBoxLayout* stakedImmatLayout = new QVBoxLayout();
+    stakedImmatLayout->setContentsMargins(0, 0, 0, 0);
+    stakedImmatLayout->setSpacing(0);
+
+    // Set the layouts for the containers
+    balanceAvailContainer->setLayout(balanceAvailLayout);
+    balancePendiContainer->setLayout(balancePendiLayout);
+    balanceImmatContainer->setLayout(balanceImmatLayout);
+    stakedAvailContainer->setLayout(stakedAvailLayout);
+    stakedPendiContainer->setLayout(stakedPendiLayout);
+    stakedImmatContainer->setLayout(stakedImmatLayout);
+
+    // Create our balance labels
+    balanceAvail = new QLabel();
+    balanceAvail->setObjectName("balanceAvail");
+    balanceAvail->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    balancePendi = new QLabel();
+    balancePendi->setObjectName("balancePendi");
+    balancePendi->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    balanceImmat = new QLabel();
+    balanceImmat->setObjectName("balanceImmat");
+    balanceImmat->setTextInteractionFlags(Qt::TextSelectableByMouse);
+
+    // Create our staked labels
+    stakedAvail = new QLabel();
+    stakedAvail->setObjectName("stakedAvail");
+    stakedAvail->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    stakedPendi = new QLabel();
+    stakedPendi->setObjectName("stakedPendi");
+    stakedPendi->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    stakedImmat = new QLabel();
+    stakedImmat->setObjectName("stakedImmat");
+    stakedImmat->setTextInteractionFlags(Qt::TextSelectableByMouse);
+
+    // Labels above the actual values
+    QLabel* balanceAvailLabel = new QLabel();
+    balanceAvailLabel->setText(tr("Available"));
+    balanceAvailLabel->setObjectName("balanceAvailLabel");
+    QLabel* balancePendiLabel = new QLabel();
+    balancePendiLabel->setText(tr("Pending"));
+    balancePendiLabel->setObjectName("balancePendiLabel");
+    QLabel* balanceImmatLabel = new QLabel();
+    balanceImmatLabel->setText(tr("Immature"));
+    balanceImmatLabel->setObjectName("balanceImmatLabel");
+    QLabel* stakedAvailLabel = new QLabel();
+    stakedAvailLabel->setText(tr("Staked"));
+    stakedAvailLabel->setObjectName("stakedAvailLabel");
+    QLabel* stakedPendiLabel = new QLabel();
+    stakedPendiLabel->setText(tr("Last 24 Hours"));
+    stakedPendiLabel->setObjectName("stakedPendiLabel");
+    QLabel* stakedImmatLabel = new QLabel();
+    stakedImmatLabel->setText(tr("Last 7 Days"));
+    stakedImmatLabel->setObjectName("stakedImmatLabel");
+
+    // Add these to the correct container
+    balanceAvailLayout->addWidget(balanceAvailLabel);
+    balanceAvailLayout->addWidget(balanceAvail);
+    balancePendiLayout->addWidget(balancePendiLabel);
+    balancePendiLayout->addWidget(balancePendi);
+    balanceImmatLayout->addWidget(balanceImmatLabel);
+    balanceImmatLayout->addWidget(balanceImmat);
+    stakedAvailLayout->addWidget(stakedAvailLabel);
+    stakedAvailLayout->addWidget(stakedAvail);
+    stakedPendiLayout->addWidget(stakedPendiLabel);
+    stakedPendiLayout->addWidget(stakedPendi);
+    stakedImmatLayout->addWidget(stakedImmatLabel);
+    stakedImmatLayout->addWidget(stakedImmat);
+
+    // Sub layout
+    QHBoxLayout* balanceSubLayout = new QHBoxLayout();
+    balanceSubLayout->setContentsMargins(0, 0, 0, 0);
+    balanceSubLayout->setSpacing(0);
+    balanceSubLayout->addWidget(balancePendiContainer);
+    balanceSubLayout->addWidget(balanceImmatContainer);
+
+    // Sub layout
+    QHBoxLayout* stakedSubLayout = new QHBoxLayout();
+    stakedSubLayout->setContentsMargins(0, 0, 0, 0);
+    stakedSubLayout->setSpacing(0);
+    stakedSubLayout->addWidget(stakedPendiContainer);
+    stakedSubLayout->addWidget(stakedImmatContainer);
+
+    // Balance sub
+    QWidget* balanceSub = new QWidget();
+    balanceSub->setLayout(balanceSubLayout);
+
+    balanceLayout->addWidget(balanceAvailContainer);
+    balanceLayout->addWidget(balanceSub);
+
+    // Staked sub
+    QWidget* stakedSub = new QWidget();
+    stakedSub->setLayout(stakedSubLayout);
+
+    stakedLayout->addWidget(stakedAvailContainer);
+    stakedLayout->addWidget(stakedSub);
+
+    // The balance amd staked
+    walletFrame->balanceLayout->addWidget(balanceContainer);
+    walletFrame->balanceLayout->addWidget(stakedContainer);
+
+    // Add the header spacer and header bar
+    walletFrame->headerLayout->addWidget(headerSpacer);
 }
 
 void ElectrumGUI::createToolBars()
@@ -1030,11 +1143,13 @@ void ElectrumGUI::setWalletActionsEnabled(bool enabled)
 
 void ElectrumGUI::createTrayIcon(const NetworkStyle *networkStyle)
 {
+#ifndef Q_OS_MAC
     trayIcon = new QSystemTrayIcon(this);
-    QString toolTip = tr("Electrum client") + " " + networkStyle->getTitleAddText();
+    QString toolTip = tr("%1 client").arg(tr(PACKAGE_NAME)) + " " + networkStyle->getTitleAddText();
     trayIcon->setToolTip(toolTip);
     trayIcon->setIcon(networkStyle->getTrayAndWindowIcon());
     trayIcon->hide();
+#endif
 
     notificator = new Notificator(QApplication::applicationName(), trayIcon, this);
 }
@@ -1067,17 +1182,8 @@ void ElectrumGUI::createTrayIconMenu()
     trayIconMenu->addAction(signMessageAction);
     trayIconMenu->addAction(verifyMessageAction);
     trayIconMenu->addSeparator();
-    trayIconMenu->addAction(overviewAction);
-    trayIconMenu->addAction(sendCoinsAction);
-    trayIconMenu->addAction(receiveCoinsAction);
-    trayIconMenu->addAction(historyAction);
-    trayIconMenu->addSeparator();
     trayIconMenu->addAction(optionsAction);
-    trayIconMenu->addAction(openInfoAction);
     trayIconMenu->addAction(openRPCConsoleAction);
-    trayIconMenu->addAction(openGraphAction);
-    trayIconMenu->addAction(openPeersAction);
-    trayIconMenu->addAction(repairWalletAction);
 #ifndef Q_OS_MAC // This is built-in on Mac
     trayIconMenu->addSeparator();
     trayIconMenu->addAction(quitAction);
@@ -1128,12 +1234,12 @@ void ElectrumGUI::aboutClicked()
     dlg.exec();
 }
 
-void ElectrumGUI::webInfoClicked()
+void ElectrumGUI::infoClicked()
 {
     if(!clientModel)
         return;
 
-    QString link = QString("https://ankh.foundation/");
+    QString link = QString("https://info.electrum.org/");
     QDesktopServices::openUrl(QUrl(link));
 }
 
@@ -1145,27 +1251,9 @@ void ElectrumGUI::showDebugWindow()
     rpcConsole->activateWindow();
 }
 
-void ElectrumGUI::showInfo()
-{
-    rpcConsole->setTabFocus(RPCConsole::TAB_INFO);
-    showDebugWindow();
-}
-
 void ElectrumGUI::showDebugWindowActivateConsole()
 {
     rpcConsole->setTabFocus(RPCConsole::TAB_CONSOLE);
-    showDebugWindow();
-}
-
-void ElectrumGUI::showGraph()
-{
-    rpcConsole->setTabFocus(RPCConsole::TAB_GRAPH);
-    showDebugWindow();
-}
-
-void ElectrumGUI::showPeers()
-{
-    rpcConsole->setTabFocus(RPCConsole::TAB_PEERS);
     showDebugWindow();
 }
 
@@ -1273,8 +1361,7 @@ void ElectrumGUI::setNumConnections(int count)
         case 7: case 8: case 9: icon = ":/icons/connect_3"; break;
         default: icon = ":/icons/connect_4"; break;
     }
-    QIcon connectionItem = QIcon(icon).pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE);
-    labelConnectionsIcon->setIcon(connectionItem);
+    labelConnectionsIcon->setPixmap(platformStyle->IconAlt(icon).pixmap(STATUSBAR_ICONSIZE * GUIUtil::scale(), STATUSBAR_ICONSIZE * GUIUtil::scale()));
     labelConnectionsIcon->setToolTip(tr("%n active connection(s) to Electrum network", "", count));
 }
 
@@ -1349,7 +1436,7 @@ void ElectrumGUI::setNumBlocks(int count, const QDateTime& blockDate, double nVe
     // Set icon state: spinning if catching up, tick otherwise
     if (secs < MAX_BLOCK_TIME_GAP) {
         tooltip = tr("Up to date") + QString(".<br>") + tooltip;
-        labelBlocksIcon->setPixmap(QIcon(":/icons/synced").pixmap(STATUSBAR_ICONSIZE * GUIUtil::scale(), STATUSBAR_ICONSIZE * GUIUtil::scale()));
+        labelBlocksIcon->setPixmap(platformStyle->IconAlt(":/icons/synced").pixmap(STATUSBAR_ICONSIZE * GUIUtil::scale(), STATUSBAR_ICONSIZE * GUIUtil::scale()));
 
 #ifdef ENABLE_WALLET
         if(walletFrame)
@@ -1373,7 +1460,7 @@ void ElectrumGUI::setNumBlocks(int count, const QDateTime& blockDate, double nVe
         progressBar->setVisible(true);
 
         tooltip = tr("Catching up...") + QString("<br>") + tooltip;
-        labelBlocksIcon->setPixmap(QIcon(QString(
+        labelBlocksIcon->setPixmap(platformStyle->IconAlt(QString(
             ":/movies/spinner-%1").arg(spinnerFrame, 3, 10, QChar('0')))
             .pixmap(STATUSBAR_ICONSIZE * GUIUtil::scale(), STATUSBAR_ICONSIZE * GUIUtil::scale()));
         spinnerFrame = (spinnerFrame + 1) % SPINNER_FRAMES;
@@ -1421,7 +1508,7 @@ void ElectrumGUI::showVotingDialog()
 
     QMessageBox msgBox;
     msgBox.setText(tr("Important network notice."));
-    msgBox.setInformativeText(tr("The Elecctrum network is currently voting on introducing changes on the consensus protocol. As a participant in our network, we value your input and the decision ultimately is yours. Please cast your vote. <br><br>For more information on the proposal, please visit <a href=\"https://electrum.org/community-fund\">this link</a><br><br>Would you like the Nav Coin Network to update the staking rewards to setup a decentralised community fund that will help grow the network?"));
+    msgBox.setInformativeText(tr("The Nav Coin Network is currently voting on introducing changes on the consensus protocol. As a participant in our network, we value your input and the decision ultimately is yours. Please cast your vote. <br><br>For more information on the proposal, please visit <a href=\"https://electrum.org/community-fund\">this link</a><br><br>Would you like the Nav Coin Network to update the staking rewards to setup a decentralised community fund that will help grow the network?"));
     QAbstractButton *myYesButton = msgBox.addButton(tr("Yes"), QMessageBox::YesRole);
     msgBox.addButton(trUtf8("No"), QMessageBox::NoRole);
     msgBox.setIcon(QMessageBox::Question);
@@ -1542,12 +1629,9 @@ void ElectrumGUI::closeEvent(QCloseEvent *event)
 void ElectrumGUI::showEvent(QShowEvent *event)
 {
     // enable the debug window when the main window shows up
-    openInfoAction->setEnabled(true);
     openRPCConsoleAction->setEnabled(true);
-    openGraphAction->setEnabled(true);
-    openPeersAction->setEnabled(true);
     aboutAction->setEnabled(true);
-    webInfoAction->setEnabled(true);
+    infoAction->setEnabled(true);
     optionsAction->setEnabled(true);
 }
 
@@ -1611,15 +1695,6 @@ bool ElectrumGUI::handlePaymentRequest(const SendCoinsRecipient& recipient)
     return false;
 }
 
-void ElectrumGUI::setHDStatus(int hdEnabled)
-{
-    labelWalletHDStatusIcon->setPixmap(platformStyle->SingleColorIcon(hdEnabled ? ":/icons/hd_enabled" : ":/icons/hd_disabled").pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE));
-    labelWalletHDStatusIcon->setToolTip(hdEnabled ? tr("HD key generation is <b>enabled</b>") : tr("HD key generation is <b>disabled</b>"));
-
-    // eventually disable the QLabel to set its opacity to 50%
-    labelWalletHDStatusIcon->setEnabled(hdEnabled);
-}
-
 void ElectrumGUI::setEncryptionStatus(int status)
 {
     if(fWalletUnlockStakingOnly)
@@ -1627,10 +1702,8 @@ void ElectrumGUI::setEncryptionStatus(int status)
         labelEncryptionIcon->setPixmap(platformStyle->IconAlt(":/icons/lock_closed").pixmap(STATUSBAR_ICONSIZE * GUIUtil::scale(), STATUSBAR_ICONSIZE * GUIUtil::scale()));
         labelEncryptionIcon->setToolTip(tr("Wallet is <b>encrypted</b> and currently <b>unlocked for staking only</b>"));
         changePassphraseAction->setEnabled(false);
-        encryptWalletAction->setEnabled(false);
         unlockWalletAction->setVisible(false);
-        unlockStakingAction->setVisible(false);
-        lockWalletAction->setVisible(false);
+        encryptWalletAction->setEnabled(false);
     }
     else
     {
@@ -1642,19 +1715,15 @@ void ElectrumGUI::setEncryptionStatus(int status)
         changePassphraseAction->setEnabled(false);
         encryptWalletAction->setEnabled(true);
         unlockWalletAction->setVisible(false);
-        unlockStakingAction->setVisible(false);
-        lockWalletAction->setVisible(false);
         break;
     case WalletModel::Unlocked:
         labelEncryptionIcon->show();
         labelEncryptionIcon->setPixmap(platformStyle->IconAlt(":/icons/lock_open").pixmap(STATUSBAR_ICONSIZE * GUIUtil::scale(), STATUSBAR_ICONSIZE * GUIUtil::scale()));
         labelEncryptionIcon->setToolTip(tr("Wallet is <b>encrypted</b> and currently <b>unlocked</b>"));
+        unlockWalletAction->setVisible(false);
         encryptWalletAction->setChecked(true);
         changePassphraseAction->setEnabled(true);
         encryptWalletAction->setEnabled(false); // TODO: decrypt currently not supported
-        unlockWalletAction->setVisible(false);
-        unlockStakingAction->setVisible(false);
-        lockWalletAction->setVisible(true);
         break;
     case WalletModel::Locked:
         labelEncryptionIcon->show();
@@ -1662,10 +1731,8 @@ void ElectrumGUI::setEncryptionStatus(int status)
         labelEncryptionIcon->setToolTip(tr("Wallet is <b>encrypted</b> and currently <b>locked</b>"));
         encryptWalletAction->setChecked(true);
         changePassphraseAction->setEnabled(true);
-        encryptWalletAction->setEnabled(false); // TODO: decrypt currently not supported
         unlockWalletAction->setVisible(true);
-        unlockStakingAction->setVisible(true);
-        lockWalletAction->setVisible(false);
+        encryptWalletAction->setEnabled(false); // TODO: decrypt currently not supported
         break;
     }
     }
@@ -1833,10 +1900,9 @@ void ElectrumGUI::toggleStaking()
                    CClientUIInterface::MSG_INFORMATION);
 }
 
-void ElectrumGUI::generateColdStaking()
+void ElectrumGUI::splitRewards()
 {
-    ColdStakingWizard wizard;
-    wizard.exec();
+    walletFrame->splitRewards();
 }
 
 #ifdef ENABLE_WALLET
@@ -1880,7 +1946,7 @@ void ElectrumGUI::updatePrice()
             CURL *curl;
             std::string response;
             std::string url(
-                    "https://api.coingecko.com/api/v3/simple/price?ids=0AE-coin&vs_currencies="
+                    "https://api.coingecko.com/api/v3/simple/price?ids=nav-coin&vs_currencies="
                     "BTC,"
                     "EUR,"
                     "USD,"
@@ -2052,8 +2118,8 @@ void ElectrumGUI::updateStakingStatus()
         nWeight /= COIN;
         nNetworkWeight /= COIN;
 
-            labelStakingIcon->setPixmap(QIcon(":/icons/staking_on").pixmap(STATUSBAR_ICONSIZE,STATUSBAR_ICONSIZE))
-            labelStakingIcon->setToolTip(text);
+        labelStakingIcon->setPixmap(platformStyle->IconAlt(":/icons/staking_on").pixmap(STATUSBAR_ICONSIZE * GUIUtil::scale(), STATUSBAR_ICONSIZE * GUIUtil::scale()));
+        labelStakingIcon->setToolTip(text);
     }
     else
     {
@@ -2071,7 +2137,7 @@ void ElectrumGUI::updateStakingStatus()
         else if (!nWeight)
             text = tr("Not staking because you don't have mature coins");
 
-        labelStakingIcon->setPixmap(QIcon(":/icons/staking_off").pixmap(STATUSBAR_ICONSIZE * GUIUtil::scale(), STATUSBAR_ICONSIZE * GUIUtil::scale()));
+        labelStakingIcon->setPixmap(platformStyle->IconAlt(":/icons/staking_off").pixmap(STATUSBAR_ICONSIZE * GUIUtil::scale(), STATUSBAR_ICONSIZE * GUIUtil::scale()));
         labelStakingIcon->setToolTip(text);
     }
 }

@@ -250,15 +250,6 @@ bool AskPassphraseDialog::event(QEvent *event)
     return QWidget::event(event);
 }
 
-void AskPassphraseDialog::toggleShowPassword(bool show)
-{
-    ui->toggleShowPasswordButton->setDown(show);
-    const auto mode = show ? QLineEdit::Normal : QLineEdit::Password;
-    ui->passEdit1->setEchoMode(mode);
-    ui->passEdit2->setEchoMode(mode);
-    ui->passEdit3->setEchoMode(mode);
-}
-
 bool AskPassphraseDialog::eventFilter(QObject *object, QEvent *event)
 {
     /* Detect Caps Lock.
