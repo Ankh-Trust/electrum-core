@@ -329,7 +329,7 @@ private Q_SLOTS:
     /** Show about dialog */
     void aboutClicked();
     /** Open Electrum Knowledge base */
-    void webInfoClicked();
+    void webIfoClicked();
     /** Show debug window */
     void showDebugWindow();
     /** Show debug window and set focus to the appropriate tab */
