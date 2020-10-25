@@ -2046,7 +2046,7 @@ void ElectrumGUI::updateStakingStatus()
         nWeight /= COIN;
         nNetworkWeight /= COIN;
 
-            labelStakingIcon->setPixmap(QIcon(":/icons/staking_on").pixmap(STATUSBAR_ICONSIZE,STATUSBAR_ICONSIZE));
+            labelStakingIcon->setPixmap(QIcon(":/icons/staking_on").pixmap(STATUSBAR_ICONSIZE,STATUSBAR_ICONSIZE))
             labelStakingIcon->setToolTip(text);
     }
     else
