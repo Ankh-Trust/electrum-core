@@ -99,8 +99,8 @@ OptionsDialog::OptionsDialog(const PlatformStyle *platformStyle, QWidget *parent
     ui->electrumAtStartup->setText(ui->electrumAtStartup->text().arg(tr(PACKAGE_NAME)));
 
     // Add the themes that we support
-    // ui->theme->addItem(tr("Light") + "("+ tr("default") + ")", QVariant("light"));
-    // ui->theme->addItem(tr("Dark"), QVariant("dark"));
+    ui->theme->addItem(tr("Light") + "("+ tr("default") + ")", QVariant("light"));
+    ui->theme->addItem(tr("Dark"), QVariant("dark"));
 
     ui->lang->setToolTip(ui->lang->toolTip().arg(tr(PACKAGE_NAME)));
     ui->lang->addItem(QString("(") + tr("default") + QString(")"), QVariant(""));
