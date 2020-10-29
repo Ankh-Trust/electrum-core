@@ -225,12 +225,10 @@ QVariant OptionsModel::data(const QModelIndex & index, int role) const
             return nDisplayUnit;
         case ThirdPartyTxUrls:
             return strThirdPartyTxUrls;
-        case Digits:
-            return settings.value("digits");
-        case Theme:
-            return settings.value("theme");
         case Language:
             return settings.value("language");
+        case Digits:
+            return settings.value("digits");
         case CoinControlFeatures:
             return fCoinControlFeatures;
         case DatabaseCache:
@@ -355,13 +353,6 @@ bool OptionsModel::setData(const QModelIndex & index, const QVariant & value, in
             if (strThirdPartyTxUrls != value.toString()) {
                 strThirdPartyTxUrls = value.toString();
                 settings.setValue("strThirdPartyTxUrls", strThirdPartyTxUrls);
-                setRestartRequired(true);
-            }
-            break;
-        case Theme:
-            if (theme != value.toString()) {
-                theme = value.toString();
-                settings.setValue("theme", value);
                 setRestartRequired(true);
             }
             break;
