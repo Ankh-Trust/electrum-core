@@ -792,30 +792,47 @@ QTabBar { alignment: left; }</string>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_Buttons">
      <item>
-      <widget class="QPushButton" name="openElectrumConfButton">
-       <property name="toolTip">
-        <string>Open the %1 configuration file from the working directory.</string>
-       </property>
-       <property name="text">
-        <string>Open Configuration File</string>
-       </property>
-       <property name="autoDefault">
-        <bool>false</bool>
-       </property>
-      </widget>
+      <layout class="QVBoxLayout" name="verticalLayout_Buttons">
+       <item>
+        <widget class="QPushButton" name="openElectrumConfButton">
+         <property name="toolTip">
+          <string>Open the %1 configuration file from the working directory.</string>
+         </property>
+         <property name="text">
+          <string>Open Configuration File</string>
+         </property>
+         <property name="autoDefault">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="resetButton">
+         <property name="toolTip">
+          <string>Reset all client options to default.</string>
+         </property>
+         <property name="text">
+          <string>&amp;Reset Options</string>
+         </property>
+         <property name="autoDefault">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
      <item>
-      <widget class="QPushButton" name="resetButton">
-       <property name="toolTip">
-        <string>Reset all client options to default.</string>
+      <spacer name="horizontalSpacer_1">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
        </property>
-       <property name="text">
-        <string>&amp;Reset Options</string>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>48</height>
+        </size>
        </property>
-       <property name="autoDefault">
-        <bool>false</bool>
-       </property>
-      </widget>
+      </spacer>
      </item>
      <item>
       <widget class="QLabel" name="statusLabel">
@@ -843,15 +860,38 @@ QTabBar { alignment: left; }</string>
       </widget>
      </item>
      <item>
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>48</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
       <widget class="QPushButton" name="okButton">
        <property name="text">
-        <string>&amp;Save</string>
+        <string>&amp;OK</string>
        </property>
        <property name="autoDefault">
         <bool>false</bool>
        </property>
        <property name="default">
         <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="cancelButton">
+       <property name="text">
+        <string>&amp;Cancel</string>
+       </property>
+       <property name="autoDefault">
+        <bool>false</bool>
        </property>
       </widget>
      </item>
