@@ -10,9 +10,6 @@
     <height>380</height>
    </rect>
   </property>
-  <property name="styleSheet">
-   <string notr="true"/>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QLabel" name="labelExplanation">
@@ -25,15 +22,19 @@
     </widget>
    </item>
    <item>
+    <widget class="QLineEdit" name="searchLineEdit">
+     <property name="placeholderText">
+      <string>Enter address or label to search</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QTableView" name="tableView">
      <property name="contextMenuPolicy">
       <enum>Qt::CustomContextMenu</enum>
      </property>
      <property name="toolTip">
       <string>Right-click to edit address or label</string>
-     </property>
-     <property name="styleSheet">
-      <string notr="true"/>
      </property>
      <property name="tabKeyNavigation">
       <bool>false</bool>
@@ -62,18 +63,15 @@
        <property name="toolTip">
         <string>Create a new address</string>
        </property>
-       <property name="styleSheet">
-        <string notr="true"/>
-       </property>
        <property name="text">
         <string>&amp;New</string>
-       </property>
-       <property name="default">
-        <bool>true</bool>
        </property>
        <property name="icon">
         <iconset>
          <normaloff>:/icons/add</normaloff>:/icons/add</iconset>
+       </property>
+       <property name="autoDefault">
+        <bool>false</bool>
        </property>
       </widget>
      </item>
@@ -82,15 +80,15 @@
        <property name="toolTip">
         <string>Copy the currently selected address to the system clipboard</string>
        </property>
-       <property name="styleSheet">
-        <string notr="true"/>
-       </property>
        <property name="text">
         <string>&amp;Copy</string>
        </property>
        <property name="icon">
-        <iconset>
+        <iconset resource="../electrum.qrc">
          <normaloff>:/icons/editcopy</normaloff>:/icons/editcopy</iconset>
+       </property>
+       <property name="autoDefault">
+        <bool>false</bool>
        </property>
       </widget>
      </item>
@@ -99,9 +97,6 @@
        <property name="toolTip">
         <string>Delete the currently selected address from the list</string>
        </property>
-       <property name="styleSheet">
-        <string notr="true"/>
-       </property>
        <property name="text">
         <string>&amp;Delete</string>
        </property>
@@ -109,12 +104,19 @@
         <iconset>
          <normaloff>:/icons/remove</normaloff>:/icons/remove</iconset>
        </property>
+       <property name="autoDefault">
+        <bool>false</bool>
+       </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="showPrivateKey">
        <property name="text">
         <string>Show Private Key</string>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>:/icons/privkey</normaloff>:/icons/privkey</iconset>
        </property>
       </widget>
      </item>
@@ -136,15 +138,15 @@
        <property name="toolTip">
         <string>Export the data in the current tab to a file</string>
        </property>
-       <property name="styleSheet">
-        <string notr="true"/>
-       </property>
        <property name="text">
         <string>&amp;Export</string>
        </property>
        <property name="icon">
         <iconset>
          <normaloff>:/icons/export</normaloff>:/icons/export</iconset>
+       </property>
+       <property name="autoDefault">
+        <bool>false</bool>
        </property>
       </widget>
      </item>
@@ -156,11 +158,11 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="styleSheet">
-        <string notr="true"/>
-       </property>
        <property name="text">
         <string>C&amp;lose</string>
+       </property>
+       <property name="autoDefault">
+        <bool>false</bool>
        </property>
       </widget>
      </item>
@@ -168,6 +170,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../electrum.qrc"/>
+ </resources>
  <connections/>
 </ui>
