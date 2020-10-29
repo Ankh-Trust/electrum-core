@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>640</width>
-    <height>385</height>
+    <height>404</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -30,19 +30,76 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="QWidget" name="progressBackground" native="true">
-     <layout class="QVBoxLayout" name="progressLayout" stretch="1">
+    <widget class="QWidget" name="bgWidget" native="true">
+     <property name="styleSheet">
+      <string notr="true">#bgWidget { background: rgba(0,0,0,220); }</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayoutMain" stretch="1">
+      <property name="leftMargin">
+       <number>60</number>
+      </property>
+      <property name="topMargin">
+       <number>60</number>
+      </property>
+      <property name="rightMargin">
+       <number>60</number>
+      </property>
+      <property name="bottomMargin">
+       <number>60</number>
+      </property>
       <item>
-       <widget class="QWidget" name="progressContent" native="true">
-        <layout class="QVBoxLayout" name="progressLayoutInner" stretch="1,0,0,0">
+       <widget class="QWidget" name="contentWidget" native="true">
+        <property name="styleSheet">
+         <string notr="true">#contentWidget { background: rgba(255,255,255,240); border-radius: 6px; }
+QLabel { color: rgb(40,40,40);  }</string>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayoutSub" stretch="1,0,0,0">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <property name="leftMargin">
+          <number>10</number>
+         </property>
+         <property name="topMargin">
+          <number>10</number>
+         </property>
+         <property name="rightMargin">
+          <number>10</number>
+         </property>
+         <property name="bottomMargin">
+          <number>10</number>
+         </property>
          <item>
-          <layout class="QHBoxLayout" name="iconTextLayout" stretch="0,1">
+          <layout class="QHBoxLayout" name="horizontalLayoutIconText" stretch="0,1">
+           <property name="topMargin">
+            <number>20</number>
+           </property>
            <item>
-            <layout class="QVBoxLayout" name="iconLayout">
+            <layout class="QVBoxLayout" name="verticalLayoutIcon">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
              <item>
-              <widget class="QLabel" name="warningIconLabel">
+              <widget class="QPushButton" name="warningIcon">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="text">
                 <string/>
+               </property>
+               <property name="icon">
+                <iconset>
+                 <normaloff>:/icons/warning</normaloff>
+                 <disabledoff>:/icons/warning</disabledoff>:/icons/warning</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>48</width>
+                 <height>48</height>
+                </size>
+               </property>
+               <property name="flat">
+                <bool>true</bool>
                </property>
               </widget>
              </item>
@@ -63,10 +120,16 @@
            </item>
            <item>
             <layout class="QVBoxLayout" name="verticalLayoutInfoText">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
              <item>
               <widget class="QLabel" name="infoText">
                <property name="text">
-                <string>Recent transactions may not yet be visible, and therefore your wallet's balance might be incorrect. This information will be correct once your wallet has finished synchronizing with the electrum network, as detailed below.</string>
+                <string>The displayed information may be out of date. Your wallet automatically synchronizes with the Electrum network after a connection is established, but this process has not completed yet. This means that recent transactions will not be visible, and the balance will not be up-to-date until this process has completed.</string>
                </property>
                <property name="textFormat">
                 <enum>Qt::RichText</enum>
@@ -85,7 +148,7 @@
                 </font>
                </property>
                <property name="text">
-                <string>Attempting to spend electrums that are affected by not-yet-displayed transactions will not be accepted by the network.</string>
+                <string>Spending 0AE may not be possible during that phase!</string>
                </property>
                <property name="textFormat">
                 <enum>Qt::RichText</enum>
@@ -286,12 +349,6 @@
             <widget class="QPushButton" name="closeButton">
              <property name="text">
               <string>Hide</string>
-             </property>
-             <property name="focusPolicy">
-              <enum>Qt::StrongFocus</enum>
-             </property>
-             <property name="default">
-              <bool>true</bool>
              </property>
             </widget>
            </item>
