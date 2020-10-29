@@ -228,7 +228,7 @@ QVariant OptionsModel::data(const QModelIndex & index, int role) const
         case Digits:
             return settings.value("digits");
         case Theme:
-            return theme;
+            return settings.value("theme");
         case Language:
             return settings.value("language");
         case CoinControlFeatures:
