@@ -11,8 +11,6 @@
 //! The required delta of headers to the estimated number of available headers until we show the IBD progress
 static constexpr int HEADER_HEIGHT_DELTA_SYNC = 24;
 
-class PlatformStyle;
-
 namespace Ui {
     class ModalOverlay;
 }
@@ -23,7 +21,7 @@ class ModalOverlay : public QWidget
     Q_OBJECT
 
 public:
-    explicit ModalOverlay(const PlatformStyle *platformStyle, QWidget *parent);
+    explicit ModalOverlay(QWidget *parent);
     ~ModalOverlay();
 
 public Q_SLOTS:
@@ -41,7 +39,6 @@ protected:
     bool event(QEvent* ev);
 
 private:
-    const PlatformStyle *platformStyle;
     Ui::ModalOverlay *ui;
     int bestHeaderHeight; //best known height (based on the headers)
     QDateTime bestHeaderDate;
