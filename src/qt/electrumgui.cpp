@@ -463,9 +463,9 @@ void ElectrumGUI::createActions()
     connect(sendCoinsMenuAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
     connect(sendCoinsMenuAction, SIGNAL(triggered()), this, SLOT(gotoSendCoinsPage()));
     connect(receiveCoinsAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
-    connect(receiveCoinsAction, SIGNAL(triggered()), this, SLOT(gotoRequestPaymentPage()));
+    connect(receiveCoinsAction, SIGNAL(triggered()), this, SLOT(gotoReceiveCoinsPage()));
     connect(receiveCoinsMenuAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
-    connect(receiveCoinsMenuAction, SIGNAL(triggered()), this, SLOT(gotoRequestPaymentPage()));
+    connect(receiveCoinsMenuAction, SIGNAL(triggered()), this, SLOT(gotoReceiveCoinsPage()));
     connect(historyAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
     connect(historyAction, SIGNAL(triggered()), this, SLOT(gotoHistoryPage()));
     connect(settingsAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
@@ -915,7 +915,7 @@ void ElectrumGUI::createToolBars()
     // Menu Button actions
     connect(menuBtns[0], SIGNAL(clicked()), this, SLOT(gotoOverviewPage()));
     connect(menuBtns[1], SIGNAL(clicked()), this, SLOT(gotoSendCoinsPage()));
-    connect(menuBtns[2], SIGNAL(clicked()), this, SLOT(gotoRequestPaymentPage()));
+    connect(menuBtns[2], SIGNAL(clicked()), this, SLOT(gotoReceiveCoinsPage()));
     connect(menuBtns[3], SIGNAL(clicked()), this, SLOT(gotoHistoryPage()));
     connect(menuBtns[4], SIGNAL(clicked()), this, SLOT(gotoCommunityFundPage()));
     connect(menuBtns[5], SIGNAL(clicked()), this, SLOT(gotoSettingsPage()));
@@ -1327,16 +1327,6 @@ void ElectrumGUI::gotoReceiveCoinsPage()
     setActiveMenu(2);
     receiveCoinsAction->setChecked(true);
     if (walletFrame) walletFrame->gotoReceiveCoinsPage();
-}
-
-void ElectrumGUI::gotoRequestPaymentPage()
-{
-    if (!checkSettingsSaved())
-        return;
-
-    setActiveMenu(2);
-    receiveCoinsAction->setChecked(true);
-    if (walletFrame) walletFrame->gotoRequestPaymentPage();
 }
 
 void ElectrumGUI::gotoSendCoinsPage(QString addr)
