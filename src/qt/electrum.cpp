@@ -670,10 +670,6 @@ int main(int argc, char *argv[])
     // Re-initialize translations after changing application name (language in network-specific settings can be different)
     initTranslations(qtTranslatorBase, qtTranslator, translatorBase, translator);
 
-    // Load the application styles
-    // Needs to be loaded after setting the app name from networkStyle
-    app.loadTheme();
-
 #ifdef ENABLE_WALLET
     /// 7. URI IPC sending
     // - Do this early as we don't want to bother initializing if we are just calling IPC
