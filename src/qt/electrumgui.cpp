@@ -75,6 +75,7 @@
 #include <QNetworkRequest>
 #include <QProgressBar>
 #include <QProgressDialog>
+#include <QPushButton>
 #include <QSettings>
 #include <QShortcut>
 #include <QSizePolicy>

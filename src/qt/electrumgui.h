@@ -21,6 +21,7 @@
 #include <QMenu>
 #include <QPainter>
 #include <QPoint>
+#include <QPushButton>
 #include <QToolButton>
 #include <QSystemTrayIcon>
 #include <QtNetwork>
