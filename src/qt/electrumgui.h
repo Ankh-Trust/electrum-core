@@ -127,7 +127,6 @@ private:
     QLabel* labelWalletHDStatusIcon;
     QPushButton* labelConnectionsIcon;
     QLabel *labelEncryptionIcon;
-    QLabel *labelConnectionsIcon;
     GUIUtil::ClickableLabel* labelBlocksIcon;
     QLabel *labelStakingIcon;
     QLabel *labelPrice;
