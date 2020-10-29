@@ -365,10 +365,9 @@ bool OptionsModel::setData(const QModelIndex & index, const QVariant & value, in
                 setRestartRequired(true);
             }
             break;
-        case Scaling:
-            if (nScaling != value.toInt()) {
-                nScaling = value.toInt();
-                settings.setValue("nScaling", value);
+        case Digits:
+            if (settings.value("digits") != value) {
+                settings.setValue("digits", value);
                 setRestartRequired(true);
             }
             break;
