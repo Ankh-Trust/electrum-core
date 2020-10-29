@@ -63,7 +63,6 @@ WalletView::WalletView(const PlatformStyle *platformStyle, QWidget *parent):
 
     receiveCoinsPage = new ReceiveCoinsDialog(platformStyle);
     sendCoinsPage = new SendCoinsDialog(platformStyle);
-    requestPaymentPage = new getAddressToReceive();
 
     usedSendingAddressesPage = new AddressBookPage(platformStyle, AddressBookPage::ForEditing, AddressBookPage::SendingTab, this);
     usedReceivingAddressesPage = new AddressBookPage(platformStyle, AddressBookPage::ForEditing, AddressBookPage::ReceivingTab, this);
@@ -73,7 +72,6 @@ WalletView::WalletView(const PlatformStyle *platformStyle, QWidget *parent):
     addWidget(transactionsPage);
     addWidget(receiveCoinsPage);
     addWidget(sendCoinsPage);
-    addWidget(requestPaymentPage);
     addWidget(daoPage);
 
     // Clicking on a transaction on the overview pre-selects the transaction on the transaction history page
@@ -92,8 +90,6 @@ WalletView::WalletView(const PlatformStyle *platformStyle, QWidget *parent):
     connect(sendCoinsPage, SIGNAL(message(QString,QString,unsigned int)), this, SIGNAL(message(QString,QString,unsigned int)));
     // Pass through messages from transactionView
     connect(transactionView, SIGNAL(message(QString,QString,unsigned int)), this, SIGNAL(message(QString,QString,unsigned int)));
-    connect(requestPaymentPage, SIGNAL(requestPayment()), this, SLOT(gotoReceiveCoinsPage()));
-    connect(requestPaymentPage, SIGNAL(requestAddressHistory()), this, SLOT(requestAddressHistory()));
 
     connect(daoPage, SIGNAL(daoEntriesChanged(int)), this, SLOT(onDaoEntriesChanged(int)));
 }
@@ -145,8 +141,6 @@ void WalletView::setWalletModel(WalletModel *walletModel)
     overviewPage->setWalletModel(walletModel);
     daoPage->setWalletModel(walletModel);
     receiveCoinsPage->setModel(walletModel);
-    requestPaymentPage->setModel(walletModel);
-    requestPaymentPage->showQR();
     sendCoinsPage->setModel(walletModel);
     usedReceivingAddressesPage->setModel(walletModel->getAddressTableModel());
     usedSendingAddressesPage->setModel(walletModel->getAddressTableModel());
@@ -229,10 +223,6 @@ void WalletView::gotoReceiveCoinsPage()
     daoPage->setActive(false);
 }
 
-void WalletView::gotoRequestPaymentPage(){
-    setCurrentWidget(requestPaymentPage);
-    daoPage->setActive(false);
-}
 
 void WalletView::gotoSendCoinsPage(QString addr)
 {
