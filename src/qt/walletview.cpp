@@ -9,7 +9,6 @@
 #include <qt/clientmodel.h>
 #include <qt/communityfundpage.h>
 #include <qt/daopage.h>
-#include <qt/getaddresstoreceive.h>
 #include <qt/guiutil.h>
 #include <qt/electrumgui.h>
 #include <qt/optionsdialog.h>
