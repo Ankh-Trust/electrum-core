@@ -18,6 +18,9 @@ public:
 
     const QString &getName() const { return name; }
 
+    bool getImagesOnButtons() const { return imagesOnButtons; }
+    bool getUseExtraSpacing() const { return useExtraSpacing; }
+
     QColor TextColor() const { return textColor; }
     QColor SingleColor() const { return singleColor; }
 
@@ -38,12 +41,15 @@ public:
     QIcon IconAlt(const QIcon& icon) const;
 
 private:
-    PlatformStyle();
+    PlatformStyle(const QString &name, bool imagesOnButtons, bool colorizeIcons, bool useExtraSpacing);
 
     QString name;
+    bool imagesOnButtons;
+    bool colorizeIcons;
+    bool useExtraSpacing;
     QColor singleColor;
     QColor textColor;
+    /* ... more to come later */
 };
 
 #endif // ELECTRUM_QT_PLATFORMSTYLE_H
-

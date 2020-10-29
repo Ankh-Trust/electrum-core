@@ -13,6 +13,22 @@
 #include <QPalette>
 #include <QPixmap>
 
+static const struct {
+    const char *platformId;
+    /** Show images on push buttons */
+    const bool imagesOnButtons;
+    /** Colorize single-color icons */
+    const bool colorizeIcons;
+    /** Extra padding/spacing in transactionview */
+    const bool useExtraSpacing;
+} platform_styles[] = {
+    {"macosx", false, false, true},
+    {"windows", true, false, false},
+    /* Other: linux, unix, ... */
+    {"other", true, false, false}
+};
+static const unsigned platform_styles_count = sizeof(platform_styles)/sizeof(*platform_styles);
+
 namespace {
 /* Local functions for colorizing single-color images */
 
@@ -56,7 +72,11 @@ QIcon ColorizeIcon(const QString& filename, const QColor& colorbase)
 }
 
 
-PlatformStyle::PlatformStyle():
+PlatformStyle::PlatformStyle(const QString &name, bool imagesOnButtons, bool colorizeIcons, bool useExtraSpacing):
+    name(name),
+    imagesOnButtons(imagesOnButtons),
+    colorizeIcons(colorizeIcons),
+    useExtraSpacing(useExtraSpacing),
     singleColor(0,0,0),
     textColor(0,0,0)
 {
@@ -97,8 +117,18 @@ QIcon PlatformStyle::IconAlt(const QIcon& icon) const
     return ColorizeIcon(icon, TextColor());
 }
 
-const PlatformStyle *PlatformStyle::instantiate()
+const PlatformStyle *PlatformStyle::instantiate(const QString &platformId)
 {
-    return new PlatformStyle();
+    for (unsigned x=0; x<platform_styles_count; ++x)
+    {
+        if (platformId == platform_styles[x].platformId)
+        {
+            return new PlatformStyle(
+                    platform_styles[x].platformId,
+                    platform_styles[x].imagesOnButtons,
+                    platform_styles[x].colorizeIcons,
+                    platform_styles[x].useExtraSpacing);
+        }
+    }
+    return 0;
 }
-
