@@ -333,6 +333,16 @@ ElectrumApplication::ElectrumApplication(int &argc, char **argv):
     returnValue(0)
 {
     setQuitOnLastWindowClosed(false);
+
+    // UI per-platform customization
+    // This must be done inside the ElectrumApplication constructor, or after it, because
+    // PlatformStyle::instantiate requires a QApplication
+    std::string platformName;
+    platformName = GetArg("-uiplatform", ElectrumGUI::DEFAULT_UIPLATFORM);
+    platformStyle = PlatformStyle::instantiate(QString::fromStdString(platformName));
+    if (!platformStyle) // Fall back to "other" if specified name not found
+        platformStyle = PlatformStyle::instantiate("other");
+    assert(platformStyle);
 }
 
 ElectrumApplication::~ElectrumApplication()
@@ -355,61 +365,6 @@ ElectrumApplication::~ElectrumApplication()
     optionsModel = 0;
     delete platformStyle;
     platformStyle = 0;
-}
-
-void ElectrumApplication::loadTheme()
-{
-    // Get an instance of settings
-    QSettings settings;
-
-    // What theme are we using? DEFAULT: light
-    QString theme = settings.value("theme").toString();
-
-    // Check theme
-    if (theme != "light" && theme != "dark") {
-        theme = "light";
-    }
-
-    qDebug() << __func__ << ": THEME LOADED: " << settings.value("theme").toString();
-
-    // Load the style sheet
-    QFile appQss(":/themes/app");
-    QFile sharedQss(":/themes/shared");
-    QFile themeQss(":/themes/" + theme);
-
-    // Check if we can access it
-    if (
-            appQss.open(QIODevice::ReadOnly) &&    // check app specific styles
-            sharedQss.open(QIODevice::ReadOnly) && // check shared stlyes
-            themeQss.open(QIODevice::ReadOnly)     // check theme styles
-       )
-    {
-        // Create a text stream
-        QTextStream appQssStream(&appQss);
-        QTextStream sharedQssStream(&sharedQss);
-        QTextStream themeQssStream(&themeQss);
-
-        // Load the whole stylesheet into the app
-        qApp->setStyleSheet(appQssStream.readAll() + sharedQssStream.readAll() + themeQssStream.readAll());
-
-        // Check if we which theme we want
-        if (theme == "dark") {
-            qApp->setStyle(new StyleDark);
-        } else {
-            qApp->setStyle(new StyleLight);
-        }
-
-        // Close the streams
-        appQss.close();
-        sharedQss.close();
-        themeQss.close();
-    }
-
-    // UI per-platform customization
-    // This must be done inside the ElectrumApplication constructor, or after it, because
-    // PlatformStyle::instantiate requires a QApplication
-    platformStyle = PlatformStyle::instantiate();
-    assert(platformStyle);
 }
 
 #ifdef ENABLE_WALLET
