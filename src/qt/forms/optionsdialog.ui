@@ -14,7 +14,8 @@
    <string>Options</string>
   </property>
   <property name="styleSheet">
-   <string notr="true"/>
+   <string notr="true">QTabWidget:tab-bar { alignment: left }
+QTabBar { alignment: left; }</string>
   </property>
   <property name="modal">
    <bool>true</bool>
@@ -57,9 +58,6 @@
          </item>
          <item>
           <widget class="QSpinBox" name="databaseCache">
-           <property name="styleSheet">
-            <string notr="true"/>
-           </property>
            <property name="frame">
             <bool>true</bool>
            </property>
@@ -112,9 +110,6 @@
           <widget class="QSpinBox" name="threadsScriptVerif">
            <property name="toolTip">
             <string>(0 = auto, &lt;0 = leave that many cores free)</string>
-           </property>
-           <property name="styleSheet">
-            <string notr="true"/>
            </property>
            <property name="frame">
             <bool>true</bool>
@@ -647,9 +642,6 @@
            <property name="toolTip">
             <string>The user interface language can be set here. This setting will take effect after restarting %1.</string>
            </property>
-           <property name="styleSheet">
-            <string notr="true"/>
-           </property>
           </widget>
          </item>
         </layout>
@@ -721,26 +713,16 @@
         </layout>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_Theme_Display">
+        <layout class="QHBoxLayout" name="horizontalLayout_5_Display">
          <item>
-          <widget class="QLabel" name="themeLabel">
+          <widget class="QLabel" name="digitsLabel">
            <property name="text">
-            <string>Wallet &amp;Theme:</string>
-           </property>
-           <property name="textFormat">
-            <enum>Qt::PlainText</enum>
-           </property>
-           <property name="buddy">
-            <cstring>theme</cstring>
+            <string>Decimal digits</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QValueComboBox" name="theme">
-           <property name="toolTip">
-            <string>User Interface Theme (What color scheme to use for the wallet GUI?)</string>
-           </property>
-          </widget>
+          <widget class="QValueComboBox" name="digits"/>
          </item>
         </layout>
        </item>
