@@ -285,20 +285,32 @@ ElectrumGUI::ElectrumGUI(const PlatformStyle *platformStyle, const NetworkStyle 
     labelStakingIcon->setProperty("class", "status-icon");
     labelPrice = new QLabel();
     labelPrice->setProperty("class", "StatusPrice");
-    labelConnectionsIcon = new QLabel();
+    labelWalletHDStatusIcon = new QLabel();
+    labelConnectionsIcon = new QPushButton();
+    labelConnectionsIcon->setFlat(true); // Make the button look like a label, but clickable
+    labelConnectionsIcon->setMaximumSize(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE);
     labelConnectionsIcon->setProperty("class", "status-icon");
+    // Jump to peers tab by clicking on connections icon
+    connect(labelConnectionsIcon, SIGNAL(clicked()), this, SLOT(showPeers()));
     labelBlocksIcon = new GUIUtil::ClickableLabel();
     labelBlocksIcon->setProperty("class", "status-icon");
     if(enableWallet)
     {
-        walletFrame->statusLayout->addWidget(labelPrice);
-        walletFrame->statusLayout->addWidget(labelEncryptionIcon);
-        walletFrame->statusLayout->addWidget(labelStakingIcon);
+        frameBlocksLayout->addStretch();
+        frameBlocksLayout->addWidget(labelPrice);
+        frameBlocksLayout->addStretch();
+        frameBlocksLayout->addWidget(unitDisplayControl);
+        frameBlocksLayout->addStretch();
+        frameBlocksLayout->addWidget(labelEncryptionIcon);
+        frameBlocksLayout->addWidget(labelWalletHDStatusIcon);
+        frameBlocksLayout->addStretch();
+        frameBlocksLayout->addWidget(labelStakingIcon);
     }
-    walletFrame->statusLayout->addWidget(labelConnectionsIcon);
-    walletFrame->statusLayout->addWidget(labelBlocksIcon);
-    if(enableWallet)
-        walletFrame->statusLayout->addWidget(unitDisplayControl);
+    frameBlocksLayout->addStretch();
+    frameBlocksLayout->addWidget(labelConnectionsIcon);
+    frameBlocksLayout->addStretch();
+    frameBlocksLayout->addWidget(labelBlocksIcon);
+    frameBlocksLayout->addStretch();
 
     updatePrice(); // First price update
 
