@@ -90,6 +90,16 @@
 #include <QVariantMap>
 #include <QWidget>
 
+const std::string ElectrumGUI::DEFAULT_UIPLATFORM =
+#if defined(Q_OS_MAC)
+        "macosx"
+#elif defined(Q_OS_WIN)
+        "windows"
+#else
+        "other"
+#endif
+        ;
+
 static const struct {
     bool error;
     const char *text;

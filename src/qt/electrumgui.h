@@ -65,7 +65,8 @@ class ElectrumGUI : public QMainWindow
 
 public:
     static const QString DEFAULT_WALLET;
-
+    static const std::string DEFAULT_UIPLATFORM;
+    
     explicit ElectrumGUI(const PlatformStyle *platformStyle, const NetworkStyle *networkStyle, QWidget *parent = 0);
     ~ElectrumGUI();
 
