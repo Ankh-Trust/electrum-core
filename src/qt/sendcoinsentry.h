@@ -47,6 +47,7 @@ public:
     void setFocus();
 
     void setTotalAmount(const CAmount& amount);
+    void useFullAmount();
 
     CAmount totalAmount;
 
@@ -62,11 +63,8 @@ private Q_SLOTS:
     void deleteClicked();
     void on_payTo_textChanged(const QString &address);
     void on_addressBookButton_clicked();
+    void on_pasteButton_clicked();
     void updateDisplayUnit();
-    void updateAddressBook();
-    void useFullAmount();
-    void coinControlFeaturesChanged(bool enabled);
-    void _coinControlFeaturesChanged(bool enabled);
 
 private:
     SendCoinsRecipient recipient;
