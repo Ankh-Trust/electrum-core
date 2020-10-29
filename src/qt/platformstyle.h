@@ -14,7 +14,7 @@ class PlatformStyle
 {
 public:
     /** Get style associated with provided platform name, or 0 if not known */
-    static const PlatformStyle *instantiate();
+    static const PlatformStyle* instantiate(const QString& platformId);
 
     const QString &getName() const { return name; }
 
