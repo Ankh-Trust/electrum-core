@@ -40,8 +40,7 @@ public:
         ProxyPortTor,           // int
         DisplayUnit,            // ElectrumUnits::Unit
         ThirdPartyTxUrls,       // QString
-        Theme,                  // QString
-        Scaling,                // int
+        Digits,                 // QString
         Language,               // QString
         CoinControlFeatures,    // bool
         ThreadsScriptVerif,     // int

@@ -72,12 +72,15 @@ void OptionsModel::Init(bool resetSettings)
     nDisplayUnit = settings.value("nDisplayUnit").toInt();
 
     if (!settings.contains("strThirdPartyTxUrls"))
-        settings.setValue("strThirdPartyTxUrls", "https://www.navexplorer.com/tx/%s");
-    strThirdPartyTxUrls = settings.value("strThirdPartyTxUrls", "https://www.navexplorer.com/tx/%s").toString();
+        settings.setValue("strThirdPartyTxUrls", "https://0AE.ankh-trust.com/tx/%s");
+    strThirdPartyTxUrls = settings.value("strThirdPartyTxUrls", "https://0AE.ankh-trust.com/tx/%s").toString();
 
     if (!settings.contains("fCoinControlFeatures"))
         settings.setValue("fCoinControlFeatures", false);
     fCoinControlFeatures = settings.value("fCoinControlFeatures", false).toBool();
+
+    if (!settings.contains("digits"))
+        settings.setValue("digits", "2");
 
     // These are shared with the core or have a command-line parameter
     // and we want command-line parameters to overwrite the GUI settings.
@@ -136,18 +139,6 @@ void OptionsModel::Init(bool resetSettings)
         addOverriddenOption("-onion");
     else if(!settings.value("fUseSeparateProxyTor").toBool() && !GetArg("-onion", "").empty())
         addOverriddenOption("-onion");
-
-    // Theme
-    if (!settings.contains("theme"))
-        settings.setValue("theme", "light");
-
-    theme = settings.value("theme").toString();
-
-    // UI Scaling
-    if (!settings.contains("nScaling"))
-        settings.setValue("nScaling", 100);
-
-    nScaling = settings.value("nScaling").toInt();
 
     // Display
     if (!settings.contains("language"))
@@ -234,10 +225,10 @@ QVariant OptionsModel::data(const QModelIndex & index, int role) const
             return nDisplayUnit;
         case ThirdPartyTxUrls:
             return strThirdPartyTxUrls;
+        case Digits:
+            return settings.value("digits");
         case Theme:
             return theme;
-        case Scaling:
-            return nScaling;
         case Language:
             return settings.value("language");
         case CoinControlFeatures:

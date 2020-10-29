@@ -93,6 +93,15 @@ OptionsDialog::OptionsDialog(const PlatformStyle *platformStyle, QWidget *parent
 #endif
 
     /* Display elements init */
+
+    /* Number of displayed decimal digits selector */
+    QString digits;
+    for (int index = 2; index <= 8; index++) {
+        digits.setNum(index);
+        ui->digits->addItem(digits, digits);
+    }
+
+    /* Language selector */
     QDir translations(":translations");
 
     ui->electrumAtStartup->setToolTip(ui->electrumAtStartup->toolTip().arg(tr(PACKAGE_NAME)));
@@ -117,7 +126,7 @@ OptionsDialog::OptionsDialog(const PlatformStyle *platformStyle, QWidget *parent
         }
     }
 
-    ui->thirdPartyTxUrls->setPlaceholderText("https://www.navexplorer.com/tx/%s");
+    ui->thirdPartyTxUrls->setPlaceholderText("https://0AE.ankh-trust.com/tx/%s");
 
     ui->unit->setModel(new ElectrumUnits(this));
 
