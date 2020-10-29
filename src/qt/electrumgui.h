@@ -124,6 +124,8 @@ private:
     WalletFrame *walletFrame;
 
     QComboBox *unitDisplayControl;
+    QLabel* labelWalletHDStatusIcon;
+    QPushButton* labelConnectionsIcon;
     QLabel *labelEncryptionIcon;
     QLabel *labelConnectionsIcon;
     GUIUtil::ClickableLabel* labelBlocksIcon;

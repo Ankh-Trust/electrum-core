@@ -119,6 +119,7 @@ ElectrumGUI::ElectrumGUI(const PlatformStyle *platformStyle, const NetworkStyle 
     walletFrame(0),
     unitDisplayControl(0),
     labelEncryptionIcon(0),
+    labelWalletHDStatusIcon(0),
     labelConnectionsIcon(0),
     labelBlocksIcon(0),
     labelStakingIcon(0),
@@ -1711,6 +1712,15 @@ bool ElectrumGUI::handlePaymentRequest(const SendCoinsRecipient& recipient)
         return true;
     }
     return false;
+}
+
+void ElectrumGUI::setHDStatus(int hdEnabled)
+{
+    labelWalletHDStatusIcon->setPixmap(platformStyle->SingleColorIcon(hdEnabled ? ":/icons/hd_enabled" : ":/icons/hd_disabled").pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE));
+    labelWalletHDStatusIcon->setToolTip(hdEnabled ? tr("HD key generation is <b>enabled</b>") : tr("HD key generation is <b>disabled</b>"));
+
+    // eventually disable the QLabel to set its opacity to 50%
+    labelWalletHDStatusIcon->setEnabled(hdEnabled);
 }
 
 void ElectrumGUI::setEncryptionStatus(int status)
