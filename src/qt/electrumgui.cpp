@@ -176,8 +176,9 @@ ElectrumGUI::ElectrumGUI(const PlatformStyle *platformStyle, const NetworkStyle 
     updatePriceAction(0),
     fShowingVoting(0)
 {
-    GUIUtil::restoreWindowGeometry("nWindow", QSize(800, 600), this);
-    QString windowTitle = tr(PACKAGE_NAME) + " - ";
+    GUIUtil::restoreWindowGeometry("nWindow", QSize(1152, 576), this);
+    setMinimumSize(QSize(1152, 576));
+    QString windowTitle = tr("Electrum Core") + "";
 #ifdef ENABLE_WALLET
     /* if compiled with wallet support, -disablewallet can still disable the wallet */
     enableWallet = !GetBoolArg("-disablewallet", false);
@@ -261,13 +262,18 @@ ElectrumGUI::ElectrumGUI(const PlatformStyle *platformStyle, const NetworkStyle 
     statusBar();
 
     // Disable size grip because it looks ugly and nobody needs it
-    statusBar()->setSizeGripEnabled(false);
+    statusBar()->setSizeGripEnabled(true);
 
     // Status bar notification icons
+    QFrame *frameBlocks = new QFrame();
+    frameBlocks->setContentsMargins(0,0,0,0);
+    frameBlocks->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+    QHBoxLayout *frameBlocksLayout = new QHBoxLayout(frameBlocks);
+    frameBlocksLayout->setContentsMargins(3,0,3,0);
+    frameBlocksLayout->setSpacing(3);
     unitDisplayControl = new QComboBox();
     unitDisplayControl->setEditable(true);
     unitDisplayControl->setInsertPolicy(QComboBox::NoInsert);
-    unitDisplayControl->setFixedHeight(25 * scale());
     for(ElectrumUnits::Unit u: ElectrumUnits::availableUnits())
     {
         unitDisplayControl->addItem(QString(ElectrumUnits::name(u)), u);
