@@ -110,7 +110,6 @@ QT_FORMS_UI = \
 	qt/forms/communityfundsuccessdialog.ui \
 	qt/forms/debugwindow.ui \
 	qt/forms/editaddressdialog.ui \
-	qt/forms/getaddresstoreceive.ui \
 	qt/forms/helpmessagedialog.ui \
 	qt/forms/modaloverlay.ui \
 	qt/forms/openuridialog.ui \
@@ -150,7 +149,6 @@ QT_MOC_CPP = \
 	qt/moc_communityfundsuccessdialog.cpp \
 	qt/moc_csvmodelwriter.cpp \
 	qt/moc_editaddressdialog.cpp \
-	qt/moc_getaddresstoreceive.cpp \
 	qt/moc_guiutil.cpp \
 	qt/moc_macappnapinhibitor.cpp \
 	qt/moc_macdockiconhandler.cpp \
@@ -266,7 +264,6 @@ ELECTRUM_QT_H = \
 	qt/communityfundsuccessdialog.h \
 	qt/csvmodelwriter.h \
 	qt/editaddressdialog.h \
-	qt/getaddresstoreceive.h \
 	qt/guiconstants.h \
 	qt/guiutil.h \
 	qt/listview.h \
@@ -468,7 +465,6 @@ ELECTRUM_QT_CPP = \
 	qt/bantablemodel.cpp \
 	qt/clientmodel.cpp \
 	qt/csvmodelwriter.cpp \
-	qt/getaddresstoreceive.cpp \
 	qt/guiutil.cpp \
 	qt/electrumaddressvalidator.cpp \
 	qt/electrumamountfield.cpp \
