@@ -411,14 +411,14 @@ void ElectrumGUI::createActions()
 {
     QActionGroup *tabGroup = new QActionGroup(this);
 
-    overviewAction = new QAction(platformStyle->Icon(":/icons/overview"), tr("&Overview"), this);
+    overviewAction = new QAction(QIcon(":/icons/overview"), tr("&Overview"), this);
     overviewAction->setStatusTip(tr("Show general overview of wallet"));
     overviewAction->setToolTip(overviewAction->statusTip());
     overviewAction->setCheckable(true);
     overviewAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_1));
     tabGroup->addAction(overviewAction);
 
-    sendCoinsAction = new QAction(platformStyle->Icon(":/icons/send"), tr("&Send"), this);
+    sendCoinsAction = new QAction(QIcon(":/icons/send"), tr("&Send"), this);
     sendCoinsAction->setStatusTip(tr("Send coins to a Electrum address"));
     sendCoinsAction->setToolTip(sendCoinsAction->statusTip());
     sendCoinsAction->setCheckable(true);
@@ -429,7 +429,7 @@ void ElectrumGUI::createActions()
     sendCoinsMenuAction->setStatusTip(sendCoinsAction->statusTip());
     sendCoinsMenuAction->setToolTip(sendCoinsMenuAction->statusTip());
 
-    receiveCoinsAction = new QAction(platformStyle->Icon(":/icons/receiving_addresses"), tr("&Receive"), this);
+    receiveCoinsAction = new QAction(QIcon(":/icons/receiving_addresses"), tr("&Receive"), this);
     receiveCoinsAction->setStatusTip(tr("Request payments (generates QR codes and electrum: URIs)"));
     receiveCoinsAction->setToolTip(receiveCoinsAction->statusTip());
     receiveCoinsAction->setCheckable(true);
@@ -446,21 +446,21 @@ void ElectrumGUI::createActions()
     splitRewardAction = new QAction(tr("Set up staking rewards"), this);
     splitRewardAction->setStatusTip(tr("Configure how to split the staking rewards"));
 
-    historyAction = new QAction(platformStyle->Icon(":/icons/transactions"), tr("&Transactions"), this);
+    historyAction = new QAction(QIcon(":/icons/transactions"), tr("&Transactions"), this);
     historyAction->setStatusTip(tr("Browse transaction history"));
     historyAction->setToolTip(historyAction->statusTip());
     historyAction->setCheckable(true);
     historyAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_4));
     tabGroup->addAction(historyAction);
 
-    daoAction = new QAction(platformStyle->Icon(":/icons/dao"), tr("&DAO"), this);
+    daoAction = new QAction(QIcon(":/icons/dao"), tr("&DAO"), this);
     daoAction->setStatusTip(tr("Participate in the DAO"));
     daoAction->setToolTip(daoAction->statusTip());
     daoAction->setCheckable(true);
     daoAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_5));
     tabGroup->addAction(daoAction);
 
-    settingsAction = new QAction(platformStyle->Icon(":/icons/options"), tr("&Settings"), this);
+    settingsAction = new QAction(QIcon(":/icons/options"), tr("&Settings"), this);
     settingsAction->setStatusTip(tr("Update settings"));
     settingsAction->setToolTip(settingsAction->statusTip());
     settingsAction->setCheckable(true);
