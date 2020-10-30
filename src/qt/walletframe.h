@@ -38,12 +38,12 @@ public:
     void removeAllWallets();
 
     bool handlePaymentRequest(const SendCoinsRecipient& recipient);
-    
+
     void showOutOfSyncWarning(bool fShow);
     WalletView *currentWalletView();
 
     QWidget *topMenu;
-    QVBoxLayout *menuLayout;
+    QHBoxLayout *menuLayout;
     QVBoxLayout *headerLayout;
     QHBoxLayout *headLayout;
     QHBoxLayout *balanceLayout;

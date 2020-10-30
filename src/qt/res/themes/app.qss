@@ -33,6 +33,19 @@
     color: #856404;
 }
 
+.main-menu-btn {
+    padding: 0.5em 0.2em 0.5em 0.5em;
+    border: 0;
+    color: #fafafa;
+    background: #3e1e6e;
+    border-right: 0.3em solid #3e1e6e;
+}
+
+.main-menu-btn:disabled {
+    background: #351565;
+    border-color: #c42bb7;
+}
+
 .main-menu-bubble {
     border-radius: 0.2em;
     background: #c42bb7;

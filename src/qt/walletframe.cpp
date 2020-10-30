@@ -32,7 +32,7 @@ WalletFrame::WalletFrame(const PlatformStyle *platformStyle, ElectrumGUI *_gui) 
     mainLayout->setContentsMargins(0, 0, 0, 0);
     mainLayout->setSpacing(0);
 
-    menuLayout = new QVBoxLayout();
+    menuLayout = new QHBoxLayout();
     menuLayout->setContentsMargins(0, 0, 0, 0);
     menuLayout->setSpacing(0);
 
