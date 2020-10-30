@@ -730,6 +730,14 @@ void ElectrumGUI::showHideNotification(bool show, int index)
     notifications[index]->setVisible(show);
 }
 
+void ElectrumGUI::setActiveMenu(int index)
+{
+    for (int i = 0; i < 5; ++i)
+    {
+        menuBtns[i]->setDisabled(i == index);
+    }
+}
+
 bool ElectrumGUI::checkSettingsSaved()
 {
     // Make sure we have a model
