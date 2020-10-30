@@ -804,7 +804,7 @@ void ElectrumGUI::showHideNotification(bool show, int index)
 
 void ElectrumGUI::setActiveMenu(int index)
 {
-    for (int i = 0; i < 6; ++i)
+    for (int i = 0; i < 5; ++i)
     {
         menuBtns[i]->setDisabled(i == index);
     }
