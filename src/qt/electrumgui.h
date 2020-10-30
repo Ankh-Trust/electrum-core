@@ -162,8 +162,6 @@ private:
     QAction *lockWalletAction;
     QAction *toggleStakingAction;
     QAction *splitRewardAction;
-    QToolButton *menuBtns[6];
-    QLabel *menuBubbles[6];
     QLabel *notifications[3];
 
     QSystemTrayIcon *trayIcon;

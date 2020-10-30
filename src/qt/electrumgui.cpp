@@ -661,64 +661,29 @@ void ElectrumGUI::createMenuBar()
 
 void ElectrumGUI::createToolBars()
 {
-    if(walletFrame == nullptr)
-        return;
-
-    // Buttons icon
-    QString btnNamesIcon[5] = {
-        "home",
-        "send",
-        "receive",
-        "transactions",
-        "dao",
-    };
-
-    // Buttons text
-    std::string btnNamesText[5] = {
-        "Overview",
-        "Send",
-        "Receive",
-        "Transactions",
-        "DAO",
-    };
-
-    // Build each new button
-    for (unsigned i = 0; i < 5; ++i)
+#ifdef ENABLE_WALLET
+    if(walletFrame)
     {
-        // Create the icon
-        QIcon icon = QIcon(":/icons/" + btnNamesIcon[i]);
+        QToolBar* toolbar = new QToolBar(tr("Tabs toolbar"));
+        toolbar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+        toolbar->addAction(overviewAction);
+        toolbar->addAction(sendCoinsAction);
+        toolbar->addAction(receiveCoinsAction);
+        toolbar->addAction(historyAction);
 
-        // Create the menu button
-        menuBtns[i] = new QToolButton();
-        menuBtns[i]->setText(tr(btnNamesText[i].c_str()));
-        menuBtns[i]->setIcon(icon);
-        menuBtns[i]->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-        menuBtns[i]->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
-        menuBtns[i]->setProperty("class", "main-menu-btn");
-
-        // Attach to the layout and assign click events
-        walletFrame->menuLayout->addWidget(menuBtns[i]);
-
-        // Create a bubble layout
-        QVBoxLayout* bubbleLayout = new QVBoxLayout(menuBtns[i]);
-        bubbleLayout->setContentsMargins(0, 10, 10, 0);
-        bubbleLayout->setSpacing(0);
-        bubbleLayout->setAlignment(Qt::AlignRight | Qt::AlignTop); // Move it to the top right
-
-        // Create the bubble and place in the bubble layout
-        menuBubbles[i] = new QLabel();
-        menuBubbles[i]->hide();
-        menuBubbles[i]->setText("1");
-        menuBubbles[i]->setProperty("class", "main-menu-bubble");
-        bubbleLayout->addWidget(menuBubbles[i]);
+        /** Create additional container for toolbar and walletFrame and make it the central widget.
+            This is a workaround mostly for toolbar styling on Mac OS but should work fine for every other OSes too.
+        */
+        QVBoxLayout* layout = new QVBoxLayout;
+        layout->addWidget(toolbar);
+        layout->addWidget(walletFrame);
+        layout->setSpacing(0);
+        layout->setContentsMargins(QMargins());
+        QWidget* containerWidget = new QWidget();
+        containerWidget->setLayout(layout);
+        setCentralWidget(containerWidget);
     }
-
-    // Menu Button actions
-    connect(menuBtns[0], SIGNAL(clicked()), this, SLOT(gotoOverviewPage()));
-    connect(menuBtns[1], SIGNAL(clicked()), this, SLOT(gotoSendCoinsPage()));
-    connect(menuBtns[2], SIGNAL(clicked()), this, SLOT(gotoReceiveCoinsPage()));
-    connect(menuBtns[3], SIGNAL(clicked()), this, SLOT(gotoHistoryPage()));
-    connect(menuBtns[4], SIGNAL(clicked()), this, SLOT(gotoCommunityFundPage()));
+#endif // ENABLE_WALLET
 }
 
 void ElectrumGUI::createHeaderWidgets()
