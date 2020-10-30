@@ -231,7 +231,7 @@ ElectrumGUI::ElectrumGUI(const PlatformStyle *platformStyle, const NetworkStyle 
     {
         /** Create wallet frame and make it the central widget */
         walletFrame = new WalletFrame(platformStyle, this);
-        setCentralWidget(walletFrame);        
+        setCentralWidget(walletFrame);
     } else
 #endif // ENABLE_WALLET
     {
@@ -408,11 +408,6 @@ ElectrumGUI::~ElectrumGUI()
 #endif
 
     delete rpcConsole;
-}
-
-float ElectrumGUI::scale()
-{
-    return GUIUtil::scale();
 }
 
 void ElectrumGUI::createActions()

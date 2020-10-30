@@ -71,9 +71,6 @@ public:
     explicit ElectrumGUI(const PlatformStyle *platformStyle, const NetworkStyle *networkStyle, QWidget *parent = 0);
     ~ElectrumGUI();
 
-    /** Get the screen scale, usefull for scaling UI elements */
-    float scale();
-
     /** Show/Hide the wallet sync warning notification */
     void showOutOfSyncWarning(bool fShow);
 
