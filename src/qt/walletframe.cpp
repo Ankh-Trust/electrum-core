@@ -21,6 +21,8 @@ WalletFrame::WalletFrame(const PlatformStyle *platformStyle, ElectrumGUI *_gui) 
     gui(_gui),
     platformStyle(platformStyle)
 {
+    int headerMargin = 15;
+
     // Leave HBox hook for adding a list view later
     QHBoxLayout *frameLayout = new QHBoxLayout(this);
     frameLayout->setSpacing(0);
