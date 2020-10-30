@@ -659,6 +659,42 @@ void ElectrumGUI::createMenuBar()
 
 void ElectrumGUI::createToolBars()
 {
+#ifdef ENABLE_WALLET
+    if(walletFrame)
+    {
+        QToolBar* toolbar = new QToolBar(tr("Tabs toolbar"));
+        toolbar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+        toolbar->addAction(overviewAction);
+        toolbar->addAction(sendCoinsAction);
+        toolbar->addAction(receiveCoinsAction);
+        toolbar->addAction(historyAction);
+
+        /** Create additional container for toolbar and walletFrame and make it the central widget.
+            This is a workaround mostly for toolbar styling on Mac OS but should work fine for every other OSes too.
+        */
+        QVBoxLayout* layout = new QVBoxLayout;
+        layout->addWidget(toolbar);
+        layout->addWidget(walletFrame);
+        layout->setSpacing(0);
+        layout->setContentsMargins(QMargins());
+        QWidget* containerWidget = new QWidget();
+        containerWidget->setLayout(layout);
+        setCentralWidget(containerWidget);
+
+/*
+ *      topMenu5 = new QPushButton();
+ *      walletFrame->menuLayout->addWidget(topMenu5);
+ *      topMenu5->setFixedSize(215,94);
+ *      topMenu5->setObjectName("topMenu5");
+ *      connect(topMenu5, SIGNAL(clicked()), this, SLOT(gotoCommunityFundPage()));
+ *      topMenu5->setStyleSheet(
+ *                  "#topMenu5 { background: url(:/icons/menu_community_fund_ns) bottom center #eee; border: 0; }"
+ *                  "#topMenu5:hover { background: url(:/icons/menu_community_fund_hover) bottom center #ddd; border: 0; }");
+ */
+
+    }
+#endif // ENABLE_WALLET
+
     if(walletFrame == nullptr)
         return;
 
