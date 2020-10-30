@@ -21,47 +21,35 @@ WalletFrame::WalletFrame(const PlatformStyle *platformStyle, ElectrumGUI *_gui) 
     gui(_gui),
     platformStyle(platformStyle)
 {
+    // Leave HBox hook for adding a list view later
+    QVBoxLayout *walletFrameLayout = new QVBoxLayout(this);
+    QHBoxLayout *topLayout = new QHBoxLayout();
+    QHBoxLayout *bottomLayout = new QHBoxLayout();
+
+    menuLayout = new QHBoxLayout();
+    menuLayout->setContentsMargins(0,0,0,0);
+    menuLayout->setSpacing(0);
+
+    walletFrameLayout->setSpacing(0);
+    walletFrameLayout->setContentsMargins(0,0,0,0);
+
     setContentsMargins(0,0,0,0);
 
-    int headerMargin = 15 * GUIUtil::scale();
-
-    // Leave HBox hook for adding a list view later
-    QHBoxLayout *frameLayout = new QHBoxLayout(this);
-    frameLayout->setSpacing(0);
-    frameLayout->setContentsMargins(0, 0, 0, 0);
-
-    QVBoxLayout *mainLayout = new QVBoxLayout();
-    mainLayout->setContentsMargins(0, 0, 0, 0);
-    mainLayout->setSpacing(0);
-
-    headerLayout = new QVBoxLayout();
-    headerLayout->setContentsMargins(headerMargin, headerMargin, headerMargin, headerMargin);
-    headerLayout->setSpacing(headerMargin);
-
-    QHBoxLayout* headLayout = new QHBoxLayout();
-    headLayout->setContentsMargins(0, 0, 0, 0);
-    headLayout->setSpacing(0);
-    headerLayout->addLayout(headLayout);
-
-    menuLayout = new QVBoxLayout();
-    menuLayout->setContentsMargins(0, 0, 0, 0);
-    menuLayout->setSpacing(0);
+    topLayout->setContentsMargins(0,0,0,0);
+    topLayout->setSpacing(0);
 
     walletStack = new QStackedWidget(this);
 
-    QHBoxLayout* contentLayout = new QHBoxLayout();
-    contentLayout->setContentsMargins(0, 0, 0, 0);
-    contentLayout->addWidget(walletStack);
+    bottomLayout->setContentsMargins(0,0,0,0);
+    bottomLayout->addWidget(walletStack);
 
-    QLabel* noWallet = new QLabel(tr("No wallet has been loaded."));
+    QLabel *noWallet = new QLabel(tr("No wallet has been loaded."));
     noWallet->setAlignment(Qt::AlignCenter);
     walletStack->addWidget(noWallet);
 
-    mainLayout->addLayout(headerLayout);
-    mainLayout->addLayout(contentLayout);
+    walletFrameLayout->addLayout(menuLayout);
+    walletFrameLayout->addLayout(bottomLayout);
 
-    frameLayout->addLayout(menuLayout);
-    frameLayout->addLayout(mainLayout);
 }
 
 WalletFrame::~WalletFrame()
@@ -82,6 +70,7 @@ bool WalletFrame::addWallet(const QString& name, WalletModel *walletModel)
     walletView->setElectrumGUI(gui);
     walletView->setClientModel(clientModel);
     walletView->setWalletModel(walletModel);
+    walletView->showOutOfSyncWarning(bOutOfSync);
 
      /* TODO we should goto the currently selected page once dynamically adding wallets is supported */
     walletView->gotoOverviewPage();
@@ -132,6 +121,14 @@ bool WalletFrame::handlePaymentRequest(const SendCoinsRecipient &recipient)
         return false;
 
     return walletView->handlePaymentRequest(recipient);
+}
+
+void WalletFrame::showOutOfSyncWarning(bool fShow)
+{
+    bOutOfSync = fShow;
+    QMap<QString, WalletView*>::const_iterator i;
+    for (i = mapWalletViews.constBegin(); i != mapWalletViews.constEnd(); ++i)
+        i.value()->showOutOfSyncWarning(fShow);
 }
 
 void WalletFrame::gotoOverviewPage()

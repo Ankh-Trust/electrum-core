@@ -38,7 +38,8 @@ public:
     void removeAllWallets();
 
     bool handlePaymentRequest(const SendCoinsRecipient& recipient);
-
+    
+    void showOutOfSyncWarning(bool fShow);
     WalletView *currentWalletView();
 
     QWidget *topMenu;
