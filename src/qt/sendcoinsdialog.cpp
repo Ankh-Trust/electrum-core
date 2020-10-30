@@ -46,7 +46,6 @@ SendCoinsDialog::SendCoinsDialog(const PlatformStyle *platformStyle, QWidget *pa
     ui->setupUi(this);
 
     ui->sendButton->setIcon(QIcon());
-#endif
 
     GUIUtil::setupAddressWidget(ui->lineEditCoinControlChange, this);
 
@@ -103,9 +102,9 @@ SendCoinsDialog::SendCoinsDialog(const PlatformStyle *platformStyle, QWidget *pa
     if (!settings.contains("fPayOnlyMinFee"))
         settings.setValue("fPayOnlyMinFee", false);
     if (!settings.contains("sCustomChangeAddress"))
-        settings.setValue("sCustomChangeAddress", "");
+      settings.setValue("sCustomChangeAddress", "");
     if (!settings.contains("fUseCustomChangeAddress"))
-        settings.setValue("fUseCustomChangeAddress", false);
+      settings.setValue("fUseCustomChangeAddress", false);
     ui->checkBoxCoinControlChange->setChecked(settings.value("fUseCustomChangeAddress").toBool());
     ui->lineEditCoinControlChange->setText(settings.value("sCustomChangeAddress").toString());
 }
@@ -466,18 +465,6 @@ void SendCoinsDialog::setBalance(const CAmount& balance, const CAmount& unconfir
     }
 }
 
-void SendCoinsDialog::useFullAmount()
-{
-    for(int i = 0; i < ui->entries->count(); ++i)
-    {
-        SendCoinsEntry *entry = qobject_cast<SendCoinsEntry*>(ui->entries->itemAt(i)->widget());
-        if(entry)
-        {
-            entry->useFullAmount();
-          }
-    }
-}
-
 void SendCoinsDialog::updateDisplayUnit()
 {
     setBalance(model->getBalance(), 0, 0, 0, 0, 0, 0, 0);
@@ -706,7 +693,6 @@ void SendCoinsDialog::coinControlChangeEdited(const QString& text)
             ui->labelCoinControlChangeLabel->setText(tr("(no label)"));
 
         CoinControlDialog::coinControl->destChange = addr.Get();
-
     }
 }
 
