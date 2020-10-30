@@ -41,7 +41,7 @@ WalletFrame::WalletFrame(const PlatformStyle *platformStyle, ElectrumGUI *_gui) 
     headLayout->setSpacing(0);
     headerLayout->addLayout(headLayout);
 
-    menuLayout = new QVBoxLayout();
+    menuLayout = new QHBoxLayout();
     menuLayout->setContentsMargins(0, 0, 0, 0);
     menuLayout->setSpacing(0);
 
@@ -55,10 +55,10 @@ WalletFrame::WalletFrame(const PlatformStyle *platformStyle, ElectrumGUI *_gui) 
     noWallet->setAlignment(Qt::AlignCenter);
     walletStack->addWidget(noWallet);
 
+    mainLayout->addLayout(menuLayout);
     mainLayout->addLayout(headerLayout);
     mainLayout->addLayout(contentLayout);
 
-    frameLayout->addLayout(menuLayout);
     frameLayout->addLayout(mainLayout);
 }
 
