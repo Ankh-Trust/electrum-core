@@ -657,40 +657,6 @@ void ElectrumGUI::createMenuBar()
     help->addAction(aboutQtAction);
 }
 
-void ElectrumGUI::createHeaderWidgets()
-{
-    // Notifications layout vertical
-    QVBoxLayout* notificationLayout = new QVBoxLayout();
-    notificationLayout->setContentsMargins(0, 0, 0, 0);
-    notificationLayout->setSpacing(0);
-    notificationLayout->setAlignment(Qt::AlignVCenter);
-
-    // Add a spacer to header to create a background
-    QWidget* headerSpacer = new QWidget();
-    headerSpacer->setObjectName("HeaderSpacer");
-    headerSpacer->setLayout(notificationLayout);
-
-    // Build each new notification
-    for (unsigned i = 0; i < notifs_count; ++i)
-    {
-        // Add notifications
-        notifications[i] = new QLabel();
-        notifications[i]->hide();
-        notifications[i]->setWordWrap(true);
-        notifications[i]->setText(tr(notifs[i].text));
-        if (notifs[i].error == true)
-            notifications[i]->setProperty("class", "alert alert-danger");
-        else
-            notifications[i]->setProperty("class", "alert alert-warning");
-
-        // Add to notification layout
-        notificationLayout->addWidget(notifications[i]);
-    }
-
-    // Add the header spacer and header bar
-    walletFrame->headerLayout->addWidget(headerSpacer);
-}
-
 void ElectrumGUI::createToolBars()
 {
     if(walletFrame == nullptr)
@@ -721,13 +687,12 @@ void ElectrumGUI::createToolBars()
         QIcon icon = platformStyle->Icon(":/icons/" + btnNamesIcon[i], COLOR_WHITE);
 
         // Update the disabled icon pixmap to use the same as QIcon::Normal
-        icon.addPixmap(icon.pixmap(iconSize, QIcon::Normal, QIcon::On), QIcon::Disabled);
+        icon.addPixmap(icon.pixmap(QIcon::Normal, QIcon::On), QIcon::Disabled);
 
         // Create the menu button
         menuBtns[i] = new QToolButton();
         menuBtns[i]->setText(tr(btnNamesText[i].c_str()));
         menuBtns[i]->setIcon(icon);
-        menuBtns[i]->setIconSize(iconSize);
         menuBtns[i]->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
         menuBtns[i]->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
         menuBtns[i]->setProperty("class", "main-menu-btn");
@@ -760,6 +725,40 @@ void ElectrumGUI::createToolBars()
     connect(menuBtns[2], SIGNAL(clicked()), this, SLOT(gotoReceiveCoinsPage()));
     connect(menuBtns[3], SIGNAL(clicked()), this, SLOT(gotoHistoryPage()));
     connect(menuBtns[4], SIGNAL(clicked()), this, SLOT(gotoCommunityFundPage()));
+}
+
+void ElectrumGUI::createHeaderWidgets()
+{
+    // Notifications layout vertical
+    QVBoxLayout* notificationLayout = new QVBoxLayout();
+    notificationLayout->setContentsMargins(0, 0, 0, 0);
+    notificationLayout->setSpacing(0);
+    notificationLayout->setAlignment(Qt::AlignVCenter);
+
+    // Add a spacer to header to create a background
+    QWidget* headerSpacer = new QWidget();
+    headerSpacer->setObjectName("HeaderSpacer");
+    headerSpacer->setLayout(notificationLayout);
+
+    // Build each new notification
+    for (unsigned i = 0; i < notifs_count; ++i)
+    {
+        // Add notifications
+        notifications[i] = new QLabel();
+        notifications[i]->hide();
+        notifications[i]->setWordWrap(true);
+        notifications[i]->setText(tr(notifs[i].text));
+        if (notifs[i].error == true)
+            notifications[i]->setProperty("class", "alert alert-danger");
+        else
+            notifications[i]->setProperty("class", "alert alert-warning");
+
+        // Add to notification layout
+        notificationLayout->addWidget(notifications[i]);
+    }
+
+    // Add the header spacer and header bar
+    walletFrame->headerLayout->addWidget(headerSpacer);
 }
 
 void ElectrumGUI::showOutOfSyncWarning(bool fShow)
