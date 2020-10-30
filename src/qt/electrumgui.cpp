@@ -1691,25 +1691,11 @@ static bool ThreadSafeMessageBox(ElectrumGUI *gui, const std::string& message, c
     return ret;
 }
 
-void SetBalance(ElectrumGUI *gui, const CAmount& total, const CAmount& avail, const CAmount &immat)
-{
-    // Call our instance method
-    gui->setBalance(total, avail, immat);
-}
-
-void SetStaked(ElectrumGUI *gui, const CAmount& all, const CAmount& today, const CAmount &week)
-{
-    // Call our instance method
-    gui->setStaked(all, today, week);
-}
-
 void ElectrumGUI::subscribeToCoreSignals()
 {
     // Connect signals to client
     uiInterface.ThreadSafeMessageBox.connect(boost::bind(ThreadSafeMessageBox, this, _1, _2, _3));
     uiInterface.ThreadSafeQuestion.connect(boost::bind(ThreadSafeMessageBox, this, _1, _3, _4));
-    uiInterface.SetBalance.connect(boost::bind(SetBalance, this, _1, _2, _3));
-    uiInterface.SetStaked.connect(boost::bind(SetStaked, this, _1, _2, _3));
 }
 
 void ElectrumGUI::unsubscribeFromCoreSignals()
@@ -1717,8 +1703,6 @@ void ElectrumGUI::unsubscribeFromCoreSignals()
     // Disconnect signals from client
     uiInterface.ThreadSafeMessageBox.disconnect(boost::bind(ThreadSafeMessageBox, this, _1, _2, _3));
     uiInterface.ThreadSafeQuestion.disconnect(boost::bind(ThreadSafeMessageBox, this, _1, _3, _4));
-    uiInterface.SetBalance.disconnect(boost::bind(SetBalance, this, _1, _2, _3));
-    uiInterface.SetStaked.disconnect(boost::bind(SetStaked, this, _1, _2, _3));
 }
 
 /** Get restart command-line parameters and request restart */
