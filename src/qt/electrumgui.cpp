@@ -696,20 +696,6 @@ void ElectrumGUI::createToolBars()
     if(walletFrame == nullptr)
         return;
 
-    // Sizes
-    QSize iconSize = QSize(35, 35);
-    QSize logoIconSize = QSize(60, 60);
-
-    // Create the logo icon
-    QIcon logoIcon = QIcon(":/icons/logo_n");
-
-    // Create the logo button
-    QToolButton* logoBtn = new QToolButton();
-    logoBtn->setIcon(logoIcon);
-    logoBtn->setIconSize(logoIconSize);
-    logoBtn->setProperty("class", "main-menu-btn");
-    logoBtn->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-
     // Attach the logo button to the layout
     walletFrame->menuLayout->addWidget(logoBtn);
 
@@ -771,25 +757,12 @@ void ElectrumGUI::createToolBars()
     padding->setProperty("class", "main-menu-btn");
     walletFrame->menuLayout->addWidget(padding);
 
-    // Add the versionLabel
-    QToolButton* versionLabel = new QToolButton();
-    versionLabel->setText(QString::fromStdString(FormatVersion(CLIENT_VERSION)));
-    versionLabel->setProperty("class", "main-menu-btn");
-    versionLabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-    walletFrame->menuLayout->addWidget(versionLabel);
-
-    // Link OverviewPage to main menu logo
-    connect(logoBtn, SIGNAL(clicked()), this, SLOT(gotoOverviewPage()));
-
     // Menu Button actions
     connect(menuBtns[0], SIGNAL(clicked()), this, SLOT(gotoOverviewPage()));
     connect(menuBtns[1], SIGNAL(clicked()), this, SLOT(gotoSendCoinsPage()));
     connect(menuBtns[2], SIGNAL(clicked()), this, SLOT(gotoReceiveCoinsPage()));
     connect(menuBtns[3], SIGNAL(clicked()), this, SLOT(gotoHistoryPage()));
     connect(menuBtns[4], SIGNAL(clicked()), this, SLOT(gotoCommunityFundPage()));
-
-    // Open about when versionLabel is clicked
-    connect(versionLabel, SIGNAL(clicked()), this, SLOT(aboutClicked()));
 }
 
 void ElectrumGUI::showOutOfSyncWarning(bool fShow)
