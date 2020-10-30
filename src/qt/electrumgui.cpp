@@ -488,7 +488,6 @@ void ElectrumGUI::createActions()
     connect(historyAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
     connect(historyAction, SIGNAL(triggered()), this, SLOT(gotoHistoryPage()));
     connect(settingsAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
-    connect(settingsAction, SIGNAL(triggered()), this, SLOT(gotoSettingsPage()));
     connect(toggleStakingAction, SIGNAL(triggered()), this, SLOT(toggleStaking()));
     connect(splitRewardAction, SIGNAL(triggered()), this, SLOT(splitRewards()));
 #endif // ENABLE_WALLET
@@ -565,7 +564,6 @@ void ElectrumGUI::createActions()
     connect(infoAction, SIGNAL(triggered()), this, SLOT(infoClicked()));
     connect(aboutQtAction, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
     connect(optionsAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
-    connect(optionsAction, SIGNAL(triggered()), this, SLOT(gotoSettingsPage()));
     connect(cfundProposalsAction, SIGNAL(triggered()), this, SLOT(cfundProposalsClicked()));
     connect(cfundPaymentRequestsAction, SIGNAL(triggered()), this, SLOT(cfundPaymentRequestsClicked()));
     connect(toggleHideAction, SIGNAL(triggered()), this, SLOT(toggleHidden()));
@@ -1154,13 +1152,6 @@ void ElectrumGUI::gotoCommunityFundPage()
     setActiveMenu(4);
     daoAction->setChecked(true);
     if (walletFrame) walletFrame->gotoCommunityFundPage();
-}
-
-void ElectrumGUI::gotoSettingsPage()
-{
-    setActiveMenu(5);
-    settingsAction->setChecked(true);
-    if (walletFrame) walletFrame->gotoSettingsPage();
 }
 
 void ElectrumGUI::gotoReceiveCoinsPage()
