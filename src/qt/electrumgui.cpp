@@ -231,6 +231,7 @@ ElectrumGUI::ElectrumGUI(const PlatformStyle *platformStyle, const NetworkStyle 
     {
         /** Create wallet frame and make it the central widget */
         walletFrame = new WalletFrame(platformStyle, this);
+        setCentralWidget(walletFrame);        
     } else
 #endif // ENABLE_WALLET
     {
