@@ -97,9 +97,9 @@ public:
         consensus.nPowTargetSpacing = 30;
         consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.fPowNoRetargeting = false;
-        consensus.nRuleChangeActivationThreshold = 15120; // 75% of 20160
-        consensus.nMinerConfirmationWindow = 20160; // confirmation period: 1 week
-        consensus.nStakeMinAge = 60 * 60 * 2;	// minimum for coin age: 2 hours
+        consensus.nRuleChangeActivationThreshold = 400; // 15120; // 75% of 20160
+        consensus.nMinerConfirmationWindow = 500; //20160; // confirmation period: 1 week
+        consensus.nStakeMinAge = 10; // 60 * 60 * 2;	// minimum for coin age: 2 hours
         consensus.nTargetSpacing = 30; // Blocktime: 30 secs
         consensus.nStakeCombineThreshold = 1000 * COIN;
         consensus.nStakeSplitThreshold = 2 * consensus.nStakeCombineThreshold;
@@ -124,7 +124,7 @@ public:
 
         consensus.nConsensusChangeMinAccept = 7500;
 
-        consensus.vParameters[Consensus::CONSENSUS_PARAM_VOTING_CYCLE_LENGTH].value = 2880 * 7; // 7 Days
+        consensus.vParameters[Consensus::CONSENSUS_PARAM_VOTING_CYCLE_LENGTH].value = 25; //2880 * 7; // 7 Days
         consensus.vParameters[Consensus::CONSENSUS_PARAM_PROPOSAL_MIN_QUORUM].value = 10000 * 2 / 3;
         consensus.vParameters[Consensus::CONSENSUS_PARAM_PAYMENT_REQUEST_MIN_QUORUM].value = 10000 * 2 / 3;
         consensus.vParameters[Consensus::CONSENSUS_PARAM_CONSULTATION_MIN_SUPPORT].value = 150;

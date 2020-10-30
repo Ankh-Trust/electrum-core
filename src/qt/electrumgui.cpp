@@ -688,9 +688,6 @@ void ElectrumGUI::createToolBars()
         // Create the icon
         QIcon icon = QIcon(":/icons/" + btnNamesIcon[i]);
 
-        // Update the disabled icon pixmap to use the same as QIcon::Normal
-        //  icon.addPixmap(icon.pixmap(QIcon::Normal, QIcon::On), QIcon::Disabled);
-
         // Create the menu button
         menuBtns[i] = new QToolButton();
         menuBtns[i]->setText(tr(btnNamesText[i].c_str()));
