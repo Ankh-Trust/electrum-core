@@ -686,7 +686,7 @@ void ElectrumGUI::createToolBars()
     for (unsigned i = 0; i < 5; ++i)
     {
         // Create the icon
-        QIcon icon = platformStyle->Icon(":/icons/" + btnNamesIcon[i]);
+        QIcon icon = QIcon(":/icons/" + btnNamesIcon[i]);
 
         // Update the disabled icon pixmap to use the same as QIcon::Normal
         icon.addPixmap(icon.pixmap(QIcon::Normal, QIcon::On), QIcon::Disabled);
@@ -697,7 +697,7 @@ void ElectrumGUI::createToolBars()
         menuBtns[i]->setIcon(icon);
         menuBtns[i]->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
         menuBtns[i]->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
-        menuBtns[i]->setProperty("class", "main-menu-btn");        
+        menuBtns[i]->setProperty("class", "main-menu-btn");
 
         // Attach to the layout and assign click events
         walletFrame->menuLayout->addWidget(menuBtns[i]);
