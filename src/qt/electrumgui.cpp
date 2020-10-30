@@ -682,8 +682,82 @@ void ElectrumGUI::createToolBars()
         QWidget* containerWidget = new QWidget();
         containerWidget->setLayout(layout);
         setCentralWidget(containerWidget);
+
+/*
+ *      topMenu5 = new QPushButton();
+ *      walletFrame->menuLayout->addWidget(topMenu5);
+ *      topMenu5->setFixedSize(215,94);
+ *      topMenu5->setObjectName("topMenu5");
+ *      connect(topMenu5, SIGNAL(clicked()), this, SLOT(gotoCommunityFundPage()));
+ *      topMenu5->setStyleSheet(
+ *                  "#topMenu5 { background: url(:/icons/menu_community_fund_ns) bottom center #eee; border: 0; }"
+ *                  "#topMenu5:hover { background: url(:/icons/menu_community_fund_hover) bottom center #ddd; border: 0; }");
+ */
+
     }
 #endif // ENABLE_WALLET
+
+    if(walletFrame == nullptr)
+        return;
+
+    // Buttons icon
+    QString btnNamesIcon[5] = {
+        "home",
+        "send",
+        "receive",
+        "transactions",
+        "dao",
+    };
+
+    // Buttons text
+    std::string btnNamesText[5] = {
+        "Overview",
+        "Send",
+        "Receive",
+        "Transactions",
+        "DAO",
+    };
+
+    // Build each new button
+    for (unsigned i = 0; i < 5; ++i)
+    {
+        // Create the icon
+        QIcon icon = QIcon(":/icons/" + btnNamesIcon[i]);
+
+        // Update the disabled icon pixmap to use the same as QIcon::Normal
+        //  icon.addPixmap(icon.pixmap(QIcon::Normal, QIcon::On), QIcon::Disabled);
+
+        // Create the menu button
+        menuBtns[i] = new QToolButton();
+        menuBtns[i]->setText(tr(btnNamesText[i].c_str()));
+        menuBtns[i]->setIcon(icon);
+        menuBtns[i]->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+        menuBtns[i]->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+        menuBtns[i]->setProperty("class", "main-menu-btn");
+
+        // Attach to the layout and assign click events
+        walletFrame->menuLayout->addWidget(menuBtns[i]);
+
+        // Create a bubble layout
+        QVBoxLayout* bubbleLayout = new QVBoxLayout(menuBtns[i]);
+        bubbleLayout->setContentsMargins(0, 10, 10, 0);
+        bubbleLayout->setSpacing(0);
+        bubbleLayout->setAlignment(Qt::AlignRight | Qt::AlignTop); // Move it to the top right
+
+        // Create the bubble and place in the bubble layout
+        menuBubbles[i] = new QLabel();
+        menuBubbles[i]->hide();
+        menuBubbles[i]->setText("1");
+        menuBubbles[i]->setProperty("class", "main-menu-bubble");
+        bubbleLayout->addWidget(menuBubbles[i]);
+    }
+
+    // Menu Button actions
+    connect(menuBtns[0], SIGNAL(clicked()), this, SLOT(gotoOverviewPage()));
+    connect(menuBtns[1], SIGNAL(clicked()), this, SLOT(gotoSendCoinsPage()));
+    connect(menuBtns[2], SIGNAL(clicked()), this, SLOT(gotoReceiveCoinsPage()));
+    connect(menuBtns[3], SIGNAL(clicked()), this, SLOT(gotoHistoryPage()));
+    connect(menuBtns[4], SIGNAL(clicked()), this, SLOT(gotoCommunityFundPage()));
 }
 
 void ElectrumGUI::createHeaderWidgets()
@@ -728,6 +802,14 @@ void ElectrumGUI::showOutOfSyncWarning(bool fShow)
 void ElectrumGUI::showHideNotification(bool show, int index)
 {
     notifications[index]->setVisible(show);
+}
+
+void ElectrumGUI::setActiveMenu(int index)
+{
+    for (int i = 0; i < 5; ++i)
+    {
+        menuBtns[i]->setDisabled(i == index);
+    }
 }
 
 bool ElectrumGUI::checkSettingsSaved()
