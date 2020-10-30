@@ -696,9 +696,6 @@ void ElectrumGUI::createToolBars()
     if(walletFrame == nullptr)
         return;
 
-    // Attach the logo button to the layout
-    walletFrame->menuLayout->addWidget(logoBtn);
-
     // Buttons icon
     QString btnNamesIcon[5] = {
         "home",
