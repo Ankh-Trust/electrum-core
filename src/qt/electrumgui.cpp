@@ -769,19 +769,6 @@ void ElectrumGUI::onDaoEntriesChanged(int count)
         // New daos? SHOW notification
         showHideNotification(count > 0, 0);
     }
-
-    // Update the bubble
-    setMenuBubble(4, count);
-}
-
-void ElectrumGUI::setMenuBubble(int index, int drak)
-{
-    menuBubbles[index]->setText(QString::number(drak));
-
-    if (drak > 0)
-        menuBubbles[index]->show();
-    else
-        menuBubbles[index]->hide();
 }
 
 void ElectrumGUI::setClientModel(ClientModel *clientModel)
