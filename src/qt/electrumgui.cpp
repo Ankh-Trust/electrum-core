@@ -725,7 +725,7 @@ void ElectrumGUI::createToolBars()
         menuBtns[i]->setProperty("class", "main-menu-btn");
 
         // Attach to the layout and assign click events
-        walletFrame->menuLayout->addWidget(menuBtns[i]);
+        //walletFrame->menuLayout->addWidget(menuBtns[i]);
 
         // Create a bubble layout
         QVBoxLayout* bubbleLayout = new QVBoxLayout(menuBtns[i]);
