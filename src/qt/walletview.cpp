@@ -44,8 +44,6 @@ WalletView::WalletView(const PlatformStyle *platformStyle, QWidget *parent):
     // Create tabs
     overviewPage = new OverviewPage(platformStyle);
 
-    settingsPage = new OptionsDialog(platformStyle);
-
     transactionsPage = new QWidget(this);
     QVBoxLayout *vbox = new QVBoxLayout();
     QHBoxLayout *hbox_buttons = new QHBoxLayout();
@@ -68,7 +66,6 @@ WalletView::WalletView(const PlatformStyle *platformStyle, QWidget *parent):
     usedReceivingAddressesPage = new AddressBookPage(platformStyle, AddressBookPage::ForEditing, AddressBookPage::ReceivingTab, this);
 
     addWidget(overviewPage);
-    addWidget(settingsPage);
     addWidget(transactionsPage);
     addWidget(receiveCoinsPage);
     addWidget(sendCoinsPage);
@@ -123,8 +120,6 @@ void WalletView::setClientModel(ClientModel *clientModel)
     overviewPage->setClientModel(clientModel);
     sendCoinsPage->setClientModel(clientModel);
     daoPage->setClientModel(clientModel);
-
-    settingsPage->setModel(clientModel->getOptionsModel());
 }
 
 void WalletView::requestAddressHistory()
