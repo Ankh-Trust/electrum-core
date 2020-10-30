@@ -697,6 +697,7 @@ void ElectrumGUI::createToolBars()
         menuBtns[i]->setIcon(icon);
         menuBtns[i]->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
         menuBtns[i]->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+        menuBtns[i]->setAlignment(Qt::AlignLeft);
 
         // Attach to the layout and assign click events
         walletFrame->menuLayout->addWidget(menuBtns[i]);
