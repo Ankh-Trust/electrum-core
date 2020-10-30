@@ -714,28 +714,30 @@ void ElectrumGUI::createToolBars()
     walletFrame->menuLayout->addWidget(logoBtn);
 
     // Buttons icon
-    QString btnNamesIcon[5] = {
+    QString btnNamesIcon[6] = {
         "home",
         "send",
         "receive",
         "transactions",
         "dao",
+        "options",
     };
 
     // Buttons text
-    std::string btnNamesText[5] = {
+    std::string btnNamesText[6] = {
         "HOME",
         "SEND",
         "RECEIVE",
         "HISTORY",
         "DAO",
+        "OPTIONS"
     };
 
     // Build each new button
-    for (unsigned i = 0; i < 5; ++i)
+    for (unsigned i = 0; i < 6; ++i)
     {
         // Create the icon
-        QIcon icon = platformStyle->Icon(":/icons/" + btnNamesIcon[i], COLOR_BLACK);
+        QIcon icon = platformStyle->Icon(":/icons/" + btnNamesIcon[i], COLOR_WHITE);
 
         // Update the disabled icon pixmap to use the same as QIcon::Normal
         icon.addPixmap(icon.pixmap(iconSize, QIcon::Normal, QIcon::On), QIcon::Disabled);
@@ -787,6 +789,7 @@ void ElectrumGUI::createToolBars()
     connect(menuBtns[2], SIGNAL(clicked()), this, SLOT(gotoReceiveCoinsPage()));
     connect(menuBtns[3], SIGNAL(clicked()), this, SLOT(gotoHistoryPage()));
     connect(menuBtns[4], SIGNAL(clicked()), this, SLOT(gotoCommunityFundPage()));
+    connect(menuBtns[5], SIGNAL(clicked()), this, SLOT(gotoSettingsPage()));
 
     // Open about when versionLabel is clicked
     connect(versionLabel, SIGNAL(clicked()), this, SLOT(aboutClicked()));
