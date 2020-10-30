@@ -62,6 +62,7 @@ private:
 
     OverviewPage *overviewPage;
     QWidget *transactionsPage;
+    OptionsDialog *settingsPage;
     ReceiveCoinsDialog *receiveCoinsPage;
     SendCoinsDialog *sendCoinsPage;
     DaoPage *daoPage;
