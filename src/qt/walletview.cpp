@@ -199,6 +199,17 @@ void WalletView::gotoHistoryPage()
     daoPage->setActive(false);
 }
 
+void WalletView::gotoSettingsPage()
+{
+    // We need to update the settings if it was modified externally
+    // This fixes a bug where coin control was enabled on the send page
+    // but was not shown as enabled on the setting spage
+    settingsPage->setModel(this->clientModel->getOptionsModel());
+
+    setCurrentWidget(settingsPage);
+    daoPage->setActive(false);
+}
+
 void WalletView::gotoCommunityFundPage()
 {
     // Change to CommunityFund UI
