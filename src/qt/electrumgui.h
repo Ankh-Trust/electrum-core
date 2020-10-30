@@ -83,12 +83,6 @@ public:
     /** Prompt user if they have not saved changes to options page */
     bool checkSettingsSaved();
 
-    /** Sets the balance for the wallet GUI header */
-    void setBalance(const CAmount &avail, const CAmount &pendi, const CAmount &immat);
-
-    /** Sets the staked amounts for the wallet GUI header */
-    void setStaked(const CAmount &all, const CAmount &today, const CAmount &week);
-
     /** Set the bubble counter on menubtns */
     void setMenuBubble(int index, int drak);
 
@@ -132,13 +126,6 @@ private:
     QLabel *progressBarLabel;
     GUIUtil::ClickableProgressBar* progressBar;
     QProgressDialog *progressDialog;
-
-    QLabel* balanceAvail;
-    QLabel* balancePendi;
-    QLabel* balanceImmat;
-    QLabel* stakedAvail;
-    QLabel* stakedPendi;
-    QLabel* stakedImmat;
 
     QMenuBar *appMenuBar;
     QAction *overviewAction;

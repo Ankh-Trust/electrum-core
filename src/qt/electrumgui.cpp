@@ -129,9 +129,6 @@ ElectrumGUI::ElectrumGUI(const PlatformStyle *platformStyle, const NetworkStyle 
     progressBarLabel(0),
     progressBar(0),
     progressDialog(0),
-    balanceAvail(0),
-    balancePendi(0),
-    balanceImmat(0),
     appMenuBar(0),
     overviewAction(0),
     historyAction(0),
@@ -840,30 +837,6 @@ bool ElectrumGUI::checkSettingsSaved()
 
     // Default is to return true
     return true;
-}
-
-void ElectrumGUI::setBalance(const CAmount &avail, const CAmount &pendi, const CAmount &immat)
-{
-    if (!walletFrame || !clientModel || !clientModel->getOptionsModel())
-        return;
-
-    int unit = clientModel->getOptionsModel()->getDisplayUnit();
-
-    balanceAvail->setText(ElectrumUnits::prettyWithUnit(unit, avail, false, ElectrumUnits::separatorAlways));
-    balancePendi->setText(ElectrumUnits::prettyWithUnit(unit, pendi, false, ElectrumUnits::separatorAlways));
-    balanceImmat->setText(ElectrumUnits::prettyWithUnit(unit, immat, false, ElectrumUnits::separatorAlways));
-}
-
-void ElectrumGUI::setStaked(const CAmount &all, const CAmount &today, const CAmount &week)
-{
-    if (!walletFrame || !clientModel || !clientModel->getOptionsModel())
-        return;
-
-    int unit = clientModel->getOptionsModel()->getDisplayUnit();
-
-    stakedAvail->setText(ElectrumUnits::prettyWithUnit(unit, all, false, ElectrumUnits::separatorAlways));
-    stakedPendi->setText(ElectrumUnits::prettyWithUnit(unit, today, false, ElectrumUnits::separatorAlways));
-    stakedImmat->setText(ElectrumUnits::prettyWithUnit(unit, week, false, ElectrumUnits::separatorAlways));
 }
 
 void ElectrumGUI::onDaoEntriesChanged(int count)
