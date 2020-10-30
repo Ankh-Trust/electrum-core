@@ -741,11 +741,6 @@ void ElectrumGUI::createToolBars()
         bubbleLayout->addWidget(menuBubbles[i]);
     }
 
-    /* This is to make the sidebar background consistent */
-    QWidget *padding = new QWidget();
-    padding->setProperty("class", "main-menu-btn");
-    walletFrame->menuLayout->addWidget(padding);
-
     // Menu Button actions
     connect(menuBtns[0], SIGNAL(clicked()), this, SLOT(gotoOverviewPage()));
     connect(menuBtns[1], SIGNAL(clicked()), this, SLOT(gotoSendCoinsPage()));
