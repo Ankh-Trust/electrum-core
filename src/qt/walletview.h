@@ -14,7 +14,6 @@
 class ElectrumGUI;
 class ClientModel;
 class OverviewPage;
-class OptionsDialog;
 class DaoPage;
 class PlatformStyle;
 class ReceiveCoinsDialog;
@@ -62,7 +61,6 @@ private:
 
     OverviewPage *overviewPage;
     QWidget *transactionsPage;
-    OptionsDialog *settingsPage;
     ReceiveCoinsDialog *receiveCoinsPage;
     SendCoinsDialog *sendCoinsPage;
     DaoPage *daoPage;
@@ -79,8 +77,6 @@ public Q_SLOTS:
     void gotoOverviewPage();
     /** Switch to history (transactions) page */
     void gotoHistoryPage();
-    /** Switch to settings page */
-    void gotoSettingsPage();
     /** Switch to community fund page */
     void gotoCommunityFundPage();
     /** Switch to receive coins page */

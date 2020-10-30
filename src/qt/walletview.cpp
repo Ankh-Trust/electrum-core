@@ -44,8 +44,6 @@ WalletView::WalletView(const PlatformStyle *platformStyle, QWidget *parent):
     // Create tabs
     overviewPage = new OverviewPage(platformStyle);
 
-    settingsPage = new OptionsDialog(platformStyle);
-
     transactionsPage = new QWidget(this);
     QVBoxLayout *vbox = new QVBoxLayout();
     QHBoxLayout *hbox_buttons = new QHBoxLayout();
@@ -68,7 +66,6 @@ WalletView::WalletView(const PlatformStyle *platformStyle, QWidget *parent):
     usedReceivingAddressesPage = new AddressBookPage(platformStyle, AddressBookPage::ForEditing, AddressBookPage::ReceivingTab, this);
 
     addWidget(overviewPage);
-    addWidget(settingsPage);
     addWidget(transactionsPage);
     addWidget(receiveCoinsPage);
     addWidget(sendCoinsPage);
@@ -124,7 +121,6 @@ void WalletView::setClientModel(ClientModel *clientModel)
     sendCoinsPage->setClientModel(clientModel);
     daoPage->setClientModel(clientModel);
 
-    settingsPage->setModel(clientModel->getOptionsModel());
 }
 
 void WalletView::requestAddressHistory()
@@ -196,17 +192,6 @@ void WalletView::gotoOverviewPage()
 void WalletView::gotoHistoryPage()
 {
     setCurrentWidget(transactionsPage);
-    daoPage->setActive(false);
-}
-
-void WalletView::gotoSettingsPage()
-{
-    // We need to update the settings if it was modified externally
-    // This fixes a bug where coin control was enabled on the send page
-    // but was not shown as enabled on the setting spage
-    settingsPage->setModel(this->clientModel->getOptionsModel());
-
-    setCurrentWidget(settingsPage);
     daoPage->setActive(false);
 }
 
