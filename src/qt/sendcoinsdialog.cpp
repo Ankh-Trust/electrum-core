@@ -45,6 +45,7 @@ SendCoinsDialog::SendCoinsDialog(const PlatformStyle *platformStyle, QWidget *pa
 {
     ui->setupUi(this);
 
+#ifdef Q_OS_MAC
     ui->sendButton->setIcon(QIcon());
 #endif
 
