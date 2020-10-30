@@ -1159,13 +1159,6 @@ void ElectrumGUI::gotoCommunityFundPage()
     if (walletFrame) walletFrame->gotoCommunityFundPage();
 }
 
-void ElectrumGUI::gotoSettingsPage()
-{
-    setActiveMenu(5);
-    settingsAction->setChecked(true);
-    if (walletFrame) walletFrame->gotoSettingsPage();
-}
-
 void ElectrumGUI::gotoReceiveCoinsPage()
 {
     if (!checkSettingsSaved())
