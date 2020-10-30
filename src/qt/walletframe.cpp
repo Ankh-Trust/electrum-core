@@ -32,6 +32,10 @@ WalletFrame::WalletFrame(const PlatformStyle *platformStyle, ElectrumGUI *_gui) 
     mainLayout->setContentsMargins(0, 0, 0, 0);
     mainLayout->setSpacing(0);
 
+    menuLayout = new QHBoxLayout();
+    menuLayout->setContentsMargins(0, 0, 0, 0);
+    menuLayout->setSpacing(0);
+
     headerLayout = new QVBoxLayout();
     headerLayout->setContentsMargins(headerMargin, headerMargin, headerMargin, headerMargin);
     headerLayout->setSpacing(headerMargin);
@@ -40,10 +44,6 @@ WalletFrame::WalletFrame(const PlatformStyle *platformStyle, ElectrumGUI *_gui) 
     headLayout->setContentsMargins(0, 0, 0, 0);
     headLayout->setSpacing(0);
     headerLayout->addLayout(headLayout);
-
-    menuLayout = new QHBoxLayout();
-    menuLayout->setContentsMargins(0, 0, 0, 0);
-    menuLayout->setSpacing(0);
 
     walletStack = new QStackedWidget(this);
 
