@@ -256,7 +256,7 @@ TransactionTableModel::~TransactionTableModel()
 
 QIcon TransactionTableModel::TxIcon(QString filename) const
 {
-    return platformStyle->Icon(filename);
+    return Qcon(filename);
 }
 
 /** Updates the column title to "Amount (DisplayUnit)" and emits headerDataChanged() signal for table headers to react. */
@@ -571,7 +571,7 @@ QVariant TransactionTableModel::data(const QModelIndex &index, int role) const
     case Qt::DecorationRole:
     {
         QIcon icon = qvariant_cast<QIcon>(index.data(RawDecorationRole));
-        return platformStyle->IconAlt(icon);
+        return QconAlt(icon);
     }
     case Qt::DisplayRole:
         switch(index.column())

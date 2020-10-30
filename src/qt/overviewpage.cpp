@@ -49,7 +49,7 @@ public:
         QRect decorationRect(mainRect.left(), mainRect.top()+ypad, DECORATION_SIZE, DECORATION_SIZE);
         QRect amountRect(mainRect.left() + xspace, mainRect.top()+ypad, mainRect.width() - xspace - 10, halfheight);
         QRect addressRect(mainRect.left() + xspace, mainRect.top()+ypad+halfheight, mainRect.width() - xspace, halfheight);
-        icon = platformStyle->Icon(icon);
+        icon = Qcon(icon);
         icon.paint(painter, decorationRect);
 
         QDateTime date = index.data(TransactionTableModel::DateRole).toDateTime();

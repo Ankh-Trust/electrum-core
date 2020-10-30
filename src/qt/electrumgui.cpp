@@ -411,32 +411,32 @@ void ElectrumGUI::createActions()
 {
     QActionGroup *tabGroup = new QActionGroup(this);
 
-    overviewAction = new QAction(platformStyle->Icon(":/icons/overview"), tr("&Overview"), this);
+    overviewAction = new QAction(Qcon(":/icons/overview"), tr("&Overview"), this);
     overviewAction->setStatusTip(tr("Show general overview of wallet"));
     overviewAction->setToolTip(overviewAction->statusTip());
     overviewAction->setCheckable(true);
     overviewAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_1));
     tabGroup->addAction(overviewAction);
 
-    sendCoinsAction = new QAction(platformStyle->Icon(":/icons/send"), tr("&Send"), this);
+    sendCoinsAction = new QAction(Qcon(":/icons/send"), tr("&Send"), this);
     sendCoinsAction->setStatusTip(tr("Send coins to a Electrum address"));
     sendCoinsAction->setToolTip(sendCoinsAction->statusTip());
     sendCoinsAction->setCheckable(true);
     sendCoinsAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_2));
     tabGroup->addAction(sendCoinsAction);
 
-    sendCoinsMenuAction = new QAction(platformStyle->IconAlt(":/icons/send"), sendCoinsAction->text(), this);
+    sendCoinsMenuAction = new QAction(QconAlt(":/icons/send"), sendCoinsAction->text(), this);
     sendCoinsMenuAction->setStatusTip(sendCoinsAction->statusTip());
     sendCoinsMenuAction->setToolTip(sendCoinsMenuAction->statusTip());
 
-    receiveCoinsAction = new QAction(platformStyle->Icon(":/icons/receiving_addresses"), tr("&Receive"), this);
+    receiveCoinsAction = new QAction(Qcon(":/icons/receiving_addresses"), tr("&Receive"), this);
     receiveCoinsAction->setStatusTip(tr("Request payments (generates QR codes and electrum: URIs)"));
     receiveCoinsAction->setToolTip(receiveCoinsAction->statusTip());
     receiveCoinsAction->setCheckable(true);
     receiveCoinsAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_3));
     tabGroup->addAction(receiveCoinsAction);
 
-    receiveCoinsMenuAction = new QAction(platformStyle->IconAlt(":/icons/receiving_addresses"), receiveCoinsAction->text(), this);
+    receiveCoinsMenuAction = new QAction(QconAlt(":/icons/receiving_addresses"), receiveCoinsAction->text(), this);
     receiveCoinsMenuAction->setStatusTip(receiveCoinsAction->statusTip());
     receiveCoinsMenuAction->setToolTip(receiveCoinsMenuAction->statusTip());
 
@@ -446,21 +446,21 @@ void ElectrumGUI::createActions()
     splitRewardAction = new QAction(tr("Set up staking rewards"), this);
     splitRewardAction->setStatusTip(tr("Configure how to split the staking rewards"));
 
-    historyAction = new QAction(platformStyle->Icon(":/icons/transactions"), tr("&Transactions"), this);
+    historyAction = new QAction(Qcon(":/icons/transactions"), tr("&Transactions"), this);
     historyAction->setStatusTip(tr("Browse transaction history"));
     historyAction->setToolTip(historyAction->statusTip());
     historyAction->setCheckable(true);
     historyAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_4));
     tabGroup->addAction(historyAction);
 
-    daoAction = new QAction(platformStyle->Icon(":/icons/dao"), tr("&DAO"), this);
+    daoAction = new QAction(Qcon(":/icons/dao"), tr("&DAO"), this);
     daoAction->setStatusTip(tr("Participate in the DAO"));
     daoAction->setToolTip(daoAction->statusTip());
     daoAction->setCheckable(true);
     daoAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_5));
     tabGroup->addAction(daoAction);
 
-    settingsAction = new QAction(platformStyle->Icon(":/icons/options"), tr("&Settings"), this);
+    settingsAction = new QAction(Qcon(":/icons/options"), tr("&Settings"), this);
     settingsAction->setStatusTip(tr("Update settings"));
     settingsAction->setToolTip(settingsAction->statusTip());
     settingsAction->setCheckable(true);
@@ -495,53 +495,53 @@ void ElectrumGUI::createActions()
     connect(splitRewardAction, SIGNAL(triggered()), this, SLOT(splitRewards()));
 #endif // ENABLE_WALLET
 
-    quitAction = new QAction(platformStyle->IconAlt(":/icons/quit"), tr("E&xit"), this);
+    quitAction = new QAction(QconAlt(":/icons/quit"), tr("E&xit"), this);
     quitAction->setStatusTip(tr("Quit application"));
     quitAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q));
     quitAction->setMenuRole(QAction::QuitRole);
-    aboutAction = new QAction(platformStyle->IconAlt(":/icons/about"), tr("&About %1").arg(tr(PACKAGE_NAME)), this);
+    aboutAction = new QAction(QconAlt(":/icons/about"), tr("&About %1").arg(tr(PACKAGE_NAME)), this);
     aboutAction->setStatusTip(tr("Show information about %1").arg(tr(PACKAGE_NAME)));
     aboutAction->setMenuRole(QAction::AboutRole);
     aboutAction->setEnabled(false);
-    infoAction = new QAction(platformStyle->IconAlt(":/icons/address-book"), tr("%1 &Knowledge Base").arg(tr(PACKAGE_NAME)), this);
+    infoAction = new QAction(QconAlt(":/icons/address-book"), tr("%1 &Knowledge Base").arg(tr(PACKAGE_NAME)), this);
     infoAction->setStatusTip(tr("Open the %1 Knowledge Base in your browser").arg(tr(PACKAGE_NAME)));
     infoAction->setMenuRole(QAction::NoRole);
     infoAction->setEnabled(false);
-    aboutQtAction = new QAction(platformStyle->IconAlt(":/icons/about_qt"), tr("About &Qt"), this);
+    aboutQtAction = new QAction(QconAlt(":/icons/about_qt"), tr("About &Qt"), this);
     aboutQtAction->setStatusTip(tr("Show information about Qt"));
     aboutQtAction->setMenuRole(QAction::AboutQtRole);
-    optionsAction = new QAction(platformStyle->IconAlt(":/icons/options"), tr("&Options..."), this);
+    optionsAction = new QAction(QconAlt(":/icons/options"), tr("&Options..."), this);
     optionsAction->setStatusTip(tr("Modify configuration options for %1").arg(tr(PACKAGE_NAME)));
     optionsAction->setMenuRole(QAction::PreferencesRole);
     optionsAction->setEnabled(false);
     cfundProposalsAction = new QAction(tr("Vote for Proposals"), this);
     cfundPaymentRequestsAction = new QAction(tr("Vote for Payment Requests"), this);
-    toggleHideAction = new QAction(platformStyle->IconAlt(":/icons/about"), tr("&Show / Hide"), this);
+    toggleHideAction = new QAction(QconAlt(":/icons/about"), tr("&Show / Hide"), this);
     toggleHideAction->setStatusTip(tr("Show or hide the main Window"));
 
-    encryptWalletAction = new QAction(platformStyle->IconAlt(":/icons/lock_closed"), tr("&Encrypt Wallet..."), this);
+    encryptWalletAction = new QAction(QconAlt(":/icons/lock_closed"), tr("&Encrypt Wallet..."), this);
     encryptWalletAction->setStatusTip(tr("Encrypt the private keys that belong to your wallet"));
     encryptWalletAction->setCheckable(true);
     unlockWalletAction = new QAction(tr("&Unlock Wallet for Staking..."), this);
     unlockWalletAction->setToolTip(tr("Unlock wallet for Staking"));
-    backupWalletAction = new QAction(platformStyle->IconAlt(":/icons/filesave"), tr("&Backup Wallet..."), this);
+    backupWalletAction = new QAction(QconAlt(":/icons/filesave"), tr("&Backup Wallet..."), this);
     backupWalletAction->setStatusTip(tr("Backup wallet to another location"));
-    changePassphraseAction = new QAction(platformStyle->IconAlt(":/icons/key"), tr("&Change Passphrase..."), this);
+    changePassphraseAction = new QAction(QconAlt(":/icons/key"), tr("&Change Passphrase..."), this);
     changePassphraseAction->setStatusTip(tr("Change the passphrase used for wallet encryption"));
 
-    signMessageAction = new QAction(platformStyle->IconAlt(":/icons/edit"), tr("Sign &message..."), this);
+    signMessageAction = new QAction(QconAlt(":/icons/edit"), tr("Sign &message..."), this);
     signMessageAction->setStatusTip(tr("Sign messages with your Electrum addresses to prove you own them"));
-    verifyMessageAction = new QAction(platformStyle->IconAlt(":/icons/verify"), tr("&Verify message..."), this);
+    verifyMessageAction = new QAction(QconAlt(":/icons/verify"), tr("&Verify message..."), this);
     verifyMessageAction->setStatusTip(tr("Verify messages to ensure they were signed with specified Electrum addresses"));
 
-    openRPCConsoleAction = new QAction(platformStyle->IconAlt(":/icons/debugwindow"), tr("&Debug window"), this);
+    openRPCConsoleAction = new QAction(QconAlt(":/icons/debugwindow"), tr("&Debug window"), this);
     openRPCConsoleAction->setStatusTip(tr("Open debugging and diagnostic console"));
     // initially disable the debug window menu item
     openRPCConsoleAction->setEnabled(false);
 
-    usedSendingAddressesAction = new QAction(platformStyle->IconAlt(":/icons/address-book"), tr("&Sending addresses..."), this);
+    usedSendingAddressesAction = new QAction(QconAlt(":/icons/address-book"), tr("&Sending addresses..."), this);
     usedSendingAddressesAction->setStatusTip(tr("Show the list of used sending addresses and labels"));
-    usedReceivingAddressesAction = new QAction(platformStyle->IconAlt(":/icons/address-book"), tr("&Receiving addresses..."), this);
+    usedReceivingAddressesAction = new QAction(QconAlt(":/icons/address-book"), tr("&Receiving addresses..."), this);
     usedReceivingAddressesAction->setStatusTip(tr("Show the list of used receiving addresses and labels"));
     repairWalletAction = new QAction(tr("&Repair wallet"), this);
     repairWalletAction->setToolTip(tr("Repair wallet transactions"));
@@ -555,10 +555,10 @@ void ElectrumGUI::createActions()
     exportMnemonicAction = new QAction(tr("Show m&nemonic"), this);
     exportMnemonicAction->setToolTip(tr("Show mnemonic"));
 
-    openAction = new QAction(platformStyle->IconAlt(":/icons/open"), tr("Open &URI..."), this);
+    openAction = new QAction(QconAlt(":/icons/open"), tr("Open &URI..."), this);
     openAction->setStatusTip(tr("Open a electrum: URI or payment request"));
 
-    showHelpMessageAction = new QAction(platformStyle->IconAlt(":/icons/info"), tr("&Command-line options"), this);
+    showHelpMessageAction = new QAction(QconAlt(":/icons/info"), tr("&Command-line options"), this);
     showHelpMessageAction->setMenuRole(QAction::NoRole);
     showHelpMessageAction->setStatusTip(tr("Show the %1 help message to get a list with possible Electrum command-line options").arg(tr(PACKAGE_NAME)));
 
@@ -1266,7 +1266,7 @@ void ElectrumGUI::setNumBlocks(int count, const QDateTime& blockDate, double nVe
     // Set icon state: spinning if catching up, tick otherwise
     if (secs < MAX_BLOCK_TIME_GAP) {
         tooltip = tr("Up to date") + QString(".<br>") + tooltip;
-        labelBlocksIcon->setPixmap(platformStyle->IconAlt(":/icons/synced").pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE));
+        labelBlocksIcon->setPixmap(QconAlt(":/icons/synced").pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE));
 
 #ifdef ENABLE_WALLET
         if(walletFrame)
@@ -1290,7 +1290,7 @@ void ElectrumGUI::setNumBlocks(int count, const QDateTime& blockDate, double nVe
         progressBar->setVisible(true);
 
         tooltip = tr("Catching up...") + QString("<br>") + tooltip;
-        labelBlocksIcon->setPixmap(platformStyle->IconAlt(QString(
+        labelBlocksIcon->setPixmap(QconAlt(QString(
             ":/movies/spinner-%1").arg(spinnerFrame, 3, 10, QChar('0')))
             .pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE));
         spinnerFrame = (spinnerFrame + 1) % SPINNER_FRAMES;
@@ -1527,7 +1527,7 @@ bool ElectrumGUI::handlePaymentRequest(const SendCoinsRecipient& recipient)
 
 void ElectrumGUI::setHDStatus(int hdEnabled)
 {
-    labelWalletHDStatusIcon->setPixmap(platformStyle->IconAlt(hdEnabled ? ":/icons/hd_enabled" : ":/icons/hd_disabled").pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE));
+    labelWalletHDStatusIcon->setPixmap(QconAlt(hdEnabled ? ":/icons/hd_enabled" : ":/icons/hd_disabled").pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE));
     labelWalletHDStatusIcon->setToolTip(hdEnabled ? tr("HD key generation is <b>enabled</b>") : tr("HD key generation is <b>disabled</b>"));
 
     // eventually disable the QLabel to set its opacity to 50%
@@ -1538,7 +1538,7 @@ void ElectrumGUI::setEncryptionStatus(int status)
 {
     if(fWalletUnlockStakingOnly)
     {
-        labelEncryptionIcon->setPixmap(platformStyle->IconAlt(":/icons/lock_closed").pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE));
+        labelEncryptionIcon->setPixmap(QconAlt(":/icons/lock_closed").pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE));
         labelEncryptionIcon->setToolTip(tr("Wallet is <b>encrypted</b> and currently <b>unlocked for staking only</b>"));
         changePassphraseAction->setEnabled(false);
         unlockWalletAction->setVisible(false);
@@ -1557,7 +1557,7 @@ void ElectrumGUI::setEncryptionStatus(int status)
         break;
     case WalletModel::Unlocked:
         labelEncryptionIcon->show();
-        labelEncryptionIcon->setPixmap(platformStyle->IconAlt(":/icons/lock_open").pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE));
+        labelEncryptionIcon->setPixmap(QconAlt(":/icons/lock_open").pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE));
         labelEncryptionIcon->setToolTip(tr("Wallet is <b>encrypted</b> and currently <b>unlocked</b>"));
         unlockWalletAction->setVisible(false);
         encryptWalletAction->setChecked(true);
@@ -1566,7 +1566,7 @@ void ElectrumGUI::setEncryptionStatus(int status)
         break;
     case WalletModel::Locked:
         labelEncryptionIcon->show();
-        labelEncryptionIcon->setPixmap(platformStyle->IconAlt(":/icons/lock_closed").pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE));
+        labelEncryptionIcon->setPixmap(QconAlt(":/icons/lock_closed").pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE));
         labelEncryptionIcon->setToolTip(tr("Wallet is <b>encrypted</b> and currently <b>locked</b>"));
         encryptWalletAction->setChecked(true);
         changePassphraseAction->setEnabled(true);
@@ -1906,7 +1906,7 @@ void ElectrumGUI::updateStakingStatus()
         // Make sure to update the staking flag
         fStaking = false;
 
-        labelStakingIcon->setPixmap(platformStyle->IconAlt(":/icons/staking_off").pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE));
+        labelStakingIcon->setPixmap(QconAlt(":/icons/staking_off").pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE));
         labelStakingIcon->setToolTip(tr("Wallet Staking is <b>OFF</b>"));
     }
     else if (nLastCoinStakeSearchInterval && nWeight)
@@ -1941,7 +1941,7 @@ void ElectrumGUI::updateStakingStatus()
         nWeight /= COIN;
         nNetworkWeight /= COIN;
 
-        labelStakingIcon->setPixmap(platformStyle->IconAlt(":/icons/staking_on").pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE));
+        labelStakingIcon->setPixmap(QconAlt(":/icons/staking_on").pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE));
         labelStakingIcon->setToolTip(text);
     }
     else
@@ -1960,7 +1960,7 @@ void ElectrumGUI::updateStakingStatus()
         else if (!nWeight)
             text = tr("Not staking because you don't have mature coins");
 
-        labelStakingIcon->setPixmap(platformStyle->IconAlt(":/icons/staking_off").pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE));
+        labelStakingIcon->setPixmap(QconAlt(":/icons/staking_off").pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE));
         labelStakingIcon->setToolTip(text);
     }
 }
