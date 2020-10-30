@@ -231,7 +231,6 @@ ElectrumGUI::ElectrumGUI(const PlatformStyle *platformStyle, const NetworkStyle 
     {
         /** Create wallet frame and make it the central widget */
         walletFrame = new WalletFrame(platformStyle, this);
-        setCentralWidget(walletFrame);
     } else
 #endif // ENABLE_WALLET
     {
@@ -348,16 +347,23 @@ ElectrumGUI::ElectrumGUI(const PlatformStyle *platformStyle, const NetworkStyle 
 
     // Progress bar and label for blocks download
     progressBarLabel = new QLabel();
-    progressBarLabel->setVisible(false);
+    progressBarLabel->setVisible(true);
     progressBar = new GUIUtil::ProgressBar();
     progressBar->setAlignment(Qt::AlignCenter);
-    progressBar->setVisible(false);
+    progressBar->setVisible(true);
 
     // Override style sheet for progress bar for styles that have a segmented progress bar,
     // as they make the text unreadable (workaround for issue #1071)
     // See https://qt-project.org/doc/qt-4.8/gallery.html
+    QString curStyle = QApplication::style()->metaObject()->className();
+    if(curStyle == "QWindowsStyle" || curStyle == "QWindowsXPStyle")
+    {
+      progressBar->setStyleSheet("QProgressBar { background-color: #F8F8F8; border: 1px solid grey; border-radius: 7px; padding: 1px; text-align: center; } QProgressBar::chunk { background: QLinearGradient(x1: 0, y1: 0, x2: 1, y2: 0, stop: 0 #00CCFF, stop: 1 #33CCFF); border-radius: 7px; margin: 0px; }");
+    }
+
     statusBar()->addWidget(progressBarLabel);
     statusBar()->addWidget(progressBar);
+    statusBar()->addPermanentWidget(frameBlocks);
 
     // Install event filter to be able to catch status tip events (QEvent::StatusTip)
     this->installEventFilter(this);
