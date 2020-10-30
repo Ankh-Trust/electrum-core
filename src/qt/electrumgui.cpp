@@ -453,7 +453,7 @@ void ElectrumGUI::createActions()
     historyAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_4));
     tabGroup->addAction(historyAction);
 
-    daoAction = new QAction(platformStyle->Icon(":/icons/dao"), tr("&Transactions"), this);
+    daoAction = new QAction(platformStyle->Icon(":/icons/dao"), tr("&DAO"), this);
     daoAction->setStatusTip(tr("Participate in the DAO"));
     daoAction->setToolTip(daoAction->statusTip());
     daoAction->setCheckable(true);
@@ -487,6 +487,8 @@ void ElectrumGUI::createActions()
     connect(receiveCoinsMenuAction, SIGNAL(triggered()), this, SLOT(gotoReceiveCoinsPage()));
     connect(historyAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
     connect(historyAction, SIGNAL(triggered()), this, SLOT(gotoHistoryPage()));
+    connect(daoAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
+    connect(daoAction, SIGNAL(triggered()), this, SLOT(gotoCommunityFundPage()));
     connect(settingsAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
     connect(settingsAction, SIGNAL(triggered()), this, SLOT(gotoSettingsPage()));
     connect(toggleStakingAction, SIGNAL(triggered()), this, SLOT(toggleStaking()));
@@ -977,6 +979,7 @@ void ElectrumGUI::setWalletActionsEnabled(bool enabled)
     receiveCoinsAction->setEnabled(enabled);
     receiveCoinsMenuAction->setEnabled(enabled);
     historyAction->setEnabled(enabled);
+    daoAction->setEnabled(enabled);
     encryptWalletAction->setEnabled(enabled);
     backupWalletAction->setEnabled(enabled);
     changePassphraseAction->setEnabled(enabled);
