@@ -26,9 +26,13 @@ WalletFrame::WalletFrame(const PlatformStyle *platformStyle, ElectrumGUI *_gui) 
     int headerMargin = 15 * GUIUtil::scale();
 
     // Leave HBox hook for adding a list view later
-    QHBoxLayout *frameLayout = new QHBoxLayout(this);
+    QVBoxLayout *frameLayout = new QVBoxLayout(this);
     frameLayout->setSpacing(0);
     frameLayout->setContentsMargins(0, 0, 0, 0);
+
+    menuLayout = new QHBoxLayout();
+    menuLayout->setContentsMargins(0, 0, 0, 0);
+    menuLayout->setSpacing(0);
 
     QVBoxLayout *mainLayout = new QVBoxLayout();
     mainLayout->setContentsMargins(0, 0, 0, 0);
@@ -42,22 +46,6 @@ WalletFrame::WalletFrame(const PlatformStyle *platformStyle, ElectrumGUI *_gui) 
     headLayout->setContentsMargins(0, 0, 0, 0);
     headLayout->setSpacing(0);
     headerLayout->addLayout(headLayout);
-
-    balanceLayout = new QHBoxLayout();
-    balanceLayout->setContentsMargins(0, 0, 0, 0);
-    balanceLayout->setSpacing(0);
-    balanceLayout->setAlignment(Qt::AlignLeft);
-    headLayout->addLayout(balanceLayout);
-
-    statusLayout = new QHBoxLayout();
-    statusLayout->setContentsMargins(0, 0, 0, 0);
-    statusLayout->setSpacing(5 * GUIUtil::scale());
-    statusLayout->setAlignment(Qt::AlignRight);
-    headLayout->addLayout(statusLayout);
-
-    menuLayout = new QHBoxLayout();
-    menuLayout->setContentsMargins(0, 0, 0, 0);
-    menuLayout->setSpacing(0);
 
     walletStack = new QStackedWidget(this);
 
