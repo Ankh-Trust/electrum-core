@@ -411,7 +411,7 @@ void ElectrumGUI::createActions()
 {
     QActionGroup *tabGroup = new QActionGroup(this);
 
-    overviewAction = new QAction(platformStyle->Icon(":/icons/electrum"), tr("&Overview"), this);
+    overviewAction = new QAction(platformStyle->Icon(":/icons/overview"), tr("&Overview"), this);
     overviewAction->setStatusTip(tr("Show general overview of wallet"));
     overviewAction->setToolTip(overviewAction->statusTip());
     overviewAction->setCheckable(true);
