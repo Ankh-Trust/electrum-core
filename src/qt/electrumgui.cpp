@@ -1381,7 +1381,8 @@ void ElectrumGUI::setNumConnections(int count)
         case 7: case 8: case 9: icon = ":/icons/connect_3"; break;
         default: icon = ":/icons/connect_4"; break;
     }
-    labelConnectionsIcon->setPixmap(platformStyle->IconAlt(icon).pixmap(STATUSBAR_ICONSIZE * GUIUtil::scale(), STATUSBAR_ICONSIZE * GUIUtil::scale()));
+    QIcon connectionItem = QIcon(icon).pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE);
+    labelConnectionsIcon->setIcon(connectionItem);
     labelConnectionsIcon->setToolTip(tr("%n active connection(s) to Electrum network", "", count));
 }
 
