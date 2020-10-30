@@ -696,13 +696,13 @@ void ElectrumGUI::createHeaderWidgets()
     stakedContainer->setObjectName("stakedContainer");
 
     QVBoxLayout* balanceLayout = new QVBoxLayout();
-    balanceLayout->setContentsMargins(0, 0, 20 * GUIUtil::scale(), 0);
-    balanceLayout->setSpacing(5 * GUIUtil::scale());
+    balanceLayout->setContentsMargins(0, 0, 20, 0);
+    balanceLayout->setSpacing(5);
     balanceContainer->setLayout(balanceLayout);
 
     QVBoxLayout* stakedLayout = new QVBoxLayout();
-    stakedLayout->setContentsMargins(20 * GUIUtil::scale(), 0, 0, 0);
-    stakedLayout->setSpacing(5 * GUIUtil::scale());
+    stakedLayout->setContentsMargins(20, 0, 0, 0);
+    stakedLayout->setSpacing(5);
     stakedContainer->setLayout(stakedLayout);
 
     // Containers for the subbalance layouts
@@ -725,7 +725,7 @@ void ElectrumGUI::createHeaderWidgets()
     balanceAvailLayout->setContentsMargins(0, 0, 0, 0);
     balanceAvailLayout->setSpacing(0);
     QVBoxLayout* balancePendiLayout = new QVBoxLayout();
-    balancePendiLayout->setContentsMargins(0, 0, 10 * GUIUtil::scale(), 0);
+    balancePendiLayout->setContentsMargins(0, 0, 10, 0);
     balancePendiLayout->setSpacing(0);
     QVBoxLayout* balanceImmatLayout = new QVBoxLayout();
     balanceImmatLayout->setContentsMargins(0, 0, 0, 0);
@@ -736,7 +736,7 @@ void ElectrumGUI::createHeaderWidgets()
     stakedAvailLayout->setContentsMargins(0, 0, 0, 0);
     stakedAvailLayout->setSpacing(0);
     QVBoxLayout* stakedPendiLayout = new QVBoxLayout();
-    stakedPendiLayout->setContentsMargins(0, 0, 10 * GUIUtil::scale(), 0);
+    stakedPendiLayout->setContentsMargins(0, 0, 10, 0);
     stakedPendiLayout->setSpacing(0);
     QVBoxLayout* stakedImmatLayout = new QVBoxLayout();
     stakedImmatLayout->setContentsMargins(0, 0, 0, 0);
@@ -848,8 +848,8 @@ void ElectrumGUI::createToolBars()
         return;
 
     // Sizes
-    QSize iconSize = QSize(35 * scale(), 35 * scale());
-    QSize logoIconSize = QSize(60 * scale(), 60 * scale());
+    QSize iconSize = QSize(35, 35);
+    QSize logoIconSize = QSize(60, 60);
 
     // Create the logo icon
     QIcon logoIcon = QIcon(":/icons/logo_n");
@@ -907,7 +907,7 @@ void ElectrumGUI::createToolBars()
 
         // Create a bubble layout
         QVBoxLayout* bubbleLayout = new QVBoxLayout(menuBtns[i]);
-        bubbleLayout->setContentsMargins(0, 10 * scale(), 10 * scale(), 0);
+        bubbleLayout->setContentsMargins(0, 10, 10, 0);
         bubbleLayout->setSpacing(0);
         bubbleLayout->setAlignment(Qt::AlignRight | Qt::AlignTop); // Move it to the top right
 
@@ -1459,7 +1459,7 @@ void ElectrumGUI::setNumBlocks(int count, const QDateTime& blockDate, double nVe
     // Set icon state: spinning if catching up, tick otherwise
     if (secs < MAX_BLOCK_TIME_GAP) {
         tooltip = tr("Up to date") + QString(".<br>") + tooltip;
-        labelBlocksIcon->setPixmap(platformStyle->IconAlt(":/icons/synced").pixmap(STATUSBAR_ICONSIZE * GUIUtil::scale(), STATUSBAR_ICONSIZE * GUIUtil::scale()));
+        labelBlocksIcon->setPixmap(platformStyle->IconAlt(":/icons/synced").pixmap(STATUSBAR_ICONSIZ, STATUSBAR_ICONSIZE));
 
 #ifdef ENABLE_WALLET
         if(walletFrame)
@@ -1485,7 +1485,7 @@ void ElectrumGUI::setNumBlocks(int count, const QDateTime& blockDate, double nVe
         tooltip = tr("Catching up...") + QString("<br>") + tooltip;
         labelBlocksIcon->setPixmap(platformStyle->IconAlt(QString(
             ":/movies/spinner-%1").arg(spinnerFrame, 3, 10, QChar('0')))
-            .pixmap(STATUSBAR_ICONSIZE * GUIUtil::scale(), STATUSBAR_ICONSIZE * GUIUtil::scale()));
+            .pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE));
         spinnerFrame = (spinnerFrame + 1) % SPINNER_FRAMES;
         prevBlocks = count;
 
@@ -1731,7 +1731,7 @@ void ElectrumGUI::setEncryptionStatus(int status)
 {
     if(fWalletUnlockStakingOnly)
     {
-        labelEncryptionIcon->setPixmap(platformStyle->IconAlt(":/icons/lock_closed").pixmap(STATUSBAR_ICONSIZE * GUIUtil::scale(), STATUSBAR_ICONSIZE * GUIUtil::scale()));
+        labelEncryptionIcon->setPixmap(platformStyle->IconAlt(":/icons/lock_closed").pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE));
         labelEncryptionIcon->setToolTip(tr("Wallet is <b>encrypted</b> and currently <b>unlocked for staking only</b>"));
         changePassphraseAction->setEnabled(false);
         unlockWalletAction->setVisible(false);
@@ -1750,7 +1750,7 @@ void ElectrumGUI::setEncryptionStatus(int status)
         break;
     case WalletModel::Unlocked:
         labelEncryptionIcon->show();
-        labelEncryptionIcon->setPixmap(platformStyle->IconAlt(":/icons/lock_open").pixmap(STATUSBAR_ICONSIZE * GUIUtil::scale(), STATUSBAR_ICONSIZE * GUIUtil::scale()));
+        labelEncryptionIcon->setPixmap(platformStyle->IconAlt(":/icons/lock_open").pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE));
         labelEncryptionIcon->setToolTip(tr("Wallet is <b>encrypted</b> and currently <b>unlocked</b>"));
         unlockWalletAction->setVisible(false);
         encryptWalletAction->setChecked(true);
@@ -1759,7 +1759,7 @@ void ElectrumGUI::setEncryptionStatus(int status)
         break;
     case WalletModel::Locked:
         labelEncryptionIcon->show();
-        labelEncryptionIcon->setPixmap(platformStyle->IconAlt(":/icons/lock_closed").pixmap(STATUSBAR_ICONSIZE * GUIUtil::scale(), STATUSBAR_ICONSIZE * GUIUtil::scale()));
+        labelEncryptionIcon->setPixmap(platformStyle->IconAlt(":/icons/lock_closed").pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE));
         labelEncryptionIcon->setToolTip(tr("Wallet is <b>encrypted</b> and currently <b>locked</b>"));
         encryptWalletAction->setChecked(true);
         changePassphraseAction->setEnabled(true);
@@ -2115,7 +2115,7 @@ void ElectrumGUI::updateStakingStatus()
         // Make sure to update the staking flag
         fStaking = false;
 
-        labelStakingIcon->setPixmap(platformStyle->IconAlt(":/icons/staking_off").pixmap(STATUSBAR_ICONSIZE * GUIUtil::scale(), STATUSBAR_ICONSIZE * GUIUtil::scale()));
+        labelStakingIcon->setPixmap(platformStyle->IconAlt(":/icons/staking_off").pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE));
         labelStakingIcon->setToolTip(tr("Wallet Staking is <b>OFF</b>"));
     }
     else if (nLastCoinStakeSearchInterval && nWeight)
@@ -2150,7 +2150,7 @@ void ElectrumGUI::updateStakingStatus()
         nWeight /= COIN;
         nNetworkWeight /= COIN;
 
-        labelStakingIcon->setPixmap(platformStyle->IconAlt(":/icons/staking_on").pixmap(STATUSBAR_ICONSIZE * GUIUtil::scale(), STATUSBAR_ICONSIZE * GUIUtil::scale()));
+        labelStakingIcon->setPixmap(platformStyle->IconAlt(":/icons/staking_on").pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE));
         labelStakingIcon->setToolTip(text);
     }
     else
@@ -2169,7 +2169,7 @@ void ElectrumGUI::updateStakingStatus()
         else if (!nWeight)
             text = tr("Not staking because you don't have mature coins");
 
-        labelStakingIcon->setPixmap(platformStyle->IconAlt(":/icons/staking_off").pixmap(STATUSBAR_ICONSIZE * GUIUtil::scale(), STATUSBAR_ICONSIZE * GUIUtil::scale()));
+        labelStakingIcon->setPixmap(platformStyle->IconAlt(":/icons/staking_off").pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE));
         labelStakingIcon->setToolTip(text);
     }
 }
