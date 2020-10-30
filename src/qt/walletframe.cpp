@@ -35,6 +35,7 @@ WalletFrame::WalletFrame(const PlatformStyle *platformStyle, ElectrumGUI *_gui) 
     menuLayout = new QHBoxLayout();
     menuLayout->setContentsMargins(0, 0, 0, 0);
     menuLayout->setSpacing(0);
+    menuLayout->setAlignment(Qt::AlignLeft);   
 
     headerLayout = new QVBoxLayout();
     headerLayout->setContentsMargins(headerMargin, headerMargin, headerMargin, headerMargin);
