@@ -689,63 +689,43 @@ void ElectrumGUI::createToolBars()
     if(walletFrame == nullptr)
         return;
 
-    // Sizes
-    QSize iconSize = QSize(35 * scale(), 35 * scale());
-    QSize logoIconSize = QSize(60 * scale(), 60 * scale());
-
-    // Create the logo icon
-    QIcon logoIcon = QIcon(":/icons/logo_n");
-
-    // Create the logo button
-    QToolButton* logoBtn = new QToolButton();
-    logoBtn->setIcon(logoIcon);
-    logoBtn->setIconSize(logoIconSize);
-    logoBtn->setProperty("class", "main-menu-btn");
-    logoBtn->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-
-    // Attach the logo button to the layout
-    // walletFrame->menuLayout->addWidget(logoBtn);
-
     // Buttons icon
-    QString btnNamesIcon[6] = {
+    QString btnNamesIcon[5] = {
         "home",
         "send",
         "receive",
         "transactions",
         "dao",
-        "options",
     };
 
     // Buttons text
-    std::string btnNamesText[6] = {
-        "HOME",
-        "SEND",
-        "RECEIVE",
-        "HISTORY",
+    std::string btnNamesText[5] = {
+        "Overview",
+        "Send",
+        "Receive",
+        "Transactions",
         "DAO",
-        "OPTIONS"
     };
 
     // Build each new button
-    for (unsigned i = 0; i < 6; ++i)
+    for (unsigned i = 0; i < 5; ++i)
     {
         // Create the icon
-        QIcon icon = platformStyle->Icon(":/icons/" + btnNamesIcon[i], COLOR_WHITE);
+        QIcon icon = QIcon(":/icons/" + btnNamesIcon[i]);
 
         // Update the disabled icon pixmap to use the same as QIcon::Normal
-        icon.addPixmap(icon.pixmap(iconSize, QIcon::Normal, QIcon::On), QIcon::Disabled);
+        //  icon.addPixmap(icon.pixmap(QIcon::Normal, QIcon::On), QIcon::Disabled);
 
         // Create the menu button
         menuBtns[i] = new QToolButton();
         menuBtns[i]->setText(tr(btnNamesText[i].c_str()));
         menuBtns[i]->setIcon(icon);
-        menuBtns[i]->setIconSize(iconSize);
-        menuBtns[i]->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
-        menuBtns[i]->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+        menuBtns[i]->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+        menuBtns[i]->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
         menuBtns[i]->setProperty("class", "main-menu-btn");
 
         // Attach to the layout and assign click events
-        // walletFrame->menuLayout->addWidget(menuBtns[i]);
+        //walletFrame->menuLayout->addWidget(menuBtns[i]);
 
         // Create a bubble layout
         QVBoxLayout* bubbleLayout = new QVBoxLayout(menuBtns[i]);
@@ -761,31 +741,12 @@ void ElectrumGUI::createToolBars()
         bubbleLayout->addWidget(menuBubbles[i]);
     }
 
-    /* This is to make the sidebar background consistent */
-    QWidget *padding = new QWidget();
-    padding->setProperty("class", "main-menu-btn");
-    // walletFrame->menuLayout->addWidget(padding);
-
-    // Add the versionLabel
-    QToolButton* versionLabel = new QToolButton();
-    versionLabel->setText(QString::fromStdString(FormatVersion(CLIENT_VERSION)));
-    versionLabel->setProperty("class", "main-menu-btn");
-    versionLabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-    // walletFrame->menuLayout->addWidget(versionLabel);
-
-    // Link OverviewPage to main menu logo
-    connect(logoBtn, SIGNAL(clicked()), this, SLOT(gotoOverviewPage()));
-
     // Menu Button actions
     connect(menuBtns[0], SIGNAL(clicked()), this, SLOT(gotoOverviewPage()));
     connect(menuBtns[1], SIGNAL(clicked()), this, SLOT(gotoSendCoinsPage()));
-    connect(menuBtns[2], SIGNAL(clicked()), this, SLOT(gotoRequestPaymentPage()));
+    connect(menuBtns[2], SIGNAL(clicked()), this, SLOT(gotoReceiveCoinsPage()));
     connect(menuBtns[3], SIGNAL(clicked()), this, SLOT(gotoHistoryPage()));
     connect(menuBtns[4], SIGNAL(clicked()), this, SLOT(gotoCommunityFundPage()));
-    connect(menuBtns[5], SIGNAL(clicked()), this, SLOT(gotoSettingsPage()));
-
-    // Open about when versionLabel is clicked
-    connect(versionLabel, SIGNAL(clicked()), this, SLOT(aboutClicked()));
 }
 
 void ElectrumGUI::createHeaderWidgets()
