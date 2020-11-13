@@ -1162,6 +1162,12 @@ void ElectrumGUI::showPeers()
     showDebugWindow();
 }
 
+void ElectrumGUI::showRepair()
+{
+    rpcConsole->setTabFocus(RPCConsole::TAB_REPAIR);
+    showDebugWindow();
+}
+
 void ElectrumGUI::showHelpMessageClicked()
 {
     helpMessageDialog->show();
@@ -1784,6 +1790,12 @@ void ElectrumGUI::toggleStaking()
 
     Q_EMIT message(tr("Staking"), GetStaking() ? tr("Staking has been enabled") : tr("Staking has been disabled"),
                    CClientUIInterface::MSG_INFORMATION);
+}
+
+void ElectrumGUI::generateColdStaking()
+{
+  ColdStakingWizard wizard;
+  wizard.exec();
 }
 
 void ElectrumGUI::splitRewards()
