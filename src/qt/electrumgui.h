@@ -25,6 +25,7 @@
 #include <QToolButton>
 #include <QSystemTrayIcon>
 #include <QtNetwork>
+#include <QWizard>
 
 #ifdef Q_OS_MAC
 #include <qt/macappnapinhibitor.h>
