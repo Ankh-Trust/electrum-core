@@ -544,8 +544,8 @@ void ElectrumGUI::createActions()
     openGraphAction->setStatusTip(tr("Show network monitor"));
     openPeersAction = new QAction(QIcon(":/icons/connect_4"), tr("&Peers list"), this);
     openPeersAction->setStatusTip(tr("Show peers info"));
-    openRepairAction = new QAction(QIcon(":/icons/options"), tr("Wallet &Repair"), this);
-    openRepairAction->setStatusTip(tr("Show wallet repair options"));
+    //openRepairAction = new QAction(QIcon(":/icons/options"), tr("Wallet &Repair"), this);
+    //openRepairAction->setStatusTip(tr("Show wallet repair options"));
 
     // initially disable the debug window menu item
     openInfoAction->setEnabled(false);
@@ -558,8 +558,8 @@ void ElectrumGUI::createActions()
     usedSendingAddressesAction->setStatusTip(tr("Show the list of used sending addresses and labels"));
     usedReceivingAddressesAction = new QAction(platformStyle->IconAlt(":/icons/address-book"), tr("&Receiving addresses..."), this);
     usedReceivingAddressesAction->setStatusTip(tr("Show the list of used receiving addresses and labels"));
-    //repairWalletAction = new QAction(tr("&Repair wallet"), this);
-    //repairWalletAction->setToolTip(tr("Repair wallet transactions"));
+    repairWalletAction = new QAction(tr("&Repair wallet"), this);
+    repairWalletAction->setToolTip(tr("Repair wallet transactions"));
 
     importPrivateKeyAction = new QAction(tr("&Import private key"), this);
     importPrivateKeyAction->setToolTip(tr("Import private key"));
