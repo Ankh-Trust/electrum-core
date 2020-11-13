@@ -17,9 +17,6 @@
    <bool>false</bool>
   </property>
   <widget class="QFrame" name="SendCoins">
-   <property name="toolTip">
-    <string>This is a normal payment.</string>
-   </property>
    <property name="frameShape">
     <enum>QFrame::NoFrame</enum>
    </property>
@@ -36,6 +33,19 @@
     <property name="verticalSpacing">
      <number>8</number>
     </property>
+    <item row="0" column="0">
+     <widget class="QLabel" name="payToLabel">
+      <property name="text">
+       <string>Pay &amp;To:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+      <property name="buddy">
+       <cstring>payTo</cstring>
+      </property>
+     </widget>
+    </item>
     <item row="0" column="1">
      <layout class="QHBoxLayout" name="payToLayout">
       <property name="spacing">
@@ -135,6 +145,9 @@
       <property name="buddy">
        <cstring>payAmount</cstring>
       </property>
+      <property name="toolTip">
+       <string>How much do you want to send?</string>
+      </property>
      </widget>
     </item>
     <item row="2" column="1">
@@ -200,22 +213,12 @@
       </property>
      </widget>
     </item>
-    <item row="0" column="0">
-     <widget class="QLabel" name="payToLabel">
-      <property name="text">
-       <string>Pay &amp;To:</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-      <property name="buddy">
-       <cstring>payTo</cstring>
-      </property>
-     </widget>
-    </item>
    </layout>
   </widget>
   <widget class="QFrame" name="SendCoins_UnauthenticatedPaymentRequest">
+   <property name="visible">
+    <bool>false</bool>
+   </property>
    <property name="palette">
     <palette>
      <active>
@@ -721,6 +724,9 @@
    </layout>
   </widget>
   <widget class="QFrame" name="SendCoins_AuthenticatedPaymentRequest">
+   <property name="visible">
+    <bool>false</bool>
+   </property>
    <property name="palette">
     <palette>
      <active>
