@@ -1093,6 +1093,10 @@ void ElectrumGUI::optionsClicked()
 {
     if(!clientModel || !clientModel->getOptionsModel())
         return;
+
+    OptionsDialog dlg(this, enableWallet);
+    dlg.setModel(clientModel->getOptionsModel());
+    dlg.exec();          
 }
 
 void ElectrumGUI::cfundProposalsClicked()
