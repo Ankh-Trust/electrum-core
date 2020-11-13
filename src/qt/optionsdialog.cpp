@@ -34,12 +34,11 @@
 #include <QSettings>
 #include <QTimer>
 
-OptionsDialog::OptionsDialog(const PlatformStyle *platformStyle, QWidget *parent) :
+OptionsDialog::OptionsDialog(QWidget *parent, bool enableWallet) :
     QDialog(parent),
     ui(new Ui::OptionsDialog),
     model(0),
-    mapper(0),
-    platformStyle(platformStyle)
+    mapper(0)
 {
     ui->setupUi(this);
 

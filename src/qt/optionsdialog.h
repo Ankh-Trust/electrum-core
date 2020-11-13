@@ -10,7 +10,6 @@
 
 class OptionsModel;
 class QValidatedLineEdit;
-class PlatformStyle;
 
 QT_BEGIN_NAMESPACE
 class QDataWidgetMapper;
@@ -38,7 +37,7 @@ class OptionsDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit OptionsDialog(const PlatformStyle *platformStyle, QWidget *parent = 0);
+    explicit OptionsDialog(QWidget *parent, bool enableWallet);
     ~OptionsDialog();
 
     void setModel(OptionsModel *model);
@@ -67,7 +66,6 @@ Q_SIGNALS:
 
 private:
 
-    const PlatformStyle *platformStyle;
     Ui::OptionsDialog *ui;
     OptionsModel *model;
     QDataWidgetMapper *mapper;
