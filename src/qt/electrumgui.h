@@ -155,7 +155,11 @@ private:
     QAction *backupWalletAction;
     QAction *changePassphraseAction;
     QAction *aboutQtAction;
+    QAction* openInfoAction;
     QAction *openRPCConsoleAction;
+    QAction* openGraphAction;
+    QAction* openPeersAction;
+    QAction* openRepairAction;
     QAction *openAction;
     QAction *showHelpMessageAction;
     QAction *unlockWalletAction;
