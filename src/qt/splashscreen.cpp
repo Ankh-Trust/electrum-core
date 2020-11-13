@@ -11,7 +11,6 @@
 #include <qt/networkstyle.h>
 
 #include <clientversion.h>
-#include <guiutil.h>
 #include <init.h>
 #include <util.h>
 #include <ui_interface.h>
@@ -24,111 +23,56 @@
 #include <QApplication>
 #include <QCloseEvent>
 #include <QDesktopWidget>
-#include <QHBoxLayout>
-#include <QLabel>
 #include <QPainter>
-#include <QTimer>
 
 SplashScreen::SplashScreen(Qt::WindowFlags f, const NetworkStyle *networkStyle) :
-    QWidget(0, f)
+    QWidget(0, f), curAlignment(0)
 {
-    // define text to place
-    QString titleText       = tr(PACKAGE_NAME);
-    QString versionText     = QString::fromStdString(FormatFullVersion());
-    QString titleAddText    = networkStyle->getTitleAddText();
+    // transparent background
+    setAttribute(Qt::WA_TranslucentBackground);
+    setStyleSheet("background:transparent;");
 
-    // Size of the splash screen
-    splashSize = QSize(480 * scale(), 320 * scale());
+    // no window decorations
+    setWindowFlags(Qt::FramelessWindowHint);
 
-    // Size of the logo
-    QSize logoSize(400 * scale(), 95 * scale());
+    float devicePixelRatio      = 1.0;
+    devicePixelRatio = ((QGuiApplication*)QCoreApplication::instance())->devicePixelRatio();
 
-    // Check if we have more text (IE testnet/devnet)
-    if(!titleAddText.isEmpty())
-        versionText += " <span style='font-weight: bold;'>" + titleAddText + "</span>";
+    QString font                  = QApplication::font().toString();
 
-    // Margin for the splashscreen
-    int margin = 10 * scale();
+    // create a bitmap according to device pixelratio
+    QSize splashSize(512*devicePixelRatio,512*devicePixelRatio);
+    pixmap = QPixmap(splashSize);
 
-    // Make the splashLayout
-    QVBoxLayout* splashLayout = new QVBoxLayout(this);
-    splashLayout->setContentsMargins(0, 0, 0, 0);
-    splashLayout->setSpacing(0);
+    // change to HiDPI if it makes sense
+    pixmap.setDevicePixelRatio(devicePixelRatio);
 
-    // Make the layout for widgets
-    QVBoxLayout* layout = new QVBoxLayout();
-    layout->setContentsMargins(margin, margin, margin, margin);
-    layout->setSpacing(0);
-    splashLayout->addLayout(layout);
+    QPainter pixPaint(&pixmap);
+    pixPaint.setPen(QColor(100,100,100));
 
-    // Build the new versionLabel
-    QLabel* versionLabel = new QLabel();
-    versionLabel->setText(versionText);
-    versionLabel->setAlignment(Qt::AlignRight | Qt::AlignTop);
-    versionLabel->setObjectName("SplashVersionLabel");
-    layout->addWidget(versionLabel);
+    // draw the electrum icon, expected size of PNG: 1024x1024
+    QRect rectIcon(QPoint(0,0), QSize(512,512));
 
-    // Load the icon
-    QPixmap icon = QPixmap(":icons/electrum_full").scaled(logoSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    const QSize requiredSize(512,512);
+    QPixmap icon(":icons/splash");
 
-    // Build the new logo
-    QLabel* logo = new QLabel();
-    logo->setPixmap(icon);
-    logo->setAlignment(Qt::AlignCenter);
-    layout->addWidget(logo);
+    pixPaint.drawPixmap(rectIcon, icon);
 
-    // Build the new statusLabel
-    statusLabel = new QLabel();
-    statusLabel->setAlignment(Qt::AlignCenter | Qt::AlignBottom);
-    statusLabel->setObjectName("SplashStatusLabel");
-    layout->addWidget(statusLabel);
-
-    // Build the splashBar
-    QWidget* splashBar = new QWidget();
-    splashBar->setMaximumHeight(7 * scale());
-    splashBar->setObjectName("SplashBar");
-
-    // Make the splashBarLayout
-    splashBarLayout = new QHBoxLayout(splashBar);
-    splashBarLayout->setContentsMargins(0, 0, 0, 0);
-    splashBarLayout->setSpacing(0);
-
-    // Build the splashBarInner section
-    splashBarInner = new QWidget();
-    splashBarInner->setObjectName("SplashBarInner");
-    splashBarInner->setFixedWidth(0);
-    splashBarLayout->addWidget(splashBarInner);
-
-    // Add the splashbar to the splashLayout
-    splashLayout->addWidget(splashBar);
-
-    timerProgress = new QTimer();
-    connect(timerProgress, SIGNAL(timeout()), this, SLOT(updateProgress()));
-    timerProgress->start(50); // Update every 50ms
-
-    // Set window title
-    setWindowTitle(titleText + " " + titleAddText);
+    pixPaint.end();
 
     // Resize window and move to center of desktop, disallow resizing
-    QRect r(QPoint(), splashSize);
+    QRect r(QPoint(), pixmap.size());
     resize(r.size());
     setFixedSize(r.size());
     move(QApplication::desktop()->screenGeometry().center() - r.center());
 
     subscribeToCoreSignals();
+    installEventFilter(this);
 }
 
 SplashScreen::~SplashScreen()
 {
     unsubscribeFromCoreSignals();
-
-    // Delete the timer
-    delete timerProgress;
-}
-
-float SplashScreen::scale()
-{
-    return GUIUtil::scale();
 }
 
 void SplashScreen::slotFinish(QWidget *mainWin)
@@ -140,9 +84,7 @@ void SplashScreen::slotFinish(QWidget *mainWin)
     if (isMinimized())
         showNormal();
     hide();
-
-    // Stop the tick tocking
-    timerProgress->stop();
+    deleteLater(); // No more need for this
 }
 
 static void InitMessage(SplashScreen *splash, const std::string &message)
@@ -150,12 +92,13 @@ static void InitMessage(SplashScreen *splash, const std::string &message)
     QMetaObject::invokeMethod(splash, "showMessage",
         Qt::QueuedConnection,
         Q_ARG(QString, QString::fromStdString(message)),
+        Q_ARG(int, Qt::AlignBottom|Qt::AlignHCenter),
         Q_ARG(QColor, QColor(55,55,55)));
 }
 
 static void ShowProgress(SplashScreen *splash, const std::string &title, int nProgress)
 {
-    InitMessage(splash, title + strprintf("%d", nProgress) + (nProgress <= 100 ? "%" : ""));
+    InitMessage(splash, title + strprintf("%d", nProgress) + "%");
 }
 
 #ifdef ENABLE_WALLET
@@ -182,45 +125,25 @@ void SplashScreen::unsubscribeFromCoreSignals()
     uiInterface.ShowProgress.disconnect(boost::bind(ShowProgress, this, _1, _2));
 #ifdef ENABLE_WALLET
     if(pwalletMain)
-        pwalletMain->ShowProgress.disconnect(boost::bind(ShowProgress, this, _1, _2));
+    pwalletMain->ShowProgress.disconnect(boost::bind(ShowProgress, this, _1, _2));
 #endif
 }
 
-void SplashScreen::showMessage(const QString &message, const QColor &color)
+void SplashScreen::showMessage(const QString &message, int alignment, const QColor &color)
 {
-    // Update the text for the statusLabel
-    statusLabel->setText(message);
+    curMessage = message;
+    curAlignment = alignment;
+    curColor = color;
     update();
 }
 
-void SplashScreen::updateProgress()
+void SplashScreen::paintEvent(QPaintEvent *event)
 {
-    // What is the progressWidth ?
-    static int progressWidth = splashSize.width() * 0.01f;
-
-    // Are we shrinking?
-    static bool shrinking = false;
-
-    // Get the current width
-    int barWidth = splashBarInner->width();
-
-    // Are we shrinking?
-    if (shrinking)
-        barWidth -= progressWidth;
-    else
-        barWidth += progressWidth;
-
-    // Check if progress is full
-    if (barWidth >= splashSize.width())
-        shrinking = true; // Start shrinking
-
-    // Check if progress is empty
-    if (barWidth <= 0)
-        shrinking = false; // Start growing
-
-    // Set the new width
-    splashBarInner->setFixedWidth(barWidth);
-    splashBarLayout->setAlignment((shrinking ? Qt::AlignRight : Qt::AlignLeft));
+    QPainter painter(this);
+    painter.drawPixmap(0, 0, pixmap);
+    QRect r = rect().adjusted(15, 15, -15, -15);
+    painter.setPen(curColor);
+    painter.drawText(r, curAlignment, curMessage);
 }
 
 void SplashScreen::closeEvent(QCloseEvent *event)

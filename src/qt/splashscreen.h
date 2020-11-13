@@ -5,8 +5,7 @@
 #ifndef ELECTRUM_QT_SPLASHSCREEN_H
 #define ELECTRUM_QT_SPLASHSCREEN_H
 
-#include <QLabel>
-#include <QHBoxLayout>
+#include <QSplashScreen>
 
 class NetworkStyle;
 
@@ -25,20 +24,15 @@ public:
     ~SplashScreen();
 
 protected:
+    void paintEvent(QPaintEvent *event);
     void closeEvent(QCloseEvent *event);
 
 public Q_SLOTS:
     /** Slot to call finish() method as it's not defined as slot */
     void slotFinish(QWidget *mainWin);
 
-    /** Get the screen scale, usefull for scaling UI elements */
-    float scale();
-
     /** Show message and progress */
-    void showMessage(const QString &message, const QColor &color);
-
-    /** Update the progress */
-    void updateProgress();
+    void showMessage(const QString &message, int alignment, const QColor &color);
 
 private:
     /** Connect core signals to splash screen */
@@ -47,11 +41,9 @@ private:
     void unsubscribeFromCoreSignals();
 
     QPixmap pixmap;
-    QLabel* statusLabel;
-    QWidget* splashBarInner;
-    QHBoxLayout* splashBarLayout;
-    QSize splashSize;
-    QTimer* timerProgress;
+    QString curMessage;
+    QColor curColor;
+    int curAlignment;
 };
 
 #endif // ELECTRUM_QT_SPLASHSCREEN_H
