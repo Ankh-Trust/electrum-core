@@ -52,7 +52,8 @@ public:
         TAB_INFO = 0,
         TAB_CONSOLE = 1,
         TAB_GRAPH = 2,
-        TAB_PEERS = 3
+        TAB_PEERS = 3,
+        TAB_REPAIR = 4
     };
 
 protected:
@@ -113,7 +114,15 @@ public Q_SLOTS:
     void peerSelected(const QItemSelection &selected, const QItemSelection &deselected);
     /** Handle updated peer information */
     void peerLayoutChanged();
-    /** Disconnect a selected node on the Peers tab */
+    /** Switch to info tab and show */
+    void showInfo();
+    /** Switch to console tab and show */
+    void showConsole();
+    /** Switch to network tab and show */
+    void showNetwork();
+    /** Switch to peers tab and show */
+    void showPeers();
+    /** Switch to wallet-repair tab and show */
     void disconnectSelectedNode();
     /** Ban a selected node on the Peers tab */
     void banSelectedNode(int bantime);

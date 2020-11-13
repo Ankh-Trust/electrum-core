@@ -349,6 +349,30 @@ RPCConsole::~RPCConsole()
     delete ui;
 }
 
+void RPCConsole::showInfo()
+{
+    ui->tabWidget->setCurrentIndex(0);
+    show();
+}
+
+void RPCConsole::showConsole()
+{
+    ui->tabWidget->setCurrentIndex(1);
+    show();
+}
+
+void RPCConsole::showNetwork()
+{
+    ui->tabWidget->setCurrentIndex(2);
+    show();
+}
+
+void RPCConsole::showPeers()
+{
+    ui->tabWidget->setCurrentIndex(3);
+    show();
+}
+
 void RPCConsole::errorLogInitPos()
 {
     // Check if we already have the file
