@@ -1121,7 +1121,7 @@ void ElectrumGUI::aboutClicked()
     dlg.exec();
 }
 
-void ElectrumGUI::infoClicked()
+void ElectrumGUI::webInfoClicked()
 {
     if(!clientModel)
         return;
