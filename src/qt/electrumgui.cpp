@@ -140,7 +140,7 @@ ElectrumGUI::ElectrumGUI(const PlatformStyle *platformStyle, const NetworkStyle 
     sendCoinsMenuAction(0),
     usedSendingAddressesAction(0),
     usedReceivingAddressesAction(0),
-    repairWalletAction(0),
+    //repairWalletAction(0),
     importPrivateKeyAction(0),
     exportMasterPrivateKeyAction(0),
     exportMnemonicAction(0),
@@ -544,22 +544,22 @@ void ElectrumGUI::createActions()
     openGraphAction->setStatusTip(tr("Show network monitor"));
     openPeersAction = new QAction(QIcon(":/icons/connect_4"), tr("&Peers list"), this);
     openPeersAction->setStatusTip(tr("Show peers info"));
-    //openRepairAction = new QAction(QIcon(":/icons/options"), tr("Wallet &Repair"), this);
-    //openRepairAction->setStatusTip(tr("Show wallet repair options"));
+    openRepairAction = new QAction(QIcon(":/icons/options"), tr("Wallet &Repair"), this);
+    openRepairAction->setStatusTip(tr("Show wallet repair options"));
 
     // initially disable the debug window menu item
     openInfoAction->setEnabled(false);
     openRPCConsoleAction->setEnabled(false);
     openGraphAction->setEnabled(false);
     openPeersAction->setEnabled(false);
-    //openRepairAction->setEnabled(false);
+    openRepairAction->setEnabled(false);
 
     usedSendingAddressesAction = new QAction(platformStyle->IconAlt(":/icons/address-book"), tr("&Sending addresses..."), this);
     usedSendingAddressesAction->setStatusTip(tr("Show the list of used sending addresses and labels"));
     usedReceivingAddressesAction = new QAction(platformStyle->IconAlt(":/icons/address-book"), tr("&Receiving addresses..."), this);
     usedReceivingAddressesAction->setStatusTip(tr("Show the list of used receiving addresses and labels"));
-    repairWalletAction = new QAction(tr("&Repair wallet"), this);
-    repairWalletAction->setToolTip(tr("Repair wallet transactions"));
+    //repairWalletAction = new QAction(tr("&Repair wallet"), this);
+    //repairWalletAction->setToolTip(tr("Repair wallet transactions"));
 
     importPrivateKeyAction = new QAction(tr("&Import private key"), this);
     importPrivateKeyAction->setToolTip(tr("Import private key"));
@@ -596,7 +596,7 @@ void ElectrumGUI::createActions()
     connect(openRPCConsoleAction, SIGNAL(triggered()), this, SLOT(showDebugWindow()));
     connect(openGraphAction, SIGNAL(triggered()), this, SLOT(showGraph()));
     connect(openPeersAction, SIGNAL(triggered()), this, SLOT(showPeers()));
-    //connect(openRepairAction, SIGNAL(triggered()), this, SLOT(showRepair()));
+    connect(openRepairAction, SIGNAL(triggered()), this, SLOT(showRepair()));
 
     // prevents an open debug window from becoming stuck/unusable on client shutdown
     connect(quitAction, SIGNAL(triggered()), rpcConsole, SLOT(hide()));
@@ -612,7 +612,7 @@ void ElectrumGUI::createActions()
         connect(verifyMessageAction, SIGNAL(triggered()), this, SLOT(gotoVerifyMessageTab()));
         connect(usedSendingAddressesAction, SIGNAL(triggered()), walletFrame, SLOT(usedSendingAddresses()));
         connect(usedReceivingAddressesAction, SIGNAL(triggered()), walletFrame, SLOT(usedReceivingAddresses()));
-        connect(repairWalletAction, SIGNAL(triggered()), this, SLOT(repairWallet()));
+        //connect(repairWalletAction, SIGNAL(triggered()), this, SLOT(repairWallet()));
         connect(importPrivateKeyAction, SIGNAL(triggered()), walletFrame, SLOT(importPrivateKey()));
         connect(exportMasterPrivateKeyAction, SIGNAL(triggered()), walletFrame, SLOT(exportMasterPrivateKeyAction()));
         connect(exportMnemonicAction, SIGNAL(triggered()), walletFrame, SLOT(exportMnemonicAction()));
@@ -678,8 +678,8 @@ void ElectrumGUI::createMenuBar()
         tools->addAction(openRPCConsoleAction);
         tools->addAction(openGraphAction);
         tools->addAction(openPeersAction);
-        //tools->addAction(openRepairAction);
-        tools->addAction(repairWalletAction);
+        tools->addAction(openRepairAction);
+        //tools->addAction(repairWalletAction);
         tools->addSeparator();
     }
 
@@ -1014,7 +1014,7 @@ void ElectrumGUI::setWalletActionsEnabled(bool enabled)
     verifyMessageAction->setEnabled(enabled);
     usedSendingAddressesAction->setEnabled(enabled);
     usedReceivingAddressesAction->setEnabled(enabled);
-    repairWalletAction->setEnabled(enabled);
+    //repairWalletAction->setEnabled(enabled);
     importPrivateKeyAction->setEnabled(enabled);
     openAction->setEnabled(enabled);
 }
@@ -1070,8 +1070,8 @@ void ElectrumGUI::createTrayIconMenu()
     trayIconMenu->addAction(openRPCConsoleAction);
     trayIconMenu->addAction(openGraphAction);
     trayIconMenu->addAction(openPeersAction);
-    //trayIconMenu->addAction(openRepairAction);
-    trayIconMenu->addAction(repairWalletAction);
+    trayIconMenu->addAction(openRepairAction);
+    //trayIconMenu->addAction(repairWalletAction);
 #ifndef Q_OS_MAC // This is built-in on Mac
     trayIconMenu->addSeparator();
     trayIconMenu->addAction(quitAction);
@@ -1096,7 +1096,7 @@ void ElectrumGUI::optionsClicked()
 
     OptionsDialog dlg(this, enableWallet);
     dlg.setModel(clientModel->getOptionsModel());
-    dlg.exec();          
+    dlg.exec();
 }
 
 void ElectrumGUI::cfundProposalsClicked()
@@ -1533,7 +1533,7 @@ void ElectrumGUI::showEvent(QShowEvent *event)
     openRPCConsoleAction->setEnabled(true);
     openGraphAction->setEnabled(true);
     openPeersAction->setEnabled(true);
-    //openRepairAction->setEnabled(true);
+    openRepairAction->setEnabled(true);
     aboutAction->setEnabled(true);
     webInfoAction->setEnabled(true);
     optionsAction->setEnabled(true);
