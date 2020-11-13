@@ -12,6 +12,7 @@
 #include <qt/guiutil.h>
 #include <qt/electrumunits.h>
 #include <qt/optionsmodel.h>
+#include <qt/platformstyle.h>
 
 #include <chainparams.h>
 #include <main.h> // for DEFAULT_SCRIPTCHECK_THREADS and MAX_SCRIPTCHECK_THREADS
