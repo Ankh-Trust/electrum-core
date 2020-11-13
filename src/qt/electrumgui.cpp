@@ -170,6 +170,7 @@ ElectrumGUI::ElectrumGUI(const PlatformStyle *platformStyle, const NetworkStyle 
     unlockWalletAction(0),
     lockWalletAction(0),
     toggleStakingAction(0),
+    generateColdStakingAction(0),    
     splitRewardAction(0),
     platformStyle(platformStyle),
     updatePriceAction(0),
@@ -443,6 +444,9 @@ void ElectrumGUI::createActions()
     toggleStakingAction = new QAction(tr("Toggle &Staking"), this);
     toggleStakingAction->setStatusTip(tr("Toggle Staking"));
 
+    generateColdStakingAction = new QAction(QIcon(":/icons/verify"), tr("&Generate Cold Staking Address"), this);
+    generateColdStakingAction->setStatusTip(tr("Generate Cold Staking Address"));
+
     splitRewardAction = new QAction(tr("Set up staking rewards"), this);
     splitRewardAction->setStatusTip(tr("Configure how to split the staking rewards"));
 
@@ -459,13 +463,6 @@ void ElectrumGUI::createActions()
     daoAction->setCheckable(true);
     daoAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_5));
     tabGroup->addAction(daoAction);
-
-    settingsAction = new QAction(QIcon(":/icons/options"), tr("&Settings"), this);
-    settingsAction->setStatusTip(tr("Update settings"));
-    settingsAction->setToolTip(settingsAction->statusTip());
-    settingsAction->setCheckable(true);
-    settingsAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_6));
-    tabGroup->addAction(settingsAction);
 
     updatePriceAction  = new QAction(tr("Update exchange prices"), this);
     updatePriceAction->setStatusTip(tr("Update exchange prices"));
@@ -489,10 +486,9 @@ void ElectrumGUI::createActions()
     connect(historyAction, SIGNAL(triggered()), this, SLOT(gotoHistoryPage()));
     connect(daoAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
     connect(daoAction, SIGNAL(triggered()), this, SLOT(gotoCommunityFundPage()));
-    connect(settingsAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
-    connect(settingsAction, SIGNAL(triggered()), this, SLOT(gotoSettingsPage()));
     connect(toggleStakingAction, SIGNAL(triggered()), this, SLOT(toggleStaking()));
     connect(splitRewardAction, SIGNAL(triggered()), this, SLOT(splitRewards()));
+    connect(generateColdStakingAction, SIGNAL(triggered()), this, SLOT(generateColdStaking()));
 #endif // ENABLE_WALLET
 
     quitAction = new QAction(platformStyle->IconAlt(":/icons/quit"), tr("E&xit"), this);
@@ -503,10 +499,10 @@ void ElectrumGUI::createActions()
     aboutAction->setStatusTip(tr("Show information about %1").arg(tr(PACKAGE_NAME)));
     aboutAction->setMenuRole(QAction::AboutRole);
     aboutAction->setEnabled(false);
-    infoAction = new QAction(platformStyle->IconAlt(":/icons/address-book"), tr("%1 &Knowledge Base").arg(tr(PACKAGE_NAME)), this);
-    infoAction->setStatusTip(tr("Open the %1 Knowledge Base in your browser").arg(tr(PACKAGE_NAME)));
-    infoAction->setMenuRole(QAction::NoRole);
-    infoAction->setEnabled(false);
+    webInfoAction = new QAction(platformStyle->IconAlt(":/icons/address-book"), tr("%1 &Knowledge Base").arg(tr(PACKAGE_NAME)), this);
+    webInfoAction->setStatusTip(tr("Open the %1 Knowledge Base in your browser").arg(tr(PACKAGE_NAME)));
+    webInfoAction->setMenuRole(QAction::NoRole);
+    webInfoAction->setEnabled(false);
     aboutQtAction = new QAction(platformStyle->IconAlt(":/icons/about_qt"), tr("About &Qt"), this);
     aboutQtAction->setStatusTip(tr("Show information about Qt"));
     aboutQtAction->setMenuRole(QAction::AboutQtRole);
@@ -534,10 +530,28 @@ void ElectrumGUI::createActions()
     verifyMessageAction = new QAction(platformStyle->IconAlt(":/icons/verify"), tr("&Verify message..."), this);
     verifyMessageAction->setStatusTip(tr("Verify messages to ensure they were signed with specified Electrum addresses"));
 
-    openRPCConsoleAction = new QAction(platformStyle->IconAlt(":/icons/debugwindow"), tr("&Debug window"), this);
-    openRPCConsoleAction->setStatusTip(tr("Open debugging and diagnostic console"));
+    //openRPCConsoleAction = new QAction(platformStyle->IconAlt(":/icons/debugwindow"), tr("&Debug window"), this);
+    //openRPCConsoleAction->setStatusTip(tr("Open debugging and diagnostic console"));
     // initially disable the debug window menu item
+    //openRPCConsoleAction->setEnabled(false);
+
+    openInfoAction = new QAction(QApplication::style()->standardIcon(QStyle::SP_MessageBoxInformation), tr("&Information"), this);
+    openInfoAction->setStatusTip(tr("Show diagnostic information"));
+    openRPCConsoleAction = new QAction(QIcon(":/icons/debugwindow"), tr("&Debug window"), this);
+    openRPCConsoleAction->setStatusTip(tr("Open debugging and diagnostic console"));
+    openGraphAction = new QAction(QIcon(":/icons/connect_4"), tr("&Network Monitor"), this);
+    openGraphAction->setStatusTip(tr("Show network monitor"));
+    openPeersAction = new QAction(QIcon(":/icons/connect_4"), tr("&Peers list"), this);
+    openPeersAction->setStatusTip(tr("Show peers info"));
+    //openRepairAction = new QAction(QIcon(":/icons/options"), tr("Wallet &Repair"), this);
+    //openRepairAction->setStatusTip(tr("Show wallet repair options"));
+
+    // initially disable the debug window menu item
+    openInfoAction->setEnabled(false);
     openRPCConsoleAction->setEnabled(false);
+    openGraphAction->setEnabled(false);
+    openPeersAction->setEnabled(false);
+    //openRepairAction->setEnabled(false);
 
     usedSendingAddressesAction = new QAction(platformStyle->IconAlt(":/icons/address-book"), tr("&Sending addresses..."), this);
     usedSendingAddressesAction->setStatusTip(tr("Show the list of used sending addresses and labels"));
@@ -564,18 +578,24 @@ void ElectrumGUI::createActions()
 
     connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
     connect(aboutAction, SIGNAL(triggered()), this, SLOT(aboutClicked()));
-    connect(infoAction, SIGNAL(triggered()), this, SLOT(infoClicked()));
+    connect(webInfoAction, SIGNAL(triggered()), this, SLOT(infoClicked()));
     connect(aboutQtAction, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
-    connect(optionsAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
-    connect(optionsAction, SIGNAL(triggered()), this, SLOT(gotoSettingsPage()));
+    connect(optionsAction, SIGNAL(triggered()), this, SLOT(optionsClicked()));
     connect(cfundProposalsAction, SIGNAL(triggered()), this, SLOT(cfundProposalsClicked()));
     connect(cfundPaymentRequestsAction, SIGNAL(triggered()), this, SLOT(cfundPaymentRequestsClicked()));
     connect(toggleHideAction, SIGNAL(triggered()), this, SLOT(toggleHidden()));
     connect(showHelpMessageAction, SIGNAL(triggered()), this, SLOT(showHelpMessageClicked()));
-    connect(openRPCConsoleAction, SIGNAL(triggered()), this, SLOT(showDebugWindow()));
+    // connect(openRPCConsoleAction, SIGNAL(triggered()), this, SLOT(showDebugWindow()));
 
     // Get restart command-line parameters and handle restart
-    connect(rpcConsole, SIGNAL(handleRestart(QStringList)), this, SLOT(handleRestart(QStringList)));
+    // connect(rpcConsole, SIGNAL(handleRestart(QStringList)), this, SLOT(handleRestart(QStringList)));
+
+    // Jump directly to tabs in RPC-console
+    connect(openInfoAction, SIGNAL(triggered()), this, SLOT(showInfo()));
+    connect(openRPCConsoleAction, SIGNAL(triggered()), this, SLOT(showDebugWindow()));
+    connect(openGraphAction, SIGNAL(triggered()), this, SLOT(showGraph()));
+    connect(openPeersAction, SIGNAL(triggered()), this, SLOT(showPeers()));
+    //connect(openRepairAction, SIGNAL(triggered()), this, SLOT(showRepair()));
 
     // prevents an open debug window from becoming stuck/unusable on client shutdown
     connect(quitAction, SIGNAL(triggered()), rpcConsole, SLOT(hide()));
@@ -584,9 +604,9 @@ void ElectrumGUI::createActions()
     if(walletFrame)
     {
         connect(encryptWalletAction, SIGNAL(triggered(bool)), walletFrame, SLOT(encryptWallet(bool)));
-        connect(unlockWalletAction, SIGNAL(triggered()), walletFrame, SLOT(unlockWalletStaking()));
         connect(backupWalletAction, SIGNAL(triggered()), walletFrame, SLOT(backupWallet()));
         connect(changePassphraseAction, SIGNAL(triggered()), walletFrame, SLOT(changePassphrase()));
+        connect(unlockWalletAction, SIGNAL(triggered()), walletFrame, SLOT(unlockWalletStaking()));
         connect(signMessageAction, SIGNAL(triggered()), this, SLOT(gotoSignMessageTab()));
         connect(verifyMessageAction, SIGNAL(triggered()), this, SLOT(gotoVerifyMessageTab()));
         connect(usedSendingAddressesAction, SIGNAL(triggered()), walletFrame, SLOT(usedSendingAddresses()));
@@ -599,8 +619,12 @@ void ElectrumGUI::createActions()
     }
 #endif // ENABLE_WALLET
 
+    new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_I), this, SLOT(showInfo()));
     new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_C), this, SLOT(showDebugWindowActivateConsole()));
     new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_D), this, SLOT(showDebugWindow()));
+    new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_G), this, SLOT(showGraph()));
+    new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_P), this, SLOT(showPeers()));
+    new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_R), this, SLOT(showRepair()));
 }
 
 void ElectrumGUI::createMenuBar()
@@ -625,8 +649,6 @@ void ElectrumGUI::createMenuBar()
         file->addAction(usedSendingAddressesAction);
         file->addAction(usedReceivingAddressesAction);
         file->addSeparator();
-        file->addAction(repairWalletAction);
-        file->addSeparator();
         file->addAction(importPrivateKeyAction);
         file->addAction(exportMasterPrivateKeyAction);
         file->addAction(exportMnemonicAction);
@@ -637,25 +659,34 @@ void ElectrumGUI::createMenuBar()
     if(walletFrame)
     {
         settings->addAction(encryptWalletAction);
-        settings->addAction(unlockWalletAction);
         settings->addAction(changePassphraseAction);
+        settings->addAction(unlockWalletAction);
         settings->addSeparator();
         settings->addAction(toggleStakingAction);
         settings->addAction(splitRewardAction);
         settings->addSeparator();
+        settings->addAction(generateColdStakingAction);
         settings->addAction(updatePriceAction);
+        settings->addSeparator();
     }
     settings->addAction(optionsAction);
 
-    QMenu *help = appMenuBar->addMenu(tr("&Help"));
-    if(walletFrame)
-    {
-        help->addAction(openRPCConsoleAction);
+    QMenu* tools = appMenuBar->addMenu(tr("&Tools"));
+    if (walletFrame) {
+        tools->addAction(openInfoAction);
+        tools->addAction(openRPCConsoleAction);
+        tools->addAction(openGraphAction);
+        tools->addAction(openPeersAction);
+        //tools->addAction(openRepairAction);
+        tools->addAction(repairWalletAction);
+        tools->addSeparator();
     }
+
+    QMenu *help = appMenuBar->addMenu(tr("&Help"));
+    help->addAction(webInfoAction);
     help->addAction(showHelpMessageAction);
     help->addSeparator();
     help->addAction(aboutAction);
-    help->addAction(infoAction);
     help->addAction(aboutQtAction);
 }
 
@@ -1028,8 +1059,18 @@ void ElectrumGUI::createTrayIconMenu()
     trayIconMenu->addAction(signMessageAction);
     trayIconMenu->addAction(verifyMessageAction);
     trayIconMenu->addSeparator();
+    trayIconMenu->addAction(overviewAction);
+    trayIconMenu->addAction(sendCoinsAction);
+    trayIconMenu->addAction(receiveCoinsAction);
+    trayIconMenu->addAction(historyAction);
+    trayIconMenu->addSeparator();
     trayIconMenu->addAction(optionsAction);
+    trayIconMenu->addAction(openInfoAction);
     trayIconMenu->addAction(openRPCConsoleAction);
+    trayIconMenu->addAction(openGraphAction);
+    trayIconMenu->addAction(openPeersAction);
+    //trayIconMenu->addAction(openRepairAction);
+    trayIconMenu->addAction(repairWalletAction);
 #ifndef Q_OS_MAC // This is built-in on Mac
     trayIconMenu->addSeparator();
     trayIconMenu->addAction(quitAction);
@@ -1085,7 +1126,7 @@ void ElectrumGUI::infoClicked()
     if(!clientModel)
         return;
 
-    QString link = QString("https://info.electrum.org/");
+    QString link = QString("https://ankh-trust.com/electrum");
     QDesktopServices::openUrl(QUrl(link));
 }
 
@@ -1097,9 +1138,27 @@ void ElectrumGUI::showDebugWindow()
     rpcConsole->activateWindow();
 }
 
+void ElectrumGUI::showInfo()
+{
+    rpcConsole->setTabFocus(RPCConsole::TAB_INFO);
+    showDebugWindow();
+}
+
 void ElectrumGUI::showDebugWindowActivateConsole()
 {
     rpcConsole->setTabFocus(RPCConsole::TAB_CONSOLE);
+    showDebugWindow();
+}
+
+void ElectrumGUI::showGraph()
+{
+    rpcConsole->setTabFocus(RPCConsole::TAB_GRAPH);
+    showDebugWindow();
+}
+
+void ElectrumGUI::showPeers()
+{
+    rpcConsole->setTabFocus(RPCConsole::TAB_PEERS);
     showDebugWindow();
 }
 
@@ -1338,7 +1397,7 @@ void ElectrumGUI::showVotingDialog()
 
     QMessageBox msgBox;
     msgBox.setText(tr("Important network notice."));
-    msgBox.setInformativeText(tr("The Nav Coin Network is currently voting on introducing changes on the consensus protocol. As a participant in our network, we value your input and the decision ultimately is yours. Please cast your vote. <br><br>For more information on the proposal, please visit <a href=\"https://electrum.org/community-fund\">this link</a><br><br>Would you like the Nav Coin Network to update the staking rewards to setup a decentralised community fund that will help grow the network?"));
+    msgBox.setInformativeText(tr("The Electrum Network is currently voting on introducing changes on the consensus protocol. As a participant in our network, we value your input and the decision ultimately is yours. Please cast your vote. <br><br>For more information on the proposal, please visit <a href=\"https://electrum.org/community-fund\">this link</a><br><br>Would you like the Nav Coin Network to update the staking rewards to setup a decentralised community fund that will help grow the network?"));
     QAbstractButton *myYesButton = msgBox.addButton(tr("Yes"), QMessageBox::YesRole);
     msgBox.addButton(trUtf8("No"), QMessageBox::NoRole);
     msgBox.setIcon(QMessageBox::Question);
@@ -1459,9 +1518,13 @@ void ElectrumGUI::closeEvent(QCloseEvent *event)
 void ElectrumGUI::showEvent(QShowEvent *event)
 {
     // enable the debug window when the main window shows up
+    openInfoAction->setEnabled(true);
     openRPCConsoleAction->setEnabled(true);
+    openGraphAction->setEnabled(true);
+    openPeersAction->setEnabled(true);
+    //openRepairAction->setEnabled(true);
     aboutAction->setEnabled(true);
-    infoAction->setEnabled(true);
+    webInfoAction->setEnabled(true);
     optionsAction->setEnabled(true);
 }
 

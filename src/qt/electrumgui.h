@@ -144,7 +144,7 @@ private:
     QAction *signMessageAction;
     QAction *verifyMessageAction;
     QAction *aboutAction;
-    QAction *infoAction;
+    QAction *webInfoAction;
     QAction *receiveCoinsAction;
     QAction *receiveCoinsMenuAction;
     QAction *optionsAction;
@@ -162,6 +162,7 @@ private:
     QAction *lockWalletAction;
     QAction *toggleStakingAction;
     QAction *splitRewardAction;
+    QAction *generateColdStakingAction;
     QToolButton *menuBtns[5];
     QLabel *menuBubbles[5];
     QLabel *notifications[3];
@@ -306,9 +307,16 @@ private Q_SLOTS:
     /** Show about dialog */
     void aboutClicked();
     /** Open Electrum Knowledge base */
-    void infoClicked();
+    void webInfoClicked();
     /** Show debug window */
     void showDebugWindow();
+
+    /** Show debug window and set focus to the appropriate tab */
+    void showInfo();
+    void showGraph();
+    void showPeers();
+    void showRepair();
+
     /** Show debug window and set focus to the console */
     void showDebugWindowActivateConsole();
     /** Show help message dialog */
@@ -319,6 +327,9 @@ private Q_SLOTS:
     void updateDisplayUnit(int unit);
     /** Toggle Staking **/
     void toggleStaking();
+    /** Generate Cold Staking Address **/
+    void generateColdStaking();
+    /** Split Stake Rewards **/
     void splitRewards();
 #ifndef Q_OS_MAC
     /** Handle tray icon clicked */
