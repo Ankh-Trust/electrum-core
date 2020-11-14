@@ -201,21 +201,11 @@ void ColdStakingAddressPage::initializePage()
             }
             QRcode_free(code);
 
-            // Size of the qr code
-            QImage qrAddrImage = QImage(QR_IMAGE_SIZE*2, QR_IMAGE_SIZE+20, QImage::Format_RGB32);
-            qrAddrImage.fill(0xffffff);
-            QPainter painter(&qrAddrImage);
-            painter.drawImage(QR_IMAGE_SIZE/2, 0, qrImage.scaled(QR_IMAGE_SIZE, QR_IMAGE_SIZE));
-            QFont font = GUIUtil::fixedPitchFont();
-            font.setPixelSize(12);
-            painter.setFont(font);
-            QRect paddedRect = qrAddrImage.rect();
-            paddedRect.setHeight(QR_IMAGE_SIZE+12);
-            painter.drawText(paddedRect, Qt::AlignBottom|Qt::AlignCenter, coldStakingAddress);
-            painter.end();
+            // Size of the qr code scaled
+            int qrSize = QR_IMAGE_SIZE * GUIUtil::scale();
 
             // Set the image
-            image->setPixmap(QPixmap::fromImage(qrAddrImage));
+            image->setPixmap(QPixmap::fromImage(qrImage.scaled(qrSize, qrSize)));
 
             // Set the address
             address->setText(coldStakingAddress);
