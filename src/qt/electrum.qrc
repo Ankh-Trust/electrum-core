@@ -50,7 +50,7 @@
         <file alias="transaction_abandoned">res/icons/transaction_abandoned.png</file>
         <file alias="transaction_confirmed">res/icons/transaction2.png</file>
         <file alias="transaction_conflicted">res/icons/transaction_conflicted.png</file>
-        <file alias="transactions">res/icons/transactions.svg</file>
+        <file alias="transactions">res/icons/transactions.png</file>
         <file alias="tx_inout">res/icons/tx_inout.png</file>
         <file alias="tx_input">res/icons/tx_input.png</file>
         <file alias="tx_mined">res/icons/tx_mined.png</file>
