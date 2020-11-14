@@ -127,12 +127,12 @@ StartOptionsSort::StartOptionsSort(std::vector<std::string> Words, int rows,
             CustomRectItem *listViewBorder = new CustomRectItem;
             scene->addItem(listViewBorder);
             listViewBorder->setRect(rect2);
-            listViewBorder->setBrush(QColor(102, 2, 60));
+            listViewBorder->setBrush(QColor(117, 120, 162));
             listViewBorder->setPos(ki, ii + 50);
             listViewBorder->setPen(Qt::NoPen);
 
             listView->setPos(ki, ii);
-            QPen myPen(QColor(207, 181, 59), 2, Qt::MPenStyle);
+            QPen myPen(QColor(117, 120, 162), 2, Qt::MPenStyle);
             listView->setPen(myPen);
 
             graphicsList.push_back(listView);
@@ -162,8 +162,6 @@ StartOptionsSort::StartOptionsSort(std::vector<std::string> Words, int rows,
         itemListWidget->setMaximumSize(QSize(118, 180));
         itemListWidget->setDragEnabled(true);
         itemListWidget->setFocusPolicy(Qt::NoFocus);
-        itemListWidget->setStyleSheet(
-                "QWidget{font-size:18px; font-style:bold;}");
         itemListWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
         labelsList.push_back(itemListWidget);
         ui->gridLayoutRevealed->addWidget(itemListWidget, 2, k, Qt::AlignCenter);
