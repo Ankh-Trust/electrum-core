@@ -9,6 +9,9 @@
 #include <startoptionsrestore.h>
 #include <ui_startoptionsrestore.h>
 
+QString editLineCorrectCss = "QLineEdit{; border:1px solid #000000;}";
+QString editLineInvalidCss = "QLineEdit{ border:1px solid #800000;}";
+
 StartOptionsRestore::StartOptionsRestore(QStringList _wordList, int rows,
                                          QWidget *parent)
     : QWidget(parent), ui(new Ui::StartOptionsRestore), wordList(_wordList) {
@@ -20,11 +23,17 @@ StartOptionsRestore::StartOptionsRestore(QStringList _wordList, int rows,
     for (int i = 0; i < rows; i++) {
         for (int k = 0; k < 6; k++) {
             QLineEdit *label = new QLineEdit(this);
-            label->setMinimumSize(80 * GUIUtil::scale(), 36 * GUIUtil::scale());
+            label->setStyleSheet(
+                "QLabel{background-color: blue; padding:0px; margin:0px"
+                "; font-size: 18px; font-weight: thin; color: #000000;}");
+            label->setMinimumSize(80, 36);
             label->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
             label->setContentsMargins(0, 0, 0, 0);
             label->setAlignment(Qt::AlignCenter);
             editList.push_back(label);
+            ui->restoreLabel->setText(
+                tr("Restore your wallet using a recovery seed phrase below. "
+                   ""));
             connect(label, SIGNAL(textChanged(const QString &)), this,
                     SLOT(textChanged(const QString &)));
             ui->gridLayoutRevealed->addWidget(label, i, k, Qt::AlignCenter);
@@ -36,12 +45,10 @@ void StartOptionsRestore::textChanged(const QString &text) {
 
     QObject *senderObj = sender();
     QLineEdit* label = static_cast<QLineEdit*>(senderObj);
-    label->setProperty("class", "");
-    if (text != "") {
-        label->setProperty("class", "highlight-border");
-        if (!wordList.contains(text)) {
-            label->setProperty("class", "error-border");
-        }
+    if (wordList.contains(text)) {
+        label->setStyleSheet(editLineCorrectCss);
+    } else {
+        label->setStyleSheet(editLineInvalidCss);
     }
     qApp->setStyleSheet(qApp->styleSheet()); // It's a hack I know :P
 }
