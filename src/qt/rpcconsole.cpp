@@ -276,8 +276,6 @@ RPCConsole::RPCConsole(const PlatformStyle *platformStyle, QWidget *parent) :
 
     ui->openDebugLogfileButton->setToolTip(ui->openDebugLogfileButton->toolTip().arg(tr(PACKAGE_NAME)));
 
-    QSize iconSize = QSize(15 * GUIUtil::scale(), 15 * GUIUtil::scale());
-
     ui->clearButton->setIcon(QIcon(":/icons/remove"));
     ui->clearButton->setIconSize(iconSize);
     ui->fontBiggerButton->setIcon(QIcon(":/icons/fontbigger"));

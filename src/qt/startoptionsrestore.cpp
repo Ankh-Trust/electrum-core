@@ -20,7 +20,7 @@ StartOptionsRestore::StartOptionsRestore(QStringList _wordList, int rows,
     for (int i = 0; i < rows; i++) {
         for (int k = 0; k < 6; k++) {
             QLineEdit *label = new QLineEdit(this);
-            label->setMinimumSize(80 * GUIUtil::scale(), 36 * GUIUtil::scale());
+            label->setMinimumSize(80, 36);
             label->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
             label->setContentsMargins(0, 0, 0, 0);
             label->setAlignment(Qt::AlignCenter);
