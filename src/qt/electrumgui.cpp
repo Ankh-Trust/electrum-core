@@ -250,7 +250,7 @@ ElectrumGUI::ElectrumGUI(const PlatformStyle *platformStyle, const NetworkStyle 
     createMenuBar();
 
     // Create the header widgets
-    createHeaderWidgets();
+    // createHeaderWidgets();
 
     // Create the toolbars
     createToolBars();
