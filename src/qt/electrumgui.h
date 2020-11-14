@@ -203,7 +203,7 @@ private:
     /** Create the menu bar and sub-menus. */
     void createMenuBar();
     /** Create the header widgets */
-    void createHeaderWidgets();
+    // void createHeaderWidgets();
     /** Create the toolbars */
     void createToolBars();
     /** Create system tray icon and notification */
