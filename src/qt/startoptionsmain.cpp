@@ -38,8 +38,36 @@ StartOptionsMain::StartOptionsMain(QWidget *parent)
 
     this->setContentsMargins(0, 0, 0, 0);
     ui->QStackTutorialContainer->setContentsMargins(0, 0, 0, 10);
-    ui->QStackTutorialContainer->setObjectName("startOptions");
+    this->setStyleSheet(
+    "QWidget{color:#000000;}"
+    "QListView { background-color: transparent; border: 2px solid transparent;}"
+    "QListView::item { color: #000000; height: 36px;} "
+    "QListView::item:selected{border:1px solid transparent;background:transparent;}"
+    "QListView::item:hover{border:1px solid #66023c;background:#66023c; color:#e5e4e2;}"
 
+    "QGraphicsView {background-color: transparent;border: 2px solid transparent; color: #CFB53B;}"
+    "QGraphicsScene {background-color: transparent;color: #CFB53B;}"
+    "QRadioButton {height: 40px;text-align: center;font-size: 20px;padding: 20px;border-radius: 8px;}"
+
+    "QRadioButton:focus {background-color: #000;}"
+    "QRadioButton::indicator {display: none;opacity: 0;width: 0px;height: 0px;}"
+    "QRadioButton:checked {background-color: transparent;border: 2px solid #CFB53B;}"
+    "QRadioButton:unchecked {background-color: transparent;border-width: 2px;border-color: #CFB53B;}"
+
+    "QRadioButton::unchecked: hover {background-color: #1f1f1f;}"
+    "QListWidget {border-color: #1f1f1f;}"
+    "QListWidget::item {border-radius: 8px;border: none;color: #CFB53B;}"
+    "QListWidget::item:selected {border: 2px solid #1f1f1f;border-radius: 8px;padding-left: 4px;background: transparent;}"
+    "QListWidget::item:focus {border: 1px solid #1f1f1f;background: transparent; ;border-radius: 8px;padding-left: 4px;}"
+
+    "QPushButton {background-color:transparent; padding:0.85em 2em; letter-spacing:1px; border:0; color: #CFB53B; font-size:12px; font-weight:bold; border-radius:20px;}"
+    "QPushButton:hover {background-color: #66023c;}"
+    "QPushButton:focus {border: none; outline: none;}"
+    "QPushButton:pressed {border:1px solid #333;}"
+
+    );
+
+    ui->QStackTutorialContainer->setObjectName("startOptions");
     ui->Back->setVisible(false);
     ui->Next->setVisible(false);
     startOptions = new StartOptions(this);
