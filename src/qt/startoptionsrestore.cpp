@@ -2,8 +2,6 @@
 // Created by Kolby on 6/19/2019.
 //
 
-#include <guiutil.h>
-
 #include <QLabel>
 #include <QLineEdit>
 #include <startoptionsrestore.h>
