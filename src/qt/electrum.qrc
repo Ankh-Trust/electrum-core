@@ -10,7 +10,7 @@
         <file alias="connect_2">res/icons/connect2.png</file>
         <file alias="connect_3">res/icons/connect3.png</file>
         <file alias="connect_4">res/icons/connect4.png</file>
-        <file alias="connect_disabled">res/icons/connect_disabled.svg</file>
+        <file alias="connect_disabled">res/icons/connect_disabled.png</file>
         <file alias="dao">res/icons/dao.svg</file>
         <file alias="splash">res/icons/splash.png</file>
         <file alias="debugwindow">res/icons/debugwindow.png</file>
