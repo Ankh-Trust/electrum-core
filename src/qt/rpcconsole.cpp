@@ -277,15 +277,10 @@ RPCConsole::RPCConsole(const PlatformStyle *platformStyle, QWidget *parent) :
     ui->openDebugLogfileButton->setToolTip(ui->openDebugLogfileButton->toolTip().arg(tr(PACKAGE_NAME)));
 
     ui->clearButton->setIcon(QIcon(":/icons/remove"));
-    ui->clearButton->setIconSize(iconSize);
     ui->fontBiggerButton->setIcon(QIcon(":/icons/fontbigger"));
-    ui->fontBiggerButton->setIconSize(iconSize);
     ui->fontSmallerButton->setIcon(QIcon(":/icons/fontsmaller"));
-    ui->fontSmallerButton->setIconSize(iconSize);
     ui->openDebugLogfileButton->setIcon(QIcon(":/icons/export"));
-    ui->openDebugLogfileButton->setIconSize(iconSize);
     ui->promptIcon->setIcon(platformStyle->IconAlt(":/icons/prompticon"));
-    ui->promptIcon->setIconSize(iconSize);
 
     // Install event filter for up and down arrow
     ui->lineEdit->installEventFilter(this);
