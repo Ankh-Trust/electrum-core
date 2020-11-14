@@ -19,9 +19,6 @@
 #include <qt/utilitydialog.h>
 #include <qt/winshutdownmonitor.h>
 
-#include <styles/dark.h>
-#include <styles/light.h>
-
 #ifdef ENABLE_WALLET
 #include <qt/paymentserver.h>
 #include <startoptionsmain.h>

@@ -204,9 +204,7 @@ QT_MOC_CPP = \
   qt/moc_electrumlistwidget.cpp \
   qt/moc_electrumpushbutton.cpp \
   qt/moc_daoproposeanswer.cpp \
-  qt/moc_daosupport.cpp \
-	qt/styles/moc_dark.cpp \
-	qt/styles/moc_light.cpp
+  qt/moc_daosupport.cpp
 
 ELECTRUM_MM = \
 	qt/macappnapinhibitor.mm \
@@ -301,8 +299,6 @@ ELECTRUM_QT_H = \
 	qt/signverifymessagedialog.h \
 	qt/splashscreen.h \
 	qt/splitrewards.h \
-	qt/styles/dark.h \
-	qt/styles/light.h \
 	qt/trafficgraphwidget.h \
 	qt/transactiondesc.h \
 	qt/transactiondescdialog.h \
@@ -386,8 +382,7 @@ RES_ICONS = \
 # Vector Icons
 RES_ICONS += \
 	qt/res/icons/connect_disabled.svg \
-	qt/res/icons/dao.svg \
-	qt/res/icons/wallet.svg
+	qt/res/icons/dao.svg
 
 ELECTRUM_QT_CPP = \
 	qt/bantablemodel.cpp \
@@ -410,8 +405,6 @@ ELECTRUM_QT_CPP = \
 	qt/qvaluecombobox.cpp \
 	qt/rpcconsole.cpp \
 	qt/splashscreen.cpp \
-	qt/styles/dark.cpp \
-	qt/styles/light.cpp \
 	qt/trafficgraphwidget.cpp \
   qt/utilitydialog.cpp \
   qt/electrumlistwidget.cpp \
