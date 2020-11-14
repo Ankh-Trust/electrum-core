@@ -500,7 +500,7 @@ void ElectrumGUI::createActions()
     aboutAction->setStatusTip(tr("Show information about %1").arg(tr(PACKAGE_NAME)));
     aboutAction->setMenuRole(QAction::AboutRole);
     aboutAction->setEnabled(false);
-    webInfoAction = new QAction(platformStyle->IconAlt(":/icons/address-book"), tr("%1 &Knowledge Base").arg(tr(PACKAGE_NAME)), this);
+    webInfoAction = new QAction(QApplication::style()->standardIcon(QStyle::SP_MessageBoxInformation), tr("%1 &Knowledge Base").arg(tr(PACKAGE_NAME)), this);
     webInfoAction->setStatusTip(tr("Open the %1 Knowledge Base in your browser").arg(tr(PACKAGE_NAME)));
     webInfoAction->setMenuRole(QAction::NoRole);
     webInfoAction->setEnabled(false);
@@ -573,7 +573,7 @@ void ElectrumGUI::createActions()
     openAction = new QAction(platformStyle->IconAlt(":/icons/open"), tr("Open &URI..."), this);
     openAction->setStatusTip(tr("Open a electrum: URI or payment request"));
 
-    showHelpMessageAction = new QAction(platformStyle->IconAlt(":/icons/info"), tr("&Command-line options"), this);
+    showHelpMessageAction = new QAction(QApplication::style()->standardIcon(QStyle::SP_MessageBoxInformation), tr("&Command-line options"), this);
     showHelpMessageAction->setMenuRole(QAction::NoRole);
     showHelpMessageAction->setStatusTip(tr("Show the %1 help message to get a list with possible Electrum command-line options").arg(tr(PACKAGE_NAME)));
 
