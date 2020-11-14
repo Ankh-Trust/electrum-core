@@ -188,9 +188,9 @@ ElectrumGUI::ElectrumGUI(const PlatformStyle *platformStyle, const NetworkStyle 
 #endif // ENABLE_WALLET
     if(enableWallet)
     {
-        windowTitle += tr("Wallet");
+        windowTitle += tr("");
     } else {
-        windowTitle += tr("Node");
+        windowTitle += tr(" Node");
     }
 
     if(clientModel->isReleaseVersion() == false)
