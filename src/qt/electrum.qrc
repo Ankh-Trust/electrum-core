@@ -1,9 +1,6 @@
 <RCC>
     <qresource prefix="/icons">
         <file alias="electrum">res/icons/electrum.png</file>
-        <file alias="electrum_full">res/icons/electrum_full.png</file>
-        <file alias="logo_n">res/icons/logo_n.png</file>
-
         <file alias="about">res/icons/about.svg</file>
         <file alias="about_qt">res/icons/about_qt.svg</file>
         <file alias="add">res/icons/add.svg</file>
@@ -15,6 +12,7 @@
         <file alias="connect_4">res/icons/connect4.svg</file>
         <file alias="connect_disabled">res/icons/connect_disabled.svg</file>
         <file alias="dao">res/icons/dao.svg</file>
+        <file alias="splash">res/icons/splash.png</file>        
         <file alias="debugwindow">res/icons/debugwindow.svg</file>
         <file alias="edit">res/icons/edit.svg</file>
         <file alias="editcopy">res/icons/editcopy.svg</file>
@@ -59,7 +57,6 @@
         <file alias="tx_output">res/icons/tx_output.svg</file>
         <file alias="verify">res/icons/verify.svg</file>
         <file alias="warning">res/icons/warning.svg</file>
-
         <file alias="roboto">res/fonts/roboto.ttf</file>
         <file alias="roboto-black">res/fonts/roboto-black.ttf</file>
         <file alias="roboto-bold">res/fonts/roboto-bold.ttf</file>

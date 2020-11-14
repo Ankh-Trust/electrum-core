@@ -326,11 +326,10 @@ ELECTRUM_QT_H = \
 
 # Icons
 RES_ICONS = \
-	qt/res/icons/logo_n.png \
 	qt/res/icons/electrum.icns \
 	qt/res/icons/electrum.ico \
 	qt/res/icons/electrum.png \
-	qt/res/icons/electrum_full.png
+	qt/res/icons/splash.png
 
 # Vector Icons
 RES_ICONS += \

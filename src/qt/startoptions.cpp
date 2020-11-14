@@ -2,8 +2,6 @@
 // Created by Kolby on 6/19/2019.
 //
 
-#include <guiutil.h>
-
 #include <startoptions.h>
 #include <ui_startoptions.h>
 
@@ -16,17 +14,11 @@ StartOptions::StartOptions(QWidget *parent)
     : QWidget(parent), ui(new Ui::StartOptions) {
     ui->setupUi(this);
 
-    // Size of the icon
-    QSize iconSize(400 * GUIUtil::scale(), 95 * GUIUtil::scale());
+    ui->welcomeIcon->setStyleSheet(
+            "QLabel{font-size: 30px; color: #transparent;}");
+    ui->welcomeIcon->setText(tr(
+        "Welcome to Electrum!"));
 
-    // Load the icon
-    QPixmap icon = QPixmap(":icons/electrum_full").scaled(iconSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-
-    // Add alt text
-    ui->welcomeIcon->setToolTip(tr("Welcome to Electrum!"));
-
-    // Add the icon
-    ui->welcomeIcon->setPixmap(icon);
 }
 
 int StartOptions::getRows() {
