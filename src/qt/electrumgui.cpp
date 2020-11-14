@@ -458,8 +458,8 @@ void ElectrumGUI::createActions()
     historyAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_4));
     tabGroup->addAction(historyAction);
 
-    daoAction = new QAction(QIcon(":/icons/dao"), tr("&DAO"), this);
-    daoAction->setStatusTip(tr("Participate in the DAO"));
+    daoAction = new QAction(QIcon(":/icons/proposals"), tr("&Proposals"), this);
+    daoAction->setStatusTip(tr("Participate in the ecosystem"));
     daoAction->setToolTip(daoAction->statusTip());
     daoAction->setCheckable(true);
     daoAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_5));
@@ -727,7 +727,7 @@ void ElectrumGUI::createToolBars()
         "send",
         "receive",
         "transactions",
-        "dao",
+        "proposals",
     };
 
     // Buttons text
@@ -736,7 +736,7 @@ void ElectrumGUI::createToolBars()
         "Send",
         "Receive",
         "Transactions",
-        "DAO",
+        "Proposals",
     };
 
     // Build each new button
