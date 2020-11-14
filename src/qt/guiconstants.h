@@ -23,9 +23,23 @@ static const int ERROR_LOG_INITIAL_COUNT = 500;
 static const int MAX_PASSPHRASE_SIZE = 1024;
 
 /* ElectrumGUI -- Size of icons in status bar */
-static const int STATUSBAR_ICONSIZE = 16;
+static const int STATUSBAR_ICONSIZE = 18;
 
 static const bool DEFAULT_SPLASHSCREEN = true;
+
+/**
+ * Wallet colors
+ */
+static const QString COLOR_WHITE = "#fafafa";
+static const QString COLOR_PURPLE = "#7d5ab5";
+static const QString COLOR_PURPLE_DARK = "#3e1e6e";
+static const QString COLOR_PURPLE_DARKER = "#351565";
+static const QString COLOR_BLUE = "#42b6eb";
+static const QString COLOR_BLUE_LIGHT = "#46b1e8";
+static const QString COLOR_MAGENTA = "#c42bb7";
+static const QString COLOR_GREY = "#c1c1c1";
+static const QString COLOR_GRAY = "#c1c1c1";
+static const QString COLOR_LINK = "#2a82da";
 
 /* Invalid field background style */
 #define STYLE_INVALID "background:#FF8080"
@@ -33,9 +47,9 @@ static const bool DEFAULT_SPLASHSCREEN = true;
 /* Transaction list -- unconfirmed transaction */
 #define COLOR_UNCONFIRMED QColor(128, 128, 128)
 /* Transaction list -- negative amount */
-#define COLOR_NEGATIVE QColor(102, 2, 60) // tyrian purple
+#define COLOR_NEGATIVE QColor(173, 43, 43)
 /* Transaction list -- positive amount */
-#define COLOR_POSITIVE QColor(207, 181, 59)
+#define COLOR_POSITIVE QColor(73, 156, 76)
 /* Transaction list -- bare address (without label) */
 #define COLOR_BAREADDRESS QColor(140, 140, 140)
 /* Transaction list -- anon transaction */
@@ -60,7 +74,7 @@ static const int TOOLTIP_WRAP_THRESHOLD = 80;
 static const int MAX_URI_LENGTH = 255;
 
 /* QRCodeDialog -- size of exported QR Code image */
-#define QR_IMAGE_SIZE 300
+#define QR_IMAGE_SIZE 260
 
 /* Number of frames in spinner animation */
 #define SPINNER_FRAMES 36
