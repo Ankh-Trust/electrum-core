@@ -465,7 +465,7 @@ void ElectrumGUI::createActions()
     daoAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_5));
     tabGroup->addAction(daoAction);
 
-    updatePriceAction  = new QAction(tr("Update exchange prices"), this);
+    updatePriceAction  = new QAction(QIcon(":/icons/verify"), tr("Update exchange prices"), this);
     updatePriceAction->setStatusTip(tr("Update exchange prices"));
 
     connect(updatePriceAction, SIGNAL(triggered()), this, SLOT(updatePrice()));
@@ -665,8 +665,8 @@ void ElectrumGUI::createMenuBar()
         settings->addSeparator();
         settings->addAction(toggleStakingAction);
         settings->addAction(splitRewardAction);
-        settings->addSeparator();
         settings->addAction(generateColdStakingAction);
+        settings->addSeparator();
         settings->addAction(updatePriceAction);
         settings->addSeparator();
     }
