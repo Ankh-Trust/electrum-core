@@ -442,14 +442,14 @@ void ElectrumGUI::createActions()
     receiveCoinsMenuAction->setStatusTip(receiveCoinsAction->statusTip());
     receiveCoinsMenuAction->setToolTip(receiveCoinsMenuAction->statusTip());
 
-    toggleStakingAction = new QAction(tr("Toggle &Staking"), this);
+    toggleStakingAction = new QAction(QIcon(":/icons/staking"), tr("Toggle &Staking"), this);
     toggleStakingAction->setStatusTip(tr("Toggle Staking"));
 
-    generateColdStakingAction = new QAction(QIcon(":/icons/verify"), tr("&Generate Cold Staking Address"), this);
-    generateColdStakingAction->setStatusTip(tr("Generate Cold Staking Address"));
-
-    splitRewardAction = new QAction(tr("Set up staking rewards"), this);
+    splitRewardAction = new QAction(QIcon(":/icons/staking"), tr("Set up staking rewards"), this);
     splitRewardAction->setStatusTip(tr("Configure how to split the staking rewards"));
+
+    generateColdStakingAction = new QAction(QIcon(":/icons/staking"), tr("&Generate Cold Staking Address"), this);
+    generateColdStakingAction->setStatusTip(tr("Generate Cold Staking Address"));
 
     historyAction = new QAction(QIcon(":/icons/transactions"), tr("&Transactions"), this);
     historyAction->setStatusTip(tr("Browse transaction history"));
