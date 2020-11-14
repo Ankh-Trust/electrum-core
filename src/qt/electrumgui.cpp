@@ -101,18 +101,17 @@ const std::string ElectrumGUI::DEFAULT_UIPLATFORM =
         "other"
 #endif
         ;
-
-static const struct {
-    bool error;
-    const char *text;
-} notifs[] = {
-    { true, "The DAO needs you! Please don't forget to vote!" },
-    { false, "This wallet is currently syncing. Your balance may not be accurate until it has completed!" },
-    { false, "GENERIC WARNINGS USE THIS" }
-};
-
-static const unsigned notifs_count = sizeof(notifs)/sizeof(*notifs);
-
+/*
+ * static const struct {
+ *     bool error;
+ *     const char *text;
+ * } notifs[] = {
+ *     { true, "The DAO needs you! Please don't forget to vote!" },
+ *     { false, "This wallet is currently syncing. Your balance may not be accurate until it has completed!" },
+ *     { false, "GENERIC WARNINGS USE THIS" }
+ * };
+ *
+ */
 const QString ElectrumGUI::DEFAULT_WALLET = "~Default";
 
 ElectrumGUI::ElectrumGUI(const PlatformStyle *platformStyle, const NetworkStyle *networkStyle, QWidget *parent) :
