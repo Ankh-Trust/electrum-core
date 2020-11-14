@@ -561,13 +561,13 @@ void ElectrumGUI::createActions()
     //repairWalletAction = new QAction(tr("&Repair wallet"), this);
     //repairWalletAction->setToolTip(tr("Repair wallet transactions"));
 
-    importPrivateKeyAction = new QAction(QIcon(":/icons/key"), tr("&Import private key"), this);
+    importPrivateKeyAction = new QAction(platformStyle->IconAlt(":/icons/key"), tr("&Import private key"), this);
     importPrivateKeyAction->setToolTip(tr("Import private key"));
 
-    exportMasterPrivateKeyAction = new QAction(QIcon(":/icons/key"), tr("Show &master private key"), this);
+    exportMasterPrivateKeyAction = new QAction(platformStyle->IconAlt(":/icons/key"), tr("Show &master private key"), this);
     exportMasterPrivateKeyAction->setToolTip(tr("Show master private key"));
 
-    exportMnemonicAction = new QAction(QIcon(":/icons/key"), tr("Show m&nemonic"), this);
+    exportMnemonicAction = new QAction(platformStyle->IconAlt(":/icons/key"), tr("Show m&nemonic"), this);
     exportMnemonicAction->setToolTip(tr("Show mnemonic"));
 
     openAction = new QAction(platformStyle->IconAlt(":/icons/open"), tr("Open &URI..."), this);
