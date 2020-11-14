@@ -91,14 +91,14 @@ public:
         consensus.nMajorityRejectBlockOutdated = 950;
         consensus.nMajorityWindow = 1000;
         consensus.BIP34Height = 0;
-        consensus.BIP34Hash = uint256S("0x000016a54f295c4f070b28711991a531008b331d5caf970fc3b54103da7221bc");
+        consensus.BIP34Hash = uint256S("0x");
         consensus.powLimit = ArithToUint256(~arith_uint256(0) >> 16);
         consensus.nPowTargetTimespan = 30;
         consensus.nPowTargetSpacing = 30;
         consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.fPowNoRetargeting = false;
-        consensus.nRuleChangeActivationThreshold = 400; // 15120; // 75% of 20160
-        consensus.nMinerConfirmationWindow = 500; //20160; // confirmation period: 1 week
+        consensus.nRuleChangeActivationThreshold = 15120; // 75% of 20160
+        consensus.nMinerConfirmationWindow = 20160; // confirmation period: 1 week
         consensus.nStakeMinAge = 10; // 60 * 60 * 2;	// minimum for coin age: 2 hours
         consensus.nTargetSpacing = 30; // Blocktime: 30 secs
         consensus.nStakeCombineThreshold = 1000 * COIN;
@@ -124,7 +124,7 @@ public:
 
         consensus.nConsensusChangeMinAccept = 7500;
 
-        consensus.vParameters[Consensus::CONSENSUS_PARAM_VOTING_CYCLE_LENGTH].value = 25; //2880 * 7; // 7 Days
+        consensus.vParameters[Consensus::CONSENSUS_PARAM_VOTING_CYCLE_LENGTH].value = 2880 * 7; // 7 Days
         consensus.vParameters[Consensus::CONSENSUS_PARAM_PROPOSAL_MIN_QUORUM].value = 10000 * 2 / 3;
         consensus.vParameters[Consensus::CONSENSUS_PARAM_PAYMENT_REQUEST_MIN_QUORUM].value = 10000 * 2 / 3;
         consensus.vParameters[Consensus::CONSENSUS_PARAM_CONSULTATION_MIN_SUPPORT].value = 150;
@@ -254,9 +254,9 @@ public:
         nPruneAfterHeight = 100000;
         bnProofOfWorkLimit = arith_uint256(~arith_uint256() >> 16);
 
-        uint32_t nTimestamp = 1602443000;
-        uint256 hashGenesisBlock = uint256S("0x000016a54f295c4f070b28711991a531008b331d5caf970fc3b54103da7221bc");
-        uint256 hashMerkleRoot = uint256S("0x28299c1ee06bb5e236befb6fc559c374d4e20439dd23899f5577004535ccea9d");
+        uint32_t nTimestamp = 1605398400;
+        uint256 hashGenesisBlock = uint256S("0x");
+        uint256 hashMerkleRoot = uint256S("0x");
         uint32_t nNonce = 2043831202;
 
         genesis = CreateGenesisBlock(nTimestamp, nNonce, 0x1f00ffff, 1, 0);
@@ -299,7 +299,7 @@ public:
 
         checkpointData = (CCheckpointData) {
             boost::assign::map_list_of
-            ( 0, uint256S("0x000016a54f295c4f070b28711991a531008b331d5caf970fc3b54103da7221bc")),
+            ( 0, uint256S("0x")),
             /*( 250, uint256S("0x668e05f32eaa6ff639b157abfaf9fe4972770a92ed7c69d566b3f4ec00d8d015"))
             ( 500, uint256S("0xa6dd84d1f35b15aae402e72a7ff4f18dca08ac001f2b95cbb4588bdfa16eeb08"))
             ( 1000, uint256S("0x8a75993a531726f54542bdcaffbfed023bfe97f99d9c4f025eb749c4d2ded54e"))
@@ -311,7 +311,7 @@ public:
             ( 100000, uint256S("0xaabf04d3961c67fc6dbb09c7b898bde1523d035d5f5ed26db739659152a89d11"))
             ( 250000, uint256S("0xaabf04d3961c67fc6dbb09c7b898bde1523d035d5f5ed26db739659152a89d11"))
             ( 500000, uint256S("0x7b1d1487143d99b1b0b43a4578f32543ba2b4497ff4909acbc6b97ca951319bb")),*/
-            1595810000, // * UNIX timestamp of last checkpoint block
+            1605398400, // * UNIX timestamp of last checkpoint block
             0,          // * total number of transactions between genesis and last checkpoint
                         //   (the tx=... number in the SetBestChain debug.log lines)
             7000        // * estimated number of transactions per day after checkpoint
@@ -332,7 +332,7 @@ public:
         consensus.nMajorityRejectBlockOutdated = 950;
         consensus.nMajorityWindow = 1000;
         consensus.BIP34Height = 0;
-        consensus.BIP34Hash = uint256S("0x00006f6325ab4854a3994f53eb79506a8fb0060405c48952cc08555d188bbe19");
+        consensus.BIP34Hash = uint256S("0x");
         consensus.powLimit = ArithToUint256(~arith_uint256(0) >> 16);
         consensus.nPowTargetTimespan = 30;
         consensus.nPowTargetSpacing = 30;
@@ -484,9 +484,9 @@ public:
         nPruneAfterHeight = 1000;
         bnProofOfWorkLimit = arith_uint256(~arith_uint256() >> 16);
 
-        uint32_t nTimestamp = 1602443000;
-        uint256 hashGenesisBlock = uint256S("0x00006f6325ab4854a3994f53eb79506a8fb0060405c48952cc08555d188bbe19");
-        uint256 hashMerkleRoot = uint256S("0x40094a94314751dcba31bc70e726ce158152e7dc90302d24f11328cb60c500b5");
+        uint32_t nTimestamp = 1605398400;
+        uint256 hashGenesisBlock = uint256S("0x");
+        uint256 hashMerkleRoot = uint256S("0x");
         uint32_t nNonce = 2043879764;
 
         genesis = CreateGenesisBlockTestnet(nTimestamp, nNonce, 0x1d00ffff, 1, 0);
@@ -530,7 +530,7 @@ public:
         checkpointData = (CCheckpointData) {
             boost::assign::map_list_of
             ( 0,     hashGenesisBlock),
-            1595810000, // * UNIX timestamp of last checkpoint block
+            1605398400, // * UNIX timestamp of last checkpoint block
             0,          // * total number of transactions between genesis and last checkpoint
                         //   (the tx=... number in the SetBestChain debug.log lines)
             7000         // * estimated number of transactions per day after checkpoint
@@ -552,7 +552,7 @@ public:
         consensus.nMajorityRejectBlockOutdated = 950;
         consensus.nMajorityWindow = 1000;
         consensus.BIP34Height = 0;
-        consensus.BIP34Hash = uint256S("0x00004af9c877c3192098476de6b8791532de41c7730da6db942c4348f27324d0");
+        consensus.BIP34Hash = uint256S("0x");
         consensus.powLimit = ArithToUint256(~arith_uint256(0) >> 16);
         consensus.nPowTargetTimespan = 30;
         consensus.nPowTargetSpacing = 30;
@@ -707,12 +707,12 @@ public:
         // To create a new devnet:
         //
         // 1) Replace nTimestamp with current timestamp.
-        uint32_t nTimestamp = 1602443000;
+        uint32_t nTimestamp = 1605398400;
         // 2) Rebuild
         // 3) Launch daemon. It'll calculate the new parameters.
         // 4) Update the following variables with the new values:
-        uint256 hashGenesisBlock = uint256S("0x00004af9c877c3192098476de6b8791532de41c7730da6db942c4348f27324d0");
-        uint256 hashMerkleRoot = uint256S("0x40094a94314751dcba31bc70e726ce158152e7dc90302d24f11328cb60c500b5");
+        uint256 hashGenesisBlock = uint256S("0x");
+        uint256 hashMerkleRoot = uint256S("0x");
         uint32_t nNonce = 2043810603;
         // 5) Rebuild. Launch daemon.
         // 6) Generate first block using RPC command "./electrum-cli generate 1"
@@ -760,7 +760,7 @@ public:
         checkpointData = (CCheckpointData) {
             boost::assign::map_list_of
             ( 0,     hashGenesisBlock),
-            1595810000, // * UNIX timestamp of last checkpoint block
+            1605398400, // * UNIX timestamp of last checkpoint block
             0,          // * total number of transactions between genesis and last checkpoint
                         //   (the tx=... number in the SetBestChain debug.log lines)
             7000         // * estimated number of transactions per day after checkpoint
