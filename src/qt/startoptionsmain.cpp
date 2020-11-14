@@ -26,242 +26,228 @@
 inline bool is_not_space(int c) { return !std::isspace(c); }
 
 StartOptionsMain::StartOptionsMain(QWidget *parent)
-    : QDialog(parent), ui(new Ui::StartOptionsMain) {
-    ui->setupUi(this);
+  : QDialog(parent), ui(new Ui::StartOptionsMain) {
+  ui->setupUi(this);
 
-    this->setWindowTitle(tr("Electrum Wallet Setup"));
+  this->setWindowTitle(tr("Electrum Wallet Setup"));
 
-    dictionary dic = string_to_lexicon("english");
-    for(unsigned long i=0; i< dic.size() ; i++){
-        qWordList << dic[i];
-    }
+  dictionary dic = string_to_lexicon("english");
+  for(unsigned long i=0; i< dic.size() ; i++){
+      qWordList << dic[i];
+  }
 
-    this->setContentsMargins(0, 0, 0, 0);
-    ui->QStackTutorialContainer->setContentsMargins(0, 0, 0, 10);
-    ui->QStackTutorialContainer->setObjectName("startOptions");
+  this->setContentsMargins(0, 0, 0, 0);
+  ui->QStackTutorialContainer->setContentsMargins(0, 0, 0, 10);
+  this->setStyleSheet(
+  "QWidget{color:#000000;}"
+  "QListView { background-color: transparent; border: 2px solid transparent;}"
+  "QListView::item { color: #000000; height: 36px;} "
+  "QListView::item:selected{border:1px solid transparent;background:transparent;}"
+  "QListView::item:hover{border:1px solid #66023c;background:#66023c; color:#e5e4e2;}"
 
-    ui->Back->setVisible(false);
-    ui->Next->setVisible(false);
-    startOptions = new StartOptions(this);
-    ui->QStackTutorialContainer->addWidget(startOptions);
-    ui->QStackTutorialContainer->setCurrentWidget(startOptions);
+  "QGraphicsView {background-color: transparent;border: 2px solid transparent; color: #CFB53B;}"
+  "QGraphicsScene {background-color: transparent;color: #CFB53B;}"
+  "QRadioButton {height: 40px;text-align: center;font-size: 20px;padding: 20px;border-radius: 8px;}"
+
+  "QRadioButton:focus {background-color: #000;}"
+  "QRadioButton::indicator {display: none;opacity: 0;width: 0px;height: 0px;}"
+  "QRadioButton:checked {background-color: transparent;border: 2px solid #CFB53B;}"
+  "QRadioButton:unchecked {background-color: transparent;border-width: 2px;border-color: #CFB53B;}"
+
+  "QRadioButton::unchecked: hover {background-color: #1f1f1f;}"
+  "QListWidget {border-color: #1f1f1f;}"
+  "QListWidget::item {border-radius: 8px;border: none;color: #CFB53B;}"
+  "QListWidget::item:selected {border: 2px solid #1f1f1f;border-radius: 8px;padding-left: 4px;background: transparent;}"
+  "QListWidget::item:focus {border: 1px solid #1f1f1f;background: transparent; ;border-radius: 8px;padding-left: 4px;}"
+
+  "QPushButton {background-color:transparent; padding:0.85em 2em; letter-spacing:1px; border:0; color: #CFB53B; font-size:12px; font-weight:bold; border-radius:20px;}"
+  "QPushButton:hover {background-color: #66023c;}"
+  "QPushButton:focus {border: none; outline: none;}"
+  "QPushButton:pressed {border:1px solid #333;}"
+
+  );
+  ui->Back->setVisible(false);
+  ui->Next->setVisible(false);
+  startOptions = new StartOptions(this);
+  ui->QStackTutorialContainer->addWidget(startOptions);
+  ui->QStackTutorialContainer->setCurrentWidget(startOptions);
 }
 
 StartOptionsMain::~StartOptionsMain() {
-    delete ui;
+  delete ui;
 }
 
 void StartOptionsMain::on_NewWallet_clicked() {
-    pageNum = CreateOrRestorePage;
-    ui->NewWallet->setVisible(false);
-    ui->RestoreWallet->setVisible(false);
-    ui->Back->setVisible(true);
-    ui->Next->setVisible(true);
-    rows = startOptions->getRows();
+  pageNum = CreateOrRestorePage;
+  ui->NewWallet->setVisible(false);
+  ui->RestoreWallet->setVisible(false);
+  ui->Back->setVisible(true);
+  ui->Next->setVisible(true);
+  rows = startOptions->getRows();
 
-    //Generate mnemonic phrase from fresh entropy
-    mnemonic = "";
-    electrum::GenerateNewMnemonicSeed(mnemonic, "english");
+  //Generate mnemonic phrase from fresh entropy
+  mnemonic = "";
+  electrum::GenerateNewMnemonicSeed(mnemonic, "english");
 
-    std::stringstream ss(mnemonic);
-    std::istream_iterator<std::string> begin(ss);
-    std::istream_iterator<std::string> end;
-    words.clear();
-    words = std::vector<std::string>(begin, end);
+  std::stringstream ss(mnemonic);
+  std::istream_iterator<std::string> begin(ss);
+  std::istream_iterator<std::string> end;
+  words.clear();
+  words = std::vector<std::string>(begin, end);
 
 
-    startOptionsRevealed = new StartOptionsRevealed(words, rows, this);
-    ui->QStackTutorialContainer->addWidget(startOptionsRevealed);
-    ui->QStackTutorialContainer->setCurrentWidget(startOptionsRevealed);
+  startOptionsRevealed = new StartOptionsRevealed(words, rows, this);
+  ui->QStackTutorialContainer->addWidget(startOptionsRevealed);
+  ui->QStackTutorialContainer->setCurrentWidget(startOptionsRevealed);
 }
 
 void StartOptionsMain::on_RestoreWallet_clicked() {
-    pageNum = CheckWordsPage;
-    ui->NewWallet->setVisible(false);
-    ui->RestoreWallet->setVisible(false);
-    ui->Back->setVisible(true);
-    ui->Next->setVisible(true);
-    rows = startOptions->getRows();
+  pageNum = CheckWordsPage;
+  ui->NewWallet->setVisible(false);
+  ui->RestoreWallet->setVisible(false);
+  ui->Back->setVisible(true);
+  ui->Next->setVisible(true);
+  rows = startOptions->getRows();
 
-    startOptionsRestore = new StartOptionsRestore(qWordList, rows, this);
-    ui->QStackTutorialContainer->addWidget(startOptionsRestore);
-    ui->QStackTutorialContainer->setCurrentWidget(startOptionsRestore);
+  startOptionsRestore = new StartOptionsRestore(qWordList, rows, this);
+  ui->QStackTutorialContainer->addWidget(startOptionsRestore);
+  ui->QStackTutorialContainer->setCurrentWidget(startOptionsRestore);
 }
 
 void StartOptionsMain::on_Back_clicked() {
-    /*  Pages
-     * Page 1 : Main page were you select the amount of words and the option
-     *      Path 1 : Create wallet
-     *          Page 2 : Shows you your words
-     *          Page 3 : Order the words
-     *      Path 2 : Restore wallet
-     *          Page 4 Enter words to restore
-     * Page 5 : Set a password
-     */
-    switch (pageNum) {
-        case StartPage: {
-            // does nothing as you can not click back on page one
-        }
-        case CreateOrRestorePage: {
-            pageNum = StartPage;
-            ui->NewWallet->setVisible(true);
-            ui->RestoreWallet->setVisible(true);
-            ui->Back->setVisible(false);
-            ui->Next->setVisible(false);
-            ui->QStackTutorialContainer->setCurrentWidget(startOptions);
-            break;
-        }
-        case OrderWordsPage: {
-            pageNum = CreateOrRestorePage;
-            ui->QStackTutorialContainer->addWidget(startOptionsRevealed);
-            ui->QStackTutorialContainer->setCurrentWidget(startOptionsRevealed);
-            break;
-        }
-        case CheckWordsPage: {
-            pageNum = StartPage;
-            ui->NewWallet->setVisible(true);
-            ui->RestoreWallet->setVisible(true);
-            ui->Back->setVisible(false);
-            ui->Next->setVisible(false);
-            ui->QStackTutorialContainer->setCurrentWidget(startOptions);
-            break;
-        }
-    }
+  /*  Pages
+   * Page 1 : Main page were you select the amount of words and the option
+   *      Path 1 : Create wallet
+   *          Page 2 : Shows you your words
+   *          Page 3 : Order the words
+   *      Path 2 : Restore wallet
+   *          Page 4 Enter words to restore
+   */
+  switch (pageNum) {
+      case StartPage: {
+          // does nothing as you can not click back on page one
+      }
+      case CreateOrRestorePage: {
+          pageNum = StartPage;
+          ui->NewWallet->setVisible(true);
+          ui->RestoreWallet->setVisible(true);
+          ui->Back->setVisible(false);
+          ui->Next->setVisible(false);
+          ui->QStackTutorialContainer->setCurrentWidget(startOptions);
+          break;
+      }
+      case OrderWordsPage: {
+          pageNum = CreateOrRestorePage;
+          ui->QStackTutorialContainer->addWidget(startOptionsRevealed);
+          ui->QStackTutorialContainer->setCurrentWidget(startOptionsRevealed);
+          ui->Next->setText(tr("Next"));
+          break;
+      }
+      case CheckWordsPage: {
+          pageNum = StartPage;
+          ui->NewWallet->setVisible(true);
+          ui->RestoreWallet->setVisible(true);
+          ui->Back->setVisible(false);
+          ui->Next->setVisible(false);
+          ui->QStackTutorialContainer->setCurrentWidget(startOptions);
+          break;
+      }
+  }
 }
 
 void StartOptionsMain::on_Next_clicked() {
-    auto rtrim = [](std::string& s) { s.erase(std::find_if(s.rbegin(), s.rend(), is_not_space).base(), s.end()); };
-    /*  Pages
-     * Page 1 : Main page were you select the amount of words and the option
-     *      Path 1 : Create wallet
-     *          Page 2 : Shows you your words
-     *          Page 3 : Order the words
-     *      Path 2 : Restore wallet
-     *          Page 4 Enter words to restore
-     * Page 5 : Set a password
-     */
-    switch (pageNum) {
-        case StartPage: {
-            // does nothing as you can not click back on page one
-        }
+  auto rtrim = [](std::string& s) { s.erase(std::find_if(s.rbegin(), s.rend(), is_not_space).base(), s.end()); };
+  /*  Pages
+   * Page 1 : Main page were you select the amount of words and the option
+   *      Path 1 : Create wallet
+   *          Page 2 : Shows you your words
+   *          Page 3 : Order the words
+   *      Path 2 : Restore wallet
+   *          Page 4 Enter words to restore
+   */
+  switch (pageNum) {
+      case StartPage: {
+          // does nothing as you can not click back on page one
+      }
 
-        case CreateOrRestorePage: {
-            pageNum = OrderWordsPage;
-            startOptionsSort = new StartOptionsSort(words, rows, this);
-            ui->QStackTutorialContainer->addWidget(startOptionsSort);
-            ui->QStackTutorialContainer->setCurrentWidget(startOptionsSort);
-            break;
-        }
-        case OrderWordsPage: {
-            words_empty_str = "";
-            std::list<QString> word_str = startOptionsSort->getOrderedStrings();
-            // reverses the lists order
-            word_str.reverse();
-            for (QString &q_word : word_str) {
-                if (words_empty_str.empty())
-                    words_empty_str = q_word.toStdString();
-                else
-                    words_empty_str += "" + q_word.toStdString();
-            }
+      case CreateOrRestorePage: {
+          pageNum = OrderWordsPage;
+          startOptionsSort = new StartOptionsSort(words, rows, this);
+          ui->QStackTutorialContainer->addWidget(startOptionsSort);
+          ui->QStackTutorialContainer->setCurrentWidget(startOptionsSort);
+          ui->Next->setText(tr("Skip/Next"));
+          break;
+      }
+      case OrderWordsPage: {
+          words_empty_str = "";
+          std::list<QString> word_str = startOptionsSort->getOrderedStrings();
+          // reverses the lists order
+          word_str.reverse();
+          for (QString &q_word : word_str) {
+              if (words_empty_str.empty())
+                  words_empty_str = q_word.toStdString();
+              else
+                  words_empty_str += "" + q_word.toStdString();
+          }
 
-            words_mnemonic = "";
-            for (std::string &q_word : words) {
-                if (words_mnemonic.empty())
-                    words_mnemonic = q_word;
-                else
-                    words_mnemonic += "" + q_word;
-            }
-            rtrim(words_empty_str);
-            rtrim(words_mnemonic);
+          words_mnemonic = "";
+          for (std::string &q_word : words) {
+              if (words_mnemonic.empty())
+                  words_mnemonic = q_word;
+              else
+                  words_mnemonic += "" + q_word;
+          }
+          rtrim(words_empty_str);
+          rtrim(words_mnemonic);
 
-            if (words_empty_str == "") {
-                QMessageBox msgBox;
-                msgBox.setIcon(QMessageBox::Warning);
-                msgBox.setText(tr("Are you sure you want to skip seed confirmation?"));
-                msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::Cancel);
-                msgBox.setDefaultButton(QMessageBox::Cancel);
-                if (msgBox.exec() == QMessageBox::Yes) {
-                    wordsDone = join(words, " ");
-                    pageNum = PasswordPage;
-                    ui->Back->setVisible(false);
-                    startOptionsPassword = new StartOptionsPassword(this);
-                    ui->QStackTutorialContainer->addWidget(startOptionsPassword);
-                    ui->QStackTutorialContainer->setCurrentWidget(startOptionsPassword);
-                }
-            } else if (words_empty_str != words_mnemonic) {
-                QString error = tr("Unfortunately, your words are in the wrong "
-                                "order. Please try again.");
-                StartOptionsDialog dlg(error, this);
-                dlg.exec();
-            } else {
-                wordsDone = join(words, " ");
-                pageNum = PasswordPage;
-                ui->Back->setVisible(false);
-                startOptionsPassword = new StartOptionsPassword(this);
-                ui->QStackTutorialContainer->addWidget(startOptionsPassword);
-                ui->QStackTutorialContainer->setCurrentWidget(startOptionsPassword);
-            }
-            break;
-        }
-        case CheckWordsPage: {
-            std::vector<std::string> word_str = startOptionsRestore->getOrderedStrings();
+          if (words_empty_str == "") {
+              QMessageBox msgBox;
+              msgBox.setIcon(QMessageBox::Warning);
+              msgBox.setText("Are you sure you want to skip seed confirmation?");
+              msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+              msgBox.setDefaultButton(QMessageBox::Cancel);
+              if (msgBox.exec() == QMessageBox::Ok) {
+                  wordsDone = join(words, " ");
+                  QApplication::quit();
+              }
+          } else if (words_empty_str != words_mnemonic) {
+            QString error = tr("Unfortunately, your words are in the wrong "
+                            "order. Please try again.");
+              StartOptionsDialog dlg(error, this);
+              dlg.exec();
+          } else {
+              wordsDone = join(words, " ");
+              QApplication::quit();
+          }
+          break;
+      }
+      case CheckWordsPage: {
+          std::vector<std::string> word_str = startOptionsRestore->getOrderedStrings();
 
-            std::string seedphrase = "";
-            for (std::string &q_word : word_str) {
-                if (seedphrase.empty())
-                    seedphrase = q_word;
-                else
-                    seedphrase += " " + q_word;
-            }
-            // reverses the lists order
-            dictionary lexicon = string_to_lexicon("english");
-            if (validate_mnemonic(sentence_to_word_list(seedphrase), lexicon)) {
-                wordsDone = join(word_str, " ");
-                pageNum = PasswordPage;
-                ui->Back->setVisible(false);
-                startOptionsPassword = new StartOptionsPassword(this);
-                ui->QStackTutorialContainer->addWidget(startOptionsPassword);
-                ui->QStackTutorialContainer->setCurrentWidget(startOptionsPassword);
-            } else {
-                QString error =
-                    tr("Unfortunately, your words seem to be invalid. This is "
-                    "most likely because one or more are misspelled. Please "
-                    "double check your spelling and word order. If you "
-                    "continue to have issue your words may not currently be in "
-                    "our dictionary.");
-                StartOptionsDialog dlg(error, this);
-                dlg.exec();
-            }
+          std::string seedphrase = "";
+          for (std::string &q_word : word_str) {
+              if (seedphrase.empty())
+                  seedphrase = q_word;
+              else
+                  seedphrase += " " + q_word;
+          }
+          // reverses the lists order
+          dictionary lexicon = string_to_lexicon("english");
+          if (validate_mnemonic(sentence_to_word_list(seedphrase), lexicon)) {
+              wordsDone = join(word_str, " ");
+              QApplication::quit();
+          } else {
+              QString error =
+                  tr("Unfortunately, your words seem to be invalid. This is "
+                  "most likely because one or more are misspelled. Please "
+                  "double check your spelling and word order. If you "
+                  "continue to have issue your words may not currently be in "
+                  "our dictionary.");
+              StartOptionsDialog dlg(error, this);
+              dlg.exec();
+          }
 
-            break;
-        }
-        case PasswordPage: {
-            std::string pass = startOptionsPassword->getPass().toStdString();
-            std::string passConf = startOptionsPassword->getPassConf().toStdString();
-            if (pass.empty() && passConf.empty())
-            {
-                QMessageBox msgBox;
-                msgBox.setIcon(QMessageBox::Warning);
-                msgBox.setText(tr("Are you sure you don't want to set a password?"));
-                msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::Cancel);
-                msgBox.setDefaultButton(QMessageBox::Cancel);
-                // Check if they want to really skip password
-                if (msgBox.exec() == QMessageBox::Yes) {
-                    password = pass;
-                    QApplication::quit();
-                }
-            } else if (pass != passConf) {
-                QMessageBox msgBox;
-                msgBox.setIcon(QMessageBox::Critical);
-                msgBox.setText(tr("Passwords don't match"));
-                msgBox.setStandardButtons(QMessageBox::Ok);
-                msgBox.setDefaultButton(QMessageBox::Ok);
-                msgBox.exec();
-            } else {
-                password = pass;
-                QApplication::quit();
-            }
-            break;
-        }
-    }
+          break;
+      }
+  }
 }
