@@ -188,9 +188,6 @@ public:
     explicit ElectrumApplication(int &argc, char **argv);
     ~ElectrumApplication();
 
-    /** Load the stylesheet and base style for the app */
-    void loadTheme();
-
 #ifdef ENABLE_WALLET
     /// Create payment server
     void createPaymentServer();
@@ -522,13 +519,6 @@ void ElectrumApplication::initializeResult(int retval)
             window->show();
         }
         Q_EMIT splashFinished(window);
-
-        //specify a new font.
-        int id = QFontDatabase::addApplicationFont(":/icons/roboto-medium");
-        QString family = QFontDatabase::applicationFontFamilies(id).at(0);
-        QFont newFont(family,10);        //set font of application
-        newFont.setStyleStrategy(QFont::PreferAntialias);
-        QApplication::setFont(newFont);
 
 #ifdef ENABLE_WALLET
         // Now that initialization/startup is done, process any command-line
