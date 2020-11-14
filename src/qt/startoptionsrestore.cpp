@@ -2,8 +2,6 @@
 // Created by Kolby on 6/19/2019.
 //
 
-#include <guiutil.h>
-
 #include <QLabel>
 #include <QLineEdit>
 #include <startoptionsrestore.h>
@@ -17,12 +15,8 @@ StartOptionsRestore::StartOptionsRestore(QStringList _wordList, int rows,
     : QWidget(parent), ui(new Ui::StartOptionsRestore), wordList(_wordList) {
     ui->setupUi(this);
 
-    QString txt(tr("Restore your wallet using a recovery seed phrase below."));
-    ui->restoreLabel->setText(txt);
-    
     for (int i = 0; i < rows; i++) {
         for (int k = 0; k < 6; k++) {
-
             QLineEdit *label = new QLineEdit(this);
             label->setStyleSheet(
                 "QLabel{background-color: blue; padding:0px; margin:0px"
