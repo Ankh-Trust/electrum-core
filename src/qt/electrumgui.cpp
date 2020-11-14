@@ -413,7 +413,7 @@ void ElectrumGUI::createActions()
 {
     QActionGroup *tabGroup = new QActionGroup(this);
 
-    overviewAction = new QAction(QIcon(":/icons/home"), tr("&Overview"), this);
+    overviewAction = new QAction(QIcon(":/icons/overview"), tr("&Overview"), this);
     overviewAction->setStatusTip(tr("Show general overview of wallet"));
     overviewAction->setToolTip(overviewAction->statusTip());
     overviewAction->setCheckable(true);
@@ -723,7 +723,7 @@ void ElectrumGUI::createToolBars()
 
     // Buttons icon
     QString btnNamesIcon[5] = {
-        "home",
+        "overview",
         "send",
         "receive",
         "transactions",
