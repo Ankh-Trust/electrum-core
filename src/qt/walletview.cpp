@@ -110,6 +110,9 @@ void WalletView::setElectrumGUI(ElectrumGUI *gui)
 
         // Pass through transaction notifications
         connect(this, SIGNAL(incomingTransaction(QString,int,CAmount,QString,QString,QString)), gui, SLOT(incomingTransaction(QString,int,CAmount,QString,QString,QString)));
+
+        // Connect HD enabled state signal
+        connect(this, SIGNAL(hdEnabledStatusChanged(int)), gui, SLOT(setHDStatus(int)));
     }
 }
 
@@ -150,6 +153,9 @@ void WalletView::setWalletModel(WalletModel *walletModel)
         connect(walletModel, SIGNAL(encryptionStatusChanged(int)), this, SIGNAL(encryptionStatusChanged(int)));
         updateEncryptionStatus();
 
+        // update HD status
+        Q_EMIT hdEnabledStatusChanged(walletModel->hdEnabled());
+        
         // Balloon pop-up for new transaction
         connect(walletModel->getTransactionTableModel(), SIGNAL(rowsInserted(QModelIndex,int,int)),
                 this, SLOT(processNewTransaction(QModelIndex,int,int)));
