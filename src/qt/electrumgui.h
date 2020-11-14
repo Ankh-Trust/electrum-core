@@ -270,7 +270,7 @@ public Q_SLOTS:
 
 private Q_SLOTS:
 #ifdef ENABLE_WALLET
-    /** Switch to overview (home) page */
+    /** Switch to overview (overview) page */
     void gotoOverviewPage();
     /** Switch to history (transactions) page */
     void gotoHistoryPage();

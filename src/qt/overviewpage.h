@@ -27,7 +27,7 @@ QT_BEGIN_NAMESPACE
 class QModelIndex;
 QT_END_NAMESPACE
 
-/** Overview ("home") page widget */
+/** Overview ("overview") page widget */
 class OverviewPage : public QWidget
 {
     Q_OBJECT

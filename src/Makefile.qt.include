@@ -354,7 +354,7 @@ RES_ICONS = \
 	qt/res/icons/fontbigger.png \
 	qt/res/icons/fontsmaller.png \
 	qt/res/icons/ghost.png \
-	qt/res/icons/home.png \
+	qt/res/icons/overview.png \
 	qt/res/icons/info.png \
 	qt/res/icons/key.png \
 	qt/res/icons/lock_closed.png \

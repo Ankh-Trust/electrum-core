@@ -73,7 +73,7 @@ private:
     const PlatformStyle *platformStyle;
 
 public Q_SLOTS:
-    /** Switch to overview (home) page */
+    /** Switch to overview (overview) page */
     void gotoOverviewPage();
     /** Switch to history (transactions) page */
     void gotoHistoryPage();
