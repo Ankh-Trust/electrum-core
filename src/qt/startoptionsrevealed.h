@@ -1,3 +1,4 @@
+
 //
 // Created by Kolby on 6/19/2019.
 //
@@ -11,16 +12,16 @@ class StartOptionsRevealed;
 }
 
 /** Dialog to ask for passphrases. Used for encryption only
-*/
+ */
 class StartOptionsRevealed : public QWidget {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
-  explicit StartOptionsRevealed(std::vector<std::string> Words, int rows,
+    explicit StartOptionsRevealed(std::vector<std::string> Words, int rows,
                                 QWidget *parent = nullptr);
-  ~StartOptionsRevealed();
+    ~StartOptionsRevealed();
 
 private:
-  Ui::StartOptionsRevealed *ui;
-  std::list<QLabel *> labelsList;
+    Ui::StartOptionsRevealed *ui;
+    std::list<QLabel *> labelsList;
 };
