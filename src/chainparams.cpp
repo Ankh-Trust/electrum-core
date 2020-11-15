@@ -91,7 +91,7 @@ public:
         consensus.nMajorityRejectBlockOutdated = 950;
         consensus.nMajorityWindow = 1000;
         consensus.BIP34Height = 0;
-        consensus.BIP34Hash = uint256S("0x");
+        consensus.BIP34Hash = uint256S("0x000008e0fcfb77896baff13fb761a5dcd38be007220618c8c6d69a2412af2ed2");
         consensus.powLimit = ArithToUint256(~arith_uint256(0) >> 16);
         consensus.nPowTargetTimespan = 30;
         consensus.nPowTargetSpacing = 30;
@@ -255,9 +255,9 @@ public:
         bnProofOfWorkLimit = arith_uint256(~arith_uint256() >> 16);
 
         uint32_t nTimestamp = 1605398400;
-        uint256 hashGenesisBlock = uint256S("0x");
-        uint256 hashMerkleRoot = uint256S("0x");
-        uint32_t nNonce = 2043831202;
+        uint256 hashGenesisBlock = uint256S("0x000008e0fcfb77896baff13fb761a5dcd38be007220618c8c6d69a2412af2ed2");
+        uint256 hashMerkleRoot = uint256S("0xc314e20303bf99faee740ef7c001cdd6afe4f0bf8f76326b024e3b6b6789ec5d");
+        uint32_t nNonce = 2043840713;
 
         genesis = CreateGenesisBlock(nTimestamp, nNonce, 0x1f00ffff, 1, 0);
 	      consensus.hashGenesisBlock = genesis.GetHash();
@@ -299,7 +299,7 @@ public:
 
         checkpointData = (CCheckpointData) {
             boost::assign::map_list_of
-            ( 0, uint256S("0x")),
+            ( 0, uint256S("0x000008e0fcfb77896baff13fb761a5dcd38be007220618c8c6d69a2412af2ed2")),
             /*( 250, uint256S("0x668e05f32eaa6ff639b157abfaf9fe4972770a92ed7c69d566b3f4ec00d8d015"))
             ( 500, uint256S("0xa6dd84d1f35b15aae402e72a7ff4f18dca08ac001f2b95cbb4588bdfa16eeb08"))
             ( 1000, uint256S("0x8a75993a531726f54542bdcaffbfed023bfe97f99d9c4f025eb749c4d2ded54e"))
