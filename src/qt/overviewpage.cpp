@@ -43,7 +43,6 @@ public:
 
         QIcon icon = qvariant_cast<QIcon>(index.data(TransactionTableModel::RawDecorationRole));
         QRect mainRect = option.rect;
-        icon = platformStyle->Icon(icon);
         QRect decorationRect(mainRect.left(), mainRect.top()+DECORATION_SIZE, DECORATION_SIZE, DECORATION_SIZE);
         int xspace = DECORATION_SIZE + 6;
         int ypad = 1;
