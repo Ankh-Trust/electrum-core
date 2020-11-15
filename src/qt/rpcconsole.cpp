@@ -286,7 +286,7 @@ RPCConsole::RPCConsole(const PlatformStyle *platformStyle, QWidget *parent) :
     ui->fontSmallerButton->setIconSize(iconSize);
     ui->openDebugLogfileButton->setIcon(QIcon(":/icons/export"));
     ui->openDebugLogfileButton->setIconSize(iconSize);
-    ui->promptIcon->setIcon(platformStyle->IconAlt(":/icons/prompticon"));
+    ui->promptIcon->setIcon(QIcon(":/icons/prompticon"));
     ui->promptIcon->setIconSize(iconSize);
 
     // Install event filter for up and down arrow
