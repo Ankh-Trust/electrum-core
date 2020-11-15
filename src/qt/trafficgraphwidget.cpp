@@ -67,7 +67,7 @@ void TrafficGraphWidget::paintEvent(QPaintEvent *)
 
     if(fMax <= 0.0f) return;
 
-    QColor axisCol(Qt::gray);
+    QColor axisCol(Qt::black);
     int h = height() - YMARGIN * 2;
     painter.setPen(axisCol);
     painter.drawLine(XMARGIN, YMARGIN + h, width() - XMARGIN, YMARGIN + h);
@@ -105,15 +105,15 @@ void TrafficGraphWidget::paintEvent(QPaintEvent *)
     if(!vSamplesIn.empty()) {
         QPainterPath p;
         paintPath(p, vSamplesIn);
-        painter.fillPath(p, QColor(0, 255, 0, 128));
-        painter.setPen(Qt::green);
+        painter.fillPath(p, QColor(207, 181, 59, 128));
+        painter.setPen(QColor(102, 2, 60));
         painter.drawPath(p);
     }
     if(!vSamplesOut.empty()) {
         QPainterPath p;
         paintPath(p, vSamplesOut);
-        painter.fillPath(p, QColor(255, 0, 0, 128));
-        painter.setPen(Qt::red);
+        painter.fillPath(p, QColor(102, 2, 60, 128));
+        painter.setPen(QColor(207, 181, 59, 128));
         painter.drawPath(p);
     }
 }
