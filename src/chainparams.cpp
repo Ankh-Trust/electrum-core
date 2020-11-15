@@ -332,7 +332,7 @@ public:
         consensus.nMajorityRejectBlockOutdated = 950;
         consensus.nMajorityWindow = 1000;
         consensus.BIP34Height = 0;
-        consensus.BIP34Hash = uint256S("0x");
+        consensus.BIP34Hash = uint256S("0x000096e8a3bdb5c0cb05ba5ad0145c9191f2ccd98fe8ec0a779fd516ee237c4e");
         consensus.powLimit = ArithToUint256(~arith_uint256(0) >> 16);
         consensus.nPowTargetTimespan = 30;
         consensus.nPowTargetSpacing = 30;
@@ -485,9 +485,9 @@ public:
         bnProofOfWorkLimit = arith_uint256(~arith_uint256() >> 16);
 
         uint32_t nTimestamp = 1605398400;
-        uint256 hashGenesisBlock = uint256S("0x");
-        uint256 hashMerkleRoot = uint256S("0x");
-        uint32_t nNonce = 2043879764;
+        uint256 hashGenesisBlock = uint256S("0x000096e8a3bdb5c0cb05ba5ad0145c9191f2ccd98fe8ec0a779fd516ee237c4e");
+        uint256 hashMerkleRoot = uint256S("0x944abb38540a7dbf4ca9071b70e652d2b4460e38091ddb27b5a03e7087ab7c7e");
+        uint32_t nNonce = 2043925823;
 
         genesis = CreateGenesisBlockTestnet(nTimestamp, nNonce, 0x1d00ffff, 1, 0);
         consensus.hashGenesisBlock = genesis.GetHash();
