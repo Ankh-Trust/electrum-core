@@ -8,7 +8,6 @@
 #include <qt/electrumunits.h>
 
 #include <QAbstractTableModel>
-#include <QIcon>
 #include <QStringList>
 
 class PlatformStyle;
@@ -111,10 +110,6 @@ public Q_SLOTS:
     void updateTransaction(const QString &hash, int status, bool showTransaction);
     void updateConfirmations();
     void updateDisplayUnit();
-
-    /** Get a new QIcon that uses platformStyle icon color */
-    QIcon TxIcon(QString filename) const;
-
     /** Updates the column title to "Amount (DisplayUnit)" and emits headerDataChanged() signal for table headers to react. */
     void updateAmountColumnTitle();
     /* Needed to update fProcessingQueuedTransactions through a QueuedConnection */
