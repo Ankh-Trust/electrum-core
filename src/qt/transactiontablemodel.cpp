@@ -52,6 +52,7 @@ struct TxLessThan
         return a < b.hash;
     }
 };
+
 // Private implementation
 class TransactionTablePriv
 {
@@ -254,11 +255,6 @@ TransactionTableModel::~TransactionTableModel()
     delete priv;
 }
 
-QIcon TransactionTableModel::TxIcon(QString filename) const
-{
-    return platformStyle->Icon(filename);
-}
-
 /** Updates the column title to "Amount (DisplayUnit)" and emits headerDataChanged() signal for table headers to react. */
 void TransactionTableModel::updateAmountColumnTitle()
 {
@@ -405,20 +401,20 @@ QVariant TransactionTableModel::txAddressDecoration(const TransactionRecord *wtx
     switch(wtx->type)
     {
     case TransactionRecord::AnonTx:
-        return TxIcon(":/icons/ghost");
+        return QIcon(":/icons/ghost");
     case TransactionRecord::Staked:
     case TransactionRecord::Generated:
-        return TxIcon(":/icons/tx_mined");
+        return QIcon(":/icons/tx_mined");
     case TransactionRecord::RecvWithAddress:
     case TransactionRecord::RecvFromOther:
     case TransactionRecord::CFundPayment:
-        return TxIcon(":/icons/tx_input");
+        return QIcon(":/icons/tx_input");
     case TransactionRecord::SendToAddress:
     case TransactionRecord::SendToOther:
     case TransactionRecord::CFund:
-        return TxIcon(":/icons/tx_output");
+        return QIcon(":/icons/tx_output");
     default:
-        return TxIcon(":/icons/tx_inout");
+        return QIcon(":/icons/tx_inout");
     }
 }
 
@@ -466,10 +462,9 @@ QVariant TransactionTableModel::addressColor(const TransactionRecord *wtx) const
         {
         QString label = walletModel->getAddressTableModel()->labelForAddress(QString::fromStdString(wtx->address));
         if(label.isEmpty())
-            return QVariant();
+            return COLOR_BAREADDRESS;
         } break;
     case TransactionRecord::SendToSelf:
-        return QVariant();
     default:
         break;
     }
@@ -499,32 +494,31 @@ QVariant TransactionTableModel::txStatusDecoration(const TransactionRecord *wtx)
     case TransactionStatus::Offline:
         return COLOR_TX_STATUS_OFFLINE;
     case TransactionStatus::Unconfirmed:
-        return TxIcon(":/icons/transaction_0");
+        return QIcon(":/icons/transaction_0");
     case TransactionStatus::Abandoned:
-        return TxIcon(":/icons/transaction_abandoned");
+        return QIcon(":/icons/transaction_abandoned");
     case TransactionStatus::Confirming:
         switch(wtx->status.depth)
         {
-        case 1: return TxIcon(":/icons/transaction_1");
-        case 2: return TxIcon(":/icons/transaction_2");
-        case 3: return TxIcon(":/icons/transaction_3");
-        case 4: return TxIcon(":/icons/transaction_4");
-        default: return TxIcon(":/icons/transaction_5");
+        case 1: return QIcon(":/icons/transaction_1");
+        case 2: return QIcon(":/icons/transaction_2");
+        case 3: return QIcon(":/icons/transaction_3");
+        case 4: return QIcon(":/icons/transaction_4");
+        default: return QIcon(":/icons/transaction_5");
         };
     case TransactionStatus::Confirmed:
-        return TxIcon(":/icons/transaction_confirmed");
+        return QIcon(":/icons/transaction_confirmed");
     case TransactionStatus::Conflicted:
-        return TxIcon(":/icons/transaction_conflicted");
+        return QIcon(":/icons/transaction_conflicted");
     case TransactionStatus::Immature: {
         int total = wtx->status.depth + wtx->status.matures_in;
         int part = (wtx->status.depth * 4 / total) + 1;
-        return TxIcon(QString(":/icons/transaction_%1").arg(part));
+        return QIcon(QString(":/icons/transaction_%1").arg(part));
         }
     case TransactionStatus::Orphan:
-        return COLOR_NEGATIVE;
     case TransactionStatus::MaturesWarning:
     case TransactionStatus::NotAccepted:
-        return TxIcon(":/icons/transaction_0");
+        return QIcon(":/icons/transaction_0");
     default:
         return COLOR_BLACK;
     }
@@ -533,7 +527,7 @@ QVariant TransactionTableModel::txStatusDecoration(const TransactionRecord *wtx)
 QVariant TransactionTableModel::txWatchonlyDecoration(const TransactionRecord *wtx) const
 {
     if (wtx->involvesWatchAddress)
-        return TxIcon(":/icons/eye");
+        return QIcon(":/icons/eye");
     else
         return QVariant();
 }
@@ -570,8 +564,7 @@ QVariant TransactionTableModel::data(const QModelIndex &index, int role) const
         break;
     case Qt::DecorationRole:
     {
-        QIcon icon = qvariant_cast<QIcon>(index.data(RawDecorationRole));
-        return QIcon(icon);
+        return qvariant_cast<QIcon>(index.data(RawDecorationRole));
     }
     case Qt::DisplayRole:
         switch(index.column())
