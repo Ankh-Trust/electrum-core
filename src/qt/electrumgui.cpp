@@ -1139,7 +1139,7 @@ void ElectrumGUI::setNumBlocks(int count, const QDateTime& blockDate, double nVe
 #ifdef ENABLE_WALLET
         if(walletFrame)
         {
-            showOutOfSyncWarning(false);
+            walletFrame->showOutOfSyncWarning(false);
             modalOverlay->showHide(true, true);
         }
 #endif // ENABLE_WALLET
@@ -1167,7 +1167,7 @@ void ElectrumGUI::setNumBlocks(int count, const QDateTime& blockDate, double nVe
 #ifdef ENABLE_WALLET
         if(walletFrame)
         {
-            showOutOfSyncWarning(true);
+            walletFrame->showOutOfSyncWarning(true);
             modalOverlay->showHide();
         }
 #endif // ENABLE_WALLET
