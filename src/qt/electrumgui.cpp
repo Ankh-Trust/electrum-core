@@ -817,12 +817,11 @@ void ElectrumGUI::createHeaderWidgets()
     walletFrame->headerLayout->addWidget(headerSpacer);
 }
 
-/*
- * void ElectrumGUI::showOutOfSyncWarning(bool fShow)
- * {
- *     showHideNotification(fShow, 1);
- * }
- */
+void ElectrumGUI::showOutOfSyncWarning(bool fShow)
+{
+    showHideNotification(fShow, 1);
+}
+
 
 void ElectrumGUI::showHideNotification(bool show, int index)
 {
