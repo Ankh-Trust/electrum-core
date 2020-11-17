@@ -304,14 +304,12 @@ void OptionsDialog::clearStatusLabel()
     ui->statusLabel->clear();
 }
 
-/*
- * void OptionsDialog::vote(QString vote)
- * {
- *     SoftSetArg("-stakervote",vote.toStdString(),true);
- *     RemoveConfigFile("stakervote");
- *     WriteConfigFile("stakervote",vote.toStdString());
- * }
- */
+void OptionsDialog::vote(QString vote)
+{
+   SoftSetArg("-stakervote",vote.toStdString(),true);
+   RemoveConfigFile("stakervote");
+   WriteConfigFile("stakervote",vote.toStdString());
+}
 
 void OptionsDialog::updateProxyValidationState()
 {
