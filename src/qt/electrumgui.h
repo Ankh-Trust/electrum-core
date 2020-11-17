@@ -278,10 +278,6 @@ private Q_SLOTS:
     /** Used by curl request in updatePrice */
     static size_t priceUdateWriteCallback(void *contents, size_t size, size_t nmemb, void *userp);
 
-    /** Update the alerts notification */
-    void updateAlerts(const QString &warnings);
-
-
 #endif // ENABLE_WALLET
     /** Show configuration dialog */
     void optionsClicked();

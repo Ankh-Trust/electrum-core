@@ -250,9 +250,6 @@ ElectrumGUI::ElectrumGUI(const PlatformStyle *platformStyle, const NetworkStyle 
     // Create application menu bar
     createMenuBar();
 
-    // Create the header widgets
-    createHeaderWidgets();
-
     // Create the toolbars
     createToolBars();
 
@@ -821,15 +818,6 @@ void ElectrumGUI::repairWallet()
     QApplication::quit();
 }
 
-void ElectrumGUI::updateAlerts(const QString &warnings)
-{
-    // Show or hide the warning
-    notifications[2]->setVisible(!warnings.isEmpty());
-
-    // Set the message
-    notifications[2]->setText(tr(qPrintable(warnings)));
-}
-
 #endif // ENABLE_WALLET
 
 void ElectrumGUI::setWalletActionsEnabled(bool enabled)
@@ -1024,50 +1012,30 @@ void ElectrumGUI::openClicked()
 
 void ElectrumGUI::gotoOverviewPage()
 {
-    if (!checkSettingsSaved())
-        return;
-
-    setActiveMenu(0);
     overviewAction->setChecked(true);
     if (walletFrame) walletFrame->gotoOverviewPage();
 }
 
 void ElectrumGUI::gotoHistoryPage()
 {
-    if (!checkSettingsSaved())
-        return;
-
-    setActiveMenu(3);
     historyAction->setChecked(true);
     if (walletFrame) walletFrame->gotoHistoryPage();
 }
 
 void ElectrumGUI::gotoCommunityFundPage()
 {
-    if (!checkSettingsSaved())
-        return;
-
-    setActiveMenu(4);
     daoAction->setChecked(true);
     if (walletFrame) walletFrame->gotoCommunityFundPage();
 }
 
 void ElectrumGUI::gotoReceiveCoinsPage()
 {
-    if (!checkSettingsSaved())
-        return;
-
-    setActiveMenu(2);
     receiveCoinsAction->setChecked(true);
     if (walletFrame) walletFrame->gotoReceiveCoinsPage();
 }
 
 void ElectrumGUI::gotoSendCoinsPage(QString addr)
 {
-    if (!checkSettingsSaved())
-        return;
-
-    setActiveMenu(1);
     sendCoinsAction->setChecked(true);
     if (walletFrame) walletFrame->gotoSendCoinsPage(addr);
 }
