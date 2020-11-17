@@ -653,6 +653,7 @@ void ElectrumGUI::createMenuBar()
         file->addAction(importPrivateKeyAction);
         file->addAction(exportMasterPrivateKeyAction);
         file->addAction(exportMnemonicAction);
+        file->addSeparator();
     }
     file->addAction(quitAction);
 
@@ -676,9 +677,10 @@ void ElectrumGUI::createMenuBar()
     if (walletFrame) {
         tools->addAction(openInfoAction);
         tools->addAction(openRPCConsoleAction);
+        tools->addAction(openRepairAction);
+        tools->addSeparator();
         tools->addAction(openGraphAction);
         tools->addAction(openPeersAction);
-        tools->addAction(openRepairAction);
         //tools->addAction(repairWalletAction);
         tools->addSeparator();
     }
