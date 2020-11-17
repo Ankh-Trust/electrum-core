@@ -9,8 +9,8 @@
 #include <qt/optionsdialog.h>
 #include <ui_optionsdialog.h>
 
-#include <qt/guiutil.h>
 #include <qt/electrumunits.h>
+#include <qt/guiutil.h>
 #include <qt/optionsmodel.h>
 
 #include <chainparams.h>
@@ -81,14 +81,10 @@ OptionsDialog::OptionsDialog(QWidget *parent, bool enableWallet) :
     ui->tabWidget->removeTab(ui->tabWidget->indexOf(ui->tabWindow));
 #endif
 
-#ifdef ENABLE_WALLET
     /* remove Wallet tab in case of -disablewallet */
-    if (GetBoolArg("-disablewallet", false)) {
-#endif // ENABLE_WALLET
+    if (!enableWallet) {
         ui->tabWidget->removeTab(ui->tabWidget->indexOf(ui->tabWallet));
-#ifdef ENABLE_WALLET
     }
-#endif
 
     /* Display elements init */
 
@@ -189,40 +185,6 @@ void OptionsDialog::setModel(OptionsModel *model)
     connect(ui->digits, SIGNAL(valueChanged()), this, SLOT(showRestartWarning()));
     connect(ui->lang, SIGNAL(valueChanged()), this, SLOT(showRestartWarning()));
     connect(ui->thirdPartyTxUrls, SIGNAL(textChanged(const QString &)), this, SLOT(showRestartWarning()));
-
-    /* Main */
-    connect(ui->electrumAtStartup, SIGNAL(clicked(bool)), this, SLOT(markModelDirty()));
-    connect(ui->threadsScriptVerif, SIGNAL(valueChanged(int)), this, SLOT(markModelDirty()));
-    connect(ui->databaseCache, SIGNAL(valueChanged(int)), this, SLOT(markModelDirty()));
-
-    /* Wallet */
-    connect(ui->spendZeroConfChange, SIGNAL(clicked(bool)), this, SLOT(markModelDirty()));
-    connect(ui->coinControlFeatures, SIGNAL(clicked(bool)), this, SLOT(markModelDirty()));
-
-    /* Network */
-    connect(ui->mapPortUpnp, SIGNAL(clicked(bool)), this, SLOT(markModelDirty()));
-    connect(ui->allowIncoming, SIGNAL(clicked(bool)), this, SLOT(markModelDirty()));
-
-    connect(ui->connectSocks, SIGNAL(clicked(bool)), this, SLOT(markModelDirty()));
-    connect(ui->proxyIp, SIGNAL(textChanged(const QString &)), this, SLOT(markModelDirty()));
-    connect(ui->proxyPort, SIGNAL(textChanged(const QString &)), this, SLOT(markModelDirty()));
-
-    connect(ui->connectSocksTor, SIGNAL(clicked(bool)), this, SLOT(markModelDirty()));
-    connect(ui->proxyIpTor, SIGNAL(textChanged(const QString &)), this, SLOT(markModelDirty()));
-    connect(ui->proxyPortTor, SIGNAL(textChanged(const QString &)), this, SLOT(markModelDirty()));
-
-    /* Window */
-#ifndef Q_OS_MAC
-    connect(ui->hideTrayIcon, SIGNAL(clicked(bool)), this, SLOT(markModelDirty()));
-    connect(ui->minimizeToTray, SIGNAL(clicked(bool)), this, SLOT(markModelDirty()));
-    connect(ui->minimizeOnClose, SIGNAL(clicked(bool)), this, SLOT(markModelDirty()));
-#endif
-
-    /* Display */
-    connect(ui->digits, SIGNAL(valueChanged()), this, SLOT(markModelDirty()));
-    connect(ui->lang, SIGNAL(valueChanged()), this, SLOT(markModelDirty()));
-    connect(ui->unit, SIGNAL(valueChanged()), this, SLOT(markModelDirty()));
-    connect(ui->thirdPartyTxUrls, SIGNAL(textChanged(const QString &)), this, SLOT(markModelDirty()));
 }
 
 void OptionsDialog::setMapper()
@@ -262,12 +224,6 @@ void OptionsDialog::setMapper()
     mapper->addMapping(ui->thirdPartyTxUrls, OptionsModel::ThirdPartyTxUrls);
 }
 
-void OptionsDialog::markModelDirty()
-{
-    info("MODEL DIRTY");
-    model->setDirty(true);
-}
-
 void OptionsDialog::setOkButtonState(bool fState)
 {
     ui->okButton->setEnabled(fState);
@@ -279,8 +235,8 @@ void OptionsDialog::on_resetButton_clicked()
     {
         // confirmation dialog
         QMessageBox::StandardButton btnRetVal = QMessageBox::question(this, tr("Confirm options reset"),
-                tr("Client restart required to activate changes.") + "<br><br>" + tr("Client will be shut down. Do you want to proceed?"),
-                QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel);
+            tr("Client restart required to activate changes.") + "<br><br>" + tr("Client will be shut down. Do you want to proceed?"),
+            QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel);
 
         if(btnRetVal == QMessageBox::Cancel)
             return;
@@ -293,18 +249,20 @@ void OptionsDialog::on_resetButton_clicked()
 
 void OptionsDialog::on_okButton_clicked()
 {
+#ifdef ENABLE_WALLET
     mapper->submit();
-    model->setDirty(false);
+#endif // ENABLE_WALLET
+    accept();
     updateDefaultProxyNets();
 }
 
 void OptionsDialog::on_openElectrumConfButton_clicked()
 {
-    QMessageBox::information(this, tr("Configuration options"),
+      QMessageBox::information(this, tr("Configuration options"),
             tr("The configuration is used to specify advanced user options less any command-line or Qt options. "
-                "Any command-line options will override this configuration file."));
-    GUIUtil::openElectrumConf();
-}
+            "Any command-line options will override this configuration file."));
+      GUIUtil::openElectrumConf();
+ }
 
 void OptionsDialog::on_cancelButton_clicked()
 {
@@ -346,12 +304,14 @@ void OptionsDialog::clearStatusLabel()
     ui->statusLabel->clear();
 }
 
-void OptionsDialog::vote(QString vote)
-{
-    SoftSetArg("-stakervote",vote.toStdString(),true);
-    RemoveConfigFile("stakervote");
-    WriteConfigFile("stakervote",vote.toStdString());
-}
+/*
+ * void OptionsDialog::vote(QString vote)
+ * {
+ *     SoftSetArg("-stakervote",vote.toStdString(),true);
+ *     RemoveConfigFile("stakervote");
+ *     WriteConfigFile("stakervote",vote.toStdString());
+ * }
+ */
 
 void OptionsDialog::updateProxyValidationState()
 {
@@ -393,7 +353,7 @@ void OptionsDialog::updateDefaultProxyNets()
 }
 
 ProxyAddressValidator::ProxyAddressValidator(QObject *parent) :
-    QValidator(parent)
+QValidator(parent)
 {
 }
 
