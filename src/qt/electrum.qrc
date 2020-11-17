@@ -40,7 +40,7 @@
         <file alias="receiving_addresses">res/icons/receive.png</file>
         <file alias="remove">res/icons/remove.png</file>
         <file alias="send">res/icons/send.png</file>
-        <file alias="staking">res/icons/staking.png</file>        
+        <file alias="staking">res/icons/staking.png</file>
         <file alias="staking_off">res/icons/staking_off.png</file>
         <file alias="staking_on">res/icons/staking_on.png</file>
         <file alias="synced">res/icons/synced.png</file>
@@ -50,6 +50,7 @@
         <file alias="transaction_3">res/icons/clock3.png</file>
         <file alias="transaction_4">res/icons/clock4.png</file>
         <file alias="transaction_5">res/icons/clock5.png</file>
+        <file alias="save">res/icons/save.png</file>
         <file alias="transaction_abandoned">res/icons/transaction_abandoned.png</file>
         <file alias="transaction_confirmed">res/icons/transaction2.png</file>
         <file alias="transaction_conflicted">res/icons/transaction_conflicted.png</file>
