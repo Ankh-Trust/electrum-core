@@ -81,6 +81,7 @@ bool WalletFrame::addWallet(const QString& name, WalletModel *walletModel)
     walletView->setElectrumGUI(gui);
     walletView->setClientModel(clientModel);
     walletView->setWalletModel(walletModel);
+    walletView->showOutOfSyncWarning(bOutOfSync);
 
      /* TODO we should goto the currently selected page once dynamically adding wallets is supported */
     walletView->gotoOverviewPage();
@@ -131,6 +132,14 @@ bool WalletFrame::handlePaymentRequest(const SendCoinsRecipient &recipient)
         return false;
 
     return walletView->handlePaymentRequest(recipient);
+}
+
+void WalletFrame::showOutOfSyncWarning(bool fShow)
+{
+    bOutOfSync = fShow;
+    QMap<QString, WalletView*>::const_iterator i;
+    for (i = mapWalletViews.constBegin(); i != mapWalletViews.constEnd(); ++i)
+        i.value()->showOutOfSyncWarning(fShow);
 }
 
 void WalletFrame::gotoOverviewPage()

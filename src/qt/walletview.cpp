@@ -155,7 +155,7 @@ void WalletView::setWalletModel(WalletModel *walletModel)
 
         // update HD status
         Q_EMIT hdEnabledStatusChanged(walletModel->hdEnabled());
-        
+
         // Balloon pop-up for new transaction
         connect(walletModel->getTransactionTableModel(), SIGNAL(rowsInserted(QModelIndex,int,int)),
                 this, SLOT(processNewTransaction(QModelIndex,int,int)));
@@ -254,6 +254,11 @@ void WalletView::gotoVerifyMessageTab(QString addr)
 bool WalletView::handlePaymentRequest(const SendCoinsRecipient& recipient)
 {
     return sendCoinsPage->handlePaymentRequest(recipient);
+}
+
+void WalletView::showOutOfSyncWarning(bool fShow)
+{
+    overviewPage->showOutOfSyncWarning(fShow);
 }
 
 void WalletView::updateEncryptionStatus()

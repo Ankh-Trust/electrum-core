@@ -55,6 +55,8 @@ public:
 
     bool handlePaymentRequest(const SendCoinsRecipient& recipient);
 
+    void showOutOfSyncWarning(bool fShow);
+    
 private:
     ClientModel *clientModel;
     WalletModel *walletModel;
@@ -137,7 +139,7 @@ Q_SIGNALS:
     /** Encryption status of wallet changed */
     void encryptionStatusChanged(int status);
     /** HD-Enabled status of wallet changed (only possible during startup) */
-    void hdEnabledStatusChanged(int hdEnabled);    
+    void hdEnabledStatusChanged(int hdEnabled);
     /** Notify that a new transaction appeared */
     void incomingTransaction(const QString& date, int unit, const CAmount& amount, const QString& type, const QString& address, const QString& label);
     /** Notify that the out of sync warning icon has been pressed */
