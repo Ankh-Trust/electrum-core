@@ -296,8 +296,6 @@ void OptionsDialog::on_okButton_clicked()
     mapper->submit();
     model->setDirty(false);
     updateDefaultProxyNets();
-
-    QMessageBox::information(this, tr("Changes saved"), tr("Changes have been saved!"));
 }
 
 void OptionsDialog::on_openElectrumConfButton_clicked()
@@ -328,7 +326,7 @@ void OptionsDialog::on_hideTrayIcon_stateChanged(int fState)
 
 void OptionsDialog::showRestartWarning(bool fPersistent)
 {
-    ui->statusLabel->setStyleSheet("QLabel { color: red; }");
+    ui->statusLabel->setStyleSheet("QLabel { color: #66023c; }");
 
     if(fPersistent)
     {
@@ -367,7 +365,7 @@ void OptionsDialog::updateProxyValidationState()
     else
     {
         setOkButtonState(false);
-        ui->statusLabel->setStyleSheet("QLabel { color: red; }");
+        ui->statusLabel->setStyleSheet("QLabel { color: #66023c; }");
         ui->statusLabel->setText(tr("The supplied proxy address is invalid."));
     }
 }
