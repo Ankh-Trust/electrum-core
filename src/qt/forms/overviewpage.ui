@@ -548,22 +548,6 @@
               </property>
              </widget>
             </item>
-            <item row="0" column="1">
-             <widget class="QLabel" name="labelTransactionsStatus">
-              <property name="toolTip">
-               <string>The displayed information may be out of date. Your wallet automatically synchronizes with the Electrum network after a connection is established, but this process has not completed yet.</string>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">QLabel { color: #66023c; }</string>
-              </property>
-              <property name="text">
-               <string notr="true">(out of sync)</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignRight|Qt::AlignRight</set>
-              </property>
-             </widget>
-            </item>
             <item row="0" column="2">
              <spacer name="horizontalSpacer_2">
               <property name="orientation">
