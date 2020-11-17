@@ -677,12 +677,12 @@ void ElectrumGUI::createMenuBar()
     if (walletFrame) {
         tools->addAction(openInfoAction);
         tools->addAction(openRPCConsoleAction);
-        tools->addAction(openRepairAction);
         tools->addSeparator();
         tools->addAction(openGraphAction);
         tools->addAction(openPeersAction);
         //tools->addAction(repairWalletAction);
         tools->addSeparator();
+        tools->addAction(openRepairAction);
     }
 
     QMenu *help = appMenuBar->addMenu(tr("&Help"));
