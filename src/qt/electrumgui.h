@@ -72,21 +72,6 @@ public:
     explicit ElectrumGUI(const PlatformStyle *platformStyle, const NetworkStyle *networkStyle, QWidget *parent = 0);
     ~ElectrumGUI();
 
-    /** Show/Hide the wallet sync warning notification */
-    void showOutOfSyncWarning(bool fShow);
-
-    /** Show/Hide a notification */
-    void showHideNotification(bool show, int index);
-
-    /** Set the active menuBtns */
-    void setActiveMenu(int index);
-
-    /** Prompt user if they have not saved changes to options page */
-    bool checkSettingsSaved();
-
-    /** Set the bubble counter on menubtns */
-    void setMenuBubble(int index, int drak);
-
     /** Set the client model.
         The client model represents the part of the core that communicates with the P2P network, and is wallet-agnostic.
     */
@@ -168,9 +153,6 @@ private:
     QAction *toggleStakingAction;
     QAction *splitRewardAction;
     QAction *generateColdStakingAction;
-    QToolButton *menuBtns[5];
-    QLabel *menuBubbles[5];
-    QLabel *notifications[3];
 
     QSystemTrayIcon *trayIcon;
     QMenu *trayIconMenu;
@@ -202,8 +184,6 @@ private:
     void createActions();
     /** Create the menu bar and sub-menus. */
     void createMenuBar();
-    /** Create the header widgets */
-    void createHeaderWidgets();
     /** Create the toolbars */
     void createToolBars();
     /** Create system tray icon and notification */
@@ -301,7 +281,6 @@ private Q_SLOTS:
     /** Update the alerts notification */
     void updateAlerts(const QString &warnings);
 
-    void onDaoEntriesChanged(int count);
 
 #endif // ENABLE_WALLET
     /** Show configuration dialog */
