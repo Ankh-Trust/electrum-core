@@ -123,7 +123,6 @@ private:
     QAction *sendCoinsMenuAction;
     QAction *usedSendingAddressesAction;
     QAction *usedReceivingAddressesAction;
-    QAction *repairWalletAction;
     QAction *importPrivateKeyAction;
     QAction *exportMasterPrivateKeyAction;
     QAction *exportMnemonicAction;
@@ -271,9 +270,6 @@ private Q_SLOTS:
     void updateStakingStatus();
     /** Fetch Price from CMC **/
     void updatePrice();
-
-    /** Repairs wallet **/
-    void repairWallet();
 
     /** Used by curl request in updatePrice */
     static size_t priceUdateWriteCallback(void *contents, size_t size, size_t nmemb, void *userp);

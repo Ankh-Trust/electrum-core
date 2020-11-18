@@ -140,7 +140,6 @@ ElectrumGUI::ElectrumGUI(const PlatformStyle *platformStyle, const NetworkStyle 
     sendCoinsMenuAction(0),
     usedSendingAddressesAction(0),
     usedReceivingAddressesAction(0),
-    //repairWalletAction(0),
     importPrivateKeyAction(0),
     exportMasterPrivateKeyAction(0),
     exportMnemonicAction(0),
@@ -331,16 +330,6 @@ ElectrumGUI::ElectrumGUI(const PlatformStyle *platformStyle, const NetworkStyle 
     connect(timerStakingIcon, SIGNAL(timeout()), this, SLOT(updateStakingStatus()));
     timerStakingIcon->start(45 * 1000);
     updateStakingStatus();
-
-    if (GetArg("-zapwallettxes",0) == 2 && GetArg("-repairwallet",0) == 1)
-    {
-        RemoveConfigFile("zapwallettxes","2");
-        RemoveConfigFile("repairwallet","1");
-
-        QMessageBox::information(this, tr("Repair wallet"),
-            tr("Wallet has been repaired."),
-            QMessageBox::Ok, QMessageBox::Ok);
-    }
 
     // Progress bar and label for blocks download
     progressBarLabel = new QLabel();
@@ -555,8 +544,6 @@ void ElectrumGUI::createActions()
     usedSendingAddressesAction->setStatusTip(tr("Show the list of used sending addresses and labels"));
     usedReceivingAddressesAction = new QAction(QIcon(":/icons/address-book"), tr("&Receiving addresses..."), this);
     usedReceivingAddressesAction->setStatusTip(tr("Show the list of used receiving addresses and labels"));
-    //repairWalletAction = new QAction(tr("&Repair wallet"), this);
-    //repairWalletAction->setToolTip(tr("Repair wallet transactions"));
 
     importPrivateKeyAction = new QAction(QIcon(":/icons/key"), tr("&Import private key"), this);
     importPrivateKeyAction->setToolTip(tr("Import private key"));
@@ -609,7 +596,6 @@ void ElectrumGUI::createActions()
         connect(verifyMessageAction, SIGNAL(triggered()), this, SLOT(gotoVerifyMessageTab()));
         connect(usedSendingAddressesAction, SIGNAL(triggered()), walletFrame, SLOT(usedSendingAddresses()));
         connect(usedReceivingAddressesAction, SIGNAL(triggered()), walletFrame, SLOT(usedReceivingAddresses()));
-        //connect(repairWalletAction, SIGNAL(triggered()), this, SLOT(repairWallet()));
         connect(importPrivateKeyAction, SIGNAL(triggered()), walletFrame, SLOT(importPrivateKey()));
         connect(exportMasterPrivateKeyAction, SIGNAL(triggered()), walletFrame, SLOT(exportMasterPrivateKeyAction()));
         connect(exportMnemonicAction, SIGNAL(triggered()), walletFrame, SLOT(exportMnemonicAction()));
@@ -677,7 +663,6 @@ void ElectrumGUI::createMenuBar()
         tools->addSeparator();
         tools->addAction(openGraphAction);
         tools->addAction(openPeersAction);
-        //tools->addAction(repairWalletAction);
         tools->addSeparator();
         tools->addAction(openRepairAction);
     }
@@ -799,21 +784,6 @@ void ElectrumGUI::removeAllWallets()
     walletFrame->removeAllWallets();
 }
 
-void ElectrumGUI::repairWallet()
-{
-    QMessageBox::StandardButton btnRetVal = QMessageBox::question(this, tr("Repair wallet"),
-        tr("Client restart required to repair the wallet.") + "<br><br>" + tr("Client will be shut down. Do you want to proceed?"),
-        QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel);
-
-    if(btnRetVal == QMessageBox::Cancel)
-        return;
-
-    WriteConfigFile("zapwallettxes","2");
-    WriteConfigFile("repairwallet","1");
-
-    QApplication::quit();
-}
-
 #endif // ENABLE_WALLET
 
 void ElectrumGUI::setWalletActionsEnabled(bool enabled)
@@ -832,7 +802,6 @@ void ElectrumGUI::setWalletActionsEnabled(bool enabled)
     verifyMessageAction->setEnabled(enabled);
     usedSendingAddressesAction->setEnabled(enabled);
     usedReceivingAddressesAction->setEnabled(enabled);
-    //repairWalletAction->setEnabled(enabled);
     importPrivateKeyAction->setEnabled(enabled);
     openAction->setEnabled(enabled);
 }
@@ -889,7 +858,6 @@ void ElectrumGUI::createTrayIconMenu()
     trayIconMenu->addAction(openGraphAction);
     trayIconMenu->addAction(openPeersAction);
     trayIconMenu->addAction(openRepairAction);
-    //trayIconMenu->addAction(repairWalletAction);
 #ifndef Q_OS_MAC // This is built-in on Mac
     trayIconMenu->addSeparator();
     trayIconMenu->addAction(quitAction);
