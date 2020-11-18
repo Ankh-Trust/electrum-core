@@ -1615,7 +1615,7 @@ void ElectrumGUI::updatePrice()
             CURL *curl;
             std::string response;
             std::string url(
-                    "https://api.coingecko.com/api/v3/simple/price?ids=nav-coin&vs_currencies="
+                    "https://api.coingecko.com/api/v3/simple/price?ids=sequence&vs_currencies="
                     "BTC,"
                     "EUR,"
                     "USD,"
