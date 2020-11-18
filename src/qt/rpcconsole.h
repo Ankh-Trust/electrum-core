@@ -123,6 +123,8 @@ public Q_SLOTS:
     /** Switch to peers tab and show */
     void showPeers();
     /** Switch to wallet-repair tab and show */
+    void showRepair();    
+    /** Switch to wallet-repair tab and show */
     void disconnectSelectedNode();
     /** Ban a selected node on the Peers tab */
     void banSelectedNode(int bantime);
