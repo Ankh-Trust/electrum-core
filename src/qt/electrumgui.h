@@ -294,7 +294,7 @@ private Q_SLOTS:
     void showRepair();
 
     /** Show debug window and set focus to the console */
-    void showDebugWindowActivateConsole();
+    void showConsole();
     /** Show help message dialog */
     void showHelpMessageClicked();
     /** Update the display currency **/
