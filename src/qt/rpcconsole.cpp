@@ -279,7 +279,7 @@ RPCConsole::RPCConsole(const PlatformStyle *platformStyle, QWidget *parent) :
     ui->clearButton->setIcon(QIcon(":/icons/remove"));
     ui->fontBiggerButton->setIcon(QIcon(":/icons/fontbigger"));
     ui->fontSmallerButton->setIcon(QIcon(":/icons/fontsmaller"));
-    
+
     ui->openDebugLogfileButton->setIcon(QIcon(":/icons/export"));
     ui->promptIcon->setIcon(QIcon(":/icons/prompticon"));
 
@@ -764,6 +764,9 @@ void RPCConsole::clear(bool clearHistory)
     ui->lineEdit->clear();
     ui->lineEdit->setFocus();
 
+    QString iconPath = ":/icons/";
+    QString iconName = "";
+
     // Add smoothly scaled icon images.
     // (when using width/height on an img, Qt uses nearest instead of linear interpolation)
     for(int i=0; ICON_MAPPING[i].url; ++i)
@@ -771,7 +774,7 @@ void RPCConsole::clear(bool clearHistory)
         ui->messagesWidget->document()->addResource(
                     QTextDocument::ImageResource,
                     QUrl(ICON_MAPPING[i].url),
-                    platformStyle->Image(ICON_MAPPING[i].source).scaled(QSize(consoleFontSize*2, consoleFontSize*2), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+                    QImage(iconPath + iconName).scaled(QSize(consoleFontSize * 2, consoleFontSize * 2), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
     }
 
     // Set default style sheet
@@ -782,14 +785,15 @@ void RPCConsole::clear(bool clearHistory)
                 "td.time { color: #808080; font-size: %2; padding-top: 3px; } "
                 "td.message { font-family: %1; font-size: %2; white-space:pre-wrap; } "
                 "td.cmd-request { color: #006060; } "
-                "td.cmd-error { color: red; } "
+                "td.cmd-error { color: #800000; } "
+                ".secwarning { color: #800000; }"
                 "b { color: #006060; } "
             ).arg(fixedFontInfo.family(), QString("%1pt").arg(consoleFontSize))
         );
 
     message(CMD_REPLY, (tr("Welcome to the %1 RPC console.").arg(tr(PACKAGE_NAME)) + "<br>" +
-                        tr("Use up and down arrows to navigate history, and <b>Ctrl-L</b> to clear screen.") + "<br>" +
-                        tr("Type <b>help</b> for an overview of available commands.")), true);
+                        tr("Use up and down arrows to navigate history, and %1 to clear screen.").arg("<b>" + clsKey + "</b>") + "<br>" +
+                        tr("Type <b>help</b> for an overview of available commands.")) + "<br><span class=\"secwarning\">" + tr("WARNING: Scammers have been active, telling users to type commands here, stealing their wallet contents. Do not use this console without fully understanding the ramification of a command.") + "</span>", true);
 }
 
 void RPCConsole::keyPressEvent(QKeyEvent *event)
