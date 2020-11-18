@@ -373,6 +373,12 @@ void RPCConsole::showPeers()
     show();
 }
 
+void RPCConsole::showRepair()
+{
+    ui->tabWidget->setCurrentIndex(4);
+    show();
+}
+
 void RPCConsole::errorLogInitPos()
 {
     // Check if we already have the file
