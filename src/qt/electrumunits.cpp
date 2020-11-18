@@ -241,8 +241,8 @@ int ElectrumUnits::decimals(int unit)
 {
     switch(unit)
     {
-        case _AE: return 8;
-        case BTC: return 8;
+        case _AE: return 2;
+        case BTC: return 2;
         case EUR:
         case USD:
         case ARS:
@@ -275,7 +275,7 @@ int ElectrumUnits::decimals(int unit)
         case TRY:
         case TWD:
         case ZAR:
-            return 8;
+            return 2;
         default: return 0;
     }
 }
