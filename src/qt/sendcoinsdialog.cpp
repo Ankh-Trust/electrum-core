@@ -74,7 +74,7 @@ SendCoinsDialog::SendCoinsDialog(const PlatformStyle *platformStyle, QWidget *pa
     connect(clipboardLowOutputAction, SIGNAL(triggered()), this, SLOT(coinControlClipboardLowOutput()));
     connect(clipboardChangeAction, SIGNAL(triggered()), this, SLOT(coinControlClipboardChange()));
     connect(ui->fullAmountBtn,  SIGNAL(clicked()), this, SLOT(useFullAmount()));
-    
+
     ui->labelCoinControlQuantity->addAction(clipboardQuantityAction);
     ui->labelCoinControlAmount->addAction(clipboardAmountAction);
     ui->labelCoinControlFee->addAction(clipboardFeeAction);
@@ -265,7 +265,7 @@ void SendCoinsDialog::on_sendButton_clicked()
         if(txFee)
         {
             // append fee string if a fee is required
-            questionString.append("<hr /><span style='color:#aa0000;'>");
+            questionString.append("<hr /><span style='color:#800000;'>");
             questionString.append(ElectrumUnits::formatHtmlWithUnit(model->getOptionsModel()->getDisplayUnit(), txFee));
             questionString.append("</span> ");
             questionString.append(tr("added as transaction fee"));

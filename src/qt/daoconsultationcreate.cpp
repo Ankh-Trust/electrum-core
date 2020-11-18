@@ -343,7 +343,7 @@ void DaoConsultationCreate::onCreateConsensus()
     LOCK2(cs_main, pwalletMain->cs_wallet);
     CStateViewCache view(pcoinsTip);
 
-    CElectrumAddress address("NQFqqMUD55ZV3PJEJZtaKCsQmjLT6JkjvJ"); // Dummy address
+    CElectrumAddress address("EPLWQ3nbeU39ZsVPtEVwvxtrrxUyjKLzhJ"); // Dummy address
 
     CWalletTx wtx;
     bool fSubtractFeeFromAmount = false;

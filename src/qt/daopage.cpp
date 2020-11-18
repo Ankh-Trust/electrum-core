@@ -528,7 +528,7 @@ void DaoPage::initialize(CProposalMap proposalMap, CPaymentRequestMap paymentReq
 
         ProposalEntry p = {
             it.first,
-            "#6666ff",
+            "#66023C",
             QString::fromStdString(proposal.strDZeel).left(150) + (proposal.strDZeel.size() > 150 ? "..." : ""),
             ElectrumUnits::formatWithUnit(unit, proposal.nAmount, false, ElectrumUnits::separatorAlways),
             ElectrumUnits::formatWithUnit(unit, proposal.nAmount - proposal.GetAvailable(coins), false, ElectrumUnits::separatorAlways),
@@ -636,7 +636,7 @@ void DaoPage::initialize(CProposalMap proposalMap, CPaymentRequestMap paymentReq
             it.first,
             QString::fromStdString(prequest.strDZeel).left(150) + (prequest.strDZeel.size() > 150 ? "..." : ""),
             QString::fromStdString(proposal.strDZeel).left(150) + (proposal.strDZeel.size() > 150 ? "..." : ""),
-            "#6666ff",
+            "#66023C",
             ElectrumUnits::formatWithUnit(unit, prequest.nAmount, false, ElectrumUnits::separatorAlways),
             prequest.nVotesYes ? prequest.nVotesYes : 0,
             prequest.nVotesNo ? prequest.nVotesNo : 0,
@@ -824,7 +824,7 @@ void DaoPage::initialize(CProposalMap proposalMap, CPaymentRequestMap paymentReq
 
         ConsultationEntry p = {
             it.first,
-            "#6666ff",
+            "#66023C",
             QString::fromStdString(consultation.strDZeel),
             answers,
             "",
@@ -968,7 +968,7 @@ void DaoPage::initialize(CProposalMap proposalMap, CPaymentRequestMap paymentReq
         bool nVote = !IsVersionBitRejected(consensusParams, id);
 
         DeploymentEntry e = {
-            "#6666ff",
+            "#66023C",
             QString::fromStdString(Consensus::sDeploymentsDesc[id]),
             status,
             status == "started",
@@ -1054,7 +1054,7 @@ void DaoPage::initialize(CProposalMap proposalMap, CPaymentRequestMap paymentReq
 
         ConsensusEntry e = {
             fHasConsultation ? consultation.consultation.hash : uint256(),
-            "#6666ff",
+            "#66023C",
             QString::fromStdString(Consensus::sConsensusParamsDesc[id]),
             GetConsensusParameter(id, coins),
             consultation.answers,
