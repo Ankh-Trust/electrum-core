@@ -646,7 +646,7 @@ void SendCoinsDialog::coinControlChangeEdited(const QString& text)
 
     // Default to no change address until verified
     CoinControlDialog::coinControl->destChange = CNoDestination();
-    ui->labelCoinControlChangeLabel->setStyleSheet("QLabel{color:red;}");
+    ui->labelCoinControlChangeLabel->setStyleSheet("QLabel{color: #800000;}");
 
     CElectrumAddress addr = CElectrumAddress(text.toStdString());
 

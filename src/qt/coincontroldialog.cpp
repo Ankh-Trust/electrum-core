@@ -640,9 +640,9 @@ void CoinControlDialog::updateLabels(WalletModel *model, QDialog* dialog)
     }
 
     // turn labels "red"
-    l5->setStyleSheet((nBytes >= MAX_FREE_TRANSACTION_CREATE_SIZE) ? "color:red;" : "");// Bytes >= 1000
-    l6->setStyleSheet((dPriority > 0 && !fAllowFree) ? "color:red;" : "");              // Priority < "medium"
-    l7->setStyleSheet((fDust) ? "color:red;" : "");                                     // Dust = "yes"
+    l5->setStyleSheet((nBytes >= MAX_FREE_TRANSACTION_CREATE_SIZE) ? "color: #800000;" : "");// Bytes >= 1000
+    l6->setStyleSheet((dPriority > 0 && !fAllowFree) ? "color: #800000;" : "");              // Priority < "medium"
+    l7->setStyleSheet((fDust) ? "color: #800000;" : "");                                     // Dust = "yes"
 
     // tool tips
     QString toolTip1 = tr("This label turns red if the transaction size is greater than 1000 bytes.") + "<br /><br />";
