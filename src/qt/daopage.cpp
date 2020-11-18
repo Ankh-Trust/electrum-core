@@ -59,7 +59,6 @@ DaoPage::DaoPage(const PlatformStyle *platformStyle, QWidget *parent) :
     cycleProgressBar->setMaximum(GetConsensusParameter(Consensus::CONSENSUS_PARAM_VOTING_CYCLE_LENGTH, view));
     cycleProgressBar->setTextVisible(true);
     cycleProgressBar->setFormat("%v/%m");
-    cycleProgressBar->setStyleSheet("QProgressBar { background-color: #F8F8F8; border: 1px solid grey; border-radius: 7px; padding: 1px; text-align: center; } QProgressBar::chunk { background: QLinearGradient(x1: 0, y1: 0, x2: 1, y2: 0, stop: 0 #33023C, stop: 1 #66023C); border-radius: 7px; margin: 0px; }");
 
     warningLbl->setObjectName("warning");
 
