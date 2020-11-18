@@ -517,14 +517,9 @@ void ElectrumGUI::createActions()
     verifyMessageAction = new QAction(QIcon(":/icons/verify"), tr("&Verify message..."), this);
     verifyMessageAction->setStatusTip(tr("Verify messages to ensure they were signed with specified Electrum addresses"));
 
-    //openRPCConsoleAction = new QAction(QIcon(":/icons/debugwindow"), tr("&Debug window"), this);
-    //openRPCConsoleAction->setStatusTip(tr("Open debugging and diagnostic console"));
-    // initially disable the debug window menu item
-    //openRPCConsoleAction->setEnabled(false);
-
     openInfoAction = new QAction(QApplication::style()->standardIcon(QStyle::SP_MessageBoxInformation), tr("&Information"), this);
     openInfoAction->setStatusTip(tr("Show diagnostic information"));
-    openRPCConsoleAction = new QAction(QIcon(":/icons/debugwindow"), tr("&Debug window"), this);
+    openRPCConsoleAction = new QAction(QIcon(":/icons/debugwindow"), tr("&Debug console"), this);
     openRPCConsoleAction->setStatusTip(tr("Open debugging and diagnostic console"));
     openGraphAction = new QAction(QIcon(":/icons/connect_4"), tr("&Network Monitor"), this);
     openGraphAction->setStatusTip(tr("Show network monitor"));
@@ -570,17 +565,16 @@ void ElectrumGUI::createActions()
     connect(cfundPaymentRequestsAction, SIGNAL(triggered()), this, SLOT(cfundPaymentRequestsClicked()));
     connect(toggleHideAction, SIGNAL(triggered()), this, SLOT(toggleHidden()));
     connect(showHelpMessageAction, SIGNAL(triggered()), this, SLOT(showHelpMessageClicked()));
-    connect(openRPCConsoleAction, SIGNAL(triggered()), this, SLOT(showDebugWindow()));
-
-    // Get restart command-line parameters and handle restart
-    connect(rpcConsole, SIGNAL(handleRestart(QStringList)), this, SLOT(handleRestart(QStringList)));
 
     // Jump directly to tabs in RPC-console
     connect(openInfoAction, SIGNAL(triggered()), this, SLOT(showInfo()));
-    connect(openRPCConsoleAction, SIGNAL(triggered()), this, SLOT(showDebugWindow()));
+    connect(openRPCConsoleAction, SIGNAL(triggered()), this, SLOT(showConsole()));
     connect(openGraphAction, SIGNAL(triggered()), this, SLOT(showGraph()));
     connect(openPeersAction, SIGNAL(triggered()), this, SLOT(showPeers()));
     connect(openRepairAction, SIGNAL(triggered()), this, SLOT(showRepair()));
+
+    // Get restart command-line parameters and handle restart
+    connect(rpcConsole, SIGNAL(handleRestart(QStringList)), this, SLOT(handleRestart(QStringList)));
 
     // prevents an open debug window from becoming stuck/unusable on client shutdown
     connect(quitAction, SIGNAL(triggered()), rpcConsole, SLOT(hide()));
@@ -604,7 +598,7 @@ void ElectrumGUI::createActions()
 #endif // ENABLE_WALLET
 
     new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_I), this, SLOT(showInfo()));
-    new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_C), this, SLOT(showDebugWindowActivateConsole()));
+    new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_C), this, SLOT(showConsole()));
     new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_D), this, SLOT(showDebugWindow()));
     new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_G), this, SLOT(showGraph()));
     new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_P), this, SLOT(showPeers()));
@@ -935,7 +929,7 @@ void ElectrumGUI::showInfo()
     showDebugWindow();
 }
 
-void ElectrumGUI::showDebugWindowActivateConsole()
+void ElectrumGUI::showConsole()
 {
     rpcConsole->setTabFocus(RPCConsole::TAB_CONSOLE);
     showDebugWindow();
