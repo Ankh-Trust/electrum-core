@@ -1615,7 +1615,7 @@ void ElectrumGUI::updatePrice()
             CURL *curl;
             std::string response;
             std::string url(
-                    "https://api.coingecko.com/api/v3/simple/price?ids=ankh-electrum&vs_currencies="
+                    "https://api.coingecko.com/api/v3/simple/price?ids=sequence&vs_currencies="
                     "BTC,"
                     "EUR,"
                     "USD,"
@@ -1672,7 +1672,7 @@ void ElectrumGUI::updatePrice()
             boost::property_tree::ptree _json;
             std::istringstream jsonStream(response);
             boost::property_tree::read_json(jsonStream, _json);
-            boost::property_tree::ptree json = _json.get_child("ankh-electrum");
+            boost::property_tree::ptree json = _json.get_child("sequence");
 
             // Get an instance of settings
             QSettings settings;
