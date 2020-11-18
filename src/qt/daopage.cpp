@@ -984,7 +984,7 @@ void DaoPage::initialize(CProposalMap proposalMap, CPaymentRequestMap paymentReq
         }
         else if (status == "locked_in")
         {
-            e.color = "#ff66ff";
+            e.color = "#6666ff";
         }
         else if (status == "active")
         {
@@ -1074,7 +1074,7 @@ void DaoPage::initialize(CProposalMap proposalMap, CPaymentRequestMap paymentReq
         }
         else if (status == "locked_in")
         {
-            e.color = "#ff66ff";
+            e.color = "#6666ff";
         }
         else if (status == "active")
         {
