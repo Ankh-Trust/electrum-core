@@ -361,7 +361,7 @@ QString ElectrumUnits::formatHtmlWithUnit(int unit, const CAmount& amount, bool 
     return QString("<span style='white-space: nowrap;'>%1</span>").arg(str);
 }
 
-QString CreditUnits::floorWithUnit(int unit, const CAmount& amount, bool plussign, SeparatorStyle separators)
+QString ElectrumUnits::floorWithUnit(int unit, const CAmount& amount, bool plussign, SeparatorStyle separators)
 {
     QSettings settings;
     int digits = settings.value("digits").toInt();
@@ -373,7 +373,7 @@ QString CreditUnits::floorWithUnit(int unit, const CAmount& amount, bool plussig
     return result + QString(" ") + name(unit);
 }
 
-QString CreditUnits::floorHtmlWithUnit(int unit, const CAmount& amount, bool plussign, SeparatorStyle separators)
+QString ElectrumUnits::floorHtmlWithUnit(int unit, const CAmount& amount, bool plussign, SeparatorStyle separators)
 {
     QString str(floorWithUnit(unit, amount, plussign, separators));
     str.replace(QChar(THIN_SP_CP), QString(THIN_SP_HTML));
