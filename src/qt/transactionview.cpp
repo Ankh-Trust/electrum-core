@@ -102,6 +102,7 @@ TransactionView::TransactionView(const PlatformStyle *platformStyle, QWidget *pa
 
     amountWidget = new QLineEdit(this);
     amountWidget->setPlaceholderText(tr("Min amount"));
+    amountWidget->setAlignment(Qt::AlignRight);
     if (platformStyle->getUseExtraSpacing()) {
         amountWidget->setFixedWidth(AMOUNT_MINIMUM_COLUMN_WIDTH - 1);
     } else {
