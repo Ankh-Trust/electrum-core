@@ -643,7 +643,7 @@ boost::filesystem::path GetBackupsDir()
 {
     namespace fs = boost::filesystem;
 
-    if (!IsArgSet("-walletbackupsdir"))
+    if (!mapArgs("-walletbackupsdir"))
         return GetDataDir() / "backups";
 
     return fs::absolute(GetArg("-walletbackupsdir", ""));
