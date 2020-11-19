@@ -31,7 +31,7 @@ static const bool DEFAULT_SPLASHSCREEN = true;
 /* Transaction list -- unconfirmed transaction */
 #define COLOR_UNCONFIRMED QColor(128, 128, 128)
 /* Transaction list -- negative amount */
-#define COLOR_NEGATIVE QColor(128, 0, 0)
+#define COLOR_NEGATIVE QColor(102, 2, 60) // tyrian purple
 /* Transaction list -- positive amount */
 #define COLOR_POSITIVE QColor(207, 181, 59)
 /* Transaction list -- bare address (without label) */
