@@ -527,8 +527,7 @@ void ElectrumGUI::createActions()
     openPeersAction->setStatusTip(tr("Show peers info"));
     openRepairAction = new QAction(QIcon(":/icons/options"), tr("Wallet &Repair"), this);
     openRepairAction->setStatusTip(tr("Show wallet repair options"));
-    showBackupsAction = new QAction(QIcon(":/icons/browse"), tr("Show Automatic &Backups"), this);
-    showBackupsAction->setStatusTip(tr("Show automatically created wallet backups"));
+
     // initially disable the debug window menu item
     openInfoAction->setEnabled(false);
     openRPCConsoleAction->setEnabled(false);
@@ -573,9 +572,6 @@ void ElectrumGUI::createActions()
     connect(openGraphAction, SIGNAL(triggered()), this, SLOT(showGraph()));
     connect(openPeersAction, SIGNAL(triggered()), this, SLOT(showPeers()));
     connect(openRepairAction, SIGNAL(triggered()), this, SLOT(showRepair()));
-
-    // Open configs and backup folder from menu
-    connect(showBackupsAction, SIGNAL(triggered()), this, SLOT(showBackups()));
 
     // Get restart command-line parameters and handle restart
     connect(rpcConsole, SIGNAL(handleRestart(QStringList)), this, SLOT(handleRestart(QStringList)));
@@ -662,7 +658,6 @@ void ElectrumGUI::createMenuBar()
         tools->addAction(openGraphAction);
         tools->addAction(openPeersAction);
         tools->addSeparator();
-        tools->addAction(showBackupsAction);
         tools->addAction(openRepairAction);
     }
 
@@ -857,8 +852,6 @@ void ElectrumGUI::createTrayIconMenu()
     trayIconMenu->addAction(openGraphAction);
     trayIconMenu->addAction(openPeersAction);
     trayIconMenu->addAction(openRepairAction);
-    trayIconMenu->addSeparator();
-    trayIconMenu->addAction(showBackupsAction);
 #ifndef Q_OS_MAC // This is built-in on Mac
     trayIconMenu->addSeparator();
     trayIconMenu->addAction(quitAction);
@@ -958,11 +951,6 @@ void ElectrumGUI::showRepair()
 {
     rpcConsole->setTabFocus(RPCConsole::TAB_REPAIR);
     showDebugWindow();
-}
-
-void CreditGUI::showBackups()
-{
-    GUIUtil::showBackups();
 }
 
 void ElectrumGUI::showHelpMessageClicked()

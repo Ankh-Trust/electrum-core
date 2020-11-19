@@ -408,22 +408,13 @@ void openDebugLogfile()
         QDesktopServices::openUrl(QUrl::fromLocalFile(boostPathToQString(pathDebug)));
 }
 
-void openConfigfile()
+void openElectrumConf()
 {
      boost::filesystem::path pathConfig = GetConfigFile();
 
      /* Open electrum.conf with the associated application */
      if (boost::filesystem::exists(pathConfig))
          QDesktopServices::openUrl(QUrl::fromLocalFile(boostPathToQString(pathConfig)));
-}
-
-void showBackups()
-{
-    boost::filesystem::path backupsDir = GetBackupsDir();
-
-    /* Open folder with default browser */
-    if (boost::filesystem::exists(backupsDir))
-        QDesktopServices::openUrl(QUrl::fromLocalFile(boostPathToQString(backupsDir)));
 }
 
 void SubstituteFonts(const QString& language)

@@ -119,11 +119,8 @@ namespace GUIUtil
     // Open debug.log
     void openDebugLogfile();
 
-    // Open electrum.conf
-    void openConfigfile();
-
-    // Browse backup folder
-    void showBackups();
+    // Open the config file
+    void openElectrumConf();
 
     // Replace invalid default fonts with known good ones
     void SubstituteFonts(const QString& language);

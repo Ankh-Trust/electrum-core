@@ -101,16 +101,6 @@ namespace boost {
 
 } // namespace boost
 
-//Electrum only features
-/**
-    nWalletBackups:
-        1..10   - number of automatic backups to keep
-        0       - disabled by command-line
-        -1      - disabled because of some error during run-time
-        -2      - disabled because wallet was locked and we were not able to replenish keypool
-*/
-int nWalletBackups = 10;
-
 using namespace std;
 
 const char * DEFAULT_WALLET_DAT = "wallet.dat";
@@ -637,16 +627,6 @@ const boost::filesystem::path &GetDataDir(bool fNetSpecific)
     fs::create_directories(path);
 
     return path;
-}
-
-boost::filesystem::path GetBackupsDir()
-{
-    namespace fs = boost::filesystem;
-
-    if (!IsArgSet("-walletbackupsdir"))
-        return GetDataDir() / "backups";
-
-    return fs::absolute(GetArg("-walletbackupsdir", ""));
 }
 
 void ClearDatadirCache()
