@@ -45,7 +45,7 @@ TransactionView::TransactionView(const PlatformStyle *platformStyle, QWidget *pa
     QHBoxLayout *hlayout = new QHBoxLayout();
     hlayout->setContentsMargins(0,0,0,0);
     hlayout->setSpacing(0);
-    hlayout->addSpacing(STATUS_COLUMN_WIDTH + 1);
+    hlayout->addSpacing(STATUS_COLUMN_WIDTH);
 
     watchOnlyWidget = new QComboBox(this);
     watchOnlyWidget->setFixedWidth(WATCHONLY_COLUMN_WIDTH);
@@ -55,7 +55,7 @@ TransactionView::TransactionView(const PlatformStyle *platformStyle, QWidget *pa
     hlayout->addWidget(watchOnlyWidget);
 
     dateWidget = new QComboBox(this);
-    dateWidget->setFixedWidth(DATE_COLUMN_WIDTH + 1);
+    dateWidget->setFixedWidth(DATE_COLUMN_WIDTH);
 
     dateWidget->addItem(tr("All"), All);
     dateWidget->addItem(tr("Today"), Today);
@@ -67,7 +67,7 @@ TransactionView::TransactionView(const PlatformStyle *platformStyle, QWidget *pa
     hlayout->addWidget(dateWidget);
 
     typeWidget = new QComboBox(this);
-    typeWidget->setFixedWidth(TYPE_COLUMN_WIDTH + 1);
+    typeWidget->setFixedWidth(TYPE_COLUMN_WIDTH);
 
     typeWidget->addItem(tr("All"), TransactionFilterProxy::ALL_TYPES);
     typeWidget->addItem(tr("Received with"), TransactionFilterProxy::TYPE(TransactionRecord::RecvWithAddress) |
