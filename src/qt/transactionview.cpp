@@ -43,20 +43,28 @@ TransactionView::TransactionView(const PlatformStyle *platformStyle, QWidget *pa
     setContentsMargins(0,0,0,0);
 
     QHBoxLayout *hlayout = new QHBoxLayout();
-    hlayout->setContentsMargins(0,0,0,6 * GUIUtil::scale());
-
-    hlayout->setSpacing(5 * GUIUtil::scale());
-    hlayout->addSpacing(23 * GUIUtil::scale());
+    hlayout->setContentsMargins(0,0,0,0);
+    if (platformStyle->getUseExtraSpacing()) {
+        hlayout->setSpacing(0);
+        hlayout->addSpacing(STATUS_COLUMN_WIDTH -1);
+    } else {
+        hlayout->setSpacing(0);
+        hlayout->addSpacing(STATUS_COLUMN_WIDTH);
+    }
 
     watchOnlyWidget = new QComboBox(this);
-    watchOnlyWidget->setFixedWidth(WATCHONLY_COLUMN_WIDTH * GUIUtil::scale());
+    watchOnlyWidget->setFixedWidth(WATCHONLY_COLUMN_WIDTH);
     watchOnlyWidget->addItem("", TransactionFilterProxy::WatchOnlyFilter_All);
     watchOnlyWidget->addItem(QIcon(":/icons/eye_plus"), "", TransactionFilterProxy::WatchOnlyFilter_Yes);
     watchOnlyWidget->addItem(QIcon(":/icons/eye_minus"), "", TransactionFilterProxy::WatchOnlyFilter_No);
     hlayout->addWidget(watchOnlyWidget);
 
     dateWidget = new QComboBox(this);
-    dateWidget->setFixedWidth(DATE_COLUMN_WIDTH * GUIUtil::scale());
+    if (platformStyle->getUseExtraSpacing()) {
+        dateWidget->setFixedWidth(DATE_COLUMN_WIDTH - 1);
+    } else {
+        dateWidget->setFixedWidth(DATE_COLUMN_WIDTH);
+    }
     dateWidget->addItem(tr("All"), All);
     dateWidget->addItem(tr("Today"), Today);
     dateWidget->addItem(tr("This week"), ThisWeek);
@@ -67,8 +75,11 @@ TransactionView::TransactionView(const PlatformStyle *platformStyle, QWidget *pa
     hlayout->addWidget(dateWidget);
 
     typeWidget = new QComboBox(this);
-    typeWidget->setFixedWidth(TYPE_COLUMN_WIDTH * GUIUtil::scale());
-
+    if (platformStyle->getUseExtraSpacing()) {
+        typeWidget->setFixedWidth(TYPE_COLUMN_WIDTH - 1);
+    } else {
+        typeWidget->setFixedWidth(TYPE_COLUMN_WIDTH);
+    }
     typeWidget->addItem(tr("All"), TransactionFilterProxy::ALL_TYPES);
     typeWidget->addItem(tr("Received with"), TransactionFilterProxy::TYPE(TransactionRecord::RecvWithAddress) |
                                         TransactionFilterProxy::TYPE(TransactionRecord::RecvFromOther) |
@@ -91,7 +102,11 @@ TransactionView::TransactionView(const PlatformStyle *platformStyle, QWidget *pa
 
     amountWidget = new QLineEdit(this);
     amountWidget->setPlaceholderText(tr("Min amount"));
-    amountWidget->setFixedWidth(AMOUNT_MINIMUM_COLUMN_WIDTH * GUIUtil::scale());
+    if (platformStyle->getUseExtraSpacing()) {
+        amountWidget->setFixedWidth(AMOUNT_MINIMUM_COLUMN_WIDTH - 1);
+    } else {
+        amountWidget->setFixedWidth(AMOUNT_MINIMUM_COLUMN_WIDTH);
+    }
     amountWidget->setValidator(new QDoubleValidator(0, 1e20, 8, this));
     hlayout->addWidget(amountWidget);
 
@@ -105,7 +120,12 @@ TransactionView::TransactionView(const PlatformStyle *platformStyle, QWidget *pa
     vlayout->addWidget(view);
     vlayout->setSpacing(0);
     int width = view->verticalScrollBar()->sizeHint().width();
-    hlayout->addSpacing(width * GUIUtil::scale());
+    // Cover scroll bar width with spacing
+    if (platformStyle->getUseExtraSpacing()) {
+        hlayout->addSpacing(width + 2);
+    } else {
+        hlayout->addSpacing(width);
+    }
     // Always show scroll bar
     view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     view->setTabKeyNavigation(false);
@@ -186,11 +206,11 @@ void TransactionView::setModel(WalletModel *model)
         transactionView->verticalHeader()->hide();
         transactionView->setShowGrid(false);
 
-        transactionView->setColumnWidth(TransactionTableModel::Status, STATUS_COLUMN_WIDTH * GUIUtil::scale());
-        transactionView->setColumnWidth(TransactionTableModel::Watchonly, WATCHONLY_COLUMN_WIDTH * GUIUtil::scale());
-        transactionView->setColumnWidth(TransactionTableModel::Date, DATE_COLUMN_WIDTH * GUIUtil::scale());
-        transactionView->setColumnWidth(TransactionTableModel::Type, TYPE_COLUMN_WIDTH * GUIUtil::scale());
-        transactionView->setColumnWidth(TransactionTableModel::Amount, AMOUNT_MINIMUM_COLUMN_WIDTH * GUIUtil::scale());
+        transactionView->setColumnWidth(TransactionTableModel::Status, STATUS_COLUMN_WIDTH);
+        transactionView->setColumnWidth(TransactionTableModel::Watchonly, WATCHONLY_COLUMN_WIDTH);
+        transactionView->setColumnWidth(TransactionTableModel::Date, DATE_COLUMN_WIDTH);
+        transactionView->setColumnWidth(TransactionTableModel::Type, TYPE_COLUMN_WIDTH);
+        transactionView->setColumnWidth(TransactionTableModel::Amount, AMOUNT_MINIMUM_COLUMN_WIDTH);
 
         columnResizingFixer = new GUIUtil::TableViewLastColumnResizingFixer(transactionView, AMOUNT_MINIMUM_COLUMN_WIDTH, MINIMUM_COLUMN_WIDTH, this);
 
@@ -477,19 +497,18 @@ void TransactionView::openThirdPartyTxUrl(QString url)
 
 QWidget *TransactionView::createDateRangeWidget()
 {
-    int margin = 1 * GUIUtil::scale();
     dateRangeWidget = new QFrame();
     dateRangeWidget->setFrameStyle(QFrame::Panel | QFrame::Raised);
-    dateRangeWidget->setContentsMargins(margin, margin, margin, margin);
+    dateRangeWidget->setContentsMargins(1, 1, 1, 1);
     QHBoxLayout *layout = new QHBoxLayout(dateRangeWidget);
     layout->setContentsMargins(0,0,0,0);
-    layout->addSpacing(23 * GUIUtil::scale());
+    layout->addSpacing(23);
     layout->addWidget(new QLabel(tr("Range:")));
 
     dateFrom = new QDateTimeEdit(this);
     dateFrom->setDisplayFormat("dd/MM/yy");
     dateFrom->setCalendarPopup(true);
-    dateFrom->setMinimumWidth(100 * GUIUtil::scale());
+    dateFrom->setMinimumWidth(100);
     dateFrom->setDate(QDate::currentDate().addDays(-7));
     layout->addWidget(dateFrom);
     layout->addWidget(new QLabel(tr("to")));
@@ -497,7 +516,7 @@ QWidget *TransactionView::createDateRangeWidget()
     dateTo = new QDateTimeEdit(this);
     dateTo->setDisplayFormat("dd/MM/yy");
     dateTo->setCalendarPopup(true);
-    dateTo->setMinimumWidth(100 * GUIUtil::scale());
+    dateTo->setMinimumWidth(100);
     dateTo->setDate(QDate::currentDate());
     layout->addWidget(dateTo);
     layout->addStretch();
