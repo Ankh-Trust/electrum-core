@@ -388,9 +388,9 @@ QString TransactionTableModel::formatTxType(const TransactionRecord *wtx) const
     case TransactionRecord::SendToSelf:
         return tr("Payment to yourself");
     case TransactionRecord::Staked:
-        return tr("Staked");
+        return tr(wtx->status.status == TransactionStatus::Orphan || !(wtx->status.depth > 0) ? "Orphan" : "Staked");
     case TransactionRecord::Generated:
-        return tr("Generated");
+        return tr(wtx->status.status == TransactionStatus::Orphan || !(wtx->status.depth > 0) ? "Orphan" : "Generated");
     default:
         return QString("Other");
     }
@@ -459,6 +459,11 @@ QVariant TransactionTableModel::addressColor(const TransactionRecord *wtx) const
     case TransactionRecord::SendToAddress:
     case TransactionRecord::Generated:
     case TransactionRecord::Staked:
+        {
+        QString label = walletModel->getAddressTableModel()->labelForAddress(QString::fromStdString(wtx->address));
+        if(label.isEmpty())
+            return COLOR_BAREADDRESS;
+        } break;
     case TransactionRecord::SendToSelf:
     default:
         break;
