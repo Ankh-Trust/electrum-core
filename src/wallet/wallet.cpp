@@ -4224,7 +4224,7 @@ bool CWallet::ParameterInteraction()
     bSpendZeroConfChange = GetBoolArg("-spendzeroconfchange", DEFAULT_SPEND_ZEROCONF_CHANGE);
     fSendFreeTransactions = GetBoolArg("-sendfreetransactions", DEFAULT_SEND_FREE_TRANSACTIONS);
 
-    if (mapArgs("-walletbackupsdir")) {
+    if (IsArgSet("-walletbackupsdir")) {
         if (!boost::filesystem::is_directory(GetArg("-walletbackupsdir", ""))) {
             LogPrintf("%s: Warning: incorrect parameter -walletbackupsdir, path must exist! Using default path.\n", __func__);
             InitWarning("Warning: incorrect parameter -walletbackupsdir, path must exist! Using default path.\n");
