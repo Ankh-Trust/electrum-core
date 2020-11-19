@@ -49,7 +49,7 @@ private Q_SLOTS:
     void on_resetButton_clicked();
     void on_okButton_clicked();
     void on_cancelButton_clicked();
-    void on_openElectrumConfButton_clicked();
+    void on_openConfigfileButton_clicked();
 
     void on_hideTrayIcon_stateChanged(int fState);
 

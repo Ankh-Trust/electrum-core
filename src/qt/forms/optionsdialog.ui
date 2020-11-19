@@ -794,7 +794,7 @@ QTabBar { alignment: left; }</string>
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_Buttons">
        <item>
-        <widget class="QPushButton" name="openElectrumConfButton">
+        <widget class="QPushButton" name="openConfigfileButton">
          <property name="toolTip">
           <string>Open the %1 configuration file from the working directory.</string>
          </property>

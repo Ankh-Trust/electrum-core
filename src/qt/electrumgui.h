@@ -145,6 +145,7 @@ private:
     QAction* openGraphAction;
     QAction* openPeersAction;
     QAction* openRepairAction;
+    QAction* showBackupsAction;
     QAction *openAction;
     QAction *showHelpMessageAction;
     QAction *unlockWalletAction;
@@ -286,6 +287,8 @@ private Q_SLOTS:
     void webInfoClicked();
     /** Show debug window */
     void showDebugWindow();
+    /** Show debug window and set focus to the console */
+    void showConsole();
 
     /** Show debug window and set focus to the appropriate tab */
     void showInfo();
@@ -293,8 +296,8 @@ private Q_SLOTS:
     void showPeers();
     void showRepair();
 
-    /** Show debug window and set focus to the console */
-    void showConsole();
+    /** Show folder with wallet backups in default file browser */
+    void showBackups();
     /** Show help message dialog */
     void showHelpMessageClicked();
     /** Update the display currency **/
