@@ -241,8 +241,8 @@ int ElectrumUnits::decimals(int unit)
 {
     switch(unit)
     {
-        case _AE: return 2;
-        case BTC: return 2;
+        case _AE: return 8;
+        case BTC: return 8;
         case EUR:
         case USD:
         case ARS:
@@ -275,7 +275,7 @@ int ElectrumUnits::decimals(int unit)
         case TRY:
         case TWD:
         case ZAR:
-            return 2;
+            return 6;
         default: return 0;
     }
 }
@@ -361,6 +361,24 @@ QString ElectrumUnits::formatHtmlWithUnit(int unit, const CAmount& amount, bool 
     return QString("<span style='white-space: nowrap;'>%1</span>").arg(str);
 }
 
+QString CreditUnits::floorWithUnit(int unit, const CAmount& amount, bool plussign, SeparatorStyle separators)
+{
+    QSettings settings;
+    int digits = settings.value("digits").toInt();
+
+    QString result = format(unit, amount, plussign, separators);
+    if (decimals(unit) > digits)
+        result.chop(decimals(unit) - digits);
+
+    return result + QString(" ") + name(unit);
+}
+
+QString CreditUnits::floorHtmlWithUnit(int unit, const CAmount& amount, bool plussign, SeparatorStyle separators)
+{
+    QString str(floorWithUnit(unit, amount, plussign, separators));
+    str.replace(QChar(THIN_SP_CP), QString(THIN_SP_HTML));
+    return QString("<span style='white-space: nowrap;'>%1</span>").arg(str);
+}
 
 bool ElectrumUnits::parse(int unit, const QString &value, CAmount *val_out)
 {

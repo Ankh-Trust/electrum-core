@@ -88,6 +88,13 @@ OptionsDialog::OptionsDialog(QWidget *parent, bool enableWallet) :
 
     /* Display elements init */
 
+    /* Number of displayed decimal digits selector */
+    QString digits;
+    for (int index = 2; index <= 8; index++) {
+        digits.setNum(index);
+        ui->digits->addItem(digits, digits);
+    }
+
     /* Language selector */
     QDir translations(":translations");
 
@@ -175,6 +182,7 @@ void OptionsDialog::setModel(OptionsModel *model)
     connect(ui->connectSocks, SIGNAL(clicked(bool)), this, SLOT(showRestartWarning()));
     connect(ui->connectSocksTor, SIGNAL(clicked(bool)), this, SLOT(showRestartWarning()));
     /* Display */
+    connect(ui->digits, SIGNAL(valueChanged()), this, SLOT(showRestartWarning()));
     connect(ui->lang, SIGNAL(valueChanged()), this, SLOT(showRestartWarning()));
     connect(ui->thirdPartyTxUrls, SIGNAL(textChanged(const QString &)), this, SLOT(showRestartWarning()));
 }
@@ -210,6 +218,7 @@ void OptionsDialog::setMapper()
 #endif
 
     /* Display */
+    mapper->addMapping(ui->digits, OptionsModel::Digits);
     mapper->addMapping(ui->lang, OptionsModel::Language);
     mapper->addMapping(ui->unit, OptionsModel::DisplayUnit);
     mapper->addMapping(ui->thirdPartyTxUrls, OptionsModel::ThirdPartyTxUrls);
@@ -275,7 +284,7 @@ void OptionsDialog::on_hideTrayIcon_stateChanged(int fState)
 
 void OptionsDialog::showRestartWarning(bool fPersistent)
 {
-    ui->statusLabel->setStyleSheet("QLabel { color: #66023c; }");
+    ui->statusLabel->setStyleSheet("QLabel { color: #800000; }");
 
     if(fPersistent)
     {
@@ -314,7 +323,7 @@ void OptionsDialog::updateProxyValidationState()
     else
     {
         setOkButtonState(false);
-        ui->statusLabel->setStyleSheet("QLabel { color: #66023c; }");
+        ui->statusLabel->setStyleSheet("QLabel { color: #800000; }");
         ui->statusLabel->setText(tr("The supplied proxy address is invalid."));
     }
 }

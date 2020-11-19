@@ -87,7 +87,7 @@ public:
             foreground = COLOR_POSITIVE;
         }
         painter->setPen(foreground);
-        QString amountText = ElectrumUnits::formatWithUnit(unit, amount, true, ElectrumUnits::separatorAlways);
+        QString amountText = ElectrumUnits::floorWithUnit(unit, amount, true, ElectrumUnits::separatorAlways);
         if(!confirmed)
         {
             amountText = QString("[") + amountText + QString("]");
@@ -191,12 +191,12 @@ void OverviewPage::setBalance(
     currentWatchUnconfBalance = watchUnconfBalance;
     currentWatchImmatureBalance = watchImmatureBalance;
     currentWatchOnlyTotalBalance = watchOnlyBalance + watchUnconfBalance + watchImmatureBalance;
-    ui->labelBalance->setText(ElectrumUnits::formatWithUnit(unit, balance, false, ElectrumUnits::separatorAlways));
-    ui->labelUnconfirmed->setText(ElectrumUnits::formatWithUnit(unit, unconfirmedBalance, false, ElectrumUnits::separatorAlways));
-    ui->labelColdStaking->setText(ElectrumUnits::formatWithUnit(unit, currentColdStakingBalance, false, ElectrumUnits::separatorAlways));
-    ui->labelImmature->setText(ElectrumUnits::formatWithUnit(unit, currentImmatureBalance, false, ElectrumUnits::separatorAlways));
-    ui->labelWatchedBalance->setText(ElectrumUnits::formatWithUnit(unit, currentWatchOnlyTotalBalance, false, ElectrumUnits::separatorAlways));
-    ui->labelTotal->setText(ElectrumUnits::formatWithUnit(unit, currentTotalBalance + currentWatchOnlyTotalBalance, false, ElectrumUnits::separatorAlways));
+    ui->labelBalance->setText(ElectrumUnits::floorHtmlWithUnit(unit, balance, false, ElectrumUnits::separatorAlways));
+    ui->labelUnconfirmed->setText(ElectrumUnits::floorHtmlWithUnit(unit, unconfirmedBalance, false, ElectrumUnits::separatorAlways));
+    ui->labelColdStaking->setText(ElectrumUnits::floorHtmlWithUnit(unit, currentColdStakingBalance, false, ElectrumUnits::separatorAlways));
+    ui->labelImmature->setText(ElectrumUnits::floorHtmlWithUnit(unit, currentImmatureBalance, false, ElectrumUnits::separatorAlways));
+    ui->labelWatchedBalance->setText(ElectrumUnits::floorHtmlWithUnit(unit, currentWatchOnlyTotalBalance, false, ElectrumUnits::separatorAlways));
+    ui->labelTotal->setText(ElectrumUnits::floorHtmlWithUnit(unit, currentTotalBalance + currentWatchOnlyTotalBalance, false, ElectrumUnits::separatorAlways));
 
     updateStakeReportNow();
 
@@ -330,12 +330,12 @@ void OverviewPage::updateStakeReport(bool fImmediate=false)
     uint64_t nExpectedTime = staking ? (GetTargetSpacing(pindexBestHeader->nHeight) * nNetworkWeight / nWeight) : 0;
     CAmount nExpectedDailyReward = staking ? ((double) 86400 / (nExpectedTime + 1)) * GetStakingRewardPerBlock(view) : 0.0;
 
-    ui->label24hStakingStats->setText(ElectrumUnits::formatWithUnit(unit, amount24h, false, ElectrumUnits::separatorAlways));
-    ui->label7dStakingStats->setText(ElectrumUnits::formatWithUnit(unit, amount7d, false, ElectrumUnits::separatorAlways));
-    ui->label30dStakingStats->setText(ElectrumUnits::formatWithUnit(unit, amount30d, false, ElectrumUnits::separatorAlways));
-    ui->label1yStakingStats->setText(ElectrumUnits::formatWithUnit(unit, amount1y, false, ElectrumUnits::separatorAlways));
-    ui->labelallStakingStats->setText(ElectrumUnits::formatWithUnit(unit, amountAll, false, ElectrumUnits::separatorAlways));
-    ui->labelExpectedStakingStats->setText(ElectrumUnits::formatWithUnit(unit, nExpectedDailyReward, false, ElectrumUnits::separatorAlways));
+    ui->label24hStakingStats->setText(ElectrumUnits::floorHtmlWithUnit(unit, amount24h, false, ElectrumUnits::separatorAlways));
+    ui->label7dStakingStats->setText(ElectrumUnits::floorHtmlWithUnit(unit, amount7d, false, ElectrumUnits::separatorAlways));
+    ui->label30dStakingStats->setText(ElectrumUnits::floorHtmlWithUnit(unit, amount30d, false, ElectrumUnits::separatorAlways));
+    ui->label1yStakingStats->setText(ElectrumUnits::floorHtmlWithUnit(unit, amount1y, false, ElectrumUnits::separatorAlways));
+    ui->labelallStakingStats->setText(ElectrumUnits::floorHtmlWithUnit(unit, amountAll, false, ElectrumUnits::separatorAlways));
+    ui->labelExpectedStakingStats->setText(ElectrumUnits::floorHtmlWithUnit(unit, nExpectedDailyReward, false, ElectrumUnits::separatorAlways));
 
     uiInterface.SetStaked(amountAll, amount24h, amount7d);
 }
