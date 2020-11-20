@@ -137,8 +137,10 @@ private:
     QAction *cfundPaymentRequestsAction;
     QAction *toggleHideAction;
     QAction *encryptWalletAction;
+    QAction *encryptTxAction;
     QAction *backupWalletAction;
     QAction *changePassphraseAction;
+    QAction *changePinAction;
     QAction *aboutQtAction;
     QAction* openInfoAction;
     QAction *openRPCConsoleAction;
@@ -229,6 +231,9 @@ public Q_SLOTS:
     */
     void message(const QString &title, const QString &message, unsigned int style, bool *ret = NULL);
 
+    /** Prompt use for pin */
+    void askForPin(std::string *ret);
+
 #ifdef ENABLE_WALLET
     /** Set the hd-enabled status as shown in the UI.
     @param[in] status            current hd enabled status
@@ -240,6 +245,8 @@ public Q_SLOTS:
        @see WalletModel::EncryptionStatus
     */
     void setEncryptionStatus(int status);
+
+    void setEncryptionTxStatus(bool fCrypted);
 
     bool handlePaymentRequest(const SendCoinsRecipient& recipient);
 

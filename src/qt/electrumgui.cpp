@@ -154,8 +154,10 @@ ElectrumGUI::ElectrumGUI(const PlatformStyle *platformStyle, const NetworkStyle 
     cfundPaymentRequestsAction(0),
     toggleHideAction(0),
     encryptWalletAction(0),
+    encryptTxAction(0),
     backupWalletAction(0),
     changePassphraseAction(0),
+    changePinAction(0),
     aboutQtAction(0),
     openRPCConsoleAction(0),
     openAction(0),
@@ -505,12 +507,17 @@ void ElectrumGUI::createActions()
     encryptWalletAction = new QAction(QIcon(":/icons/lock_closed"), tr("&Encrypt Wallet..."), this);
     encryptWalletAction->setStatusTip(tr("Encrypt the private keys that belong to your wallet"));
     encryptWalletAction->setCheckable(true);
+    encryptTxAction = new QAction(QIcon(":/icons/lock_closed"), tr("&Encrypt Txdata..."), this);
+    encryptTxAction->setStatusTip(tr("Encrypt the transaction history data in your wallet"));
+    encryptTxAction->setCheckable(true);
     unlockWalletAction = new QAction(QIcon(":/icons/lock_open"), tr("&Unlock Wallet for Staking..."), this);
     unlockWalletAction->setToolTip(tr("Unlock wallet for Staking"));
     backupWalletAction = new QAction(QIcon(":/icons/save"), tr("&Backup Wallet..."), this);
     backupWalletAction->setStatusTip(tr("Backup wallet to another location"));
     changePassphraseAction = new QAction(QIcon(":/icons/key"), tr("&Change Passphrase..."), this);
     changePassphraseAction->setStatusTip(tr("Change the passphrase used for wallet encryption"));
+    changePinAction = new QAction(QIcon(":/icons/key"), tr("&Change Txdata Pin..."), this);
+    changePinAction->setStatusTip(tr("Change the pin used for transaction data encryption"));
 
     signMessageAction = new QAction(QIcon(":/icons/edit"), tr("Sign &message..."), this);
     signMessageAction->setStatusTip(tr("Sign messages with your Electrum addresses to prove you own them"));
@@ -583,8 +590,10 @@ void ElectrumGUI::createActions()
     if(walletFrame)
     {
         connect(encryptWalletAction, SIGNAL(triggered(bool)), walletFrame, SLOT(encryptWallet(bool)));
+        connect(encryptTxAction, SIGNAL(triggered()), walletFrame, SLOT(encryptTx()));
         connect(backupWalletAction, SIGNAL(triggered()), walletFrame, SLOT(backupWallet()));
         connect(changePassphraseAction, SIGNAL(triggered()), walletFrame, SLOT(changePassphrase()));
+        connect(changePinAction, SIGNAL(triggered()), walletFrame, SLOT(encryptTx()));
         connect(unlockWalletAction, SIGNAL(triggered()), walletFrame, SLOT(unlockWalletStaking()));
         connect(signMessageAction, SIGNAL(triggered()), this, SLOT(gotoSignMessageTab()));
         connect(verifyMessageAction, SIGNAL(triggered()), this, SLOT(gotoVerifyMessageTab()));
@@ -640,6 +649,9 @@ void ElectrumGUI::createMenuBar()
         settings->addAction(encryptWalletAction);
         settings->addAction(changePassphraseAction);
         settings->addAction(unlockWalletAction);
+        settings->addSeparator();
+        settings->addAction(encryptTxAction);
+        settings->addAction(changePinAction);
         settings->addSeparator();
         settings->addAction(toggleStakingAction);
         settings->addAction(splitRewardAction);
@@ -790,8 +802,10 @@ void ElectrumGUI::setWalletActionsEnabled(bool enabled)
     historyAction->setEnabled(enabled);
     daoAction->setEnabled(enabled);
     encryptWalletAction->setEnabled(enabled);
+    encryptTxAction->setEnabled(enabled);
     backupWalletAction->setEnabled(enabled);
     changePassphraseAction->setEnabled(enabled);
+    changePinAction->setEnabled(enabled);
     signMessageAction->setEnabled(enabled);
     verifyMessageAction->setEnabled(enabled);
     usedSendingAddressesAction->setEnabled(enabled);
@@ -1411,6 +1425,12 @@ void ElectrumGUI::setEncryptionStatus(int status)
     }
     updateStakingStatus();
 }
+
+void ElectrumGUI::setEncryptionTxStatus(bool fCrypted)
+{
+    encryptTxAction->setEnabled(!fCrypted);
+    changePinAction->setEnabled(fCrypted);
+}
 #endif // ENABLE_WALLET
 
 void ElectrumGUI::showNormalIfMinimized(bool fToggleHidden)
@@ -1507,11 +1527,33 @@ static bool ThreadSafeMessageBox(ElectrumGUI *gui, const std::string& message, c
     return ret;
 }
 
+static std::string AskForPin(ElectrumGUI *gui)
+{
+    std::string ret = "";
+    QMetaObject::invokeMethod(gui, "askForPin", GUIUtil::blockingGUIThreadConnection(), Q_ARG(std::string*, &ret));
+    return ret;
+}
+
+void ElectrumGUI::askForPin(std::string *ret)
+{
+    bool ok = false;
+    QString text = QInputDialog::getText(this,
+            tr("Unlock wallet"),
+            tr("Pin/Password:"),
+            QLineEdit::Password,
+            "",
+            &ok);
+    *ret = text.toStdString();
+    if (*ret == "")
+        *ret = "=";
+}
+
 void ElectrumGUI::subscribeToCoreSignals()
 {
     // Connect signals to client
     uiInterface.ThreadSafeMessageBox.connect(boost::bind(ThreadSafeMessageBox, this, _1, _2, _3));
     uiInterface.ThreadSafeQuestion.connect(boost::bind(ThreadSafeMessageBox, this, _1, _3, _4));
+    uiInterface.AskForPin.connect(boost::bind(AskForPin, this));
 }
 
 void ElectrumGUI::unsubscribeFromCoreSignals()
@@ -1519,6 +1561,7 @@ void ElectrumGUI::unsubscribeFromCoreSignals()
     // Disconnect signals from client
     uiInterface.ThreadSafeMessageBox.disconnect(boost::bind(ThreadSafeMessageBox, this, _1, _2, _3));
     uiInterface.ThreadSafeQuestion.disconnect(boost::bind(ThreadSafeMessageBox, this, _1, _3, _4));
+    uiInterface.AskForPin.disconnect(boost::bind(AskForPin, this));
 }
 
 /** Get restart command-line parameters and request restart */

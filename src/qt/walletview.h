@@ -56,7 +56,7 @@ public:
     bool handlePaymentRequest(const SendCoinsRecipient& recipient);
 
     void showOutOfSyncWarning(bool fShow);
-    
+
 private:
     ClientModel *clientModel;
     WalletModel *walletModel;
@@ -98,6 +98,8 @@ public Q_SLOTS:
     void processNewTransaction(const QModelIndex& parent, int start, int /*end*/);
     /** Encrypt the wallet */
     void encryptWallet(bool status);
+    /** Encrypt the wallet txdata */
+    void encryptTx();
     /** Backup the wallet */
     void backupWallet();
     /** Change encrypted wallet passphrase */
@@ -120,6 +122,9 @@ public Q_SLOTS:
     /** Re-emit encryption status signal */
     void updateEncryptionStatus();
 
+    /** Re-emit encryption tx status signal */
+    void updateEncryptionTxStatus();
+
     /** Show progress dialog e.g. for rescan */
     void showProgress(const QString &title, int nProgress);
 
@@ -138,6 +143,8 @@ Q_SIGNALS:
     void message(const QString &title, const QString &message, unsigned int style);
     /** Encryption status of wallet changed */
     void encryptionStatusChanged(int status);
+    /** Encryption status of txdata changed */
+    void encryptionTxStatusChanged(bool fCrypted);    
     /** HD-Enabled status of wallet changed (only possible during startup) */
     void hdEnabledStatusChanged(int hdEnabled);
     /** Notify that a new transaction appeared */

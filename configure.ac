@@ -664,7 +664,7 @@ AC_SUBST(LIBMEMENV)
 
 if test x$enable_wallet != xno; then
     dnl Check for libdb_cxx only if wallet enabled
-    ELECTRUM_FIND_BDB48
+    ELECTRUM_FIND_BDB
 fi
 
 dnl Check for libminiupnpc (optional)
