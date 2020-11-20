@@ -432,7 +432,7 @@ bool VoteStep(const CValidationState& state, CBlockIndex *pindexNew, const bool 
                                      pindexblock->nHeight);
 
                             if(mapCachePaymentRequestToUpdate.count((*prVotes)[i].first) == 0)
-                                mapCachePaymentRequestToUpdate[(*prVotes)[i].first] = make_pair(make_pair(0, 0), 0);0);
+                                mapCachePaymentRequestToUpdate[(*prVotes)[i].first] = make_pair(make_pair(0, 0), 0);
 
                             if((*prVotes)[i].second == VoteFlags::VOTE_YES)
                                 mapCachePaymentRequestToUpdate[(*prVotes)[i].first].first.first += 1;
@@ -3016,7 +3016,7 @@ void CPaymentRequest::ToJson(UniValue& ret, const CStateViewCache& view) const {
     ret.pushKV("votesYes", nVotesYes);
     ret.pushKV("votesAbs", nVotesAbs);
     ret.pushKV("votesNo", nVotesNo);
-    ret.pushKV("excludedVotes", nExclude);    
+    ret.pushKV("excludedVotes", nExclude);
     ret.pushKV("votingCycle", std::min((uint64_t)nVotingCycle, GetConsensusParameter(Consensus::CONSENSUS_PARAM_PAYMENT_REQUEST_MAX_VOTING_CYCLES, view)+1));
     // votingCycle does not return higher than nCyclesPaymentRequestVoting to avoid reader confusion, since votes are not counted anyway when votingCycle > nCyclesPaymentRequestVoting
     UniValue mapState(UniValue::VOBJ);
