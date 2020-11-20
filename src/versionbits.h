@@ -56,6 +56,7 @@ static const int32_t VERSIONBITS_NUM_BITS = 29;
 * Bit 21 -> V452 FORK
 * Bit 24 -> C FUND CONSULTATIONS
 * Bit 26 -> DAO CONSENSUS
+* Bit 28 -> EXCLUDE
 *
 ***/
 
@@ -72,6 +73,7 @@ static const int32_t nV451ForkMask = 0x00100000;
 static const int32_t nV452ForkMask = 0x00200000;
 static const int32_t nDAOVersionMask = 0x00800000;
 static const int32_t nDaoConsensusVersionMask = 0x02000000;
+static const int32_t nDaoExcludeVersionMask = 0x08000000;
 
 static const std::vector<int> rejectedVersionBitsByDefault = {17};
 
