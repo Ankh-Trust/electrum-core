@@ -13,12 +13,12 @@
 #include <QPropertyAnimation>
 
 ModalOverlay::ModalOverlay(QWidget *parent) :
-QWidget(parent),
-ui(new Ui::ModalOverlay),
-bestHeaderHeight(0),
-bestHeaderDate(QDateTime()),
-layerIsVisible(false),
-userClosed(false)
+    QWidget(parent),
+    ui(new Ui::ModalOverlay),
+    bestHeaderHeight(0),
+    bestHeaderDate(QDateTime()),
+    layerIsVisible(false),
+    userClosed(false)
 {
     ui->setupUi(this);
     connect(ui->closeButton, &QPushButton::clicked, this, &ModalOverlay::closeClicked);

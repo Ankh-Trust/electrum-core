@@ -169,6 +169,17 @@ void CBase58Data::SetData(const std::vector<unsigned char>& vchVersionIn, const 
     }
 }
 
+void CBase58Data::SetData(const std::vector<unsigned char>& vchVersionIn, const void* pdata, size_t nSize, const void* pdata2, size_t nSize2, const void* pdata3, size_t nSize3)
+{
+    vchVersion = vchVersionIn;
+    vchData.resize(nSize+nSize2+nSize3);
+    if (!vchData.empty()) {
+        memcpy(&vchData[0], pdata, nSize);
+        memcpy(&vchData[nSize], pdata2, nSize2);
+        memcpy(&vchData[nSize+nSize2], pdata3, nSize3);
+    }
+}
+
 void CBase58Data::SetData(const std::vector<unsigned char>& vchVersionIn, const unsigned char* pbegin, const unsigned char* pend)
 {
     SetData(vchVersionIn, (void*)pbegin, pend - pbegin);
@@ -227,7 +238,8 @@ public:
     CElectrumAddressVisitor(CElectrumAddress* addrIn) : addr(addrIn) {}
 
     bool operator()(const CKeyID& id) const { return addr->Set(id); }
-    bool operator()(const pair<CKeyID, CKeyID>& id) const { return addr->Set(id.first, id.second); }
+    bool operator()(const std::pair<CKeyID, CKeyID>& id) const { return addr->Set(id.first, id.second); }
+    bool operator()(const std::pair<CKeyID, std::pair<CKeyID, CKeyID>>& id) const { return addr->Set(id.first, id.second.first, id.second.second); }
     bool operator()(const CScriptID& id) const { return addr->Set(id); }
     bool operator()(const CNoDestination& no) const { return false; }
 };
@@ -246,9 +258,21 @@ bool CElectrumAddress::Set(const CKeyID& id, const CKeyID& id2)
     return true;
 }
 
+bool CElectrumAddress::Set(const CKeyID& id, const CKeyID& id2, const CKeyID& id3)
+{
+    SetData(Params().Base58Prefix(CChainParams::COLDSTAKING_ADDRESS_V2), &id, 20, &id2, 20, &id3, 20);
+    return true;
+}
+
 bool CElectrumAddress::Set(const CScriptID& id)
 {
     SetData(Params().Base58Prefix(CChainParams::SCRIPT_ADDRESS), &id, 20);
+    return true;
+}
+
+bool CElectrumAddress::Set(const CScript& scriptIn)
+{
+    SetData(Params().Base58Prefix(CChainParams::RAW_SCRIPT_ADDRESS), &scriptIn[0], scriptIn.size());
     return true;
 }
 
@@ -264,7 +288,7 @@ bool CElectrumAddress::IsValid() const
 
 bool CElectrumAddress::GetSpendingAddress(CElectrumAddress &address) const
 {
-    if(!IsColdStakingAddress(Params()))
+    if(!IsColdStakingAddress(Params()) && !IsColdStakingv2Address(Params()))
         return false;
     uint160 id;
     memcpy(&id, &vchData[20], 20);
@@ -274,10 +298,20 @@ bool CElectrumAddress::GetSpendingAddress(CElectrumAddress &address) const
 
 bool CElectrumAddress::GetStakingAddress(CElectrumAddress &address) const
 {
-    if(!IsColdStakingAddress(Params()))
+    if(!IsColdStakingAddress(Params()) && !IsColdStakingv2Address(Params()))
         return false;
     uint160 id;
     memcpy(&id, &vchData[0], 20);
+    address.Set(CKeyID(id));
+    return true;
+}
+
+bool CElectrumAddress::GetVotingAddress(CElectrumAddress &address) const
+{
+    if(!IsColdStakingv2Address(Params()))
+        return false;
+    uint160 id;
+    memcpy(&id, &vchData[40], 20);
     address.Set(CKeyID(id));
     return true;
 }
@@ -286,6 +320,10 @@ bool CElectrumAddress::IsValid(const CChainParams& params) const
 {
     if (vchVersion == params.Base58Prefix(CChainParams::COLDSTAKING_ADDRESS))
         return vchData.size() == 40;
+    if (vchVersion == params.Base58Prefix(CChainParams::COLDSTAKING_ADDRESS_V2))
+        return vchData.size() == 60;
+    if (vchVersion == params.Base58Prefix(CChainParams::RAW_SCRIPT_ADDRESS))
+        return vchData.size() > 0;
     bool fCorrectSize = vchData.size() == 20;
     bool fKnownVersion = vchVersion == params.Base58Prefix(CChainParams::PUBKEY_ADDRESS) ||
                          vchVersion == params.Base58Prefix(CChainParams::SCRIPT_ADDRESS);
@@ -297,6 +335,12 @@ bool CElectrumAddress::IsColdStakingAddress(const CChainParams& params) const
     return vchVersion == params.Base58Prefix(CChainParams::COLDSTAKING_ADDRESS) && vchData.size() == 40;
 }
 
+
+bool CElectrumAddress::IsColdStakingv2Address(const CChainParams& params) const
+{
+    return vchVersion == params.Base58Prefix(CChainParams::COLDSTAKING_ADDRESS_V2) && vchData.size() == 60;
+}
+
 CTxDestination CElectrumAddress::Get() const
 {
     if (!IsValid())
@@ -306,11 +350,25 @@ CTxDestination CElectrumAddress::Get() const
     if (vchVersion == Params().Base58Prefix(CChainParams::COLDSTAKING_ADDRESS)) {
         uint160 id2;
         memcpy(&id2, &vchData[20], 20);
-        return make_pair(CKeyID(id), CKeyID(id2));
-    } if (vchVersion == Params().Base58Prefix(CChainParams::PUBKEY_ADDRESS))
+        return std::make_pair(CKeyID(id), CKeyID(id2));
+    }
+    if (vchVersion == Params().Base58Prefix(CChainParams::COLDSTAKING_ADDRESS_V2)) {
+        uint160 id2;
+        memcpy(&id2, &vchData[20], 20);
+        uint160 id3;
+        memcpy(&id3, &vchData[40], 20);
+        return std::make_pair(CKeyID(id), std::make_pair(CKeyID(id2), CKeyID(id3)));
+    }
+    if (vchVersion == Params().Base58Prefix(CChainParams::PUBKEY_ADDRESS))
         return CKeyID(id);
     else if (vchVersion == Params().Base58Prefix(CChainParams::SCRIPT_ADDRESS))
         return CScriptID(id);
+    else if (vchVersion == Params().Base58Prefix(CChainParams::RAW_SCRIPT_ADDRESS))
+    {
+        std::vector<unsigned char> vData(vchData.size());
+        memcpy(&vData[0], &vchData[0], vchData.size());
+        return CScript(vData.begin(), vData.end());
+    }
     else
         return CNoDestination();
 }
@@ -322,6 +380,10 @@ bool CElectrumAddress::GetIndexKey(uint160& hashBytes, int& type) const
     } else if (vchVersion == Params().Base58Prefix(CChainParams::COLDSTAKING_ADDRESS)) {
         hashBytes = uint160(Hash160(vchData.begin(), vchData.end()));
         type = 3;
+        return true;
+    } else if (vchVersion == Params().Base58Prefix(CChainParams::COLDSTAKING_ADDRESS_V2)) {
+        hashBytes = uint160(Hash160(vchData.begin(), vchData.end()));
+        type = 4;
         return true;
     } else if (vchVersion == Params().Base58Prefix(CChainParams::PUBKEY_ADDRESS)) {
         memcpy(&hashBytes, &vchData[0], 20);
@@ -348,7 +410,8 @@ bool CElectrumAddress::GetKeyID(CKeyID& keyID) const
 
 bool CElectrumAddress::GetStakingKeyID(CKeyID& keyID) const
 {
-    if (!(IsValid() && vchVersion == Params().Base58Prefix(CChainParams::COLDSTAKING_ADDRESS)))
+    if (!(IsValid() && (vchVersion == Params().Base58Prefix(CChainParams::COLDSTAKING_ADDRESS)
+                     || vchVersion == Params().Base58Prefix(CChainParams::COLDSTAKING_ADDRESS_V2))))
         return false;
     uint160 id;
     memcpy(&id, &vchData[0], 20);
@@ -358,7 +421,8 @@ bool CElectrumAddress::GetStakingKeyID(CKeyID& keyID) const
 
 bool CElectrumAddress::GetSpendingKeyID(CKeyID& keyID) const
 {
-    if (!(IsValid() && vchVersion == Params().Base58Prefix(CChainParams::COLDSTAKING_ADDRESS)))
+    if (!(IsValid() && (vchVersion == Params().Base58Prefix(CChainParams::COLDSTAKING_ADDRESS)
+                     || vchVersion == Params().Base58Prefix(CChainParams::COLDSTAKING_ADDRESS_V2))))
         return false;
     uint160 id;
     memcpy(&id, &vchData[20], 20);
@@ -366,9 +430,24 @@ bool CElectrumAddress::GetSpendingKeyID(CKeyID& keyID) const
     return true;
 }
 
+bool CElectrumAddress::GetVotingKeyID(CKeyID& keyID) const
+{
+    if (!(IsValid() && vchVersion == Params().Base58Prefix(CChainParams::COLDSTAKING_ADDRESS_V2)))
+        return false;
+    uint160 id;
+    memcpy(&id, &vchData[40], 20);
+    keyID = CKeyID(id);
+    return true;
+}
+
 bool CElectrumAddress::IsScript() const
 {
     return IsValid() && vchVersion == Params().Base58Prefix(CChainParams::SCRIPT_ADDRESS);
+}
+
+bool CElectrumAddress::IsRawScript() const
+{
+    return IsValid() && vchVersion == Params().Base58Prefix(CChainParams::RAW_SCRIPT_ADDRESS);
 }
 
 void CElectrumSecret::SetKey(const CKey& vchSecret)

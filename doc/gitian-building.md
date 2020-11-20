@@ -443,10 +443,10 @@ Then when building, override the remote URLs that gbuild would otherwise pull fr
 cd /some/root/path/
 git clone https://github.com/electrum-core/electrum-detached-sigs.git
 
-NAVPATH=/some/root/path/electrum
+0AEPATH=/some/root/path/electrum
 SIGPATH=/some/root/path/electrum-detached-sigs
 
-./bin/gbuild --url electrum=${NAVPATH},signature=${SIGPATH} ../electrum/contrib/gitian-descriptors/gitian-win-signer.yml
+./bin/gbuild --url electrum=${0AEPATH},signature=${SIGPATH} ../electrum/contrib/gitian-descriptors/gitian-win-signer.yml
 ```
 
 Building with Debian 9.5.0

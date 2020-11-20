@@ -134,9 +134,6 @@
     </message>
     </context>
 <context>
-    <name>NavTechInit</name>
-    </context>
-<context>
     <name>OpenURIDialog</name>
     <message>
         <source>Open URI</source>
@@ -255,6 +252,9 @@
     </message>
     </context>
 <context>
+    <name>getAddressToReceive</name>
+    </context>
+<context>
     <name>electrum-core</name>
     <message>
         <source>Electrum Core</source>
@@ -273,10 +273,4 @@
         <translation>Ошибка</translation>
     </message>
 </context>
-<context>
-    <name>navtechitem</name>
-    </context>
-<context>
-    <name>navtechsetup</name>
-    </context>
 </TS>

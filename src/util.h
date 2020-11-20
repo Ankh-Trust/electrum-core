@@ -16,6 +16,7 @@
 
 #include <compat.h>
 #include <tinyformat.h>
+#include <uint256.h>
 #include <utiltime.h>
 
 #include <atomic>
@@ -43,6 +44,8 @@ public:
 
 extern std::map<std::string, std::string> mapArgs;
 extern std::map<std::string, std::vector<std::string> > mapMultiArgs;
+extern std::map<uint256, int64_t> mapAddedVotes;
+extern std::map<uint256, bool> mapSupported;
 extern bool fDebug;
 extern bool fPrintToConsole;
 extern bool fPrintToDebugLog;
@@ -54,6 +57,7 @@ extern bool fLogIPs;
 extern std::atomic<bool> fReopenLogFiles;
 extern CTranslationInterface translationInterface;
 
+extern const char * DEFAULT_WALLET_DAT;
 extern const char * const ELECTRUM_CONF_FILENAME;
 extern const char * const ELECTRUM_PID_FILENAME;
 
@@ -145,6 +149,7 @@ void AllocateFileRange(FILE *file, unsigned int offset, unsigned int length);
 bool RenameOver(boost::filesystem::path src, boost::filesystem::path dest);
 bool TryCreateDirectory(const boost::filesystem::path& p);
 boost::filesystem::path GetDefaultDataDir();
+bool CheckIfWalletDatExists(bool fNetSpecific = true);
 const boost::filesystem::path &GetDataDir(bool fNetSpecific = true);
 void ClearDatadirCache();
 boost::filesystem::path GetConfigFile();
@@ -155,6 +160,7 @@ void CreatePidFile(const boost::filesystem::path &path, pid_t pid);
 void ReadConfigFile(std::map<std::string, std::string>& mapSettingsRet, std::map<std::string, std::vector<std::string> >& mapMultiSettingsRet);
 void WriteConfigFile(std::string key, std::string value);
 void RemoveConfigFile(std::string key, std::string value);
+void RemoveConfigFilePair(std::string key, std::string value);
 void RemoveConfigFile(std::string key);
 bool ExistsKeyInConfigFile(std::string key);
 #ifdef WIN32

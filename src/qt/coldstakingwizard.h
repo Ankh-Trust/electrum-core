@@ -53,10 +53,12 @@ public:
 private:
     QLabel *spendingAddressLabel;
     QLabel *stakingAddressLabel;
+    QLabel *votingAddressLabel;
     QLabel *descriptionLabel;
     QLabel *errorLabel;
     QLineEdit *spendingAddressLineEdit;
     QLineEdit *stakingAddressLineEdit;
+    QLineEdit *votingAddressLineEdit;
 };
 
 class ColdStakingAddressPage : public QWizardPage
@@ -69,6 +71,7 @@ public:
 
 private:
     QRImageWidget *image;
+    QLineEdit *address;
     QPushButton *button;
     QString coldStakingAddress;
 

@@ -7,7 +7,7 @@ Source: https://github.com/electrum/electrum
 Files: *
 Copyright: 2009-2016, Bitcoin Core Developers
 License: Expat
-Comment: The NAVcoin Core developers encompasses the current developers listed on electrum.org,
+Comment: The NavCoin Core developers encompasses the current developers listed on electrum.org,
          as well as the numerous contributors to the project.
 
 Files: debian/*

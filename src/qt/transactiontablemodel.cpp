@@ -241,7 +241,7 @@ TransactionTableModel::TransactionTableModel(const PlatformStyle *platformStyle,
         fProcessingQueuedTransactions(false),
         platformStyle(platformStyle)
 {
-    columns << QString() << QString() << tr("Date") << tr("Type") << tr("Label") << ElectrumUnits::getAmountColumnTitle(walletModel->getOptionsModel()->getDisplayUnit());
+    columns << QString() << QString() << tr("Date") << tr("Type") << tr("Address / Label") << ElectrumUnits::getAmountColumnTitle(walletModel->getOptionsModel()->getDisplayUnit());
     priv->refreshWallet();
 
     connect(walletModel->getOptionsModel(), SIGNAL(displayUnitChanged(int)), this, SLOT(updateDisplayUnit()));
@@ -388,9 +388,9 @@ QString TransactionTableModel::formatTxType(const TransactionRecord *wtx) const
     case TransactionRecord::SendToSelf:
         return tr("Payment to yourself");
     case TransactionRecord::Staked:
-        return tr(wtx->status.status == TransactionStatus::Orphan || !(wtx->status.depth > 0) ? "Orphan" : "Staked");
+        return tr("Staked");
     case TransactionRecord::Generated:
-        return tr(wtx->status.status == TransactionStatus::Orphan || !(wtx->status.depth > 0) ? "Orphan" : "Generated");
+        return tr("Generated");
     default:
         return QString("Other");
     }
@@ -459,11 +459,6 @@ QVariant TransactionTableModel::addressColor(const TransactionRecord *wtx) const
     case TransactionRecord::SendToAddress:
     case TransactionRecord::Generated:
     case TransactionRecord::Staked:
-        {
-        QString label = walletModel->getAddressTableModel()->labelForAddress(QString::fromStdString(wtx->address));
-        if(label.isEmpty())
-            return COLOR_BAREADDRESS;
-        } break;
     case TransactionRecord::SendToSelf:
     default:
         break;

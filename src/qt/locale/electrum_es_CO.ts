@@ -158,7 +158,7 @@
     </message>
     <message>
         <source>Open &amp;URI...</source>
-        <translation>Abrir &amp;URI...</translation>
+        <translation>Abrir &amp;URL...</translation>
     </message>
     <message>
         <source>Send coins to a Electrum address</source>
@@ -220,9 +220,6 @@
         <source>Error</source>
         <translation>Error</translation>
     </message>
-    </context>
-<context>
-    <name>NavTechInit</name>
     </context>
 <context>
     <name>OpenURIDialog</name>
@@ -307,6 +304,9 @@
     </message>
     </context>
 <context>
+    <name>getAddressToReceive</name>
+    </context>
+<context>
     <name>electrum-core</name>
     <message>
         <source>Electrum Core</source>
@@ -337,10 +337,4 @@
         <translation>Error</translation>
     </message>
 </context>
-<context>
-    <name>navtechitem</name>
-    </context>
-<context>
-    <name>navtechsetup</name>
-    </context>
 </TS>

@@ -285,3 +285,4 @@ public:
 };
 
 #endif // ELECTRUM_DBWRAPPER_H
+

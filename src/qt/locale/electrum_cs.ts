@@ -540,9 +540,6 @@
     </message>
 </context>
 <context>
-    <name>NavTechInit</name>
-    </context>
-<context>
     <name>OpenURIDialog</name>
     <message>
         <source>Open URI</source>
@@ -1553,6 +1550,17 @@
     </message>
     </context>
 <context>
+    <name>getAddressToReceive</name>
+    <message>
+        <source>Form</source>
+        <translation>Formulář</translation>
+    </message>
+    <message>
+        <source>QR Code</source>
+        <translation>QR kód</translation>
+    </message>
+    </context>
+<context>
     <name>electrum-core</name>
     <message>
         <source>Options:</source>
@@ -2239,18 +2247,4 @@
         <translation>Chyba</translation>
     </message>
 </context>
-<context>
-    <name>navtechitem</name>
-    <message>
-        <source>Form</source>
-        <translation>Formulář</translation>
-    </message>
-    </context>
-<context>
-    <name>navtechsetup</name>
-    <message>
-        <source>Remove</source>
-        <translation>Smazat</translation>
-    </message>
-    </context>
 </TS>

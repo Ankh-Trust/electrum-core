@@ -4,7 +4,7 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include <policy/fees.h>
-#include <policy/policy.h>>
+#include <policy/policy.h>
 
 #include <amount.h>
 #include <primitives/transaction.h>

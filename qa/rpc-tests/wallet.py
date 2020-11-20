@@ -16,7 +16,6 @@ class WalletTest (ElectrumTestFramework):
         self.num_nodes = 4
 
     def setup_network(self, split=False):
-        print(self.options.tmpdir)
         self.nodes = start_nodes(3, self.options.tmpdir)
         connect_nodes_bi(self.nodes,0,1)
         connect_nodes_bi(self.nodes,1,2)
@@ -204,7 +203,7 @@ class WalletTest (ElectrumTestFramework):
         #do some -walletbroadcast tests
         stop_nodes(self.nodes)
         wait_electrumds()
-        self.nodes = start_nodes(3, self.options.tmpdir, [["-walletbroadcast=0"],["-walletbroadcast=0"],["-walletbroadcast=0"]])
+        self.nodes = start_nodes(3, self.options.tmpdir, [['-walletbroadcast=0','-staking=0'],['-walletbroadcast=0','-staking=0'],['-walletbroadcast=0','-staking=0']])
         connect_nodes_bi(self.nodes,0,1)
         connect_nodes_bi(self.nodes,1,2)
         connect_nodes_bi(self.nodes,2,0)

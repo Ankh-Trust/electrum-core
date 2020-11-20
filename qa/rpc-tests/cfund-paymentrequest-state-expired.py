@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2018 The NAVcoin Core developers
+# Copyright (c) 2018 The NavCoin Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -54,7 +54,7 @@ class CommunityFundPaymentRequestStateTest(ElectrumTestFramework):
             i = i + 1
 
         # Validate that the status of the payment request is expired
-        assert (self.nodes[0].getpaymentrequest(paymentrequestid0)["state"] == 0)
+        assert (self.nodes[0].getpaymentrequest(paymentrequestid0)["state"] == 3)
         assert (self.nodes[0].getpaymentrequest(paymentrequestid0)["status"] == "expired")
 
         # Move to the last block of the voting cycle, where the payment request state changes

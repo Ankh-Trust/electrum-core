@@ -44,28 +44,19 @@ TransactionView::TransactionView(const PlatformStyle *platformStyle, QWidget *pa
 
     QHBoxLayout *hlayout = new QHBoxLayout();
     hlayout->setContentsMargins(0,0,0,0);
-
-    if (platformStyle->getUseExtraSpacing()) {
-        hlayout->setSpacing(0);
-        hlayout->addSpacing(STATUS_COLUMN_WIDTH - 1);
-    } else {
-        hlayout->setSpacing(0);
-        hlayout->addSpacing(STATUS_COLUMN_WIDTH);
-    }
+    hlayout->setSpacing(0);
+    hlayout->addSpacing(STATUS_COLUMN_WIDTH);
 
     watchOnlyWidget = new QComboBox(this);
     watchOnlyWidget->setFixedWidth(WATCHONLY_COLUMN_WIDTH);
     watchOnlyWidget->addItem("", TransactionFilterProxy::WatchOnlyFilter_All);
-    watchOnlyWidget->addItem(platformStyle->SingleColorIcon(":/icons/eye_plus"), "", TransactionFilterProxy::WatchOnlyFilter_Yes);
-    watchOnlyWidget->addItem(platformStyle->SingleColorIcon(":/icons/eye_minus"), "", TransactionFilterProxy::WatchOnlyFilter_No);
+    watchOnlyWidget->addItem(QIcon(":/icons/eye_plus"), "", TransactionFilterProxy::WatchOnlyFilter_Yes);
+    watchOnlyWidget->addItem(QIcon(":/icons/eye_minus"), "", TransactionFilterProxy::WatchOnlyFilter_No);
     hlayout->addWidget(watchOnlyWidget);
 
     dateWidget = new QComboBox(this);
-    if (platformStyle->getUseExtraSpacing()) {
-        dateWidget->setFixedWidth(DATE_COLUMN_WIDTH - 1);
-    } else {
-        dateWidget->setFixedWidth(DATE_COLUMN_WIDTH);
-    }
+    dateWidget->setFixedWidth(DATE_COLUMN_WIDTH);
+
     dateWidget->addItem(tr("All"), All);
     dateWidget->addItem(tr("Today"), Today);
     dateWidget->addItem(tr("This week"), ThisWeek);
@@ -76,11 +67,7 @@ TransactionView::TransactionView(const PlatformStyle *platformStyle, QWidget *pa
     hlayout->addWidget(dateWidget);
 
     typeWidget = new QComboBox(this);
-    if (platformStyle->getUseExtraSpacing()) {
-        typeWidget->setFixedWidth(TYPE_COLUMN_WIDTH - 1);
-    } else {
-        typeWidget->setFixedWidth(TYPE_COLUMN_WIDTH);
-    }
+    typeWidget->setFixedWidth(TYPE_COLUMN_WIDTH);
 
     typeWidget->addItem(tr("All"), TransactionFilterProxy::ALL_TYPES);
     typeWidget->addItem(tr("Received with"), TransactionFilterProxy::TYPE(TransactionRecord::RecvWithAddress) |
@@ -104,11 +91,9 @@ TransactionView::TransactionView(const PlatformStyle *platformStyle, QWidget *pa
 
     amountWidget = new QLineEdit(this);
     amountWidget->setPlaceholderText(tr("Min amount"));
-    if (platformStyle->getUseExtraSpacing()) {
-        amountWidget->setFixedWidth(AMOUNT_MINIMUM_COLUMN_WIDTH - 1);
-    } else {
-        amountWidget->setFixedWidth(AMOUNT_MINIMUM_COLUMN_WIDTH);
-    }
+    amountWidget->setAlignment(Qt::AlignRight);
+    amountWidget->setFixedWidth(AMOUNT_MINIMUM_COLUMN_WIDTH + 1);
+
     amountWidget->setValidator(new QDoubleValidator(0, 1e20, 8, this));
     hlayout->addWidget(amountWidget);
 
@@ -124,7 +109,7 @@ TransactionView::TransactionView(const PlatformStyle *platformStyle, QWidget *pa
     int width = view->verticalScrollBar()->sizeHint().width();
     // Cover scroll bar width with spacing
     if (platformStyle->getUseExtraSpacing()) {
-        hlayout->addSpacing(width+2);
+        hlayout->addSpacing(width + 2);
     } else {
         hlayout->addSpacing(width);
     }
@@ -206,6 +191,7 @@ void TransactionView::setModel(WalletModel *model)
         transactionView->setSortingEnabled(true);
         transactionView->sortByColumn(TransactionTableModel::Date, Qt::DescendingOrder);
         transactionView->verticalHeader()->hide();
+        transactionView->setShowGrid(false);
 
         transactionView->setColumnWidth(TransactionTableModel::Status, STATUS_COLUMN_WIDTH);
         transactionView->setColumnWidth(TransactionTableModel::Watchonly, WATCHONLY_COLUMN_WIDTH);
@@ -500,7 +486,7 @@ QWidget *TransactionView::createDateRangeWidget()
 {
     dateRangeWidget = new QFrame();
     dateRangeWidget->setFrameStyle(QFrame::Panel | QFrame::Raised);
-    dateRangeWidget->setContentsMargins(1,1,1,1);
+    dateRangeWidget->setContentsMargins(1, 1, 1, 1);
     QHBoxLayout *layout = new QHBoxLayout(dateRangeWidget);
     layout->setContentsMargins(0,0,0,0);
     layout->addSpacing(23);

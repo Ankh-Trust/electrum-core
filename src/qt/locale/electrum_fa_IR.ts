@@ -258,9 +258,6 @@
     </message>
 </context>
 <context>
-    <name>NavTechInit</name>
-    </context>
-<context>
     <name>OpenURIDialog</name>
     </context>
 <context>
@@ -531,6 +528,13 @@
     </message>
     </context>
 <context>
+    <name>getAddressToReceive</name>
+    <message>
+        <source>Form</source>
+        <translation>فرم</translation>
+    </message>
+    </context>
+<context>
     <name>electrum-core</name>
     <message>
         <source>Options:</source>
@@ -629,14 +633,4 @@
         <translation>خطا</translation>
     </message>
 </context>
-<context>
-    <name>navtechitem</name>
-    <message>
-        <source>Form</source>
-        <translation>فرم</translation>
-    </message>
-    </context>
-<context>
-    <name>navtechsetup</name>
-    </context>
 </TS>

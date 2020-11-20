@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2019 The NAVcoin Core developers
+# Copyright (c) 2019 The NavCoin Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -60,7 +60,7 @@ class CFundPaymentRequestStateReorg(ElectrumTestFramework):
         assert(self.nodes[1].getproposal(proposal_id)["state"] == 1)
         assert(self.nodes[1].getproposal(proposal_id)["status"] == "accepted")
 
-        raw_preq = self.nodes[0].createpaymentrequest(proposal_id, 100, "preq", True)
+        raw_preq = self.nodes[0].createpaymentrequest(proposal_id, 100, "preq", 1, True)["raw"]
         self.sync_all()
 
         # Disconnect Nodes 0 and 1

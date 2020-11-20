@@ -1,5 +1,5 @@
 ---
-name: "electrum-osx-1.0.0"
+name: "electrum-osx-4.0.0"
 enable_cache: true
 distro: "ubuntu"
 suites:

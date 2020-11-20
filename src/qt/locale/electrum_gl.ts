@@ -402,9 +402,6 @@
     </message>
 </context>
 <context>
-    <name>NavTechInit</name>
-    </context>
-<context>
     <name>OpenURIDialog</name>
     <message>
         <source>Open URI</source>
@@ -971,6 +968,17 @@
     </message>
     </context>
 <context>
+    <name>getAddressToReceive</name>
+    <message>
+        <source>Form</source>
+        <translation>Formulario</translation>
+    </message>
+    <message>
+        <source>QR Code</source>
+        <translation>Código QR</translation>
+    </message>
+    </context>
+<context>
     <name>electrum-core</name>
     <message>
         <source>Options:</source>
@@ -1197,14 +1205,4 @@
         <translation>Erro</translation>
     </message>
 </context>
-<context>
-    <name>navtechitem</name>
-    <message>
-        <source>Form</source>
-        <translation>Formulario</translation>
-    </message>
-    </context>
-<context>
-    <name>navtechsetup</name>
-    </context>
 </TS>

@@ -29,6 +29,7 @@
 #include <db_cxx.h>
 #endif
 
+#include <QDir>
 #include <QFile>
 #include <QKeyEvent>
 #include <QMenu>
@@ -56,6 +57,15 @@ const int CONSOLE_HISTORY = 50;
 const int INITIAL_TRAFFIC_GRAPH_MINS = 30;
 const QSize FONT_RANGE(4, 40);
 const char fontSizeSettingsKey[] = "consoleFontSize";
+
+// Repair parameters
+const QString SALVAGEWALLET("-salvagewallet");
+const QString RESCAN("-rescan");
+const QString ZAPTXES1("-zapwallettxes=1");
+const QString ZAPTXES2("-zapwallettxes=2");
+const QString UPGRADEWALLET("-upgradewallet");
+const QString REINDEX2("-reindex");
+const QString RESYNC("-resync");
 
 const struct {
     const char *url;
@@ -266,12 +276,13 @@ RPCConsole::RPCConsole(const PlatformStyle *platformStyle, QWidget *parent) :
 
     ui->openDebugLogfileButton->setToolTip(ui->openDebugLogfileButton->toolTip().arg(tr(PACKAGE_NAME)));
 
-    if (platformStyle->getImagesOnButtons()) {
-        ui->openDebugLogfileButton->setIcon(QIcon(":/icons/export"));
-    }
     ui->clearButton->setIcon(QIcon(":/icons/remove"));
     ui->fontBiggerButton->setIcon(QIcon(":/icons/fontbigger"));
     ui->fontSmallerButton->setIcon(QIcon(":/icons/fontsmaller"));
+
+    ui->openDebugLogfileButton->setIcon(QIcon(":/icons/export"));
+    ui->promptIcon->setIcon(QIcon(":/icons/prompticon"));
+
 
     // Install event filter for up and down arrow
     ui->lineEdit->installEventFilter(this);
@@ -282,9 +293,20 @@ RPCConsole::RPCConsole(const PlatformStyle *platformStyle, QWidget *parent) :
     connect(ui->fontSmallerButton, SIGNAL(clicked()), this, SLOT(fontSmaller()));
     connect(ui->btnClearTrafficGraph, SIGNAL(clicked()), ui->trafficGraph, SLOT(clear()));
 
+    // Wallet Repair Buttons
+    connect(ui->btn_salvagewallet, SIGNAL(clicked()), this, SLOT(walletSalvage()));
+    connect(ui->btn_rescan, SIGNAL(clicked()), this, SLOT(walletRescan()));
+    connect(ui->btn_zapwallettxes1, SIGNAL(clicked()), this, SLOT(walletZaptxes1()));
+    connect(ui->btn_zapwallettxes2, SIGNAL(clicked()), this, SLOT(walletZaptxes2()));
+    connect(ui->btn_upgradewallet, SIGNAL(clicked()), this, SLOT(walletUpgrade()));
+    connect(ui->btn_reindex, SIGNAL(clicked()), this, SLOT(walletReindex()));
+    connect(ui->btn_resync, SIGNAL(clicked()), this, SLOT(walletResync()));
+
+
     // set library version labels
 #ifdef ENABLE_WALLET
     ui->berkeleyDBVersion->setText(DbEnv::version(0, 0, 0));
+    ui->wallet_path->setText(QString::fromStdString(GetDataDir().string() + QDir::separator().toLatin1() + GetArg("-wallet", DEFAULT_WALLET_DAT)));
 #else
     ui->label_berkeleyDBVersion->hide();
     ui->berkeleyDBVersion->hide();
@@ -343,6 +365,12 @@ void RPCConsole::showNetwork()
 void RPCConsole::showPeers()
 {
     ui->tabWidget->setCurrentIndex(3);
+    show();
+}
+
+void RPCConsole::showRepair()
+{
+    ui->tabWidget->setCurrentIndex(4);
     show();
 }
 
@@ -646,6 +674,85 @@ void RPCConsole::setFontSize(int newSize)
     ui->messagesWidget->verticalScrollBar()->setValue(oldPosFactor * ui->messagesWidget->verticalScrollBar()->maximum());
 }
 
+/** Restart wallet with "-salvagewallet" */
+void RPCConsole::walletSalvage()
+{
+    buildParameterlist(SALVAGEWALLET);
+}
+
+/** Restart wallet with "-rescan" */
+void RPCConsole::walletRescan()
+{
+    buildParameterlist(RESCAN);
+}
+
+/** Restart wallet with "-zapwallettxes=1" */
+void RPCConsole::walletZaptxes1()
+{
+    buildParameterlist(ZAPTXES1);
+}
+
+/** Restart wallet with "-zapwallettxes=2" */
+void RPCConsole::walletZaptxes2()
+{
+    buildParameterlist(ZAPTXES2);
+}
+
+/** Restart wallet with "-upgradewallet" */
+void RPCConsole::walletUpgrade()
+{
+    buildParameterlist(UPGRADEWALLET);
+}
+
+/** Restart wallet with "-reindex" */
+void RPCConsole::walletReindex()
+{
+    buildParameterlist(REINDEX2);
+}
+
+/** Restart wallet with "-resync" */
+void RPCConsole::walletResync()
+{
+    QString resyncWarning = tr("This will delete your local blockchain folders and the wallet will synchronize the complete Blockchain from scratch.<br /><br />");
+    resyncWarning +=   tr("This needs quite some time and downloads a lot of data.<br /><br />");
+    resyncWarning +=   tr("Your transactions and funds will be visible again after the download has completed.<br /><br />");
+    resyncWarning +=   tr("Do you want to continue?.<br />");
+    QMessageBox::StandardButton retval = QMessageBox::question(this, tr("Confirm resync Blockchain"),
+                                                               resyncWarning,
+                                                               QMessageBox::Yes | QMessageBox::Cancel,
+                                                               QMessageBox::Cancel);
+
+    if (retval != QMessageBox::Yes) {
+        // Resync canceled
+        return;
+    }
+
+    // Restart and resync
+    buildParameterlist(RESYNC);
+}
+
+/** Build command-line parameter list for restart */
+void RPCConsole::buildParameterlist(QString arg)
+{
+    // Get command-line arguments and remove the application name
+    QStringList args = QApplication::arguments();
+    args.removeFirst();
+
+    // Remove existing repair-options
+    args.removeAll(SALVAGEWALLET);
+    args.removeAll(RESCAN);
+    args.removeAll(ZAPTXES1);
+    args.removeAll(ZAPTXES2);
+    args.removeAll(UPGRADEWALLET);
+    args.removeAll(REINDEX2);
+
+    // Append repair parameter to command line.
+    args.append(arg);
+
+    // Send command-line arguments to BitcoinGUI::handleRestart()
+    Q_EMIT handleRestart(args);
+}
+
 void RPCConsole::clear(bool clearHistory)
 {
     ui->messagesWidget->clear();
@@ -678,14 +785,21 @@ void RPCConsole::clear(bool clearHistory)
                 "td.time { color: #808080; font-size: %2; padding-top: 3px; } "
                 "td.message { font-family: %1; font-size: %2; white-space:pre-wrap; } "
                 "td.cmd-request { color: #006060; } "
-                "td.cmd-error { color: #66023c; } "
+                "td.cmd-error { color: #800000; } "
+                ".secwarning { color: #800000; }"
                 "b { color: #006060; } "
             ).arg(fixedFontInfo.family(), QString("%1pt").arg(consoleFontSize))
         );
 
+#ifdef Q_OS_MAC
+    QString clsKey = "(⌘)-L";
+#else
+    QString clsKey = "Ctrl-L";
+#endif
+
     message(CMD_REPLY, (tr("Welcome to the %1 RPC console.").arg(tr(PACKAGE_NAME)) + "<br>" +
-                        tr("Use up and down arrows to navigate history, and <b>Ctrl-L</b> to clear screen.") + "<br>" +
-                        tr("Type <b>help</b> for an overview of available commands.")), true);
+                        tr("Use up and down arrows to navigate history, and %1 to clear screen.").arg("<b>" + clsKey + "</b>") + "<br>" +
+                        tr("Type <b>help</b> for an overview of available commands.")) + "<br><span class=\"secwarning\">" + tr("WARNING: Scammers have been active, telling users to type commands here, stealing their wallet contents. Do not use this console without fully understanding the ramification of a command.") + "</span>", true);
 }
 
 void RPCConsole::keyPressEvent(QKeyEvent *event)

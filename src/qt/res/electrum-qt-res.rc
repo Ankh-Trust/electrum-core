@@ -18,8 +18,8 @@ BEGIN
     BEGIN
         BLOCK "040904E4" // U.S. English - multilingual (hex)
         BEGIN
-            VALUE "CompanyName",        "Ankh"
-            VALUE "FileDescription",    "Ankh Electrum Core Wallet (GUI node for Electrum)"
+            VALUE "CompanyName",        "Electrum"
+            VALUE "FileDescription",    PACKAGE_NAME " (GUI node for Electrum)"
             VALUE "FileVersion",        VER_FILEVERSION_STR
             VALUE "InternalName",       "electrum-qt"
             VALUE "LegalCopyright",     COPYRIGHT_STR

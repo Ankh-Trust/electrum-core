@@ -6,6 +6,7 @@
 #define ELECTRUM_QT_WALLETVIEW_H
 
 #include <amount.h>
+#include <splitrewards.h>
 
 #include <QStackedWidget>
 #include <QPushButton>
@@ -13,7 +14,7 @@
 class ElectrumGUI;
 class ClientModel;
 class OverviewPage;
-class CommunityFundPage;
+class DaoPage;
 class PlatformStyle;
 class ReceiveCoinsDialog;
 class SendCoinsDialog;
@@ -55,7 +56,7 @@ public:
     bool handlePaymentRequest(const SendCoinsRecipient& recipient);
 
     void showOutOfSyncWarning(bool fShow);
-
+    
 private:
     ClientModel *clientModel;
     WalletModel *walletModel;
@@ -64,7 +65,7 @@ private:
     QWidget *transactionsPage;
     ReceiveCoinsDialog *receiveCoinsPage;
     SendCoinsDialog *sendCoinsPage;
-    CommunityFundPage *communityFundPage;
+    DaoPage *daoPage;
     AddressBookPage *usedSendingAddressesPage;
     AddressBookPage *usedReceivingAddressesPage;
 
@@ -74,7 +75,7 @@ private:
     const PlatformStyle *platformStyle;
 
 public Q_SLOTS:
-    /** Switch to overview (home) page */
+    /** Switch to overview (overview) page */
     void gotoOverviewPage();
     /** Switch to history (transactions) page */
     void gotoHistoryPage();
@@ -107,6 +108,9 @@ public Q_SLOTS:
     void lockWallet();
     void importPrivateKey();
     void exportMasterPrivateKeyAction();
+    void exportMnemonicAction();
+
+    void splitRewards();
 
     /** Show used sending addresses */
     void usedSendingAddresses();
@@ -122,10 +126,10 @@ public Q_SLOTS:
     /** User has requested more information about the out of sync state */
     void requestedSyncWarningInfo();
 
-    void setVotingStatus(QString text);
-
     void setStakingStats(QString day, QString week, QString month, QString year, QString all);
     void requestAddressHistory();
+
+    void onDaoEntriesChanged(int count);
 
 Q_SIGNALS:
     /** Signal that we want to show the main window */
@@ -140,6 +144,8 @@ Q_SIGNALS:
     void incomingTransaction(const QString& date, int unit, const CAmount& amount, const QString& type, const QString& address, const QString& label);
     /** Notify that the out of sync warning icon has been pressed */
     void outOfSyncWarningClicked();
+
+    void daoEntriesChanged(int count);
 
     void openAddressHistory();
 

@@ -1,14 +1,14 @@
-+#!/usr/bin/env python3
-# Copyright (c) 2018 The Navcoin Core developers
+#!/usr/bin/env python3
+# Copyright (c) 2018 The NavCoin Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-from test_framework.test_framework import NavCoinTestFramework
+from test_framework.test_framework import ElectrumTestFramework
 from test_framework.cfund_util import *
 
 import urllib.parse
 
-class CfundForkReorgPreq(NavCoinTestFramework):
+class CfundForkReorgPreq(ElectrumTestFramework):
     """Tests that reorg with 2 chains with same proposals/requests does not cause a fork"""
 
     def __init__(self):
@@ -78,6 +78,8 @@ class CfundForkReorgPreq(NavCoinTestFramework):
         slow_gen(self.nodes[1], 1)
         end_cycle(self.nodes[1])
 
+        assert_equal(self.nodes[1].getpaymentrequest(paymentHash0)["status"], "accepted")
+
         # Now make sure that both nodes are on different chains
         assert(self.nodes[0].getbestblockhash() != self.nodes[1].getbestblockhash())
 
@@ -94,12 +96,14 @@ class CfundForkReorgPreq(NavCoinTestFramework):
         sync_blocks(self.nodes)
 
         # Now check that the hash for both nodes are the same
+        assert_equal(self.nodes[0].getpaymentrequest(paymentHash0)["status"], "accepted")
         assert_equal(self.nodes[0].getbestblockhash(), best_block)
         assert_equal(self.nodes[0].getbestblockhash(), self.nodes[1].getbestblockhash())
         assert_equal(self.nodes[0].getblock(self.nodes[0].getpaymentrequest(paymentHash0)["blockHash"]), self.nodes[1].getblock(self.nodes[1].getpaymentrequest(paymentHash0)["blockHash"]))
         assert_equal(self.nodes[0].getpaymentrequest(paymentHash0), self.nodes[1].getpaymentrequest(paymentHash0))
 
-        slow_gen(self.nodes[0], self.nodes[0].cfundstats()["votingPeriod"]["ending"] - self.nodes[0].cfundstats()["votingPeriod"]["current"])
+        slow_gen(self.nodes[0], 1)
+        end_cycle(self.nodes[0])
         sync_blocks(self.nodes)
 
         assert_equal(self.nodes[0].getpaymentrequest(paymentHash0)["status"], "paid")
@@ -111,7 +115,7 @@ class CfundForkReorgPreq(NavCoinTestFramework):
     def create_raw_paymentrequest(self, amount, address, proposal_hash, description):
         amount = amount * 100000000
         privkey = self.nodes[0].dumpprivkey(address)
-        message = "I kindly ask to withdraw " + str(amount) + "NAV from the proposal " + proposal_hash + ". Payment request id: " + str(description)
+        message = "I kindly ask to withdraw " + str(amount) + "0AE from the proposal " + proposal_hash + ". Payment request id: " + str(description)
         signature = self.nodes[0].signmessagewithprivkey(privkey, message)
 
         # Create a raw payment request

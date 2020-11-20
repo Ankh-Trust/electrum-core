@@ -166,7 +166,7 @@ testScripts = [
     'cfund-proposal-state-expired.py',
     'cfund-reorg.py',
     'cfund-rawtx-create-proposal.py',
-    'cfund-rawtx-paymentrequest-create.py',
+#    'cfund-rawtx-paymentrequest-create.py',
     'cfund-rawtx-paymentrequest-vote.py',
     'cfund-rawtx-proposal-vote.py',
     'cfund-vote.py',
@@ -177,7 +177,7 @@ testScripts = [
     'getcoldstakingaddress.py',
     'getstakereport.py',
     'importaddress.py',
-    'getstakinginfo.py',
+#    'getstakinginfo.py',
     'coldstaking_staking.py',
     'coldstaking_spending.py',
     'coldstaking_fee.py',
@@ -190,8 +190,17 @@ testScripts = [
     'sendtoaddress.py',
     'stakeimmaturebalance.py',
     'rpc-help.py',
+    'dao-consultations.py',
+    'dao-consultation-consensus.py',
+    'dao-consultation-consensus-cycle-length.py',
     'createrawscriptaddress.py',
-    'cfunddb-statehash.py'
+    'cfunddb-statehash.py',
+    'dao/001-proposal-expired.py',
+    'dao/002-proposal-rejected.py',
+    'dao/003-proposal-accepted.py',
+    'dao/004-proposal-expired-preq.py',
+    'dao/005-proposal-rejected-preq.py',
+    'dao/006-proposal-accepted-preq.py',
 ]
 #if ENABLE_ZMQ:
 #    testScripts.append('zmq_test.py')

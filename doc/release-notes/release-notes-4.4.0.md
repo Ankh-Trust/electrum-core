@@ -28,15 +28,15 @@ You can read more about [NPIP0003 on the NPIP GitHub](https://github.com/electru
 
 ## Community Fund Contribution Increase
 
-The Version Bit 16 will signal for the soft fork to increase the Community Fund contribution from 0.25 0AE to 0.50 0AE per block.
+The Version Bit 16 will signal for the soft fork to increase the Community Fund contribution from 0.25 0AE to 0.50 0AE per block. 
 
 You can read more about [NPIP0005 on the NPIP GitHub](https://github.com/electrum/npips/blob/master/npip-0005.mediawiki).
 
-## Reject specific version bits
+## Reject specific version bits 
 
-This release introduces the concept of bit version rejection.
+This release introduces the concept of bit version rejection. 
 
-It is designed to make it easier for the network to reject individual soft forks when they are bundled together in one release.
+It is designed to make it easier for the network to reject individual soft forks when they are bundled together in one release. 
 
 As soft forks come within the software signaling by default only the converse was needed for people to reject soft forks they did not agree with.
 
@@ -97,7 +97,7 @@ Arguments:
 3. "id" (string, required) Unique id to identify the payment request
 
 Result:
-{
+{ 
     hash: prequestid, (string) The payment request id.
     strDZeel: string  (string) The attached strdzeel property.
 }  

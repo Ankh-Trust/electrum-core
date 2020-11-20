@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2018 The NAVcoin Core developers
+# Copyright (c) 2018 The NavCoin Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -165,7 +165,7 @@ class CommunityFundCreatePaymentrequestRawTX(ElectrumTestFramework):
         slow_gen(self.nodes[0], 10)
 
         # Proposal 2 should be expired
-        assert (self.nodes[0].getproposal(proposalid2_expired_timeout)["status"] == "expired waiting for end of voting period")
+        assert (self.nodes[0].getproposal(proposalid2_expired_timeout)["status"] == "expired, waiting for end of voting period")
 
         start_new_cycle(self.nodes[0])
 

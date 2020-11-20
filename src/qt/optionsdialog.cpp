@@ -67,13 +67,13 @@ OptionsDialog::OptionsDialog(QWidget *parent, bool enableWallet) :
     connect(ui->connectSocksTor, SIGNAL(toggled(bool)), ui->proxyIpTor, SLOT(setEnabled(bool)));
     connect(ui->connectSocksTor, SIGNAL(toggled(bool)), ui->proxyPortTor, SLOT(setEnabled(bool)));
     connect(ui->connectSocksTor, SIGNAL(toggled(bool)), this, SLOT(updateProxyValidationState()));
-    //connect(ui->voteTextField, SIGNAL(textChanged(QString)), this, SLOT(vote(QString)));
+    connect(ui->voteTextField, SIGNAL(textChanged(QString)), this, SLOT(vote(QString)));
 
     bool showVoting = GetStaking();
 
-    //ui->voteLabel->setVisible(showVoting);
-    //ui->voteTextField->setVisible(showVoting);
-    //ui->voteTextField->setText(QString::fromStdString(GetArg("-stakervote","")));
+    ui->voteLabel->setVisible(showVoting);
+    ui->voteTextField->setVisible(showVoting);
+    ui->voteTextField->setText(QString::fromStdString(GetArg("-stakervote","")));
 
     /* Window elements init */
 #ifdef Q_OS_MAC
@@ -120,7 +120,7 @@ OptionsDialog::OptionsDialog(QWidget *parent, bool enableWallet) :
         }
     }
 
-    ui->thirdPartyTxUrls->setPlaceholderText("https://0ae.ankh-trust.com/tx/%s");
+    ui->thirdPartyTxUrls->setPlaceholderText("https://0AE.ankh-trust.com/tx/%s");
 
     ui->unit->setModel(new ElectrumUnits(this));
 
@@ -149,7 +149,7 @@ void OptionsDialog::setModel(OptionsModel *model)
 
     QSettings settings;
 
-    //ui->voteTextField->setText(QString::fromStdString(GetArg("-stakervote","")));
+    ui->voteTextField->setText(QString::fromStdString(GetArg("-stakervote","")));
     ui->voteQuestionLabel->setText(settings.value("votingQuestion", "").toString());
 
     if(model)
@@ -182,7 +182,6 @@ void OptionsDialog::setModel(OptionsModel *model)
     connect(ui->connectSocks, SIGNAL(clicked(bool)), this, SLOT(showRestartWarning()));
     connect(ui->connectSocksTor, SIGNAL(clicked(bool)), this, SLOT(showRestartWarning()));
     /* Display */
-    connect(ui->digits, SIGNAL(valueChanged()), this, SLOT(showRestartWarning()));
     connect(ui->lang, SIGNAL(valueChanged()), this, SLOT(showRestartWarning()));
     connect(ui->thirdPartyTxUrls, SIGNAL(textChanged(const QString &)), this, SLOT(showRestartWarning()));
 }
@@ -284,7 +283,7 @@ void OptionsDialog::on_hideTrayIcon_stateChanged(int fState)
 
 void OptionsDialog::showRestartWarning(bool fPersistent)
 {
-    ui->statusLabel->setStyleSheet("QLabel { color: #66023c; }");
+    ui->statusLabel->setStyleSheet("QLabel { color: #800000; }");
 
     if(fPersistent)
     {
@@ -304,14 +303,12 @@ void OptionsDialog::clearStatusLabel()
     ui->statusLabel->clear();
 }
 
-/*
- * void OptionsDialog::vote(QString vote)
- * {
- *     SoftSetArg("-stakervote",vote.toStdString(),true);
- *     RemoveConfigFile("stakervote");
- *     WriteConfigFile("stakervote",vote.toStdString());
- * }
- */
+void OptionsDialog::vote(QString vote)
+{
+   SoftSetArg("-stakervote",vote.toStdString(),true);
+   RemoveConfigFile("stakervote");
+   WriteConfigFile("stakervote",vote.toStdString());
+}
 
 void OptionsDialog::updateProxyValidationState()
 {
@@ -325,7 +322,7 @@ void OptionsDialog::updateProxyValidationState()
     else
     {
         setOkButtonState(false);
-        ui->statusLabel->setStyleSheet("QLabel { color: #66023c; }");
+        ui->statusLabel->setStyleSheet("QLabel { color: #800000; }");
         ui->statusLabel->setText(tr("The supplied proxy address is invalid."));
     }
 }

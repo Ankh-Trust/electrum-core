@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
-# Copyright (c) 2018 The Navcoin Core developers
+# Copyright (c) 2018 The NavCoin Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-from test_framework.test_framework import NavCoinTestFramework
+from test_framework.test_framework import ElectrumTestFramework
 from test_framework.cfund_util import *
 
 import urllib.parse
 import string
 import random
 
-class CfundForkReorgProposal(NavCoinTestFramework):
+class CfundForkReorgProposal(ElectrumTestFramework):
     """Tests that reorg with 2 chains with same proposals/requests does not cause a fork"""
 
     def __init__(self):
@@ -49,7 +49,7 @@ class CfundForkReorgProposal(NavCoinTestFramework):
         time.sleep(2) # Wait for the nodes to disconnect
 
         # Create the proposal and save the id/hash
-        proposalHex = self.nodes[0].createproposal(paymentAddress, proposalAmount, proposalDeadline, "test", 1, True)
+        proposalHex = self.nodes[0].createproposal(paymentAddress, proposalAmount, proposalDeadline, "test", 1, True)["raw"]
 
         # Broadcast on node 0
         slow_gen(self.nodes[0], 1)
@@ -144,9 +144,17 @@ class CfundForkReorgProposal(NavCoinTestFramework):
         paidBlock = self.nodes[0].getblock(self.nodes[0].getpaymentrequest(preqHash)["stateChangedOnBlock"])
         unspent = self.nodes[0].listunspent(0, 80)
 
-        assert_equal(unspent[0]['address'], paymentAddress)
-        assert_equal(unspent[0]['amount'], paymentAmount)
-        assert_equal(paidBlock['tx'][0], unspent[0]['txid'])
+        found = False
+        txid = ""
+
+        for utxo in unspent:
+            if utxo['address'] == paymentAddress and utxo['amount'] == paymentAmount:
+                found = True
+                txid = utxo['txid']
+                break
+
+        assert(found)
+        assert_equal(paidBlock['tx'][0], txid)
 
 if __name__ == '__main__':
     CfundForkReorgProposal().main()

@@ -2,7 +2,7 @@
 #include <ui_communityfundsuccessdialog.h>
 #include <QDialog>
 
-CommunityFundSuccessDialog::CommunityFundSuccessDialog(uint256 hash, QWidget *parent, CFund::CProposal* proposal) :
+CommunityFundSuccessDialog::CommunityFundSuccessDialog(uint256 hash, QWidget *parent, CProposal* proposal) :
     QDialog(parent),
     ui(new Ui::CommunityFundSuccessDialog),
     proposal(proposal),
@@ -13,12 +13,12 @@ CommunityFundSuccessDialog::CommunityFundSuccessDialog(uint256 hash, QWidget *pa
 
     // Generate label for proposal
     ui->label->setTextFormat(Qt::RichText);
-    ui->label->setText(QString::fromStdString("You can now view your proposal in the core wallet or <a href=\"https://www.navexplorer.com/community-fund/proposals/pending\">on the navexplorer</a> once the next block has been broadcast"));
+    ui->label->setText(QString::fromStdString("You can now view your proposal in the core wallet or <a href=\"https://0ae.ankh-trust.com/dao/proposals/pending\">on the block explorer</a> once the next block has been broadcast"));
     ui->label->setTextInteractionFlags(Qt::TextBrowserInteraction);
     ui->label->setOpenExternalLinks(true);
 }
 
-CommunityFundSuccessDialog::CommunityFundSuccessDialog(uint256 hash, QWidget *parent, CFund::CPaymentRequest* prequest) :
+CommunityFundSuccessDialog::CommunityFundSuccessDialog(uint256 hash, QWidget *parent, CPaymentRequest* prequest) :
     QDialog(parent),
     ui(new Ui::CommunityFundSuccessDialog),
     proposal(0),
@@ -30,7 +30,7 @@ CommunityFundSuccessDialog::CommunityFundSuccessDialog(uint256 hash, QWidget *pa
     // Generate label for payment request
     ui->labelTitle->setText(QString("Created Payment Request Successfully"));
     ui->label->setTextFormat(Qt::RichText);
-    ui->label->setText(QString::fromStdString("You can now view your payment request in the core wallet or <a href=\"https://www.navexplorer.com/community-fund/payment-requests/pending\">on the navexplorer</a> once the next block has been broadcast"));
+    ui->label->setText(QString::fromStdString("You can now view your payment request in the core wallet or <a href=\"https://0ae.ankh-trust.com/dao/payment-requests/pending\">on the block explorer</a> once the next block has been broadcast"));
     ui->label->setTextInteractionFlags(Qt::TextBrowserInteraction);
     ui->label->setOpenExternalLinks(true);
 }

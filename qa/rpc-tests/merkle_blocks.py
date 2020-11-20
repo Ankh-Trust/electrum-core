@@ -42,7 +42,7 @@ class MerkleBlockTest(ElectrumTestFramework):
         assert_equal(self.nodes[2].getbalance(), 0)
 
         node0utxos = self.nodes[0].listunspent(1, 104)
-        # We generated 105 blocks so we are excluding the first block which contains 50 mill~ 0AE
+        # We generated 105 blocks so we are excluding the first block which contains 59 mill~ 0AE
 
         tx1 = self.nodes[0].createrawtransaction([node0utxos.pop()], {self.nodes[1].getnewaddress(): 49.99})
         txid1 = self.nodes[0].sendrawtransaction(self.nodes[0].signrawtransaction(tx1)["hex"])
@@ -86,3 +86,4 @@ class MerkleBlockTest(ElectrumTestFramework):
 
 if __name__ == '__main__':
     MerkleBlockTest().main()
+

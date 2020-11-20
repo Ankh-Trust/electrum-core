@@ -43,7 +43,7 @@ config file):
 
 	HiddenServiceDir /var/lib/tor/electrum-service/
 	HiddenServicePort 5556 127.0.0.1:8333
-	HiddenServicePort 45556 127.0.0.1:18333
+	HiddenServicePort 15556 127.0.0.1:18333
 
 The directory can be different of course, but (both) port numbers should be equal to
 your electrumd's P2P listen port (5556 by default).

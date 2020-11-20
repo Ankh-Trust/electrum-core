@@ -5,7 +5,7 @@
 
 ### Community Fund - Accumulation of coins, signaled by version bit 7:
   - Reduction of the staking rewards to 4%.
-  - Inclusion of an additional output in the Coinstake transaction contributing 0.25 0AE to the Community Fund
+  - Inclusion of an additional output in the Coinstake transaction contributing 0.250AE to the Community Fund
   - Consensus validation of the previous rule.
   - Uses a separate DB on disk to store data about the Community Fund, increasing performance.
 
@@ -22,11 +22,11 @@
 
 
 ## An additional network “devnet” is added.
-  - Default p2p port: 48886
-  - Default rpc port: 44846
+  - Default p2p port: 18886
+  - Default rpc port: 44446
   - Default datadir: OS_DATADIR/devnet
   - Enabled through argument -devnet=1
-
+  
 ## Core Wallet GUI Fixes:
 - Fixes wrong pixel density on HiDPI screens.
 - Menu option to export private key of an address and master private key.
@@ -35,7 +35,7 @@
 - Shows and categorizes correctly contributions to the Community Fund and payments received from it.
 - Does not show Orphan Stakes on the Transaction List.
 - Removes Community Fund voting popup.
-
+  
 ## Other Fixes/Notes
 - Ignores Coinstake Output when calculating the Witness Merkle Root, fixing a bug related to Segregated Witness transactions.
 - Bans nodes with obsolete versions.
@@ -45,3 +45,5 @@
 - Updates the seed nodes.
 - Fixes some of the test units.
 - electrum-tx tool has been updated to use electrum’s own transaction structure
+
+

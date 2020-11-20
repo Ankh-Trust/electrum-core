@@ -1,8 +1,12 @@
-# **Ankh Electrum (0AE) v1.0.0.0**
+![Electrum](./img/logo-extended.png)
 
-![0AC logo](https://github.com/Ankh-Trust/electrum-core/blob/master/src/qt/res/icons/about.png)
+This is the working repository for Electrum Core, our fork of bitcoin-core 0.13.
 
-**Copyright (c) 2019-2019 [Ankh](https://ankh.foundation)**
+For more information please visit the website:
+
+ https://electrum.org/en/roadmap
+
+[![Build Status](https://travis-ci.org/electrum/electrum-core.svg?branch=master)](https://travis-ci.org/electrum/electrum-core)
 
 ## Building
 
@@ -16,9 +20,32 @@ For building the wallet see the markdown files in [doc](doc) folder
 |:-----------|:-----------|
 | Block Spacing | `30 seconds` |
 | Stake Minimum Age | `2 hours` |
- | Stake Reward | `1 0AE per block` | 
+ | Stake Reward | `2 0AE per block` |
 | Port | `44840` |
 | RPC Port | `44844` |
+
+## Social Channels
+
+| Site | link |
+|:-----------|:-----------|
+| Freenode IRC | #electrum-dev |
+| Medium | https://medium.com/nav-coin |
+| Twitter | https://twitter.com/Electrum |
+| Discord | https://discord.gg/y4Vu9jw |
+| Telegram | https://t.me/electrum |
+| Reddit | http://www.reddit.com/r/electrum |
+| Facebook | https://www.facebook.com/Electrum |
+| Instagram | https://www.instagram.com/navcore/ |
+| Bitcointalk | https://bitcointalk.org/index.php?topic=679791 |
+
+## Community Resources
+
+| Site         | link                                                                                                                    |
+| :----------- | :---------------------------------------------------------------------------------------------------------------------- |
+| Trello Board | [https://trello.com/nav-community](https://trello.com/invite/b/rPdvVVL4/ba5c40a885fd3c02cda2a8b406ff7124/nav-community) |
+| NavHub       | http://navhub.org                                                                                                       |
+
+
 
 License
 ---------------------

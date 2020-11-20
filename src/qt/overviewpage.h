@@ -6,6 +6,7 @@
 #define ELECTRUM_QT_OVERVIEWPAGE_H
 
 #include <amount.h>
+#include <splitrewards.h>
 
 #include <QWidget>
 #include <QPushButton>
@@ -26,7 +27,7 @@ QT_BEGIN_NAMESPACE
 class QModelIndex;
 QT_END_NAMESPACE
 
-/** Overview ("home") page widget */
+/** Overview ("overview") page widget */
 class OverviewPage : public QWidget
 {
     Q_OBJECT
@@ -47,8 +48,7 @@ public Q_SLOTS:
     void setStakingStats(QString day, QString week, QString month, QString year, QString all);
     void updateStakeReportNow();
     void updateStakeReportbalanceChanged(CAmount, CAmount, CAmount, CAmount, CAmount, CAmount, CAmount);
-    void setVotingStatus(QString text);
-
+    void on_showStakingSetup_clicked();
 
 Q_SIGNALS:
     void transactionClicked(const QModelIndex &index);
@@ -79,8 +79,7 @@ private Q_SLOTS:
     void handleTransactionClicked(const QModelIndex &index);
     void updateAlerts(const QString &warnings);
     void updateWatchOnlyLabels(bool showWatchOnly);
-    void unlockWalletStaking();
-    void handleOutOfSyncWarningClicks();
+    void handleOutOfSyncWarningClicks();    
 };
 
 #endif // ELECTRUM_QT_OVERVIEWPAGE_H

@@ -1057,7 +1057,7 @@
         <translation>Wichtige Netzwerk-Mitteilung.</translation>
     </message>
     <message>
-        <source>The Electrum Network is currently voting on introducing changes on the consensus protocol. As a participant in our network, we value your input and the decision ultimately is yours. Please cast your vote. &lt;br&gt;&lt;br&gt;For more information on the proposal, please visit &lt;a href="https://navcoin.org/community-fund"&gt;this link&lt;/a&gt;&lt;br&gt;&lt;br&gt;Would you like the Electrum Network to update the staking rewards to setup a decentralised community fund that will help grow the network?</source>
+        <source>The Electrum Network is currently voting on introducing changes on the consensus protocol. As a participant in our network, we value your input and the decision ultimately is yours. Please cast your vote. &lt;br&gt;&lt;br&gt;For more information on the proposal, please visit &lt;a href="https://navcoin.org/community-fund"&gt;this link&lt;/a&gt;&lt;br&gt;&lt;br&gt;Would you like the Nav Coin Network to update the staking rewards to setup a decentralised community fund that will help grow the network?</source>
         <translation>Das Electrum Netzwerk stimmt momentan über Änderungen am Consensus Protocol ab. Als ein Teilnehmer in unserem Netzwerk wertschätzen wir deinen Beitrag und die Entscheidung liegt letztendlich bei dir. Bitte gib deine Stimme ab. Für mehr Informationen zum diesem Vorhaben besuche bitte diesen Link . Würdest du gern die Staking Rewards aktualisieren um einen dezentralisierten Community Fund einzurichten, der dem Netzwerk wachsen helfen wird?</translation>
     </message>
     <message>
@@ -1145,32 +1145,6 @@
     <message>
         <source>Wallet is &lt;b&gt;encrypted&lt;/b&gt; and currently &lt;b&gt;locked&lt;/b&gt;</source>
         <translation>Wallet ist &lt;b&gt;verschlüsselt&lt;/b&gt; und aktuell &lt;b&gt;gesperrt&lt;/b&gt;</translation>
-    </message>
-</context>
-<context>
-    <name>NavTechInit</name>
-    <message>
-        <source>NavTech Setup</source>
-        <translation>NavTech Einstellungen</translation>
-    </message>
-    <message>
-        <source>Electrum uses an unique parallel cluster of nodes called NavTech to protect the privacy of your transactions.</source>
-        <translation>Electrum nutzt ein einzigartiges paralleles Cluster von Netzwerkknoten, NavTech genannt, um sicherzustellen, dass deine privaten Transaktionen geschützt sind.</translation>
-    </message>
-    <message>
-        <source>You will find below the list of the Electrum Foundation Servers. Feel free to modify this list to include your prefered servers:</source>
-        <translation>Nachstehend findest du eine Liste der Electrum Foundation Server. Du kannst diese Liste nach belieben modifizieren um deine bevorzugten Server einzufügen.</translation>
-    </message>
-    <message>
-        <source>95.183.52.55:3000
-95.183.52.28:3000
-95.183.52.29:3000
-95.183.53.184:3000
-</source>
-        <translation>95.183.52.55:3000
-95.183.52.28:3000
-95.183.52.29:3000
-95.183.53.184:3000</translation>
     </message>
 </context>
 <context>
@@ -2265,16 +2239,16 @@
         <translation>(Intelligente Gebührenlogik ist noch nicht verfügbar. Normalerweise dauert dies einige Blöcke lang...)</translation>
     </message>
     <message>
-        <source>You don't have any NAVTech server added. </source>
-        <translation>Du hast keinen NAVTech Server hinzugefügt.</translation>
+        <source>You don't have any 0AETech server added. </source>
+        <translation>Du hast keinen 0AETech Server hinzugefügt.</translation>
     </message>
     <message>
         <source>Private payment</source>
         <translation>Private Zahlung</translation>
     </message>
     <message>
-        <source>Manage NAVTech servers</source>
-        <translation>Verwalte NAVTech Server</translation>
+        <source>Manage 0AETech servers</source>
+        <translation>Verwalte 0AETech Server</translation>
     </message>
     <message>
         <source>Use full amount</source>
@@ -2341,8 +2315,8 @@
         <translation>Änderung kopieren</translation>
     </message>
     <message>
-        <source>NAVTech server returned a different number of addresses.</source>
-        <translation>NAVTech Server hat eine andere Anzahl von Adressen zurückgesandt.</translation>
+        <source>0AETech server returned a different number of addresses.</source>
+        <translation>0AETech Server hat eine andere Anzahl von Adressen zurückgesandt.</translation>
     </message>
     <message>
         <source>Something went wrong:</source>
@@ -2565,8 +2539,8 @@
         <translation>Nachricht &amp;signieren</translation>
     </message>
     <message>
-        <source>You can sign messages/agreements with your addresses to prove you can receive electra sent to them. Be careful not to sign anything vague or random, as phishing attacks may try to trick you into signing your identity over to them. Only sign fully-detailed statements you agree to.</source>
-        <translation>Sie können Nachrichten/Vereinbarungen mit Hilfe Ihrer Adressen signieren, um zu beweisen, dass Sie Electra empfangen können, die an diese Adressen überwiesen werden. Seien Sie vorsichtig und signieren Sie nichts Vages oder Willkürliches, um Ihre Indentität vor Phishingangriffen zu schützen. Signieren Sie nur vollständig-detaillierte Aussagen, mit denen Sie auch einverstanden sind.</translation>
+        <source>You can sign messages/agreements with your addresses to prove you can receive electrums sent to them. Be careful not to sign anything vague or random, as phishing attacks may try to trick you into signing your identity over to them. Only sign fully-detailed statements you agree to.</source>
+        <translation>Sie können Nachrichten/Vereinbarungen mit Hilfe Ihrer Adressen signieren, um zu beweisen, dass Sie Electrums empfangen können, die an diese Adressen überwiesen werden. Seien Sie vorsichtig und signieren Sie nichts Vages oder Willkürliches, um Ihre Indentität vor Phishingangriffen zu schützen. Signieren Sie nur vollständig-detaillierte Aussagen, mit denen Sie auch einverstanden sind.</translation>
     </message>
     <message>
         <source>The Electrum address to sign the message with</source>
@@ -3191,75 +3165,122 @@
         <translation>Daten der aktuellen Ansicht in eine Datei exportieren</translation>
     </message>
     <message>
-         <source>Backup Wallet</source>
-         <translation>Backup Wallet</translation>
-     </message>
-     <message>
-         <source>Wallet Data (*.dat)</source>
-         <translation>Wallet-Daten (*.dat)</translation>
-     </message>
-     <message>
-         <source>Backup Failed</source>
-         <translation>Backup fehlgeschlagen</translation>
-     </message>
-     <message>
-         <source>Backup Successful</source>
-         <translation>Backup erfolgreich</translation>
-     </message>
-     <message>
-         <source>The wallet data was successfully saved to %1.</source>
-         <translation>Die Wallet-Daten wurden erfolgreich in %1 gespeichert.</translation>
-     </message>
-     <message>
-         <source>Wallet is not a HD wallet.</source>
-         <translation>Wallet ist keine HD-Wallet.</translation>
-     </message>
-     <message>
-         <source>Show Master Private Key</source>
-         <translation>Master Private Key anzeigen</translation>
-     </message>
-     <message>
-         <source>Master Private Key:&lt;br&gt;&lt;br&gt;%1</source>
-         <translation>Master Private Key:12%1</translation>
-     </message>
-     <message>
-         <source>Unable to retrieve HD master private key</source>
-         <translation>HD Master Private Key kann nicht abgerufen werden</translation>
-     </message>
-     <message>
-         <source>Import Private Key</source>
-         <translation>Private Key importieren</translation>
-     </message>
-     <message>
-         <source>Private Key:</source>
-         <translation>Private Key:</translation>
-     </message>
-     <message>
-         <source>Invalid private key encoding.</source>
-         <translation>Ungültige Verschlüsselung des Private Key</translation>
-     </message>
-     <message>
-         <source>Private key outside allowed range.</source>
-         <translation>Private Key außerhalb des zulässigen Bereichs.</translation>
-     </message>
-     <message>
-         <source>Address already added.</source>
-         <translation>Adresse bereits hinzugefügt.</translation>
-     </message>
-     <message>
-         <source>Error adding key to wallet.</source>
-         <translation>Fehler beim Hinzufügen des Keys zur Wallet</translation>
-     </message>
-     <message>
-         <source>Electrum needs to scan the chain... Please, wait.</source>
-         <translation>Electrum muss die Chain scannen... bitte warte.</translation>
-     </message>
-     <message>
-         <source>Private key correctly added!</source>
-         <translation>Private Key korrekt hinzugefügt!</translation>
-     </message>
- </context>
- <context>
+        <source>Backup Wallet</source>
+        <translation>Backup Wallet</translation>
+    </message>
+    <message>
+        <source>Wallet Data (*.dat)</source>
+        <translation>Wallet-Daten (*.dat)</translation>
+    </message>
+    <message>
+        <source>Backup Failed</source>
+        <translation>Backup fehlgeschlagen</translation>
+    </message>
+    <message>
+        <source>Backup Successful</source>
+        <translation>Backup erfolgreich</translation>
+    </message>
+    <message>
+        <source>The wallet data was successfully saved to %1.</source>
+        <translation>Die Wallet-Daten wurden erfolgreich in %1 gespeichert.</translation>
+    </message>
+    <message>
+        <source>Wallet is not a HD wallet.</source>
+        <translation>Wallet ist keine HD-Wallet.</translation>
+    </message>
+    <message>
+        <source>Show Master Private Key</source>
+        <translation>Master Private Key anzeigen</translation>
+    </message>
+    <message>
+        <source>Master Private Key:&lt;br&gt;&lt;br&gt;%1</source>
+        <translation>Master Private Key:12%1</translation>
+    </message>
+    <message>
+        <source>Unable to retrieve HD master private key</source>
+        <translation>HD Master Private Key kann nicht abgerufen werden</translation>
+    </message>
+    <message>
+        <source>Import Private Key</source>
+        <translation>Private Key importieren</translation>
+    </message>
+    <message>
+        <source>Private Key:</source>
+        <translation>Private Key:</translation>
+    </message>
+    <message>
+        <source>Invalid private key encoding.</source>
+        <translation>Ungültige Verschlüsselung des Private Key</translation>
+    </message>
+    <message>
+        <source>Private key outside allowed range.</source>
+        <translation>Private Key außerhalb des zulässigen Bereichs.</translation>
+    </message>
+    <message>
+        <source>Address already added.</source>
+        <translation>Adresse bereits hinzugefügt.</translation>
+    </message>
+    <message>
+        <source>Error adding key to wallet.</source>
+        <translation>Fehler beim Hinzufügen des Keys zur Wallet</translation>
+    </message>
+    <message>
+        <source>Electrum needs to scan the chain... Please, wait.</source>
+        <translation>Electrum muss die Chain scannen... bitte warte.</translation>
+    </message>
+    <message>
+        <source>Private key correctly added!</source>
+        <translation>Private Key korrekt hinzugefügt!</translation>
+    </message>
+</context>
+<context>
+    <name>getAddressToReceive</name>
+    <message>
+        <source>Form</source>
+        <translation>Formular</translation>
+    </message>
+    <message>
+        <source>Use the following address to receive Electrums:</source>
+        <translation>Verwende die folgende Adresse um Electrums zu erhalten:</translation>
+    </message>
+    <message>
+        <source>QR Code</source>
+        <translation>QR-Code</translation>
+    </message>
+    <message>
+        <source>Copy to clipboard</source>
+        <translation>In die Zwischenablage kopieren</translation>
+    </message>
+    <message>
+        <source>Generate a new address</source>
+        <translation>Generiere eine neue Adresse</translation>
+    </message>
+    <message>
+        <source>Create a Cold Staking address</source>
+        <translation>Erstelle eine Cold Staking Adresse</translation>
+    </message>
+    <message>
+        <source>Request payment</source>
+        <translation>Zahlung anfordern</translation>
+    </message>
+    <message>
+        <source>List old addresses</source>
+        <translation>Alte Adressen auflisten</translation>
+    </message>
+    <message>
+        <source>Action not available</source>
+        <translation>Aktion nicht verfügbar</translation>
+    </message>
+    <message>
+        <source>Resulting URI too long, try to reduce the text for label / message.</source>
+        <translation>Resultierende URI zu lang, versuche den Text der Beschriftung/ Mitteilung zu reduzieren.</translation>
+    </message>
+    <message>
+        <source>Error encoding URI into QR Code.</source>
+        <translation>Fehler beim Verschlüsseln des URI zum QR Code</translation>
+    </message>
+</context>
+<context>
     <name>electrum-core</name>
     <message>
         <source>Options:</source>
@@ -3394,8 +3415,8 @@
         <translation>Die Block-Datenbank enthält einen Block, der in der Zukunft auftaucht. Dies kann daran liegen, dass die Systemzeit Ihres Computers falsch eingestellt ist. Stellen Sie die Block-Datenbank nur wieder her, wenn Sie sich sicher sind, dass Ihre Systemzeit korrekt eingestellt ist.</translation>
     </message>
     <message>
-      <source>The community fund database looks to be corrupted. You will need to rebuild the block database.</source>
-      <translation>Die Gemeinschaftsfonds-Datenbank scheint beschädigt zu sein. Du musst die Blockdatenbank neu erstellen.</translation>
+        <source>The community fund database looks to be corrupted. You will need to rebuild the block database.</source>
+        <translation>Die Gemeinschaftsfonds-Datenbank scheint beschädigt zu sein. Du musst die Blockdatenbank neu erstellen.</translation>
     </message>
     <message>
         <source>This is a pre-release test build - use at your own risk - do not use for mining or merchant applications</source>
@@ -4144,100 +4165,6 @@
     <message>
         <source>Error</source>
         <translation>Fehler</translation>
-    </message>
-</context>
-<context>
-    <name>navtechitem</name>
-    <message>
-        <source>Form</source>
-        <translation>Formular</translation>
-    </message>
-    <message>
-        <source>Server Name</source>
-        <translation>Servername</translation>
-    </message>
-    <message>
-        <source>127.0.0.1:3000</source>
-        <translation>127.0.0.1:3000</translation>
-    </message>
-    <message>
-        <source>Get Info</source>
-        <translation>Erhalte Informationen</translation>
-    </message>
-    <message>
-        <source>Delete</source>
-        <translation>Löschen</translation>
-    </message>
-</context>
-<context>
-    <name>navtechsetup</name>
-    <message>
-        <source>Dialog</source>
-        <translation>Dialog</translation>
-    </message>
-    <message>
-        <source>List of Navtech servers currently configured in your wallet to process private payments:</source>
-        <translation>Liste der Navtech-Server, die derzeit in deiner Wallet für die Verarbeitung privater Zahlungen konfiguriert sind:</translation>
-    </message>
-    <message>
-        <source>When performing a private payment, a random server from this list will be used.</source>
-        <translation>Bei einer privaten Zahlung wird ein zufälliger Server aus dieser Liste verwendet.</translation>
-    </message>
-    <message>
-        <source>Get Info</source>
-        <translation>Erhalte Informationen</translation>
-    </message>
-    <message>
-        <source>Remove</source>
-        <translation>Entfernen</translation>
-    </message>
-    <message>
-        <source>Server address</source>
-        <translation>Serveradresse</translation>
-    </message>
-    <message>
-        <source>Add new</source>
-        <translation>Neue hinzufügen</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation>Speichern</translation>
-    </message>
-    <message>
-        <source>Remove Navtech server</source>
-        <translation>Entferne Navtech Server</translation>
-    </message>
-    <message>
-        <source>You are about to remove the following Navtech server: </source>
-        <translation>Du bist dabei, den folgenden Navtech Server zu entfernen:</translation>
-    </message>
-    <message>
-        <source>Are you sure?</source>
-        <translation>Bist du sicher?</translation>
-    </message>
-    <message>
-        <source>Removed.</source>
-        <translation>Entfernt.</translation>
-    </message>
-    <message>
-        <source>Navtech server</source>
-        <translation>Navtech Server</translation>
-    </message>
-    <message>
-        <source>Address: </source>
-        <translation>Adresse:</translation>
-    </message>
-    <message>
-        <source>Min amount: </source>
-        <translation>Mindestbetrag:</translation>
-    </message>
-    <message>
-        <source>Max amount: </source>
-        <translation>Maximalbetrag:</translation>
-    </message>
-    <message>
-        <source>Tx fee: </source>
-        <translation>Tx Gebühr:</translation>
     </message>
 </context>
 </TS>

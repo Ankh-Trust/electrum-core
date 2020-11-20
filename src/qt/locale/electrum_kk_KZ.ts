@@ -214,9 +214,6 @@
     </message>
     </context>
 <context>
-    <name>NavTechInit</name>
-    </context>
-<context>
     <name>OpenURIDialog</name>
     </context>
 <context>
@@ -367,6 +364,9 @@
     </message>
     </context>
 <context>
+    <name>getAddressToReceive</name>
+    </context>
+<context>
     <name>electrum-core</name>
     <message>
         <source>Information</source>
@@ -389,10 +389,4 @@
         <translation>қате</translation>
     </message>
 </context>
-<context>
-    <name>navtechitem</name>
-    </context>
-<context>
-    <name>navtechsetup</name>
-    </context>
 </TS>

@@ -8,45 +8,59 @@
 #include <qt/walletview.h>
 #include <util.h>
 
+#include <guiutil.h>
+
 #include <cstdio>
 
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QVBoxLayout>
 
 WalletFrame::WalletFrame(const PlatformStyle *platformStyle, ElectrumGUI *_gui) :
     QFrame(_gui),
     gui(_gui),
     platformStyle(platformStyle)
 {
+    int headerMargin = 15;
+
     // Leave HBox hook for adding a list view later
-    QVBoxLayout *walletFrameLayout = new QVBoxLayout(this);
-    QHBoxLayout *topLayout = new QHBoxLayout();
-    QHBoxLayout *bottomLayout = new QHBoxLayout();
+    QHBoxLayout *frameLayout = new QHBoxLayout(this);
+    frameLayout->setSpacing(0);
+    frameLayout->setContentsMargins(0, 0, 0, 0);
+
+    QVBoxLayout *mainLayout = new QVBoxLayout();
+    mainLayout->setContentsMargins(0, 0, 0, 0);
+    mainLayout->setSpacing(0);
 
     menuLayout = new QHBoxLayout();
-    menuLayout->setContentsMargins(0,0,0,0);
+    menuLayout->setContentsMargins(0, 0, 0, 0);
     menuLayout->setSpacing(0);
+    menuLayout->setAlignment(Qt::AlignLeft);
 
-    walletFrameLayout->setSpacing(0);
-    walletFrameLayout->setContentsMargins(0,0,0,0);
+    headerLayout = new QVBoxLayout();
+    headerLayout->setContentsMargins(headerMargin, headerMargin, headerMargin, headerMargin);
+    headerLayout->setSpacing(headerMargin);
 
-    setContentsMargins(0,0,0,0);
-
-    topLayout->setContentsMargins(0,0,0,0);
-    topLayout->setSpacing(0);
+    QHBoxLayout* headLayout = new QHBoxLayout();
+    headLayout->setContentsMargins(0, 0, 0, 0);
+    headLayout->setSpacing(0);
+    headerLayout->addLayout(headLayout);
 
     walletStack = new QStackedWidget(this);
 
-    bottomLayout->setContentsMargins(0,0,0,0);
-    bottomLayout->addWidget(walletStack);
+    QHBoxLayout* contentLayout = new QHBoxLayout();
+    contentLayout->setContentsMargins(0, 0, 0, 0);
+    contentLayout->addWidget(walletStack);
 
-    QLabel *noWallet = new QLabel(tr("No wallet has been loaded."));
+    QLabel* noWallet = new QLabel(tr("No wallet has been loaded."));
     noWallet->setAlignment(Qt::AlignCenter);
     walletStack->addWidget(noWallet);
 
-    walletFrameLayout->addLayout(menuLayout);
-    walletFrameLayout->addLayout(bottomLayout);
+    mainLayout->addLayout(menuLayout);
+    //mainLayout->addLayout(headerLayout);
+    mainLayout->addLayout(contentLayout);
 
+    frameLayout->addLayout(mainLayout);
 }
 
 WalletFrame::~WalletFrame()
@@ -77,7 +91,7 @@ bool WalletFrame::addWallet(const QString& name, WalletModel *walletModel)
     // Ensure a walletView is able to show the main window
     connect(walletView, SIGNAL(showNormalIfMinimized()), gui, SLOT(showNormalIfMinimized()));
     connect(walletView, SIGNAL(openAddressHistory()), this, SLOT(usedReceivingAddresses()));
-
+    connect(walletView, SIGNAL(daoEntriesChanged(int)), this, SLOT(onDaoEntriesChanged(int)));
 
     return true;
 }
@@ -142,11 +156,11 @@ void WalletFrame::setStakingStats(QString day, QString week, QString month, QStr
         i.value()->setStakingStats(day,week,month,year,all);
 }
 
-void WalletFrame::setVotingStatus(QString text)
+void WalletFrame::splitRewards()
 {
     QMap<QString, WalletView*>::const_iterator i;
     for (i = mapWalletViews.constBegin(); i != mapWalletViews.constEnd(); ++i)
-        i.value()->setVotingStatus(text);
+        i.value()->splitRewards();
 }
 
 void WalletFrame::gotoHistoryPage()
@@ -240,6 +254,13 @@ void WalletFrame::exportMasterPrivateKeyAction()
         walletView->exportMasterPrivateKeyAction();
 }
 
+void WalletFrame::exportMnemonicAction()
+{
+    WalletView *walletView = currentWalletView();
+    if(walletView)
+        walletView->exportMnemonicAction();
+}
+
 void WalletFrame::lockWallet()
 {
     WalletView *walletView = currentWalletView();
@@ -269,4 +290,9 @@ WalletView *WalletFrame::currentWalletView()
 void WalletFrame::outOfSyncWarningClicked()
 {
     Q_EMIT requestedSyncWarningInfo();
+}
+
+void WalletFrame::onDaoEntriesChanged(int count)
+{
+    Q_EMIT daoEntriesChanged(count);
 }

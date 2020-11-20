@@ -6,7 +6,7 @@
 #ifndef ELECTRUM_UNDO_H
 #define ELECTRUM_UNDO_H
 
-#include <compressor.h>
+#include <compressor.h> 
 #include <primitives/transaction.h>
 #include <serialize.h>
 

@@ -227,7 +227,7 @@
     </message>
     <message>
         <source>Open &amp;URI...</source>
-        <translation>Abrir y uri...</translation>
+        <translation>Abrir y url...</translation>
     </message>
     <message>
         <source>Reindexing blocks on disk...</source>
@@ -338,9 +338,6 @@
         <translation>La billetera esta &lt;b&gt;codificada&lt;/b&gt; y actualmente &lt;b&gt;bloqueda&lt;/b&gt;</translation>
     </message>
 </context>
-<context>
-    <name>NavTechInit</name>
-    </context>
 <context>
     <name>OpenURIDialog</name>
     <message>
@@ -775,6 +772,17 @@
     </message>
     </context>
 <context>
+    <name>getAddressToReceive</name>
+    <message>
+        <source>Form</source>
+        <translation>Formulario</translation>
+    </message>
+    <message>
+        <source>QR Code</source>
+        <translation>Código QR </translation>
+    </message>
+    </context>
+<context>
     <name>electrum-core</name>
     <message>
         <source>Options:</source>
@@ -885,14 +893,4 @@
         <translation>Error</translation>
     </message>
 </context>
-<context>
-    <name>navtechitem</name>
-    <message>
-        <source>Form</source>
-        <translation>Formulario</translation>
-    </message>
-    </context>
-<context>
-    <name>navtechsetup</name>
-    </context>
 </TS>

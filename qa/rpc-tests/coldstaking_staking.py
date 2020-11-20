@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2018 The NAVcoin Core developers
+# Copyright (c) 2018 The NavCoin Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -118,7 +118,7 @@ class ColdStakingStaking(ElectrumTestFramework):
             pass
         except Exception as e:
             pass
-
+        
         # We expect our balance and weight to be unchanged
         assert(self.nodes[0].getbalance() == balance_step_one)
         assert(spending_fail)
@@ -162,7 +162,7 @@ class ColdStakingStaking(ElectrumTestFramework):
         assert(spending_fail)
         assert(self.nodes[0].getstakinginfo()["weight"] / 100000000.0 >= staking_weight_one / 100000000.0 - 1)
 
-
+        
         # Staking
         slow_gen(self.nodes[1], 300)
         self.sync_all()
@@ -184,7 +184,7 @@ class ColdStakingStaking(ElectrumTestFramework):
 
         # print(utxo_before, utxo_after, utxo_after_two)
         assert(utxo_before != utxo_after)
-
+        
 
     def send_raw_transaction(self, decoded_raw_transaction, to_address, change_address, amount):
         # Create a raw tx
@@ -194,11 +194,11 @@ class ColdStakingStaking(ElectrumTestFramework):
 
         # Sign raw transaction
         signresult = self.nodes[0].signrawtransaction(rawtx)
-        # signresult["complete"]
+        # signresult["complete"]   
 
         # Send raw transaction
         return self.nodes[0].sendrawtransaction(signresult['hex'])
-
+        
 
 if __name__ == '__main__':
     ColdStakingStaking().main()

@@ -254,9 +254,6 @@
     </message>
     </context>
 <context>
-    <name>NavTechInit</name>
-    </context>
-<context>
     <name>OpenURIDialog</name>
     <message>
         <source>Open URI</source>
@@ -731,6 +728,17 @@
     </message>
     </context>
 <context>
+    <name>getAddressToReceive</name>
+    <message>
+        <source>Form</source>
+        <translation>படிவம்</translation>
+    </message>
+    <message>
+        <source>QR Code</source>
+        <translation>QR குறியீடு</translation>
+    </message>
+    </context>
+<context>
     <name>electrum-core</name>
     <message>
         <source>Electrum Core</source>
@@ -757,18 +765,4 @@
         <translation>தவறு</translation>
     </message>
 </context>
-<context>
-    <name>navtechitem</name>
-    <message>
-        <source>Form</source>
-        <translation>படிவம்</translation>
-    </message>
-    </context>
-<context>
-    <name>navtechsetup</name>
-    <message>
-        <source>Remove</source>
-        <translation>நீக்கு</translation>
-    </message>
-    </context>
 </TS>

@@ -44,10 +44,16 @@ public:
 
     QWidget *topMenu;
     QHBoxLayout *menuLayout;
+    QVBoxLayout *headerLayout;
+    QHBoxLayout *headLayout;
+    QHBoxLayout *balanceLayout;
+    QHBoxLayout *statusLayout;
 
 Q_SIGNALS:
     /** Notify that the user has requested more information about the out-of-sync warning */
     void requestedSyncWarningInfo();
+
+    void daoEntriesChanged(int count);
 
 private:
     QStackedWidget *walletStack;
@@ -62,7 +68,7 @@ private:
 
 public Q_SLOTS:
 
-    /** Switch to overview (home) page */
+    /** Switch to overview (overview) page */
     void gotoOverviewPage();
     /** Switch to history (transactions) page */
     void gotoHistoryPage();
@@ -72,13 +78,10 @@ public Q_SLOTS:
     void gotoReceiveCoinsPage();
     /** Switch to send coins page */
     void gotoSendCoinsPage(QString addr = "");
-
     /** Show Sign/Verify Message dialog and switch to sign message tab */
     void gotoSignMessageTab(QString addr = "");
     /** Show Sign/Verify Message dialog and switch to verify message tab */
     void gotoVerifyMessageTab(QString addr = "");
-
-
 
     /** Encrypt the wallet */
     void encryptWallet(bool status);
@@ -92,10 +95,11 @@ public Q_SLOTS:
     void lockWallet();
     void importPrivateKey();
     void exportMasterPrivateKeyAction();
+    void exportMnemonicAction();
 
     void setStakingStats(QString day, QString week, QString month, QString year, QString all);
 
-    void setVotingStatus(QString text);
+    void splitRewards();
 
     /** Show used sending addresses */
     void usedSendingAddresses();
@@ -103,6 +107,8 @@ public Q_SLOTS:
     void usedReceivingAddresses();
     /** Pass on signal over requested out-of-sync-warning information */
     void outOfSyncWarningClicked();
+
+    void onDaoEntriesChanged(int count);
 };
 
 #endif // ELECTRUM_QT_WALLETFRAME_H

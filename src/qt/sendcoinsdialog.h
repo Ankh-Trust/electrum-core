@@ -57,25 +57,18 @@ public Q_SLOTS:
     void setBalance(const CAmount& balance, const CAmount& unconfirmedBalance, const CAmount& stakingBalance, const CAmount& immatureBalance,
                     const CAmount& watchOnlyBalance, const CAmount& watchUnconfBalance, const CAmount& watchImmatureBalance, const CAmount& coldStakingBalance);
     void useFullAmount();
-    //void checkNavtechServers();
-    //void showNavTechDialog();
-    //void anonsendCheckboxClick();
-
 
 private:
     Ui::SendCoinsDialog *ui;
     ClientModel *clientModel;
     WalletModel *model;
     bool fNewRecipientAllowed;
-    bool fFeeMinimized;
     const PlatformStyle *platformStyle;
 
     // Process WalletModel::SendCoinsReturn and generate a pair consisting
     // of a message and message flags for use in Q_EMIT message().
     // Additional parameter msgArg can be used via .arg(msgArg).
     void processSendCoinsReturn(const WalletModel::SendCoinsReturn &sendCoinsReturn, const QString &msgArg = QString());
-    void minimizeFeeSection(bool fMinimize);
-    void updateFeeMinimizedLabel();
 
 private Q_SLOTS:
     void on_sendButton_clicked();
@@ -94,11 +87,6 @@ private Q_SLOTS:
     void coinControlClipboardPriority();
     void coinControlClipboardLowOutput();
     void coinControlClipboardChange();
-    void setMinimumFee();
-    void updateFeeSectionControls();
-    void updateMinFeeLabel();
-    void updateSmartFeeLabel();
-    void updateGlobalFeeVariables();
 
 Q_SIGNALS:
     // Fired when a message should be reported to the user

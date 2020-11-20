@@ -61,6 +61,7 @@
 #include <QDesktopWidget>
 #include <QDir>
 #include <QDragEnterEvent>
+#include <QHBoxLayout>
 #include <QInputDialog>
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -78,11 +79,12 @@
 #include <QPushButton>
 #include <QSettings>
 #include <QShortcut>
+#include <QSizePolicy>
 #include <QStackedWidget>
 #include <QStatusBar>
-#include <QStyle>
 #include <QTimer>
 #include <QToolBar>
+#include <QToolButton>
 #include <QUrl>
 #include <QUrlQuery>
 #include <QVBoxLayout>
@@ -100,6 +102,17 @@ const std::string ElectrumGUI::DEFAULT_UIPLATFORM =
 #endif
         ;
 
+static const struct {
+    bool error;
+    const char *text;
+} notifs[] = {
+    { true, "The DAO needs you! Please don't forget to vote!" },
+    { false, "This wallet is currently syncing. Your balance may not be accurate until it has completed!" },
+    { false, "GENERIC WARNINGS USE THIS" }
+};
+
+static const unsigned notifs_count = sizeof(notifs)/sizeof(*notifs);
+
 const QString ElectrumGUI::DEFAULT_WALLET = "~Default";
 
 ElectrumGUI::ElectrumGUI(const PlatformStyle *platformStyle, const NetworkStyle *networkStyle, QWidget *parent) :
@@ -113,20 +126,23 @@ ElectrumGUI::ElectrumGUI(const PlatformStyle *platformStyle, const NetworkStyle 
     labelBlocksIcon(0),
     labelStakingIcon(0),
     labelPrice(0),
+    timerPrice(0),
     progressBarLabel(0),
     progressBar(0),
     progressDialog(0),
     appMenuBar(0),
     overviewAction(0),
     historyAction(0),
+    daoAction(0),
+    settingsAction(0),
     quitAction(0),
     sendCoinsAction(0),
     sendCoinsMenuAction(0),
     usedSendingAddressesAction(0),
     usedReceivingAddressesAction(0),
-    repairWalletAction(0),
     importPrivateKeyAction(0),
     exportMasterPrivateKeyAction(0),
+    exportMnemonicAction(0),
     signMessageAction(0),
     verifyMessageAction(0),
     aboutAction(0),
@@ -151,13 +167,11 @@ ElectrumGUI::ElectrumGUI(const PlatformStyle *platformStyle, const NetworkStyle 
     helpMessageDialog(0),
     prevBlocks(0),
     spinnerFrame(0),
-    fDontShowAgain(false),
     unlockWalletAction(0),
-    unlockStakingAction(0),
     lockWalletAction(0),
     toggleStakingAction(0),
     generateColdStakingAction(0),
-    lastDialogShown(0),
+    splitRewardAction(0),
     platformStyle(platformStyle),
     updatePriceAction(0),
     fShowingVoting(0)
@@ -175,7 +189,7 @@ ElectrumGUI::ElectrumGUI(const PlatformStyle *platformStyle, const NetworkStyle 
     {
         windowTitle += tr("");
     } else {
-        windowTitle += tr("Node");
+        windowTitle += tr(" Node");
     }
 
     if(clientModel->isReleaseVersion() == false)
@@ -213,8 +227,9 @@ ElectrumGUI::ElectrumGUI(const PlatformStyle *platformStyle, const NetworkStyle 
 #ifdef ENABLE_WALLET
     if(enableWallet)
     {
-        /** Create wallet frame*/
+        /** Create wallet frame and make it the central widget */
         walletFrame = new WalletFrame(platformStyle, this);
+        setCentralWidget(walletFrame);
     } else
 #endif // ENABLE_WALLET
     {
@@ -243,7 +258,7 @@ ElectrumGUI::ElectrumGUI(const PlatformStyle *platformStyle, const NetworkStyle 
     // Create status bar
     statusBar();
 
-    // Set size grip
+    // Disable size grip because it looks ugly and nobody needs it
     statusBar()->setSizeGripEnabled(true);
 
     // Status bar notification icons
@@ -262,16 +277,20 @@ ElectrumGUI::ElectrumGUI(const PlatformStyle *platformStyle, const NetworkStyle 
     }
     connect(unitDisplayControl,SIGNAL(currentIndexChanged(int)),this,SLOT(comboBoxChanged(int)));
     labelEncryptionIcon = new QLabel();
+    labelEncryptionIcon->setProperty("class", "status-icon");
     labelStakingIcon = new QLabel();
+    labelStakingIcon->setProperty("class", "status-icon");
     labelPrice = new QLabel();
+    labelPrice->setProperty("class", "StatusPrice");
     labelWalletHDStatusIcon = new QLabel();
     labelConnectionsIcon = new QPushButton();
     labelConnectionsIcon->setFlat(true); // Make the button look like a label, but clickable
     labelConnectionsIcon->setMaximumSize(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE);
+    labelConnectionsIcon->setProperty("class", "status-icon");
     // Jump to peers tab by clicking on connections icon
     connect(labelConnectionsIcon, SIGNAL(clicked()), this, SLOT(showPeers()));
-
     labelBlocksIcon = new GUIUtil::ClickableLabel();
+    labelBlocksIcon->setProperty("class", "status-icon");
     if(enableWallet)
     {
         frameBlocksLayout->addStretch();
@@ -292,36 +311,25 @@ ElectrumGUI::ElectrumGUI(const PlatformStyle *platformStyle, const NetworkStyle 
 
     updatePrice(); // First price update
 
+    // Get the passed override value or use default value
     int updateFiatPeriod = GetArg("-updatefiatperiod", PRICE_UPDATE_DELAY);
+
+    // Make sure the delay is a same value
     if (updateFiatPeriod >= PRICE_UPDATE_DELAY)
     {
-        QTimer *timerPrice = new QTimer(labelPrice);
+        timerPrice = new QTimer(labelPrice);
         connect(timerPrice, SIGNAL(timeout()), this, SLOT(updatePrice()));
         timerPrice->start(updateFiatPeriod);
         info("Automatic price update set to " + std::to_string(updateFiatPeriod) + "ms");
-    }
-    else
+    } else // No auto update of prices
     {
         info("Automatic price update turned OFF");
     }
 
-    if (GetBoolArg("-staking", true))
-    {
-        QTimer *timerStakingIcon = new QTimer(labelStakingIcon);
-        connect(timerStakingIcon, SIGNAL(timeout()), this, SLOT(updateStakingStatus()));
-        timerStakingIcon->start(45 * 1000);
-        updateStakingStatus();
-    }
-
-    if (GetArg("-zapwallettxes",0) == 2 && GetArg("-repairwallet",0) == 1)
-    {
-        RemoveConfigFile("zapwallettxes","2");
-        RemoveConfigFile("repairwallet","1");
-
-        QMessageBox::information(this, tr("Repair wallet"),
-            tr("Wallet has been repaired."),
-            QMessageBox::Ok, QMessageBox::Ok);
-    }
+    QTimer *timerStakingIcon = new QTimer(labelStakingIcon);
+    connect(timerStakingIcon, SIGNAL(timeout()), this, SLOT(updateStakingStatus()));
+    timerStakingIcon->start(45 * 1000);
+    updateStakingStatus();
 
     // Progress bar and label for blocks download
     progressBarLabel = new QLabel();
@@ -359,6 +367,14 @@ ElectrumGUI::ElectrumGUI(const PlatformStyle *platformStyle, const NetworkStyle 
         connect(labelBlocksIcon, &GUIUtil::ClickableLabel::clicked, this, &ElectrumGUI::showModalOverlay);
         connect(progressBar, &GUIUtil::ClickableProgressBar::clicked, this, &ElectrumGUI::showModalOverlay);
     }
+
+    gotoOverviewPage();
+#endif
+
+    connect(walletFrame, SIGNAL(daoEntriesChanged(int)), this, SLOT(onDaoEntriesChanged(int)));
+
+#ifdef Q_OS_MAC
+    appNapInhibitor = new CAppNapInhibitor;
 #endif
 }
 
@@ -371,6 +387,7 @@ ElectrumGUI::~ElectrumGUI()
     if(trayIcon) // Hide tray icon, as deleting will let it linger until quit (on Ubuntu)
         trayIcon->hide();
 #ifdef Q_OS_MAC
+    delete appNapInhibitor;
     delete appMenuBar;
     MacDockIconHandler::cleanup();
 #endif
@@ -386,22 +403,14 @@ void ElectrumGUI::createActions()
     overviewAction->setStatusTip(tr("Show general overview of wallet"));
     overviewAction->setToolTip(overviewAction->statusTip());
     overviewAction->setCheckable(true);
-#ifdef Q_OS_MAC
-    overviewAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_1));
-#else
     overviewAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_1));
-#endif
     tabGroup->addAction(overviewAction);
 
     sendCoinsAction = new QAction(QIcon(":/icons/send"), tr("&Send"), this);
     sendCoinsAction->setStatusTip(tr("Send coins to a Electrum address"));
     sendCoinsAction->setToolTip(sendCoinsAction->statusTip());
     sendCoinsAction->setCheckable(true);
-#ifdef Q_OS_MAC
-    sendCoinsAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_2));
-#else
     sendCoinsAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_2));
-#endif
     tabGroup->addAction(sendCoinsAction);
 
     sendCoinsMenuAction = new QAction(QIcon(":/icons/send"), sendCoinsAction->text(), this);
@@ -412,11 +421,7 @@ void ElectrumGUI::createActions()
     receiveCoinsAction->setStatusTip(tr("Request payments (generates QR codes and electrum: URIs)"));
     receiveCoinsAction->setToolTip(receiveCoinsAction->statusTip());
     receiveCoinsAction->setCheckable(true);
-#ifdef Q_OS_MAC
-    receiveCoinsAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_3));
-#else
     receiveCoinsAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_3));
-#endif
     tabGroup->addAction(receiveCoinsAction);
 
     receiveCoinsMenuAction = new QAction(QIcon(":/icons/receiving_addresses"), receiveCoinsAction->text(), this);
@@ -426,19 +431,25 @@ void ElectrumGUI::createActions()
     toggleStakingAction = new QAction(QIcon(":/icons/staking"), tr("Toggle &Staking"), this);
     toggleStakingAction->setStatusTip(tr("Toggle Staking"));
 
-    generateColdStakingAction = new QAction(QIcon(":/icons/verify"), tr("&Generate Cold Staking Address"), this);
+    splitRewardAction = new QAction(QIcon(":/icons/staking"), tr("Set up staking rewards"), this);
+    splitRewardAction->setStatusTip(tr("Configure how to split the staking rewards"));
+
+    generateColdStakingAction = new QAction(QIcon(":/icons/staking"), tr("&Generate Cold Staking Address"), this);
     generateColdStakingAction->setStatusTip(tr("Generate Cold Staking Address"));
 
-    historyAction = new QAction(QIcon(":/icons/history"), tr("&Transactions"), this);
+    historyAction = new QAction(QIcon(":/icons/transactions"), tr("&Transactions"), this);
     historyAction->setStatusTip(tr("Browse transaction history"));
     historyAction->setToolTip(historyAction->statusTip());
     historyAction->setCheckable(true);
-#ifdef Q_OS_MAC
-    historyAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_4));
-#else
     historyAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_4));
-#endif
     tabGroup->addAction(historyAction);
+
+    daoAction = new QAction(QIcon(":/icons/proposals"), tr("&Proposals"), this);
+    daoAction->setStatusTip(tr("Participate in the ecosystem"));
+    daoAction->setToolTip(daoAction->statusTip());
+    daoAction->setCheckable(true);
+    daoAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_5));
+    tabGroup->addAction(daoAction);
 
     updatePriceAction  = new QAction(QIcon(":/icons/verify"), tr("Update exchange prices"), this);
     updatePriceAction->setStatusTip(tr("Update exchange prices"));
@@ -460,7 +471,10 @@ void ElectrumGUI::createActions()
     connect(receiveCoinsMenuAction, SIGNAL(triggered()), this, SLOT(gotoReceiveCoinsPage()));
     connect(historyAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
     connect(historyAction, SIGNAL(triggered()), this, SLOT(gotoHistoryPage()));
+    connect(daoAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
+    connect(daoAction, SIGNAL(triggered()), this, SLOT(gotoCommunityFundPage()));
     connect(toggleStakingAction, SIGNAL(triggered()), this, SLOT(toggleStaking()));
+    connect(splitRewardAction, SIGNAL(triggered()), this, SLOT(splitRewards()));
     connect(generateColdStakingAction, SIGNAL(triggered()), this, SLOT(generateColdStaking()));
 #endif // ENABLE_WALLET
 
@@ -472,8 +486,8 @@ void ElectrumGUI::createActions()
     aboutAction->setStatusTip(tr("Show information about %1").arg(tr(PACKAGE_NAME)));
     aboutAction->setMenuRole(QAction::AboutRole);
     aboutAction->setEnabled(false);
-    webInfoAction = new QAction(QApplication::style()->standardIcon(QStyle::SP_MessageBoxInformation), tr("Electrum &Knowledge Base"), this);
-    webInfoAction->setStatusTip(tr("Open the Electrum Knowledge Base in your browser"));
+    webInfoAction = new QAction(QApplication::style()->standardIcon(QStyle::SP_MessageBoxInformation), tr("%1 &Knowledge Base").arg(tr(PACKAGE_NAME)), this);
+    webInfoAction->setStatusTip(tr("Open the %1 Knowledge Base in your browser").arg(tr(PACKAGE_NAME)));
     webInfoAction->setMenuRole(QAction::NoRole);
     webInfoAction->setEnabled(false);
     aboutQtAction = new QAction(QIcon(":/icons/about_qt"), tr("About &Qt"), this);
@@ -491,13 +505,9 @@ void ElectrumGUI::createActions()
     encryptWalletAction = new QAction(QIcon(":/icons/lock_closed"), tr("&Encrypt Wallet..."), this);
     encryptWalletAction->setStatusTip(tr("Encrypt the private keys that belong to your wallet"));
     encryptWalletAction->setCheckable(true);
-    unlockWalletAction = new QAction(QIcon(":/icons/lock_open"), tr("&Unlock Wallet ..."), this);
+    unlockWalletAction = new QAction(QIcon(":/icons/lock_open"), tr("&Unlock Wallet for Staking..."), this);
     unlockWalletAction->setToolTip(tr("Unlock wallet for Staking"));
-    unlockStakingAction = new QAction(QIcon(":/icons/staking"), tr("Unlock Wallet for &Staking..."), this);
-    unlockStakingAction->setToolTip(tr("Unlock wallet for Staking"));
-    lockWalletAction = new QAction(QIcon(":/icons/lock_closed"), tr("&Lock Wallet"), this);
-    lockWalletAction->setToolTip(tr("Lock wallet"));
-    backupWalletAction = new QAction(QIcon(":/icons/filesave"), tr("&Backup Wallet..."), this);
+    backupWalletAction = new QAction(QIcon(":/icons/save"), tr("&Backup Wallet..."), this);
     backupWalletAction->setStatusTip(tr("Backup wallet to another location"));
     changePassphraseAction = new QAction(QIcon(":/icons/key"), tr("&Change Passphrase..."), this);
     changePassphraseAction->setStatusTip(tr("Change the passphrase used for wallet encryption"));
@@ -509,34 +519,35 @@ void ElectrumGUI::createActions()
 
     openInfoAction = new QAction(QApplication::style()->standardIcon(QStyle::SP_MessageBoxInformation), tr("&Information"), this);
     openInfoAction->setStatusTip(tr("Show diagnostic information"));
-    openRPCConsoleAction = new QAction(QIcon(":/icons/debugwindow"), tr("&Debug window"), this);
+    openRPCConsoleAction = new QAction(QIcon(":/icons/debugwindow"), tr("&Debug console"), this);
     openRPCConsoleAction->setStatusTip(tr("Open debugging and diagnostic console"));
     openGraphAction = new QAction(QIcon(":/icons/connect_4"), tr("&Network Monitor"), this);
     openGraphAction->setStatusTip(tr("Show network monitor"));
     openPeersAction = new QAction(QIcon(":/icons/connect_4"), tr("&Peers list"), this);
     openPeersAction->setStatusTip(tr("Show peers info"));
-    //openRepairAction = new QAction(QIcon(":/icons/options"), tr("Wallet &Repair"), this);
-    //openRepairAction->setStatusTip(tr("Show wallet repair options"));
+    openRepairAction = new QAction(QIcon(":/icons/options"), tr("Wallet &Repair"), this);
+    openRepairAction->setStatusTip(tr("Show wallet repair options"));
 
     // initially disable the debug window menu item
     openInfoAction->setEnabled(false);
     openRPCConsoleAction->setEnabled(false);
     openGraphAction->setEnabled(false);
     openPeersAction->setEnabled(false);
-    //openRepairAction->setEnabled(false);
+    openRepairAction->setEnabled(false);
 
     usedSendingAddressesAction = new QAction(QIcon(":/icons/address-book"), tr("&Sending addresses..."), this);
     usedSendingAddressesAction->setStatusTip(tr("Show the list of used sending addresses and labels"));
     usedReceivingAddressesAction = new QAction(QIcon(":/icons/address-book"), tr("&Receiving addresses..."), this);
     usedReceivingAddressesAction->setStatusTip(tr("Show the list of used receiving addresses and labels"));
-    repairWalletAction = new QAction(QIcon(":/icons/options"), tr("&Repair wallet"), this);
-    repairWalletAction->setToolTip(tr("Repair wallet transactions"));
 
     importPrivateKeyAction = new QAction(QIcon(":/icons/key"), tr("&Import private key"), this);
     importPrivateKeyAction->setToolTip(tr("Import private key"));
 
     exportMasterPrivateKeyAction = new QAction(QIcon(":/icons/key"), tr("Show &master private key"), this);
     exportMasterPrivateKeyAction->setToolTip(tr("Show master private key"));
+
+    exportMnemonicAction = new QAction(QIcon(":/icons/key"), tr("Show m&nemonic"), this);
+    exportMnemonicAction->setToolTip(tr("Show mnemonic"));
 
     openAction = new QAction(QIcon(":/icons/open"), tr("Open &URI..."), this);
     openAction->setStatusTip(tr("Open a electrum: URI or payment request"));
@@ -547,7 +558,7 @@ void ElectrumGUI::createActions()
 
     connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
     connect(aboutAction, SIGNAL(triggered()), this, SLOT(aboutClicked()));
-    connect(webInfoAction, SIGNAL(triggered()), this, SLOT(webInfoClicked()));
+    connect(webInfoAction, SIGNAL(triggered()), this, SLOT(infoClicked()));
     connect(aboutQtAction, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
     connect(optionsAction, SIGNAL(triggered()), this, SLOT(optionsClicked()));
     connect(cfundProposalsAction, SIGNAL(triggered()), this, SLOT(cfundProposalsClicked()));
@@ -557,10 +568,13 @@ void ElectrumGUI::createActions()
 
     // Jump directly to tabs in RPC-console
     connect(openInfoAction, SIGNAL(triggered()), this, SLOT(showInfo()));
-    connect(openRPCConsoleAction, SIGNAL(triggered()), this, SLOT(showDebugWindow()));
+    connect(openRPCConsoleAction, SIGNAL(triggered()), this, SLOT(showConsole()));
     connect(openGraphAction, SIGNAL(triggered()), this, SLOT(showGraph()));
     connect(openPeersAction, SIGNAL(triggered()), this, SLOT(showPeers()));
-    //connect(openRepairAction, SIGNAL(triggered()), this, SLOT(showRepair()));
+    connect(openRepairAction, SIGNAL(triggered()), this, SLOT(showRepair()));
+
+    // Get restart command-line parameters and handle restart
+    connect(rpcConsole, SIGNAL(handleRestart(QStringList)), this, SLOT(handleRestart(QStringList)));
 
     // prevents an open debug window from becoming stuck/unusable on client shutdown
     connect(quitAction, SIGNAL(triggered()), rpcConsole, SLOT(hide()));
@@ -571,22 +585,20 @@ void ElectrumGUI::createActions()
         connect(encryptWalletAction, SIGNAL(triggered(bool)), walletFrame, SLOT(encryptWallet(bool)));
         connect(backupWalletAction, SIGNAL(triggered()), walletFrame, SLOT(backupWallet()));
         connect(changePassphraseAction, SIGNAL(triggered()), walletFrame, SLOT(changePassphrase()));
-        connect(unlockWalletAction, SIGNAL(triggered()), walletFrame, SLOT(unlockWallet()));
-        connect(unlockStakingAction, SIGNAL(triggered()), walletFrame, SLOT(unlockWalletStaking()));
-        connect(lockWalletAction, SIGNAL(triggered()), walletFrame, SLOT(lockWallet()));
+        connect(unlockWalletAction, SIGNAL(triggered()), walletFrame, SLOT(unlockWalletStaking()));
         connect(signMessageAction, SIGNAL(triggered()), this, SLOT(gotoSignMessageTab()));
         connect(verifyMessageAction, SIGNAL(triggered()), this, SLOT(gotoVerifyMessageTab()));
         connect(usedSendingAddressesAction, SIGNAL(triggered()), walletFrame, SLOT(usedSendingAddresses()));
         connect(usedReceivingAddressesAction, SIGNAL(triggered()), walletFrame, SLOT(usedReceivingAddresses()));
-        connect(repairWalletAction, SIGNAL(triggered()), this, SLOT(repairWallet()));
         connect(importPrivateKeyAction, SIGNAL(triggered()), walletFrame, SLOT(importPrivateKey()));
         connect(exportMasterPrivateKeyAction, SIGNAL(triggered()), walletFrame, SLOT(exportMasterPrivateKeyAction()));
+        connect(exportMnemonicAction, SIGNAL(triggered()), walletFrame, SLOT(exportMnemonicAction()));
         connect(openAction, SIGNAL(triggered()), this, SLOT(openClicked()));
     }
 #endif // ENABLE_WALLET
 
     new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_I), this, SLOT(showInfo()));
-    new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_C), this, SLOT(showDebugWindowActivateConsole()));
+    new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_C), this, SLOT(showConsole()));
     new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_D), this, SLOT(showDebugWindow()));
     new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_G), this, SLOT(showGraph()));
     new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_P), this, SLOT(showPeers()));
@@ -617,6 +629,8 @@ void ElectrumGUI::createMenuBar()
         file->addSeparator();
         file->addAction(importPrivateKeyAction);
         file->addAction(exportMasterPrivateKeyAction);
+        file->addAction(exportMnemonicAction);
+        file->addSeparator();
     }
     file->addAction(quitAction);
 
@@ -626,12 +640,11 @@ void ElectrumGUI::createMenuBar()
         settings->addAction(encryptWalletAction);
         settings->addAction(changePassphraseAction);
         settings->addAction(unlockWalletAction);
-        settings->addAction(lockWalletAction);
         settings->addSeparator();
-        settings->addAction(unlockStakingAction);
         settings->addAction(toggleStakingAction);
-        settings->addSeparator();
+        settings->addAction(splitRewardAction);
         settings->addAction(generateColdStakingAction);
+        settings->addSeparator();
         settings->addAction(updatePriceAction);
         settings->addSeparator();
     }
@@ -641,11 +654,11 @@ void ElectrumGUI::createMenuBar()
     if (walletFrame) {
         tools->addAction(openInfoAction);
         tools->addAction(openRPCConsoleAction);
+        tools->addSeparator();
         tools->addAction(openGraphAction);
         tools->addAction(openPeersAction);
-        //tools->addAction(openRepairAction);
-        tools->addAction(repairWalletAction);
         tools->addSeparator();
+        tools->addAction(openRepairAction);
     }
 
     QMenu *help = appMenuBar->addMenu(tr("&Help"));
@@ -667,6 +680,7 @@ void ElectrumGUI::createToolBars()
         toolbar->addAction(sendCoinsAction);
         toolbar->addAction(receiveCoinsAction);
         toolbar->addAction(historyAction);
+        toolbar->addAction(daoAction);
 
         /** Create additional container for toolbar and walletFrame and make it the central widget.
             This is a workaround mostly for toolbar styling on Mac OS but should work fine for every other OSes too.
@@ -679,18 +693,6 @@ void ElectrumGUI::createToolBars()
         QWidget* containerWidget = new QWidget();
         containerWidget->setLayout(layout);
         setCentralWidget(containerWidget);
-
-/*
- *      topMenu5 = new QPushButton();
- *      walletFrame->menuLayout->addWidget(topMenu5);
- *      topMenu5->setFixedSize(215,94);
- *      topMenu5->setObjectName("topMenu5");
- *      connect(topMenu5, SIGNAL(clicked()), this, SLOT(gotoCommunityFundPage()));
- *      topMenu5->setStyleSheet(
- *                  "#topMenu5 { background: url(:/icons/menu_community_fund_ns) bottom center #eee; border: 0; }"
- *                  "#topMenu5:hover { background: url(:/icons/menu_community_fund_hover) bottom center #ddd; border: 0; }");
- */
-
     }
 #endif // ENABLE_WALLET
 }
@@ -776,21 +778,6 @@ void ElectrumGUI::removeAllWallets()
     walletFrame->removeAllWallets();
 }
 
-void ElectrumGUI::repairWallet()
-{
-    QMessageBox::StandardButton btnRetVal = QMessageBox::question(this, tr("Repair wallet"),
-        tr("Client restart required to repair the wallet.") + "<br><br>" + tr("Client will be shut down. Do you want to proceed?"),
-        QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel);
-
-    if(btnRetVal == QMessageBox::Cancel)
-        return;
-
-    WriteConfigFile("zapwallettxes","2");
-    WriteConfigFile("repairwallet","1");
-
-    QApplication::quit();
-}
-
 #endif // ENABLE_WALLET
 
 void ElectrumGUI::setWalletActionsEnabled(bool enabled)
@@ -801,6 +788,7 @@ void ElectrumGUI::setWalletActionsEnabled(bool enabled)
     receiveCoinsAction->setEnabled(enabled);
     receiveCoinsMenuAction->setEnabled(enabled);
     historyAction->setEnabled(enabled);
+    daoAction->setEnabled(enabled);
     encryptWalletAction->setEnabled(enabled);
     backupWalletAction->setEnabled(enabled);
     changePassphraseAction->setEnabled(enabled);
@@ -808,18 +796,20 @@ void ElectrumGUI::setWalletActionsEnabled(bool enabled)
     verifyMessageAction->setEnabled(enabled);
     usedSendingAddressesAction->setEnabled(enabled);
     usedReceivingAddressesAction->setEnabled(enabled);
-    repairWalletAction->setEnabled(enabled);
     importPrivateKeyAction->setEnabled(enabled);
     openAction->setEnabled(enabled);
 }
 
 void ElectrumGUI::createTrayIcon(const NetworkStyle *networkStyle)
 {
+#ifndef Q_OS_MAC
     trayIcon = new QSystemTrayIcon(this);
-    QString toolTip = tr("Electrum client") + " " + networkStyle->getTitleAddText();
+    QString toolTip = tr("%1 client").arg(tr(PACKAGE_NAME)) + " " + networkStyle->getTitleAddText();
     trayIcon->setToolTip(toolTip);
     trayIcon->setIcon(networkStyle->getTrayAndWindowIcon());
     trayIcon->hide();
+#endif
+
     notificator = new Notificator(QApplication::applicationName(), trayIcon, this);
 }
 
@@ -861,8 +851,7 @@ void ElectrumGUI::createTrayIconMenu()
     trayIconMenu->addAction(openRPCConsoleAction);
     trayIconMenu->addAction(openGraphAction);
     trayIconMenu->addAction(openPeersAction);
-    //trayIconMenu->addAction(openRepairAction);
-    trayIconMenu->addAction(repairWalletAction);
+    trayIconMenu->addAction(openRepairAction);
 #ifndef Q_OS_MAC // This is built-in on Mac
     trayIconMenu->addSeparator();
     trayIconMenu->addAction(quitAction);
@@ -890,24 +879,23 @@ void ElectrumGUI::optionsClicked()
     dlg.exec();
 }
 
-/*
- *  void ElectrumGUI::cfundProposalsClicked()
- *  {
- *      if(!clientModel || !clientModel->getOptionsModel())
- *          return;
- *  }
- */
-    void ElectrumGUI::cfundProposalsOpen(bool fMode)
-    {
-        if(!clientModel || !clientModel->getOptionsModel())
-            return;
-    }
+void ElectrumGUI::cfundProposalsClicked()
+{
+    if(!clientModel || !clientModel->getOptionsModel())
+        return;
+}
 
-    void ElectrumGUI::cfundPaymentRequestsClicked()
-    {
-        if(!clientModel || !clientModel->getOptionsModel())
-            return;
-    }
+void ElectrumGUI::cfundProposalsOpen(bool fMode)
+{
+    if(!clientModel || !clientModel->getOptionsModel())
+        return;
+}
+
+void ElectrumGUI::cfundPaymentRequestsClicked()
+{
+    if(!clientModel || !clientModel->getOptionsModel())
+        return;
+}
 
 void ElectrumGUI::aboutClicked()
 {
@@ -923,7 +911,7 @@ void ElectrumGUI::webInfoClicked()
     if(!clientModel)
         return;
 
-    QString link = QString("https://ankh.foundation/electrum");
+    QString link = QString("https://ankh-trust.com/electrum");
     QDesktopServices::openUrl(QUrl(link));
 }
 
@@ -941,7 +929,7 @@ void ElectrumGUI::showInfo()
     showDebugWindow();
 }
 
-void ElectrumGUI::showDebugWindowActivateConsole()
+void ElectrumGUI::showConsole()
 {
     rpcConsole->setTabFocus(RPCConsole::TAB_CONSOLE);
     showDebugWindow();
@@ -956,6 +944,12 @@ void ElectrumGUI::showGraph()
 void ElectrumGUI::showPeers()
 {
     rpcConsole->setTabFocus(RPCConsole::TAB_PEERS);
+    showDebugWindow();
+}
+
+void ElectrumGUI::showRepair()
+{
+    rpcConsole->setTabFocus(RPCConsole::TAB_REPAIR);
     showDebugWindow();
 }
 
@@ -986,29 +980,11 @@ void ElectrumGUI::gotoHistoryPage()
     if (walletFrame) walletFrame->gotoHistoryPage();
 }
 
-/*
- * void ElectrumGUI::gotoCommunityFundPage()
- * {
- *  topMenu1->setStyleSheet(
- *     "#topMenu1 { border-image: url(:/icons/menu_home_ns)  0 0 0 0 stretch stretch; border: 0px; }"
- *     "#topMenu1:hover { border-image: url(:/icons/menu_home_hover)  0 0 0 0 stretch stretch; border: 0px; }");
- *  topMenu2->setStyleSheet(
- *              "#topMenu2 { border-image: url(:/icons/menu_send_ns)  0 0 0 0 stretch stretch; border: 0px; }"
- *              "#topMenu2:hover { border-image: url(:/icons/menu_send_hover)  0 0 0 0 stretch stretch; border: 0px; }");
- *  topMenu3->setStyleSheet(
- *              "#topMenu3 { border-image: url(:/icons/menu_receive_ns)  0 0 0 0 stretch stretch; border: 0px; }"
- *              "#topMenu3:hover { border-image: url(:/icons/menu_receive_hover)  0 0 0 0 stretch stretch; border: 0px; }");
- *  topMenu4->setStyleSheet(
- *              "#topMenu4 { border-image: url(:/icons/menu_transaction_ns)  0 0 0 0 stretch stretch; border: 0px; }"
- *              "#topMenu4:hover { border-image: url(:/icons/menu_transaction_hover)  0 0 0 0 stretch stretch; border: 0px; }");
- *
- *  topMenu5->setStyleSheet(
- *              "#topMenu5 { border-image: url(:/icons/menu_community_fund_s)  0 0 0 0 stretch stretch; border: 0px; }");
- *
- *  historyAction->setChecked(true);
- *  if (walletFrame) walletFrame->gotoCommunityFundPage();
- *}
- */
+void ElectrumGUI::gotoCommunityFundPage()
+{
+    daoAction->setChecked(true);
+    if (walletFrame) walletFrame->gotoCommunityFundPage();
+}
 
 void ElectrumGUI::gotoReceiveCoinsPage()
 {
@@ -1038,30 +1014,35 @@ void ElectrumGUI::setNumConnections(int count)
     QString icon;
     switch(count)
     {
-    case 0: icon = ":/icons/connect_0"; break;
-    case 1: case 2: case 3: icon = ":/icons/connect_1"; break;
-    case 4: case 5: case 6: icon = ":/icons/connect_2"; break;
-    case 7: case 8: case 9: icon = ":/icons/connect_3"; break;
-    default: icon = ":/icons/connect_4"; break;
+        case 0: icon = ":/icons/connect_0"; break;
+        case 1: case 2: case 3: icon = ":/icons/connect_1"; break;
+        case 4: case 5: case 6: icon = ":/icons/connect_2"; break;
+        case 7: case 8: case 9: icon = ":/icons/connect_3"; break;
+        default: icon = ":/icons/connect_4"; break;
     }
     QIcon connectionItem = QIcon(icon).pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE);
     labelConnectionsIcon->setIcon(connectionItem);
     labelConnectionsIcon->setToolTip(tr("%n active connection(s) to Electrum network", "", count));
 }
 
-bool showingVotingDialog = false;
-
 void ElectrumGUI::updateHeadersSyncProgressLabel()
 {
     int64_t headersTipTime = clientModel->getHeaderTipTime();
     int headersTipHeight = clientModel->getHeaderTipHeight();
-    int estHeadersLeft = (GetTime() - headersTipTime) / Params().GetConsensus().nTargetSpacing;
+    int estHeadersLeft = (GetTime() - headersTipTime) / Params().GetConsensus().nPowTargetSpacing;
     if (estHeadersLeft > HEADER_HEIGHT_DELTA_SYNC)
         progressBarLabel->setText(tr("Syncing Headers (%1%)...").arg(QString::number(100.0 / (headersTipHeight+estHeadersLeft)*headersTipHeight, 'f', 1)));
 }
 
+bool showingVotingDialog = false;
+
 void ElectrumGUI::setNumBlocks(int count, const QDateTime& blockDate, double nVerificationProgress, bool header)
 {
+#ifdef Q_OS_MAC
+    // Disabling macOS App Nap on initial sync, disk and reindex operations.
+    IsInitialBlockDownload() ? appNapInhibitor->disableAppNap() : appNapInhibitor->enableAppNap();
+#endif
+
     if (modalOverlay)
     {
         if (header)
@@ -1073,33 +1054,35 @@ void ElectrumGUI::setNumBlocks(int count, const QDateTime& blockDate, double nVe
     if(!clientModel)
         return;
 
-    // Prevent orphan statusbar messages (e.g. hover Quit in main menu, wait until chain-sync starts -> garbelled text)
+    // Prevent orphan statusbar messages (e.g. hover Quit in main menu, wait until chain-sync starts -> garbled text)
     statusBar()->clearMessage();
 
     // Acquire current block source
     enum BlockSource blockSource = clientModel->getBlockSource();
     switch (blockSource) {
-        case BLOCK_SOURCE_NETWORK:
+        case BlockSource::NETWORK:
             if (header) {
                 updateHeadersSyncProgressLabel();
                 return;
             }
-                progressBarLabel->setText(tr("Synchronizing with network..."));
-                updateHeadersSyncProgressLabel();
+            progressBarLabel->setText(tr("Synchronizing with network..."));
+            updateHeadersSyncProgressLabel();
             break;
-        case BLOCK_SOURCE_DISK:
-            if (header)
-                    progressBarLabel->setText(tr("Importing blocks on disk..."));
+        case BlockSource::DISK:
+            if (header) {
+                progressBarLabel->setText(tr("Indexing blocks on disk..."));
+            } else {
+                progressBarLabel->setText(tr("Processing blocks on disk..."));
+            }
             break;
-        case BLOCK_SOURCE_REINDEX:
-                progressBarLabel->setText(tr("Reindexing blocks on disk..."));
+        case BlockSource::REINDEX:
+            progressBarLabel->setText(tr("Reindexing blocks on disk..."));
             break;
-        case BLOCK_SOURCE_NONE:
+        case BlockSource::NONE:
             if (header) {
                 return;
             }
-            // Case: not Importing, not Reindexing and no network connection
-                progressBarLabel->setText(tr("Connecting to peers..."));
+            progressBarLabel->setText(tr("Connecting to peers..."));
             break;
     }
 
@@ -1111,8 +1094,7 @@ void ElectrumGUI::setNumBlocks(int count, const QDateTime& blockDate, double nVe
     tooltip = tr("Processed %n block(s) of transaction history.", "", count);
 
     // Set icon state: spinning if catching up, tick otherwise
-    if(secs < 90*60)
-    {
+    if (secs < MAX_BLOCK_TIME_GAP) {
         tooltip = tr("Up to date") + QString(".<br>") + tooltip;
         labelBlocksIcon->setPixmap(QIcon(":/icons/synced").pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE));
 
@@ -1129,7 +1111,6 @@ void ElectrumGUI::setNumBlocks(int count, const QDateTime& blockDate, double nVe
     }
     else
     {
-        // Represent time from last generated block in human readable text
         QString timeBehindText = GUIUtil::formatNiceTimeOffset(secs);
 
         progressBarLabel->setVisible(true);
@@ -1139,13 +1120,10 @@ void ElectrumGUI::setNumBlocks(int count, const QDateTime& blockDate, double nVe
         progressBar->setVisible(true);
 
         tooltip = tr("Catching up...") + QString("<br>") + tooltip;
-        if(count != prevBlocks)
-        {
-            labelBlocksIcon->setPixmap(QIcon(QString(
-                ":/movies/spinner-%1").arg(spinnerFrame, 3, 10, QChar('0')))
-                .pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE));
-            spinnerFrame = (spinnerFrame + 1) % SPINNER_FRAMES;
-        }
+        labelBlocksIcon->setPixmap(QIcon(QString(
+            ":/movies/spinner-%1").arg(spinnerFrame, 3, 10, QChar('0')))
+            .pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE));
+        spinnerFrame = (spinnerFrame + 1) % SPINNER_FRAMES;
         prevBlocks = count;
 
 #ifdef ENABLE_WALLET
@@ -1190,7 +1168,7 @@ void ElectrumGUI::showVotingDialog()
 
     QMessageBox msgBox;
     msgBox.setText(tr("Important network notice."));
-    msgBox.setInformativeText(tr("The Nav Coin Network is currently voting on introducing changes on the consensus protocol. As a participant in our network, we value your input and the decision ultimately is yours. Please cast your vote. <br><br>For more information on the proposal, please visit <a href=\"https://electrum.org/community-fund\">this link</a><br><br>Would you like the Nav Coin Network to update the staking rewards to setup a decentralised community fund that will help grow the network?"));
+    msgBox.setInformativeText(tr("The Electrum Network is currently voting on introducing changes on the consensus protocol. As a participant in our network, we value your input and the decision ultimately is yours. Please cast your vote. <br><br>For more information on the proposal, please visit <a href=\"https://electrum.org/community-fund\">this link</a><br><br>Would you like the Nav Coin Network to update the staking rewards to setup a decentralised community fund that will help grow the network?"));
     QAbstractButton *myYesButton = msgBox.addButton(tr("Yes"), QMessageBox::YesRole);
     msgBox.addButton(trUtf8("No"), QMessageBox::NoRole);
     msgBox.setIcon(QMessageBox::Question);
@@ -1315,7 +1293,7 @@ void ElectrumGUI::showEvent(QShowEvent *event)
     openRPCConsoleAction->setEnabled(true);
     openGraphAction->setEnabled(true);
     openPeersAction->setEnabled(true);
-    //openRepairAction->setEnabled(true);
+    openRepairAction->setEnabled(true);
     aboutAction->setEnabled(true);
     webInfoAction->setEnabled(true);
     optionsAction->setEnabled(true);
@@ -1383,7 +1361,7 @@ bool ElectrumGUI::handlePaymentRequest(const SendCoinsRecipient& recipient)
 
 void ElectrumGUI::setHDStatus(int hdEnabled)
 {
-    labelWalletHDStatusIcon->setPixmap(platformStyle->SingleColorIcon(hdEnabled ? ":/icons/hd_enabled" : ":/icons/hd_disabled").pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE));
+    labelWalletHDStatusIcon->setPixmap(QIcon(hdEnabled ? ":/icons/hd_enabled" : ":/icons/hd_disabled").pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE));
     labelWalletHDStatusIcon->setToolTip(hdEnabled ? tr("HD key generation is <b>enabled</b>") : tr("HD key generation is <b>disabled</b>"));
 
     // eventually disable the QLabel to set its opacity to 50%
@@ -1394,13 +1372,11 @@ void ElectrumGUI::setEncryptionStatus(int status)
 {
     if(fWalletUnlockStakingOnly)
     {
-        labelEncryptionIcon->setPixmap(QIcon(":/icons/lock_closed").pixmap(STATUSBAR_ICONSIZE,STATUSBAR_ICONSIZE));
+        labelEncryptionIcon->setPixmap(QIcon(":/icons/lock_closed").pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE));
         labelEncryptionIcon->setToolTip(tr("Wallet is <b>encrypted</b> and currently <b>unlocked for staking only</b>"));
         changePassphraseAction->setEnabled(false);
-        encryptWalletAction->setEnabled(false);
         unlockWalletAction->setVisible(false);
-        unlockStakingAction->setVisible(false);
-        lockWalletAction->setVisible(false);
+        encryptWalletAction->setEnabled(false);
     }
     else
     {
@@ -1412,30 +1388,24 @@ void ElectrumGUI::setEncryptionStatus(int status)
         changePassphraseAction->setEnabled(false);
         encryptWalletAction->setEnabled(true);
         unlockWalletAction->setVisible(false);
-        unlockStakingAction->setVisible(false);
-        lockWalletAction->setVisible(false);
         break;
     case WalletModel::Unlocked:
         labelEncryptionIcon->show();
-        labelEncryptionIcon->setPixmap(platformStyle->SingleColorIcon(":/icons/lock_open").pixmap(STATUSBAR_ICONSIZE,STATUSBAR_ICONSIZE));
+        labelEncryptionIcon->setPixmap(QIcon(":/icons/lock_open").pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE));
         labelEncryptionIcon->setToolTip(tr("Wallet is <b>encrypted</b> and currently <b>unlocked</b>"));
+        unlockWalletAction->setVisible(false);
         encryptWalletAction->setChecked(true);
         changePassphraseAction->setEnabled(true);
         encryptWalletAction->setEnabled(false); // TODO: decrypt currently not supported
-        unlockWalletAction->setVisible(false);
-        unlockStakingAction->setVisible(false);
-        lockWalletAction->setVisible(false);
         break;
     case WalletModel::Locked:
         labelEncryptionIcon->show();
-        labelEncryptionIcon->setPixmap(platformStyle->SingleColorIcon(":/icons/lock_closed").pixmap(STATUSBAR_ICONSIZE,STATUSBAR_ICONSIZE));
+        labelEncryptionIcon->setPixmap(QIcon(":/icons/lock_closed").pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE));
         labelEncryptionIcon->setToolTip(tr("Wallet is <b>encrypted</b> and currently <b>locked</b>"));
         encryptWalletAction->setChecked(true);
         changePassphraseAction->setEnabled(true);
+        unlockWalletAction->setVisible(true);
         encryptWalletAction->setEnabled(false); // TODO: decrypt currently not supported
-        unlockWalletAction->setVisible(false);
-        unlockStakingAction->setVisible(true);
-        lockWalletAction->setVisible(false);
         break;
     }
     }
@@ -1551,6 +1521,13 @@ void ElectrumGUI::unsubscribeFromCoreSignals()
     uiInterface.ThreadSafeQuestion.disconnect(boost::bind(ThreadSafeMessageBox, this, _1, _3, _4));
 }
 
+/** Get restart command-line parameters and request restart */
+void ElectrumGUI::handleRestart(QStringList args)
+{
+    if (!ShutdownRequested())
+        Q_EMIT requestedRestart(args);
+}
+
 /** When Display Units are changed on OptionsModel it will refresh the display text of the control on the status bar */
 void ElectrumGUI::updateDisplayUnit(int unit)
 {
@@ -1586,6 +1563,11 @@ void ElectrumGUI::generateColdStaking()
   wizard.exec();
 }
 
+void ElectrumGUI::splitRewards()
+{
+    walletFrame->splitRewards();
+}
+
 #ifdef ENABLE_WALLET
 
 
@@ -1607,15 +1589,27 @@ void ElectrumGUI::updateWeight()
 
 void ElectrumGUI::updatePrice()
 {
+    // Check for shutdown
+    if (ShutdownRequested()) {
+        // Kill the timer and return
+        timerPrice->stop();
+        timerPrice->deleteLater();
+
+        // Can't update pricing
+        info("Can't update prices, shutdown requested.");
+
+        // Done
+        return;
+    }
+
     info("Updating prices");
 
     std::thread pThread{[this]{
         try {
             CURL *curl;
-            CURLcode curlCode;
             std::string response;
             std::string url(
-                    "https://min-api.cryptocompare.com/data/price?fsym=0AE&tsyms="
+                    "https://api.coingecko.com/api/v3/simple/price?ids=sequence&vs_currencies="
                     "BTC,"
                     "EUR,"
                     "USD,"
@@ -1663,53 +1657,53 @@ void ElectrumGUI::updatePrice()
             curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
             curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, priceUdateWriteCallback);
             curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
-            curlCode = curl_easy_perform(curl);
+            curl_easy_perform(curl);
             curl_easy_cleanup(curl);
 
             // Parse json
             // NOTE: Had to use boost json as Q5's json support would not work with
             //       the json data that I was getting from the API, IDK why ¯\_(ツ)_/¯
-            boost::property_tree::ptree json;
+            boost::property_tree::ptree _json;
             std::istringstream jsonStream(response);
-            boost::property_tree::read_json(jsonStream, json);
+            boost::property_tree::read_json(jsonStream, _json);
+            boost::property_tree::ptree json = _json.get_child("sequence");
 
             // Get an instance of settings
             QSettings settings;
-
             // Save the values
-            settings.setValue("btcFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("BTC"))) * 100000000);
-            settings.setValue("eurFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("EUR"))) * 100000000);
-            settings.setValue("usdFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("USD"))) * 100000000);
-            settings.setValue("arsFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("ARS"))) * 100000000);
-            settings.setValue("audFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("AUD"))) * 100000000);
-            settings.setValue("brlFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("BRL"))) * 100000000);
-            settings.setValue("cadFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("CAD"))) * 100000000);
-            settings.setValue("chfFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("CHF"))) * 100000000);
-            settings.setValue("clpFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("CLP"))) * 100000000);
-            settings.setValue("czkFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("CZK"))) * 100000000);
-            settings.setValue("dkkFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("DKK"))) * 100000000);
-            settings.setValue("gbpFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("GBP"))) * 100000000);
-            settings.setValue("hkdFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("HKD"))) * 100000000);
-            settings.setValue("hufFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("HUF"))) * 100000000);
-            settings.setValue("idrFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("IDR"))) * 100000000);
-            settings.setValue("ilsFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("ILS"))) * 100000000);
-            settings.setValue("inrFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("INR"))) * 100000000);
-            settings.setValue("jpyFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("JPY"))) * 100000000);
-            settings.setValue("krwFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("KRW"))) * 100000000);
-            settings.setValue("mxnFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("MXN"))) * 100000000);
-            settings.setValue("myrFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("MYR"))) * 100000000);
-            settings.setValue("nokFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("NOK"))) * 100000000);
-            settings.setValue("nzdFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("NZD"))) * 100000000);
-            settings.setValue("phpFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("PHP"))) * 100000000);
-            settings.setValue("pkrFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("PKR"))) * 100000000);
-            settings.setValue("plnFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("PLN"))) * 100000000);
-            settings.setValue("rubFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("RUB"))) * 100000000);
-            settings.setValue("sekFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("SEK"))) * 100000000);
-            settings.setValue("sgdFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("SGD"))) * 100000000);
-            settings.setValue("thbFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("THB"))) * 100000000);
-            settings.setValue("tryFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("TRY"))) * 100000000);
-            settings.setValue("twdFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("TWD"))) * 100000000);
-            settings.setValue("zarFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("ZAR"))) * 100000000);
+            settings.setValue("btcFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("btc"))) * 100000000);
+            settings.setValue("eurFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("eur"))) * 100000000);
+            settings.setValue("usdFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("usd"))) * 100000000);
+            settings.setValue("arsFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("ars"))) * 100000000);
+            settings.setValue("audFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("aud"))) * 100000000);
+            settings.setValue("brlFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("brl"))) * 100000000);
+            settings.setValue("cadFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("cad"))) * 100000000);
+            settings.setValue("chfFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("chf"))) * 100000000);
+            settings.setValue("clpFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("clp"))) * 100000000);
+            settings.setValue("czkFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("czk"))) * 100000000);
+            settings.setValue("dkkFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("dkk"))) * 100000000);
+            settings.setValue("gbpFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("gbp"))) * 100000000);
+            settings.setValue("hkdFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("hkd"))) * 100000000);
+            settings.setValue("hufFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("huf"))) * 100000000);
+            settings.setValue("idrFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("idr"))) * 100000000);
+            settings.setValue("ilsFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("ils"))) * 100000000);
+            settings.setValue("inrFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("inr"))) * 100000000);
+            settings.setValue("jpyFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("jpy"))) * 100000000);
+            settings.setValue("krwFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("krw"))) * 100000000);
+            settings.setValue("mxnFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("mxn"))) * 100000000);
+            settings.setValue("myrFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("myr"))) * 100000000);
+            settings.setValue("nokFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("nok"))) * 100000000);
+            settings.setValue("nzdFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("nzd"))) * 100000000);
+            settings.setValue("phpFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("php"))) * 100000000);
+            settings.setValue("pkrFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("pkr"))) * 100000000);
+            settings.setValue("plnFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("pln"))) * 100000000);
+            settings.setValue("rubFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("rub"))) * 100000000);
+            settings.setValue("sekFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("sek"))) * 100000000);
+            settings.setValue("sgdFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("sgd"))) * 100000000);
+            settings.setValue("thbFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("thb"))) * 100000000);
+            settings.setValue("tryFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("try"))) * 100000000);
+            settings.setValue("twdFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("twd"))) * 100000000);
+            settings.setValue("zarFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("zar"))) * 100000000);
 
             if(clientModel)
                 clientModel->getOptionsModel()->setDisplayUnit(clientModel->getOptionsModel()->getDisplayUnit());
@@ -1744,103 +1738,33 @@ void ElectrumGUI::updateStakingStatus()
 {
     updateWeight();
 
-    if(walletFrame){
+    if(!walletFrame)
+        return;
 
-        if (nLastCoinStakeSearchInterval && nWeight)
+    if (!GetStaking())
+    {
+        // Make sure to update the staking flag
+        fStaking = false;
+
+        labelStakingIcon->setPixmap(QIcon(":/icons/staking_off").pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE));
+        labelStakingIcon->setToolTip(tr("Wallet Staking is <b>OFF</b>"));
+    }
+    else if (nLastCoinStakeSearchInterval && nWeight)
+    {
+        // Make sure to update the staking flag
+        fStaking = true;
+
+        uint64_t nWeight = this->nWeight;
+        uint64_t nNetworkWeight = GetPoSKernelPS();
+        int nBestHeight = pindexBestHeader->nHeight;
+
+        unsigned nEstimateTime = GetTargetSpacing(nBestHeight) * nNetworkWeight / nWeight;
+
+        QString text = tr("You are staking");
+
+        if (nEstimateTime > 60 && GetBoolArg("showexpectedstaketime", false))
         {
-            bool fFoundProposal = false;
-            bool fFoundPaymentRequest = false;
-            {
-                LOCK(cs_main);
-
-
-              CProposalMap mapProposals;
-
-              if(pcoinsTip->GetAllProposals(mapProposals))
-              {
-                   for (CProposalMap::iterator it_ = mapProposals.begin(); it_ != mapProposals.end(); it_++)
-                   {
-                       CFund::CProposal proposal;
-                       if (!pcoinsTip->GetProposal(it_->first, proposal))
-                           continue;
-                       if (proposal.GetLastState() != CFund::NIL)
-                           continue;
-                       auto it = std::find_if( vAddedProposalVotes.begin(), vAddedProposalVotes.end(),
-                                               [&proposal](const std::pair<std::string, int>& element){ return element.first == proposal.hash.ToString();} );
-                       if (it == vAddedProposalVotes.end()) {
-                           fFoundProposal = true;
-                           break;
-                       }
-                   }
-              }
-
-            }
-            {
-                CPaymentRequestMap mapPaymentRequests;
-
-                if(pcoinsTip->GetAllPaymentRequests(mapPaymentRequests))
-                {
-                    for (CPaymentRequestMap::iterator it_ = mapPaymentRequests.begin(); it_ != mapPaymentRequests.end(); it_++)
-                    {
-                        CFund::CPaymentRequest prequest;
-
-                        if (!pcoinsTip->GetPaymentRequest(it_->first, prequest))
-                            continue;
-
-                        if (prequest.GetLastState() != CFund::NIL)
-                            continue;
-                        auto it = std::find_if( vAddedPaymentRequestVotes.begin(), vAddedPaymentRequestVotes.end(),
-                                                [&prequest](const std::pair<std::string, int>& element){ return element.first == prequest.hash.ToString();} );
-                        if (it == vAddedPaymentRequestVotes.end()) {
-                            fFoundPaymentRequest = true;
-                            break;
-                        }
-                    }
-                }
-            }
-            if ((fFoundPaymentRequest || fFoundProposal) && !this->fDontShowAgain && (this->lastDialogShown + (60*60*24)) < GetTimeNow()) {
-                QCheckBox *cb = new QCheckBox("Don't show this notification again until wallet is restarted.");
-                QMessageBox msgbox(this);
-                msgbox.setWindowTitle("Community Fund Update");
-                QString sWhat = fFoundProposal && fFoundPaymentRequest ? tr("Proposals and Payment Requests") : (fFoundProposal ? tr("Proposals") : tr("Payment Requests"));
-                msgbox.setText(tr("There are new %1 in the Community Fund.<br><br>As a staker it's important to engage in the voting process.<br><br>Please cast your vote using the Community Fund tab!").arg(sWhat));
-                msgbox.setIcon(QMessageBox::Icon::Information);
-                msgbox.setCheckBox(cb);
-                QAbstractButton* pButtonInfo = msgbox.addButton(tr("Read about the Community Fund"), QMessageBox::YesRole);
-                QAbstractButton* pButtonOpen = msgbox.addButton(tr("Open Community Fund"), QMessageBox::YesRole);
-                QAbstractButton* pButtonClose = msgbox.addButton(tr("Close"), QMessageBox::RejectRole);
-                pButtonClose->setVisible(false);
-                this->lastDialogShown = GetTimeNow();
-
-                msgbox.exec();
-
-                if(cb->isChecked()) {
-                    this->fDontShowAgain = true;
-                } else {
-                    this->fDontShowAgain = false;
-                }
-
-                //  if (msgbox.clickedButton()==pButtonOpen) {
-                //      gotoCommunityFundPage();
-                //  }
-                if (msgbox.clickedButton()==pButtonInfo) {
-                    QString link = QString("https://electrum.org/en/community-fund/");
-                    QDesktopServices::openUrl(QUrl(link));
-                }
-            }
-
-            uint64_t nWeight = this->nWeight;
-            uint64_t nNetworkWeight = GetPoSKernelPS();
-            int nBestHeight = pindexBestHeader->nHeight;
-
-            unsigned nEstimateTime = GetTargetSpacing(nBestHeight) * nNetworkWeight / nWeight;
-
-            QString text;
-            if (nEstimateTime < 60)
-            {
-                text = tr("Expected time to earn reward is %n seconds(s)", "", nEstimateTime);
-            }
-            else if (nEstimateTime < 60*60)
+            if (nEstimateTime < 60*60)
             {
                 text = tr("Expected time to earn reward is %n minute(s)", "", nEstimateTime/60);
             }
@@ -1852,35 +1776,33 @@ void ElectrumGUI::updateStakingStatus()
             {
                 text = tr("Expected time to earn reward is %n day(s)", "", nEstimateTime/(60*60*24));
             }
-
-            nWeight /= COIN;
-            nNetworkWeight /= COIN;
-
-            labelStakingIcon->setPixmap(QIcon(":/icons/staking_on").pixmap(STATUSBAR_ICONSIZE,STATUSBAR_ICONSIZE));
-            labelStakingIcon->setToolTip(tr("Staking: On"));
-        }
-        else
-        {
-            labelStakingIcon->setPixmap(QIcon(":/icons/staking_off").pixmap(STATUSBAR_ICONSIZE,STATUSBAR_ICONSIZE));
-            if (pwalletMain && pwalletMain->IsLocked())
-                labelStakingIcon->setToolTip(tr("Staking: Off (because wallet is locked)"));
-            else if (vNodes.empty())
-                labelStakingIcon->setToolTip(tr("Staking: Off (because wallet is offline)"));
-            else if (IsInitialBlockDownload())
-                labelStakingIcon->setToolTip(tr("Staking: Off (because wallet is syncing)"));
-            else if (!nWeight)
-                labelStakingIcon->setToolTip(tr("Staking: Off (because you don't have mature coins)"));
-            else
-                labelStakingIcon->setToolTip(tr("Staking: Off"));
         }
 
-//        vStakePeriodRange_T aRange = PrepareRangeForStakeReport();
-//        int nItemCounted = GetsStakeSubTotal(aRange);
-//        if(ARRAYLEN(aRange) > 32){
-//            walletFrame->setStakingStats(FormatMoney(aRange[30].Total).c_str(),FormatMoney(aRange[31].Total).c_str(),FormatMoney(aRange[32].Total).c_str());
-//        }
+        nWeight /= COIN;
+        nNetworkWeight /= COIN;
+
+        labelStakingIcon->setPixmap(QIcon(":/icons/staking_on").pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE));
+        labelStakingIcon->setToolTip(text);
     }
+    else
+    {
+        // Make sure to update the staking flag
+        fStaking = false;
 
+        QString text = tr("Not staking, please wait");
+
+        if (pwalletMain && pwalletMain->IsLocked())
+            text = tr("Not staking because wallet is locked");
+        else if (vNodes.empty())
+            text = tr("Not staking because wallet is offline");
+        else if (IsInitialBlockDownload())
+            text = tr("Not staking because wallet is syncing");
+        else if (!nWeight)
+            text = tr("Not staking because you don't have mature coins");
+
+        labelStakingIcon->setPixmap(QIcon(":/icons/staking_off").pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE));
+        labelStakingIcon->setToolTip(text);
+    }
 }
 
 #endif

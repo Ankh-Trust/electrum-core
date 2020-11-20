@@ -141,7 +141,7 @@ The gbuild invocations below <b>DO NOT DO THIS</b> by default.
     pushd ./gitian-builder
     ./bin/gbuild --memory 3000 --commit electrum-core=${VERSION} ../electrum-core/contrib/gitian-descriptors/gitian-arm.yml
     mv build/out/electrum-*.tar.gz build/out/src/electrum-*.tar.gz ../
-
+    
     ./bin/gbuild --memory 3000 --commit electrum-core=${VERSION} ../electrum-core/contrib/gitian-descriptors/gitian-linux.yml
     mv build/out/electrum-*.tar.gz build/out/src/electrum-*.tar.gz ../
 
@@ -211,15 +211,15 @@ Once the release candidate is approved and promoted to a final release, a new re
 
 Before publicly announcing the release the Bootstrap & NavPay servers should be updated to the new version.
 
-### Update The NavCoin Website
+### Update The Electrum Website
 
 Update the version number and download links on all translations of the Wallets page;
 
-https://github.com/navcoin/navcoin-org/tree/master/content/wallets
+https://github.com/electrum/electrum-org/tree/master/content/wallets
 
-Also create the notice for the release;
+Also create the notice for the release; 
 
-https://github.com/navcoin/navcoin-org/tree/master/content/notices
+https://github.com/electrum/electrum-org/tree/master/content/notices
 
 The notice can be written manually by duplicating and modifying an existing notice, or through the admin section of the website. The admin section relies on your GitHub login having push access to the repo, so you will need to ensure you have the correct repository rights if you want to create it that way.
 
@@ -227,18 +227,18 @@ The hero image for the release notice is usually generated with the navoin canva
 
 ### Publicly Announce the release
 
-To ensure resonable due diligence is done to inform the communtiy of new software releases the final release should be announced on all possible NavCoin platforms;
+To ensure resonable due diligence is done to inform the communtiy of new software releases the final release should be announced on all possible Electrum platforms;
 
-[Reddit](https://reddit.com/r/navcoin), [Twitter](https://twitter.com/navcoin), [Facebook](https://facebook.com/navcoin), [Telegram](https://t.me/navcoin), [Discord](https://discord.gg/y4Vu9jw), [BitcoinTalk](https://bitcointalk.org/index.php?topic=679791.new#new), [Medium](https://medium.com/nav-coin/), Blockfolio Signal & MailChimp.
+[Reddit](https://reddit.com/r/electrum), [Twitter](https://twitter.com/electrum), [Facebook](https://facebook.com/electrum), [Telegram](https://t.me/electrum), [Discord](https://discord.gg/y4Vu9jw), [BitcoinTalk](https://bitcointalk.org/index.php?topic=679791.new#new), [Medium](https://medium.com/nav-coin/), Blockfolio Signal & MailChimp.
 
 
 ### Notify Exchanges, Commercial Nodes
 
 All exchanges should be notified of the update;
 
-https://navcoin.org/en/buy-navcoin
+https://electrum.org/en/buy-electrum
 
-Most of the exchanges have their contact emails are consolidated into a mailing list inside the admin@navcoin email account which can be set to the BCC to ensure they receive the update. For ones which are not part of the mailing list their is usually a support form on their site which needs to be filled out.
+Most of the exchanges have their contact emails are consolidated into a mailing list inside the admin@electrum email account which can be set to the BCC to ensure they receive the update. For ones which are not part of the mailing list their is usually a support form on their site which needs to be filled out.
 
 Additional to exhcanges, the following wallets & services should be notified;
 

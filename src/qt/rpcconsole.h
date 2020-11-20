@@ -52,7 +52,8 @@ public:
         TAB_INFO = 0,
         TAB_CONSOLE = 1,
         TAB_GRAPH = 2,
-        TAB_PEERS = 3
+        TAB_PEERS = 3,
+        TAB_REPAIR = 4
     };
 
 protected:
@@ -84,10 +85,19 @@ private Q_SLOTS:
 
 public Q_SLOTS:
     void clear(bool clearHistory = true);
+
+    /** Wallet repair options */
+    void walletSalvage();
+    void walletRescan();
+    void walletZaptxes1();
+    void walletZaptxes2();
+    void walletUpgrade();
+    void walletReindex();
+    void walletResync();
+
     void fontBigger();
     void fontSmaller();
     void setFontSize(int newSize);
-
     /** Append the message to the message widget */
     void message(int category, const QString &message, bool html = false);
     /** Set number of connections shown in the UI */
@@ -112,6 +122,8 @@ public Q_SLOTS:
     void showNetwork();
     /** Switch to peers tab and show */
     void showPeers();
+    /** Switch to wallet-repair tab and show */
+    void showRepair();    
     /** Switch to wallet-repair tab and show */
     void disconnectSelectedNode();
     /** Ban a selected node on the Peers tab */

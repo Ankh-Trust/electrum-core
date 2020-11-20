@@ -7,7 +7,7 @@ Fixes a bug where the Community Fund payment requests could be accepted by the n
 
 ## Voting Cycle Counter Hotfix
 <[Pull Request 396](https://github.com/electrum/electrum-core/pull/396)> 
-<[Commit a6782c3](https://github.com/electrum/electrum-core/commit/a6782c3be14484433b8a2b9abeac9aef7151331d)>
+<[Commit a6782c3](https://github.com/electrum/electrum-core/commit/a6782c3be14444433b8a2b9abeac9aef7151331d)>
 Fixes a bug where the `votingCycle` field of community fund proposals and payment requests would continue to increment after their terminal state if a user reorgs. Also for proposal/payment requests which change from pending to expired, when the voting cycle is 1 over the cycle limit, staker's votes would continue to be counted even though such proposal/payment request is expired. This bug did not affect network consensus on the status of proposal or payment requests.
 
 ## Faster Blockchain Sync

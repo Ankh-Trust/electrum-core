@@ -11,20 +11,25 @@
 
 #include <amount.h>
 
-#include <QLabel>
-#include <QMainWindow>
+#include <QAbstractButton>
+#include <QComboBox>
 #include <QEvent>
 #include <QHoverEvent>
+#include <QLabel>
+#include <QMainWindow>
 #include <QMap>
 #include <QMenu>
-#include <QComboBox>
+#include <QPainter>
 #include <QPoint>
 #include <QPushButton>
+#include <QToolButton>
 #include <QSystemTrayIcon>
 #include <QtNetwork>
-#include <QAbstractButton>
-#include <QPainter>
 #include <QWizard>
+
+#ifdef Q_OS_MAC
+#include <qt/macappnapinhibitor.h>
+#endif
 
 class ClientModel;
 class NetworkStyle;
@@ -98,26 +103,29 @@ private:
 
     QComboBox *unitDisplayControl;
     QLabel* labelWalletHDStatusIcon;
+    QPushButton* labelConnectionsIcon;
     QLabel *labelEncryptionIcon;
-    QPushButton *labelConnectionsIcon;
     GUIUtil::ClickableLabel* labelBlocksIcon;
     QLabel *labelStakingIcon;
     QLabel *labelPrice;
+    QTimer *timerPrice;
     QLabel *progressBarLabel;
     GUIUtil::ClickableProgressBar* progressBar;
     QProgressDialog *progressDialog;
 
     QMenuBar *appMenuBar;
     QAction *overviewAction;
+    QAction *daoAction;
     QAction *historyAction;
+    QAction *settingsAction;
     QAction *quitAction;
     QAction *sendCoinsAction;
     QAction *sendCoinsMenuAction;
     QAction *usedSendingAddressesAction;
     QAction *usedReceivingAddressesAction;
-    QAction *repairWalletAction;
     QAction *importPrivateKeyAction;
     QAction *exportMasterPrivateKeyAction;
+    QAction *exportMnemonicAction;
     QAction *signMessageAction;
     QAction *verifyMessageAction;
     QAction *aboutAction;
@@ -136,19 +144,14 @@ private:
     QAction *openRPCConsoleAction;
     QAction* openGraphAction;
     QAction* openPeersAction;
-    //QAction* openRepairAction;
+    QAction* openRepairAction;
     QAction *openAction;
     QAction *showHelpMessageAction;
     QAction *unlockWalletAction;
-    QAction *unlockStakingAction;
     QAction *lockWalletAction;
     QAction *toggleStakingAction;
+    QAction *splitRewardAction;
     QAction *generateColdStakingAction;
-    QPushButton *topMenu1; // Home
-    QPushButton *topMenu2; // Send
-    QPushButton *topMenu3; // Recieve
-    QPushButton *topMenu4; // Transaction History
-//    QPushButton *topMenu5; // Community Fund
 
     QSystemTrayIcon *trayIcon;
     QMenu *trayIconMenu;
@@ -157,12 +160,17 @@ private:
     HelpMessageDialog *helpMessageDialog;
     ModalOverlay* modalOverlay;
 
+#ifdef Q_OS_MAC
+    CAppNapInhibitor* appNapInhibitor = nullptr;
+#endif
+
+#ifdef ENABLE_WALLET
+    bool fStaking = false;
+#endif // ENABLE_WALLET
+
     /** Keep track of previous number of blocks, to detect progress */
     int prevBlocks;
     int spinnerFrame;
-
-    bool fDontShowAgain;
-    int64_t lastDialogShown;
 
     uint64_t nWeight;
 
@@ -197,15 +205,20 @@ private:
     void cfundProposalsOpen(bool fMode);
 
 
+
 Q_SIGNALS:
     /** Signal raised when a URI was entered or dragged to the GUI */
     void receivedURI(const QString &uri);
+    /** Restart handling */
+    void requestedRestart(QStringList args);
 
 public Q_SLOTS:
     /** Set number of connections shown in the UI */
     void setNumConnections(int count);
     /** Set number of blocks and last block date shown in the UI */
     void setNumBlocks(int count, const QDateTime& blockDate, double nVerificationProgress, bool headers);
+    /** Get restart command-line parameters and request restart */
+    void handleRestart(QStringList args);
 
     /** Notify the user of an event from the core network or transaction handling code.
        @param[in] title     the message box / notification title
@@ -236,17 +249,16 @@ public Q_SLOTS:
 
 private Q_SLOTS:
 #ifdef ENABLE_WALLET
-    /** Switch to overview (home) page */
+    /** Switch to overview (overview) page */
     void gotoOverviewPage();
     /** Switch to history (transactions) page */
     void gotoHistoryPage();
-//    /** Switch to community fund page*/
-//    void gotoCommunityFundPage();
+    /** Switch to community fund page*/
+    void gotoCommunityFundPage();
     /** Switch to receive coins page */
     void gotoReceiveCoinsPage();
     /** Switch to send coins page */
     void gotoSendCoinsPage(QString addr = "");
-
     /** Show Sign/Verify Message dialog and switch to sign message tab */
     void gotoSignMessageTab(QString addr = "");
     /** Show Sign/Verify Message dialog and switch to verify message tab */
@@ -259,17 +271,14 @@ private Q_SLOTS:
     /** Fetch Price from CMC **/
     void updatePrice();
 
-    /** Repairs wallet **/
-    void repairWallet();
-
     /** Used by curl request in updatePrice */
     static size_t priceUdateWriteCallback(void *contents, size_t size, size_t nmemb, void *userp);
 
 #endif // ENABLE_WALLET
     /** Show configuration dialog */
     void optionsClicked();
-//    /** Community Fund related */
-//    void cfundProposalsClicked();
+    /** Community Fund related */
+    void cfundProposalsClicked();
     void cfundPaymentRequestsClicked();
     /** Show about dialog */
     void aboutClicked();
@@ -282,9 +291,10 @@ private Q_SLOTS:
     void showInfo();
     void showGraph();
     void showPeers();
+    void showRepair();
 
     /** Show debug window and set focus to the console */
-    void showDebugWindowActivateConsole();
+    void showConsole();
     /** Show help message dialog */
     void showHelpMessageClicked();
     /** Update the display currency **/
@@ -295,6 +305,8 @@ private Q_SLOTS:
     void toggleStaking();
     /** Generate Cold Staking Address **/
     void generateColdStaking();
+    /** Split Stake Rewards **/
+    void splitRewards();
 #ifndef Q_OS_MAC
     /** Handle tray icon clicked */
     void trayIconActivated(QSystemTrayIcon::ActivationReason reason);

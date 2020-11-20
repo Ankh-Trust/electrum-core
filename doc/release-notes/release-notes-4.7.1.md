@@ -23,11 +23,10 @@ This fix is the main purpose of the 4.7.1 patch release, while preparing this bu
 * [`Pull Request 587`](https://github.com/electrum/electrum-core/pull/587) [`Commit ff6f543e`](https://github.com/electrum/electrum-core/commit/49f74084cf9eed8d8e7c46707d836b82ff6f543e) Add support for raw script addresses
 * [`Pull Request 603`](https://github.com/electrum/electrum-core/pull/603) [`Commit f755e298`](https://github.com/electrum/electrum-core/commit/6fe0683ba99ce912da4d9181094ab4baf755e298) Updated depends to use winssl for windows and darwinssl for osx
 * [`Pull Request 605`](https://github.com/electrum/electrum-core/pull/605) [`Commit 5e0af830`](https://github.com/electrum/electrum-core/commit/0b8cb5dd81186fcd54860fe7c25f2cac5e0af830) Staking reward setup GUI
-* [`Pull Request 608`](https://github.com/electrum/electrum-core/pull/608) [`Commit 07d49bf2`](https://github.com/electrum/electrum-core/commit/e688c6ed6a1da2734aa89b41ae16051807d49bf2) Fix CFund DB read after nullified entry
 * [`Pull Request 611`](https://github.com/electrum/electrum-core/pull/611) [`Commit 30401b32`](https://github.com/electrum/electrum-core/commit/f7b1c6304200052418c66e8f242ddf8c30401b32) Fixed error.log loading in Debug Window (Windows)
 * [`Pull Request 612`](https://github.com/electrum/electrum-core/pull/612) [`Commit d5cfa467`](https://github.com/electrum/electrum-core/commit/902970adfdd5ce0e54e54bfa7545edfad5cfa467) Fix random RPC tests failing
 * [`Pull Request 614`](https://github.com/electrum/electrum-core/pull/614) [`Commit 80323b33`](https://github.com/electrum/electrum-core/commit/856d57a8f944ed3382d7001a3e9a1bfd80323b33) Patch for staking redirect gui
 * [`Pull Request 615`](https://github.com/electrum/electrum-core/pull/615) [`Commit 9e84d40a`](https://github.com/electrum/electrum-core/commit/662163ad8f73081d2d6145938571ca809e84d40a) Bump version number
 
+For additional information about new features, check [https://electrum.org/en/notices/](https://electrum.org/en/notices/) 
 
-For additional information about new features, check [https://info.electrum.org/electrum-core/](https://info.electrum.org/electrum-core/)

@@ -11,7 +11,7 @@ argument:
     nodes_main.txt
     nodes_test.txt
 
-These files must consist of lines in the format 
+These files must consist of lines in the format
 
     <ip>
     <ip>:<port>
@@ -135,7 +135,6 @@ def main():
     with open(os.path.join(indir,'nodes_dev.txt'),'r') as f:
         process_nodes(g, f, 'pnSeed6_dev', 48886)
     g.write('#endif // ELECTRUM_CHAINPARAMSSEEDS_H\n')
-            
+
 if __name__ == '__main__':
     main()
-

@@ -14,7 +14,7 @@ class PlatformStyle
 {
 public:
     /** Get style associated with provided platform name, or 0 if not known */
-    static const PlatformStyle *instantiate(const QString &platformId);
+    static const PlatformStyle* instantiate(const QString& platformId);
 
     const QString &getName() const { return name; }
 
@@ -25,19 +25,20 @@ public:
     QColor SingleColor() const { return singleColor; }
 
     /** Colorize an image (given filename) with the icon color */
-    QImage SingleColorImage(const QString& filename) const;
+    QImage Image(const QString& filename) const;
 
     /** Colorize an icon (given filename) with the icon color */
-    QIcon SingleColorIcon(const QString& filename) const;
+    QIcon Icon(const QString& filename) const;
+    QIcon Icon(const QString& filename, const QString& colorbase) const;
 
     /** Colorize an icon (given object) with the icon color */
-    QIcon SingleColorIcon(const QIcon& icon) const;
+    QIcon Icon(const QIcon& icon) const;
 
     /** Colorize an icon (given filename) with the text color */
-    QIcon TextColorIcon(const QString& filename) const;
+    QIcon IconAlt(const QString& filename) const;
 
     /** Colorize an icon (given object) with the text color */
-    QIcon TextColorIcon(const QIcon& icon) const;
+    QIcon IconAlt(const QIcon& icon) const;
 
 private:
     PlatformStyle(const QString &name, bool imagesOnButtons, bool colorizeIcons, bool useExtraSpacing);
@@ -52,4 +53,3 @@ private:
 };
 
 #endif // ELECTRUM_QT_PLATFORMSTYLE_H
-
