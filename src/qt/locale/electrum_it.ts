@@ -1081,7 +1081,7 @@ Ricorda che criptando il tuo wallet non assicura totalmente i tuoi Electrum dall
         <translation>Importante notifica di rete.</translation>
     </message>
     <message>
-        <source>The Nav Coin Network is currently voting on introducing changes on the consensus protocol. As a participant in our network, we value your input and the decision ultimately is yours. Please cast your vote. &lt;br&gt;&lt;br&gt;For more information on the proposal, please visit &lt;a href="https://electrum.org/community-fund"&gt;this link&lt;/a&gt;&lt;br&gt;&lt;br&gt;Would you like the Nav Coin Network to update the staking rewards to setup a decentralised community fund that will help grow the network?</source>
+        <source>The Nav Coin Network is currently voting on introducing changes on the consensus protocol. As a participant in our network, we value your input and the decision ultimately is yours. Please cast your vote. &lt;br&gt;&lt;br&gt;For more information on the proposal, please visit &lt;a href="https://electrum.org/community-fund"&gt;this link&lt;/a&gt;&lt;br&gt;&lt;br&gt;Would you like the Nav Coin Network to update the staking rewards to setup a decentralised Ankh Fund that will help grow the network?</source>
         <translation>La rete Nav Coin sta attualmente votando per introdurre cambiamenti sul protocollo di consenso. Come membro della rete diamo valore alla tua scelta e la scelta finale sarà soltanto tua. Perfavore inoltra il tuo voto.&lt;br&gt;&lt;br&gt;Per maggiori informazioni sulla proposta, visita&lt;a href="https://electrum.org/community-fund"&gt;questo link&lt;/a&gt;&lt;br&gt;&lt;br&gt;Ti piacerebbe aggiornare le ricompense per lo staking nella rete Nav Coin per creare un fondo comunitario decentralizzato che aiuterà la rete a crescere?</translation>
     </message>
     <message>
@@ -2959,8 +2959,8 @@ Per specificare più URL separarli con una barra verticale "|".</translation>
         <translation>Inviato a</translation>
     </message>
     <message>
-        <source>Community Fund Payment</source>
-        <translation>Pagamento del Community Fund</translation>
+        <source>Ankh Fund Payment</source>
+        <translation>Pagamento del Ankh Fund</translation>
     </message>
     <message>
         <source>Private Payment</source>
@@ -2987,8 +2987,8 @@ Per specificare più URL separarli con una barra verticale "|".</translation>
         <translation>watch-only</translation>
     </message>
     <message>
-        <source>Community Fund Contribution</source>
-        <translation>Contributo al Community Fund</translation>
+        <source>Ankh Fund Contribution</source>
+        <translation>Contributo al Ankh Fund</translation>
     </message>
     <message>
         <source>(n/a)</source>
@@ -3070,8 +3070,8 @@ Per specificare più URL separarli con una barra verticale "|".</translation>
         <translation>Staked</translation>
     </message>
     <message>
-        <source>Community Fund</source>
-        <translation>Community Fund</translation>
+        <source>Ankh Fund</source>
+        <translation>Ankh Fund</translation>
     </message>
     <message>
         <source>Other</source>
@@ -3492,8 +3492,8 @@ Per specificare più URL separarli con una barra verticale "|".</translation>
         <translation>Il database dei blocchi contiene un blocco che sembra provenire dal futuro. Questo può essere dovuto alla data e ora del tuo computer impostate in modo scorretto. Ricostruisci il database dei blocchi se sei certo che la data e l'ora sul tuo computer siano corrette</translation>
     </message>
     <message>
-        <source>The community fund database looks to be corrupted. You will need to rebuild the block database.</source>
-        <translation>Il database del community fund sembra corrotto. Sarà necessario ricostruire il database dei blocchi.</translation>
+        <source>The Ankh Fund database looks to be corrupted. You will need to rebuild the block database.</source>
+        <translation>Il database del Ankh Fund sembra corrotto. Sarà necessario ricostruire il database dei blocchi.</translation>
     </message>
     <message>
         <source>This is a pre-release test build - use at your own risk - do not use for mining or merchant applications</source>

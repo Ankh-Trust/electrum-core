@@ -10,7 +10,7 @@ import json
 
 
 class CommunityFundCreatePaymentrequestRawTX(ElectrumTestFramework):
-    """Tests the state transition of payment requests of the Community fund."""
+    """Tests the state transition of payment requests of the Ankh Fund."""
 
     def __init__(self):
         super().__init__()

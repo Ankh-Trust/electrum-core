@@ -4,7 +4,7 @@
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #
-# Expanded helper routines for regression testing of the 0AE Coin community fund
+# Expanded helper routines for regression testing of the 0AE Coin Ankh Fund
 #
 
 from test_framework.util import *

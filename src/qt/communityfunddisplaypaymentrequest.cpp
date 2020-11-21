@@ -49,7 +49,7 @@ void CommunityFundDisplayPaymentRequest::refresh()
     LOCK(cs_main);
     CStateViewCache coins(pcoinsTip);
 
-    // Set labels from community fund
+    // Set labels from Ankh Fund
     ui->title->setText(QString::fromStdString(prequest.strDZeel));
     ui->labelStatus->setText(QString::fromStdString(prequest.GetState(coins)));
 

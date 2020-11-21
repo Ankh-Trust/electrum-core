@@ -9,7 +9,7 @@ from test_framework.cfund_util import *
 import time
 
 class CommunityFundPaymentRequestsTest(ElectrumTestFramework):
-    """Tests the payment request procedures of the Community fund."""
+    """Tests the payment request procedures of the Ankh Fund."""
 
     def __init__(self):
         super().__init__()

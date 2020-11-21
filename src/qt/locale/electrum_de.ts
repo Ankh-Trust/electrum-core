@@ -1057,8 +1057,8 @@
         <translation>Wichtige Netzwerk-Mitteilung.</translation>
     </message>
     <message>
-        <source>The Electrum Network is currently voting on introducing changes on the consensus protocol. As a participant in our network, we value your input and the decision ultimately is yours. Please cast your vote. &lt;br&gt;&lt;br&gt;For more information on the proposal, please visit &lt;a href="https://navcoin.org/community-fund"&gt;this link&lt;/a&gt;&lt;br&gt;&lt;br&gt;Would you like the Nav Coin Network to update the staking rewards to setup a decentralised community fund that will help grow the network?</source>
-        <translation>Das Electrum Netzwerk stimmt momentan über Änderungen am Consensus Protocol ab. Als ein Teilnehmer in unserem Netzwerk wertschätzen wir deinen Beitrag und die Entscheidung liegt letztendlich bei dir. Bitte gib deine Stimme ab. Für mehr Informationen zum diesem Vorhaben besuche bitte diesen Link . Würdest du gern die Staking Rewards aktualisieren um einen dezentralisierten Community Fund einzurichten, der dem Netzwerk wachsen helfen wird?</translation>
+        <source>The Electrum Network is currently voting on introducing changes on the consensus protocol. As a participant in our network, we value your input and the decision ultimately is yours. Please cast your vote. &lt;br&gt;&lt;br&gt;For more information on the proposal, please visit &lt;a href="https://navcoin.org/community-fund"&gt;this link&lt;/a&gt;&lt;br&gt;&lt;br&gt;Would you like the Nav Coin Network to update the staking rewards to setup a decentralised Ankh Fund that will help grow the network?</source>
+        <translation>Das Electrum Netzwerk stimmt momentan über Änderungen am Consensus Protocol ab. Als ein Teilnehmer in unserem Netzwerk wertschätzen wir deinen Beitrag und die Entscheidung liegt letztendlich bei dir. Bitte gib deine Stimme ab. Für mehr Informationen zum diesem Vorhaben besuche bitte diesen Link . Würdest du gern die Staking Rewards aktualisieren um einen dezentralisierten Ankh Fund einzurichten, der dem Netzwerk wachsen helfen wird?</translation>
     </message>
     <message>
         <source>Yes</source>
@@ -2922,7 +2922,7 @@
         <translation>Senden an</translation>
     </message>
     <message>
-        <source>Community Fund Payment</source>
+        <source>Ankh Fund Payment</source>
         <translation>Gemeinschaftsfonds-Zahlung</translation>
     </message>
     <message>
@@ -2950,7 +2950,7 @@
         <translation>Nur ansehen</translation>
     </message>
     <message>
-        <source>Community Fund Contribution</source>
+        <source>Ankh Fund Contribution</source>
         <translation>Gemeinschaftsfonds-Beitrag</translation>
     </message>
     <message>
@@ -3029,7 +3029,7 @@
         <translation>gestaked</translation>
     </message>
     <message>
-        <source>Community Fund</source>
+        <source>Ankh Fund</source>
         <translation>Gemeinschaftsfonds</translation>
     </message>
     <message>
@@ -3415,7 +3415,7 @@
         <translation>Die Block-Datenbank enthält einen Block, der in der Zukunft auftaucht. Dies kann daran liegen, dass die Systemzeit Ihres Computers falsch eingestellt ist. Stellen Sie die Block-Datenbank nur wieder her, wenn Sie sich sicher sind, dass Ihre Systemzeit korrekt eingestellt ist.</translation>
     </message>
     <message>
-        <source>The community fund database looks to be corrupted. You will need to rebuild the block database.</source>
+        <source>The Ankh Fund database looks to be corrupted. You will need to rebuild the block database.</source>
         <translation>Die Gemeinschaftsfonds-Datenbank scheint beschädigt zu sein. Du musst die Blockdatenbank neu erstellen.</translation>
     </message>
     <message>

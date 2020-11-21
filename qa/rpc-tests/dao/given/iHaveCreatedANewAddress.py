@@ -4,7 +4,7 @@
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #
-# Expanded helper routines for regression testing of the 0AE Coin community fund
+# Expanded helper routines for regression testing of the 0AE Coin Ankh Fund
 #
 
 from test_framework.util import *
@@ -23,12 +23,12 @@ returnPrivateKey=False):
   except JSONRPCException as e:
     print(e.error)
     assert(False)
-  
+
   if (returnPrivateKey):
     try:
       keypair["privkey"] = node.dumpprivkey(pubkey)
     except JSONRPCException as e:
       print(e.error)
       assert(False)
-  
+
   return keypair

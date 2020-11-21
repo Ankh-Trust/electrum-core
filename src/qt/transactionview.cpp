@@ -79,7 +79,7 @@ TransactionView::TransactionView(const PlatformStyle *platformStyle, QWidget *pa
     typeWidget->addItem(tr("To yourself"), TransactionFilterProxy::TYPE(TransactionRecord::SendToSelf));
     typeWidget->addItem(tr("Staked/generated"), (TransactionFilterProxy::TYPE(TransactionRecord::Generated) |
                         TransactionFilterProxy::TYPE(TransactionRecord::Staked)));
-    typeWidget->addItem(tr("Community Fund"), TransactionFilterProxy::TYPE(TransactionRecord::CFund) |
+    typeWidget->addItem(tr("Ankh Fund"), TransactionFilterProxy::TYPE(TransactionRecord::CFund) |
                         TransactionFilterProxy::TYPE(TransactionRecord::CFundPayment));
     typeWidget->addItem(tr("Other"), TransactionFilterProxy::TYPE(TransactionRecord::Other));
 

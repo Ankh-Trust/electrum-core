@@ -8,7 +8,7 @@ from test_framework.cfund_util import *
 
 
 class CommunityFundVotePaymentrequestRawTX(ElectrumTestFramework):
-    """Tests the state transition of payment requests of the Community fund."""
+    """Tests the state transition of payment requests of the Ankh Fund."""
 
     def __init__(self):
         super().__init__()

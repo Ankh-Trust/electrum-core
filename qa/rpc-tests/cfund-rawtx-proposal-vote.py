@@ -9,7 +9,7 @@ from test_framework.cfund_util import *
 import time
 
 class CommunityFundRawTXProposalVoteTest(ElectrumTestFramework):
-    """Tests the state transition of proposals of the Community fund."""
+    """Tests the state transition of proposals of the Ankh Fund."""
 
     def __init__(self):
         super().__init__()

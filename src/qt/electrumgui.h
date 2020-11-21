@@ -260,7 +260,7 @@ private Q_SLOTS:
     void gotoOverviewPage();
     /** Switch to history (transactions) page */
     void gotoHistoryPage();
-    /** Switch to community fund page*/
+    /** Switch to Ankh Fund page*/
     void gotoCommunityFundPage();
     /** Switch to receive coins page */
     void gotoReceiveCoinsPage();
@@ -284,7 +284,7 @@ private Q_SLOTS:
 #endif // ENABLE_WALLET
     /** Show configuration dialog */
     void optionsClicked();
-    /** Community Fund related */
+    /** Ankh Fund related */
     void cfundProposalsClicked();
     void cfundPaymentRequestsClicked();
     /** Show about dialog */

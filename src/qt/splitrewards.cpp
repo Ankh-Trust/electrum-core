@@ -129,7 +129,7 @@ void SplitRewardsDialog::showFor(QString sin)
 
             if (teamAddresses.count(key))
             {
-                if (teamAddresses[key] == "Community Fund")
+                if (teamAddresses[key] == "Ankh Fund")
                     nCFundContribution += PercentageToNav(amount);
                 else
                     descs << QString::fromStdString(FormatMoney(PercentageToNav(amount))) + " to " + teamAddresses[key];
@@ -163,7 +163,7 @@ void SplitRewardsDialog::showFor(QString sin)
 
     tree->resizeColumnToContents(1);
 
-    strDesc->setText(tr("For each block, %1 0AE will go to the Community Fund, %2 and %3 will be accumulated in your own address").arg(QString::fromStdString(FormatMoney(nCFundContribution)), descs.join(", "), QString::fromStdString(FormatMoney(PercentageToNav(availableAmount)))));
+    strDesc->setText(tr("For each block, %1 0AE will go to the Ankh Fund, %2 and %3 will be accumulated in your own address").arg(QString::fromStdString(FormatMoney(nCFundContribution)), descs.join(", "), QString::fromStdString(FormatMoney(PercentageToNav(availableAmount)))));
 
     jmodel->loadJson(doc.toJson());
 }

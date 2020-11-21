@@ -5,7 +5,7 @@
 
 
 #
-# Expanded helper routines for regression testing of the 0AE Coin community fund
+# Expanded helper routines for regression testing of the 0AE Coin Ankh Fund
 #
 
 from test_framework.util import *
@@ -13,28 +13,28 @@ from test_framework.util import *
 
 def activate_cfund(node):
     slow_gen(node, 100)
-    # Verify the Community Fund is started
+    # Verify the Ankh Fund is started
     assert (get_bip9_status(node, "communityfund")["status"] == "started")
 
     slow_gen(node, 100)
-    # Verify the Community Fund is locked_in
+    # Verify the Ankh Fund is locked_in
     assert (get_bip9_status(node, "communityfund")["status"] == "locked_in")
 
     slow_gen(node, 100)
-    # Verify the Community Fund is active
+    # Verify the Ankh Fund is active
     assert (get_bip9_status(node, "communityfund")["status"] == "active")
 
 def activate_softfork(node, what):
     slow_gen(node, 100)
-    # Verify the Community Fund is started
+    # Verify the Ankh Fund is started
     assert (get_bip9_status(node, what)["status"] == "started")
 
     slow_gen(node, 100)
-    # Verify the Community Fund is locked_in
+    # Verify the Ankh Fund is locked_in
     assert (get_bip9_status(node, what)["status"] == "locked_in")
 
     slow_gen(node, 100)
-    # Verify the Community Fund is active
+    # Verify the Ankh Fund is active
     assert (get_bip9_status(node, what)["status"] == "active")
 
 def end_cycle(node):

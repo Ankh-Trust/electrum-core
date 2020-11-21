@@ -9,7 +9,7 @@ from test_framework.cfund_util import *
 import time
 
 class CommunityFundPaymentRequestExtractFundsTest(ElectrumTestFramework):
-    """Tests the payment request procedures of the Community fund."""
+    """Tests the payment request procedures of the Ankh Fund."""
 
     def __init__(self):
         super().__init__()
@@ -76,7 +76,7 @@ class CommunityFundPaymentRequestExtractFundsTest(ElectrumTestFramework):
         assert(invalid == 0)
 
         assert(self.nodes[0].cfundstats()["funds"]["locked"] == locked_accepted)
-        
+
         end_cycle(self.nodes[0])
 
         # Lets reject one of them with votes
