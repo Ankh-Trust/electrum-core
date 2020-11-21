@@ -58,7 +58,7 @@ CommunityFundCreateProposalDialog::CommunityFundCreateProposalDialog(QWidget *pa
     });
 
     string fee = FormatMoney(GetConsensusParameter(Consensus::CONSENSUS_PARAM_PROPOSAL_MIN_FEE, view));
-    QString warning = tr("By submitting the proposal a contribution of %1 0AE to the Community Fund will occur from your wallet.").arg(QString::fromStdString(fee));
+    QString warning = tr("By submitting the proposal a contribution of %1 0AE to the Ankh Fund will occur from your wallet.").arg(QString::fromStdString(fee));
     ui->labelWarning->setText(warning);
 }
 
