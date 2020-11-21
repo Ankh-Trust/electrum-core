@@ -5,7 +5,7 @@
 
 
 #
-# Expanded helper routines for regression testing of the 0AE Coin Ankh Fund
+# Expanded helper routines for regression testing of the 0AE Coin community fund
 #
 
 from test_framework.util import *

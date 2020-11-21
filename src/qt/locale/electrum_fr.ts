@@ -1073,7 +1073,7 @@
         <translation>Notification importante du réseau.</translation>
     </message>
     <message>
-        <source>The Nav Coin Network is currently voting on introducing changes on the consensus protocol. As a participant in our network, we value your input and the decision ultimately is yours. Please cast your vote. &lt;br&gt;&lt;br&gt;For more information on the proposal, please visit &lt;a href="https://navcoin.org/community-fund"&gt;this link&lt;/a&gt;&lt;br&gt;&lt;br&gt;Would you like the Nav Coin Network to update the staking rewards to setup a decentralised Ankh Fund that will help grow the network?</source>
+        <source>The Nav Coin Network is currently voting on introducing changes on the consensus protocol. As a participant in our network, we value your input and the decision ultimately is yours. Please cast your vote. &lt;br&gt;&lt;br&gt;For more information on the proposal, please visit &lt;a href="https://navcoin.org/community-fund"&gt;this link&lt;/a&gt;&lt;br&gt;&lt;br&gt;Would you like the Nav Coin Network to update the staking rewards to setup a decentralised community fund that will help grow the network?</source>
         <translation>Le réseau Electrum vote pour l'introduction de changement sur le protocole du consensus. En tant que participant dans notre réseau, nous estimons votre contribution et la décision finale vous reviens. Veuillez exprimer votre vote. &lt;br&gt;&lt;br&gt;Pour plus d'information sur la proposition, veuillez cliquer sur &lt;a href="https://navcoin.org/community-fund"&gt;ce lien&lt;/a&gt;&lt;br&gt;&lt;br&gt;Souhaitez vous que le réseau Electrum mette à jour le système de récompenses par le staking pour configurer un fond communautaire qui aidera à l'évolution du réseau ?</translation>
     </message>
     <message>
@@ -2966,7 +2966,7 @@
         <translation>Envoyer à</translation>
     </message>
     <message>
-        <source>Ankh Fund Payment</source>
+        <source>Community Fund Payment</source>
         <translation>Paiement du Fond Communautaire</translation>
     </message>
     <message>
@@ -2994,7 +2994,7 @@
         <translation>Lecture seule</translation>
     </message>
     <message>
-        <source>Ankh Fund Contribution</source>
+        <source>Community Fund Contribution</source>
         <translation>Apport au fond communautaire</translation>
     </message>
     <message>
@@ -3077,7 +3077,7 @@
         <translation>Stakez</translation>
     </message>
     <message>
-        <source>Ankh Fund</source>
+        <source>Community Fund</source>
         <translation>Fond communautaire</translation>
     </message>
     <message>
@@ -3495,7 +3495,7 @@
         <translation>La base de données de blocs contient un bloc qui semble provenir du futur. Cela pourrait être causé par la date et l'heure erronées de votre ordinateur. Ne reconstruisez la base de données de blocs que si vous êtes certain que la date et l'heure de votre ordinateur sont justes.</translation>
     </message>
     <message>
-        <source>The Ankh Fund database looks to be corrupted. You will need to rebuild the block database.</source>
+        <source>The community fund database looks to be corrupted. You will need to rebuild the block database.</source>
         <translation>La base de données du fond communautaire semble corrompue. Vous allez avoir besoin de reconstruire le bloc de la base de données.</translation>
     </message>
     <message>

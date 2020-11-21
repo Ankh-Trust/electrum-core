@@ -4,12 +4,12 @@
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #
-# Expanded helper routines for regression testing of the 0AE Coin Ankh Fund
+# Expanded helper routines for regression testing of the 0AE Coin community fund
 #
 
 from test_framework.util import *
 
-def givenIHaveCreatedAProposal(node=None,
+def givenIHaveCreatedAProposal(node=None, 
 address=None,
 amount=None,
 duration=None,
@@ -29,7 +29,7 @@ dump=False):
   except JSONRPCException as e:
     print(e.error)
     assert(False)
-
+  
   slow_gen(node, 1)
 
   proposal = node.getproposal(hash)
@@ -47,4 +47,4 @@ dump=False):
   assert(proposal["votesNo"] == 0)
   assert(proposal["votesYes"] == 0)
 
-  return hash
+  return hash 

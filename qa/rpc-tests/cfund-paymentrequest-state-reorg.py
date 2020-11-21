@@ -11,7 +11,7 @@ import urllib.parse
 
 
 class CFundPaymentRequestStateReorg(ElectrumTestFramework):
-    """Tests consistency of Ankh Fund Payment Requests state through reorgs."""
+    """Tests consistency of Community Fund Payment Requests state through reorgs."""
 
     def __init__(self):
         super().__init__()

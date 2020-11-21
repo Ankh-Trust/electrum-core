@@ -4,12 +4,12 @@
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #
-# Expanded helper routines for regression testing of the 0AE Coin Ankh Fund
+# Expanded helper routines for regression testing of the 0AE Coin community fund
 #
 
 from test_framework.util import *
 
-def thenTheProposalShouldHavePaymentRequests(node=None,
+def thenTheProposalShouldHavePaymentRequests(node=None, 
 proposalHash=None,
 preqHashes=None):
 
@@ -28,7 +28,7 @@ preqHashes=None):
   if (len(preqHashes) == 0 and len(proposal["paymentRequests"]) == 0):
     assert(True)
     return
-
+  
   proposalPreqHashes = []
 
   # Check all payment requests attached to the proposal are parsed
@@ -38,4 +38,4 @@ preqHashes=None):
 
   # Check all payment request hashes parsed are attached to the proposal
   for preqHash in preqHashes:
-    assert(preqHash in proposalPreqHashes)
+    assert(preqHash in proposalPreqHashes) 

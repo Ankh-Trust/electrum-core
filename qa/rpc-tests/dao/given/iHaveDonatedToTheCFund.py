@@ -4,12 +4,12 @@
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #
-# Expanded helper routines for regression testing of the 0AE Coin Ankh Fund
+# Expanded helper routines for regression testing of the 0AE Coin community fund
 #
 
 from test_framework.util import *
 
-def givenIHaveDonatedToTheCFund(node=None,
+def givenIHaveDonatedToTheCFund(node=None, 
 amount=None):
 
   if (node is None
@@ -24,6 +24,6 @@ amount=None):
   except JSONRPCException as e:
     print(e.error)
     assert(False)
-
+  
   slow_gen(node, 1)
   assert(node.cfundstats()["funds"]["available"] == availableBefore + amount)

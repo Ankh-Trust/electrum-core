@@ -1126,7 +1126,7 @@ UniValue cfundstats(const UniValue& params, bool fHelp)
     if (fHelp || params.size() != 0)
         throw runtime_error(
                 "cfundstats\n"
-                "\nReturns statistics about the Ankh Fund.\n"
+                "\nReturns statistics about the community fund.\n"
                 + HelpExampleCli("cfundstats", "")
                 + HelpExampleRpc("cfundstats", "")
                 );

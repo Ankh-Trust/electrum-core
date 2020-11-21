@@ -110,12 +110,12 @@ void CommunityFundPage::refresh(bool all, int proposal)
 
     CStateViewCache view(pcoinsTip);
 
-    // Format avaliable amount in the Ankh Fund
+    // Format avaliable amount in the community fund
     string available;
     available = wallet->formatDisplayAmount(pindexBestHeader->nCFSupply);
     ui->labelAvailableAmount->setText(QString::fromStdString(available));
 
-    // Format locked amount in the Ankh Fund
+    // Format locked amount in the community fund
     string locked;
     locked = wallet->formatDisplayAmount(pindexBestHeader->nCFLocked);
     ui->labelLockedAmount->setText(QString::fromStdString(locked));

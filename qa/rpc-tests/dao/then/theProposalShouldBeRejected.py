@@ -4,12 +4,12 @@
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #
-# Expanded helper routines for regression testing of the 0AE Coin Ankh Fund
+# Expanded helper routines for regression testing of the 0AE Coin community fund
 #
 
 from test_framework.util import *
 
-def thenTheProposalShouldBeRejected(node=None,
+def thenTheProposalShouldBeRejected(node=None, 
 proposalHash=None):
 
   if (node is None

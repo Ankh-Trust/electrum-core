@@ -4,23 +4,23 @@
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #
-# Expanded helper routines for regression testing of the 0AE Coin Ankh Fund
+# Expanded helper routines for regression testing of the 0AE Coin community fund
 #
 
 import sys, os #include the parent folder so the test_framework is available
 sys.path.insert(1, os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..')))
 
 from test_framework.util import *
-from dao.given import (givenIHaveActivatedTheCFund,
-  givenIHaveDonatedToTheCFund,
-  givenIHaveCreatedANewAddress,
-  givenIHaveCreatedAProposal,
+from dao.given import (givenIHaveActivatedTheCFund, 
+  givenIHaveDonatedToTheCFund, 
+  givenIHaveCreatedANewAddress, 
+  givenIHaveCreatedAProposal, 
   givenIHaveVotedOnTheProposal)
 
 from dao.when import *
 from dao.then import *
 
-def givenIHaveARejectedProposal(node=None,
+def givenIHaveARejectedProposal(node=None, 
 address=None,
 amount=None,
 duration=None,
@@ -51,4 +51,4 @@ dump=False):
   return {
     "hash": hash,
     "address": address
-  }
+  } 

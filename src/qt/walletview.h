@@ -79,7 +79,7 @@ public Q_SLOTS:
     void gotoOverviewPage();
     /** Switch to history (transactions) page */
     void gotoHistoryPage();
-    /** Switch to Ankh Fund page */
+    /** Switch to community fund page */
     void gotoCommunityFundPage();
     /** Switch to receive coins page */
     void gotoReceiveCoinsPage();
@@ -144,7 +144,7 @@ Q_SIGNALS:
     /** Encryption status of wallet changed */
     void encryptionStatusChanged(int status);
     /** Encryption status of txdata changed */
-    void encryptionTxStatusChanged(bool fCrypted);
+    void encryptionTxStatusChanged(bool fCrypted);    
     /** HD-Enabled status of wallet changed (only possible during startup) */
     void hdEnabledStatusChanged(int hdEnabled);
     /** Notify that a new transaction appeared */

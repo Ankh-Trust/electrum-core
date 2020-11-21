@@ -608,7 +608,7 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
     else if(!fSplit) // only 1 stake output, was not split
         txNew.vout[1].nValue = blockValue;
 
-    // Adds Ankh Fund output if enabled
+    // Adds Community Fund output if enabled
     if(IsCommunityFundAccumulationEnabled(pindexPrev, Params().GetConsensus(), false))
     {
         if(IsCommunityFundAccumulationSpreadEnabled(pindexPrev, Params().GetConsensus()))

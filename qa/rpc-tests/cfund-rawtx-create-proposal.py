@@ -9,7 +9,7 @@ from test_framework.cfund_util import *
 import time
 
 class CommunityFundRawTXCreateProposalTest(ElectrumTestFramework):
-    """Tests the state transition of proposals of the Ankh Fund."""
+    """Tests the state transition of proposals of the Community fund."""
 
     def __init__(self):
         super().__init__()
@@ -270,7 +270,7 @@ class CommunityFundRawTXCreateProposalTest(ElectrumTestFramework):
         self.descTxtAllCharsSymbol3 = "♩ ♪ ♫ ♬ ♭ ♮ ♯  ⌨ ⏏ ⎗ ⎘ ⎙ ⎚ ⌥ ⎇ ⌘ ⌦ ⌫ ⌧ ♲ ♳ ♴ ♵ ♶ ♷ ♸ ♹ ♺ ♻ ♼ ♽ ⁌ ⁍ ⎌ ⌇ ⌲ ⍝ ⍟ ⍣ ⍤ ⍥ ⍨ ⍩ ⎋ ♃ ♄ ♅ ♆ ♇ ♈ ♉ ♊ ♋ ♌ ♍ ♎ ♏ ♐ ♑ ♒ ♓ ⏚ ⏛"
 
 
-        self.descTxtWhiteSpace = '''I
+        self.descTxtWhiteSpace = '''I 
 Have
 Enters
 

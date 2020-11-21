@@ -180,12 +180,12 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].nStartTime = 1573776000; // Nov 15th, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].nTimeout = 1668470400; // Nov 15th, 2022
 
-        // Deployment of Ankh Fund
+        // Deployment of Community Fund
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND].bit = 6;
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND].nStartTime = 1573776000; // Nov 15th, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND].nTimeout = 1668470400; // Nov 15th, 2022
 
-        // Deployment of Ankh Fund Accumulation
+        // Deployment of Community Fund Accumulation
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION].bit = 7;
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION].nStartTime = 1573776000; // Nov 15th, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION].nTimeout = 1668470400; // Nov 15th, 2022
@@ -195,12 +195,12 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_NTPSYNC].nStartTime = 1573776000; // Nov 15th, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_NTPSYNC].nTimeout = 1668470400; // Nov 15th, 2022
 
-        // Deployment of Ankh Fund Accumulation Spread(NPIP-0003)
+        // Deployment of Community Fund Accumulation Spread(NPIP-0003)
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION_SPREAD].bit = 14;
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION_SPREAD].nStartTime = 1573776000; // Nov 15th, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION_SPREAD].nTimeout = 1668470400; // Nov 15th, 2022
 
-        // Increase in Ankh Fund Accumulation Amount (NPIP-0004)
+        // Increase in Community Fund Accumulation Amount (NPIP-0004)
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_AMOUNT_V2].bit = 16;
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_AMOUNT_V2].nStartTime = 1573776000; // Nov 15th, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_AMOUNT_V2].nTimeout = 1668470400; // Nov 15th, 2022
@@ -210,17 +210,17 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_STATIC_REWARD].nStartTime = 1573776000; // Nov 15th, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_STATIC_REWARD].nTimeout = 1668470400; // Nov 15th, 2022
 
-        // Deployment of Quorum reduction for the Ankh Fund
+        // Deployment of Quorum reduction for the Community Fund
         consensus.vDeployments[Consensus::DEPLOYMENT_QUORUM_CFUND].bit = 17;
         consensus.vDeployments[Consensus::DEPLOYMENT_QUORUM_CFUND].nStartTime = 1573776000; // Nov 15th, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_QUORUM_CFUND].nTimeout = 1668470400; // Nov 15th, 2022
 
-        // Deployment of VOTING STATE CACHE for the Ankh Fund
+        // Deployment of VOTING STATE CACHE for the Community Fund
         consensus.vDeployments[Consensus::DEPLOYMENT_VOTE_STATE_CACHE].bit = 22;
         consensus.vDeployments[Consensus::DEPLOYMENT_VOTE_STATE_CACHE].nStartTime = 1573776000; // Nov 15th, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_VOTE_STATE_CACHE].nTimeout = 1668470400; // Nov 15th, 2022
 
-        // Deployment of CONSULTATIONS for the Ankh Fund
+        // Deployment of CONSULTATIONS for the Community Fund
         consensus.vDeployments[Consensus::DEPLOYMENT_CONSULTATIONS].bit = 23;
         consensus.vDeployments[Consensus::DEPLOYMENT_CONSULTATIONS].nStartTime = 1573776000; // Nov 15th, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_CONSULTATIONS].nTimeout = 1668470400; // Nov 15th, 2022
@@ -416,12 +416,12 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].nStartTime = 1573776000; // Nov 15th, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].nTimeout = 1668470400; // Nov 15th, 2022
 
-        // Deployment of Ankh Fund
+        // Deployment of Community Fund
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND].bit = 6;
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND].nStartTime = 1573776000; // Nov 15th, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND].nTimeout = 1668470400; // Nov 15th, 2022
 
-        // Deployment of Ankh Fund Accumulation
+        // Deployment of Community Fund Accumulation
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION].bit = 7;
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION].nStartTime = 1573776000; // Nov 15th, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION].nTimeout = 1668470400; // Nov 15th, 2022
@@ -431,12 +431,12 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_NTPSYNC].nStartTime = 1573776000; // Nov 15th, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_NTPSYNC].nTimeout = 1556712000; // 1668470400; // Nov 15th, 2022
 
-        // Deployment of Ankh Fund Accumulation Spread(NPIP-0003)
+        // Deployment of Community Fund Accumulation Spread(NPIP-0003)
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION_SPREAD].bit = 14;
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION_SPREAD].nStartTime = 1573776000; // Nov 15th, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION_SPREAD].nTimeout = 1668470400; // Nov 15th, 2022
 
-        // Increate in Ankh Fund Accumulation Ammonut (NPIP-0004)
+        // Increate in Community Fund Accumulation Ammonut (NPIP-0004)
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_AMOUNT_V2].bit = 16;
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_AMOUNT_V2].nStartTime = 1573776000; // Nov 15th, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_AMOUNT_V2].nTimeout = 1668470400; // Nov 15th, 2022
@@ -446,17 +446,17 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_STATIC_REWARD].nStartTime = 1573776000; // Nov 15th, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_STATIC_REWARD].nTimeout = 1668470400; // Nov 15th, 2022
 
-        // Deployment of Quorum reduction for the Ankh Fund
+        // Deployment of Quorum reduction for the Community Fund
         consensus.vDeployments[Consensus::DEPLOYMENT_QUORUM_CFUND].bit = 17;
         consensus.vDeployments[Consensus::DEPLOYMENT_QUORUM_CFUND].nStartTime = 1573776000; // Nov 15th, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_QUORUM_CFUND].nTimeout = 1668470400; // Nov 15th, 2022
 
-        // Deployment of VOTING STATE CACHE for the Ankh Fund
+        // Deployment of VOTING STATE CACHE for the Community Fund
         consensus.vDeployments[Consensus::DEPLOYMENT_VOTE_STATE_CACHE].bit = 22;
         consensus.vDeployments[Consensus::DEPLOYMENT_VOTE_STATE_CACHE].nStartTime = 1573776000; // Nov 15th, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_VOTE_STATE_CACHE].nTimeout = 1668470400; // Nov 15th, 2022
 
-        // Deployment of CONSULTATIONS for the Ankh Fund
+        // Deployment of CONSULTATIONS for the Community Fund
         consensus.vDeployments[Consensus::DEPLOYMENT_CONSULTATIONS].bit = 23;
         consensus.vDeployments[Consensus::DEPLOYMENT_CONSULTATIONS].nStartTime = 1573776000; // Nov 15th, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_CONSULTATIONS].nTimeout = 1668470400; // Nov 15th, 2022
@@ -641,7 +641,7 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].nStartTime = 1573776000; // Nov 15th, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].nTimeout = 1668470400; // Nov 15th, 2022
 
-        // Deployment of Ankh Fund
+        // Deployment of Community Fund
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND].bit = 6;
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND].nStartTime = 1573776000; // Nov 15th, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND].nTimeout = 1668470400; // Nov 15th, 2022
@@ -651,17 +651,17 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_NTPSYNC].nStartTime = 1573776000; // Nov 15th, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_NTPSYNC].nTimeout = 1668470400; // Nov 15th, 2022
 
-        // Deployment of Ankh Fund Accumulation
+        // Deployment of Community Fund Accumulation
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION].bit = 7;
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION].nStartTime = 1573776000; // Nov 15th, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION].nTimeout = 1668470400; // Nov 15th, 2022
 
-        // Deployment of Ankh Fund Accumulation Spread(NPIP-0003)
+        // Deployment of Community Fund Accumulation Spread(NPIP-0003)
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION_SPREAD].bit = 14;
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION_SPREAD].nStartTime = 1573776000; // Nov 15th, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION_SPREAD].nTimeout = 1668470400; // Nov 15th, 2022
 
-        // Increate in Ankh Fund Accumulation Ammonut (NPIP-0004)
+        // Increate in Community Fund Accumulation Ammonut (NPIP-0004)
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_AMOUNT_V2].bit = 16;
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_AMOUNT_V2].nStartTime = 1573776000; // Nov 15th, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_AMOUNT_V2].nTimeout = 1668470400; // Nov 15th, 2022
@@ -671,17 +671,17 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_STATIC_REWARD].nStartTime = 1573776000; // Nov 15th, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_STATIC_REWARD].nTimeout = 1668470400; // Nov 15th, 2022
 
-        // Deployment of Quorum reduction for the Ankh Fund
+        // Deployment of Quorum reduction for the Community Fund
         consensus.vDeployments[Consensus::DEPLOYMENT_QUORUM_CFUND].bit = 17;
         consensus.vDeployments[Consensus::DEPLOYMENT_QUORUM_CFUND].nStartTime = 1573776000; // Nov 15th, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_QUORUM_CFUND].nTimeout = 1668470400; // Nov 15th, 2022
 
-        // Deployment of VOTING STATE CACHE for the Ankh Fund
+        // Deployment of VOTING STATE CACHE for the Community Fund
         consensus.vDeployments[Consensus::DEPLOYMENT_VOTE_STATE_CACHE].bit = 22;
         consensus.vDeployments[Consensus::DEPLOYMENT_VOTE_STATE_CACHE].nStartTime = 1573776000; // Nov 15th, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_VOTE_STATE_CACHE].nTimeout = 1668470400; // Nov 15th, 2022
 
-        // Deployment of CONSULTATIONS for the Ankh Fund
+        // Deployment of CONSULTATIONS for the Community Fund
         consensus.vDeployments[Consensus::DEPLOYMENT_CONSULTATIONS].bit = 23;
         consensus.vDeployments[Consensus::DEPLOYMENT_CONSULTATIONS].nStartTime = 1573776000; // Nov 15th, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_CONSULTATIONS].nTimeout = 1668470400; // Nov 15th, 2022
@@ -876,12 +876,12 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].nStartTime = 0;
         consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].nTimeout = 2556712000;
 
-        // Deployment of Ankh Fund
+        // Deployment of Community Fund
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND].bit = 6;
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND].nStartTime = 0;
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND].nTimeout = 2556712000;
 
-        // Deployment of Ankh Fund Accumulation
+        // Deployment of Community Fund Accumulation
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION].bit = 7;
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION].nStartTime = 0;
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION].nTimeout = 2556712000;
@@ -891,12 +891,12 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_NTPSYNC].nStartTime = 0;
         consensus.vDeployments[Consensus::DEPLOYMENT_NTPSYNC].nTimeout = 2556712000;
 
-        // Deployment of Ankh Fund Accumulation Spread(NPIP-0003)
+        // Deployment of Community Fund Accumulation Spread(NPIP-0003)
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION_SPREAD].bit = 14;
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION_SPREAD].nStartTime = 1573776000; // Nov 15th, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_ACCUMULATION_SPREAD].nTimeout = 1668470400; // Nov 15th, 2022
 
-        // Increate in Ankh Fund Accumulation Ammonut (NPIP-0004)
+        // Increate in Community Fund Accumulation Ammonut (NPIP-0004)
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_AMOUNT_V2].bit = 16;
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_AMOUNT_V2].nStartTime = 1573776000; // Nov 15th, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_COMMUNITYFUND_AMOUNT_V2].nTimeout = 1668470400; // Nov 15th, 2022
@@ -906,17 +906,17 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_STATIC_REWARD].nStartTime = 1573776000; // Nov 15th, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_STATIC_REWARD].nTimeout = 1668470400; // Nov 15th, 2022
 
-        // Deployment of Quorum reduction for the Ankh Fund
+        // Deployment of Quorum reduction for the Community Fund
         consensus.vDeployments[Consensus::DEPLOYMENT_QUORUM_CFUND].bit = 17;
         consensus.vDeployments[Consensus::DEPLOYMENT_QUORUM_CFUND].nStartTime = 1573776000; // Nov 15th, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_QUORUM_CFUND].nTimeout = 1668470400; // Nov 15th, 2022
 
-        // Deployment of VOTING STATE CACHE for the Ankh Fund
+        // Deployment of VOTING STATE CACHE for the Community Fund
         consensus.vDeployments[Consensus::DEPLOYMENT_VOTE_STATE_CACHE].bit = 22;
         consensus.vDeployments[Consensus::DEPLOYMENT_VOTE_STATE_CACHE].nStartTime = 1573776000; // Nov 15th, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_VOTE_STATE_CACHE].nTimeout = 1668470400; // Nov 15th, 2022
 
-        // Deployment of CONSULTATIONS for the Ankh Fund
+        // Deployment of CONSULTATIONS for the Community Fund
         consensus.vDeployments[Consensus::DEPLOYMENT_CONSULTATIONS].bit = 23;
         consensus.vDeployments[Consensus::DEPLOYMENT_CONSULTATIONS].nStartTime = 1573776000; // Nov 15th, 2019
         consensus.vDeployments[Consensus::DEPLOYMENT_CONSULTATIONS].nTimeout = 1668470400; // Nov 15th, 2022

@@ -10,7 +10,7 @@ import time
 
 
 class CommunityFundProposalsTest(ElectrumTestFramework):
-    """Tests the voting procedures of the Ankh Fund."""
+    """Tests the voting procedures of the Community fund."""
 
     def __init__(self):
         super().__init__()

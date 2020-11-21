@@ -11,7 +11,7 @@ import http.client
 import urllib.parse
 
 class CommunityFundPaymentRequestPayout(ElectrumTestFramework):
-    """Tests the payment request procedures of the Ankh Fund."""
+    """Tests the payment request procedures of the Community fund."""
 
     def __init__(self):
         super().__init__()
