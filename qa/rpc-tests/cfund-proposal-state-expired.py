@@ -36,7 +36,7 @@ class CommunityFundProposalStateTest(ElectrumTestFramework):
 
         # Move the necessary amount of cycles for the proposal to expire
         i = 0
-        necessary = self.nodes[0].cfundstats()["consensus"]["maxCountVotingCycleProposals"]
+        necessary = self.nodes[0].fundstats()["consensus"]["maxCountVotingCycleProposals"]
         while i < necessary:
             start_new_cycle(self.nodes[0])
             i = i + 1

@@ -27,7 +27,7 @@ class CommunityFundPaymentRequestsTest(ElectrumTestFramework):
 
         # Create a proposal and accept by voting
         proposalid0 = self.nodes[0].createproposal(self.nodes[0].getnewaddress(), 10, 3600, "test")["hash"]
-        locked_before = self.nodes[0].cfundstats()["funds"]["locked"]
+        locked_before = self.nodes[0].fundstats()["funds"]["locked"]
         end_cycle(self.nodes[0])
 
         time.sleep(0.2)
@@ -35,7 +35,7 @@ class CommunityFundPaymentRequestsTest(ElectrumTestFramework):
         self.nodes[0].proposalvote(proposalid0, "yes")
         slow_gen(self.nodes[0], 1)
         end_cycle(self.nodes[0])
-        locked_accepted = self.nodes[0].cfundstats()["funds"]["locked"]
+        locked_accepted = self.nodes[0].fundstats()["funds"]["locked"]
 
         time.sleep(0.2)
 
@@ -43,7 +43,7 @@ class CommunityFundPaymentRequestsTest(ElectrumTestFramework):
 
         assert(self.nodes[0].getproposal(proposalid0)["state"] == 1)
         assert(self.nodes[0].getproposal(proposalid0)["status"] == "accepted")
-        assert(self.nodes[0].cfundstats()["funds"]["locked"] == float(locked_before) + float(self.nodes[0].getproposal(proposalid0)["requestedAmount"]))
+        assert(self.nodes[0].fundstats()["funds"]["locked"] == float(locked_before) + float(self.nodes[0].getproposal(proposalid0)["requestedAmount"]))
 
         # Create a payment request
         paymentrequestid0 = self.nodes[0].createpaymentrequest(proposalid0, 1, "test0")["hash"]
@@ -53,12 +53,12 @@ class CommunityFundPaymentRequestsTest(ElectrumTestFramework):
 
         assert(self.nodes[0].getpaymentrequest(paymentrequestid0)["state"] == 0)
         assert(self.nodes[0].getpaymentrequest(paymentrequestid0)["status"] == "pending")
-        assert(self.nodes[0].cfundstats()["funds"]["locked"] == locked_accepted)
+        assert(self.nodes[0].fundstats()["funds"]["locked"] == locked_accepted)
 
         # Vote enough yes votes, without enough quorum
 
-        total_votes = self.nodes[0].cfundstats()["consensus"]["minSumVotesPerVotingCycle"]
-        min_yes_votes = self.nodes[0].cfundstats()["consensus"]["votesAcceptPaymentRequestPercentage"]/100
+        total_votes = self.nodes[0].fundstats()["consensus"]["minSumVotesPerVotingCycle"]
+        min_yes_votes = self.nodes[0].fundstats()["consensus"]["votesAcceptPaymentRequestPercentage"]/100
         yes_votes = int(total_votes * min_yes_votes) + 1
 
         self.nodes[0].paymentrequestvote(paymentrequestid0, "yes")
@@ -73,7 +73,7 @@ class CommunityFundPaymentRequestsTest(ElectrumTestFramework):
 
         assert(self.nodes[0].getpaymentrequest(paymentrequestid0)["state"] == 0)
         assert(self.nodes[0].getpaymentrequest(paymentrequestid0)["status"] == "pending")
-        assert(self.nodes[0].cfundstats()["funds"]["locked"] == locked_accepted)
+        assert(self.nodes[0].fundstats()["funds"]["locked"] == locked_accepted)
 
         end_cycle(self.nodes[0])
         time.sleep(0.2)
@@ -82,11 +82,11 @@ class CommunityFundPaymentRequestsTest(ElectrumTestFramework):
 
         assert(self.nodes[0].getpaymentrequest(paymentrequestid0)["state"] == 0)
         assert(self.nodes[0].getpaymentrequest(paymentrequestid0)["status"] == "pending")
-        assert(self.nodes[0].cfundstats()["funds"]["locked"] == locked_accepted)
+        assert(self.nodes[0].fundstats()["funds"]["locked"] == locked_accepted)
 
         # Vote enough quorum, but not enough positive votes
 
-        total_votes = self.nodes[0].cfundstats()["consensus"]["minSumVotesPerVotingCycle"] + 1
+        total_votes = self.nodes[0].fundstats()["consensus"]["minSumVotesPerVotingCycle"] + 1
         yes_votes = int(total_votes * min_yes_votes)
 
         self.nodes[0].paymentrequestvote(paymentrequestid0, "yes")
@@ -99,7 +99,7 @@ class CommunityFundPaymentRequestsTest(ElectrumTestFramework):
 
         assert(self.nodes[0].getpaymentrequest(paymentrequestid0)["state"] == 0)
         assert(self.nodes[0].getpaymentrequest(paymentrequestid0)["status"] == "pending")
-        assert(self.nodes[0].cfundstats()["funds"]["locked"] == locked_accepted)
+        assert(self.nodes[0].fundstats()["funds"]["locked"] == locked_accepted)
 
         end_cycle(self.nodes[0])
         time.sleep(0.2)
@@ -108,11 +108,11 @@ class CommunityFundPaymentRequestsTest(ElectrumTestFramework):
 
         assert(self.nodes[0].getpaymentrequest(paymentrequestid0)["state"] == 0)
         assert(self.nodes[0].getpaymentrequest(paymentrequestid0)["status"] == "pending")
-        assert(self.nodes[0].cfundstats()["funds"]["locked"] == locked_accepted)
+        assert(self.nodes[0].fundstats()["funds"]["locked"] == locked_accepted)
 
         # Vote enough quorum and enough positive votes
 
-        total_votes = self.nodes[0].cfundstats()["consensus"]["minSumVotesPerVotingCycle"] + 1
+        total_votes = self.nodes[0].fundstats()["consensus"]["minSumVotesPerVotingCycle"] + 1
         yes_votes = int(total_votes * min_yes_votes) + 1
 
         slow_gen(self.nodes[0], 1)
@@ -129,7 +129,7 @@ class CommunityFundPaymentRequestsTest(ElectrumTestFramework):
 
         assert_equal(self.nodes[0].getpaymentrequest(paymentrequestid0)["state"], 0)
         assert_equal(self.nodes[0].getpaymentrequest(paymentrequestid0)["status"], "pending")
-        assert_equal(self.nodes[0].cfundstats()["funds"]["locked"], locked_accepted)
+        assert_equal(self.nodes[0].fundstats()["funds"]["locked"], locked_accepted)
 
         time.sleep(0.2)
 
@@ -137,8 +137,8 @@ class CommunityFundPaymentRequestsTest(ElectrumTestFramework):
         self.nodes[0].invalidateblock(blocks[-1])
         assert_equal(self.nodes[0].getpaymentrequest(paymentrequestid0)["state"], 0)
         assert_equal(self.nodes[0].getpaymentrequest(paymentrequestid0)["status"], "pending")
-        assert_equal(self.nodes[0].cfundstats()["funds"]["locked"], locked_accepted)
-        self.nodes[0].cfundstats()
+        assert_equal(self.nodes[0].fundstats()["funds"]["locked"], locked_accepted)
+        self.nodes[0].fundstats()
 
         # Vote again
 
@@ -158,11 +158,11 @@ class CommunityFundPaymentRequestsTest(ElectrumTestFramework):
 
         assert(self.nodes[0].getpaymentrequest(paymentrequestid0)["state"] == 1)
         assert(self.nodes[0].getpaymentrequest(paymentrequestid0)["status"] == "accepted")
-        assert(self.nodes[0].cfundstats()["funds"]["locked"] == locked_after_payment)
+        assert(self.nodes[0].fundstats()["funds"]["locked"] == locked_after_payment)
 
         # Check that paymentrequest moves to paid state
 
-        cycles_to_expire = self.nodes[0].cfundstats()["consensus"]["maxCountVotingCyclePaymentRequests"]
+        cycles_to_expire = self.nodes[0].fundstats()["consensus"]["maxCountVotingCyclePaymentRequests"]
 
         for idx in range(cycles_to_expire):
             end_cycle(self.nodes[0])
@@ -214,7 +214,7 @@ class CommunityFundPaymentRequestsTest(ElectrumTestFramework):
         locked_after_2nd_payment = (locked_after_payment -
                                     float(self.nodes[0].getpaymentrequest(paymentrequestid1)["requestedAmount"]) -
                                     float(self.nodes[0].getpaymentrequest(paymentrequestid2)["requestedAmount"]))
-        assert(self.nodes[0].cfundstats()["funds"]["locked"] == locked_after_2nd_payment)
+        assert(self.nodes[0].fundstats()["funds"]["locked"] == locked_after_2nd_payment)
 
 
         # Create and vote on payment request more than the total proposal amount, must throw "JSONRPC error: Invalid amount."

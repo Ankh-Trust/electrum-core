@@ -26,5 +26,5 @@ def activate_staticr(node):
 
 def end_cycle(node):
     # Move to the end of the cycle
-    slow_gen(node, node.cfundstats()["votingPeriod"]["ending"] - node.cfundstats()["votingPeriod"][
+    slow_gen(node, node.fundstats()["votingPeriod"]["ending"] - node.fundstats()["votingPeriod"][
         "current"])

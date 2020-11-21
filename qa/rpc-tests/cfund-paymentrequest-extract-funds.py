@@ -27,7 +27,7 @@ class CommunityFundPaymentRequestExtractFundsTest(ElectrumTestFramework):
 
         # Create a proposal and accept by voting
         proposalid0 = self.nodes[0].createproposal(self.nodes[0].getnewaddress(), 100, 36000, "test")["hash"]
-        locked_before = self.nodes[0].cfundstats()["funds"]["locked"]
+        locked_before = self.nodes[0].fundstats()["funds"]["locked"]
         end_cycle(self.nodes[0])
 
         time.sleep(0.2)
@@ -35,7 +35,7 @@ class CommunityFundPaymentRequestExtractFundsTest(ElectrumTestFramework):
         self.nodes[0].proposalvote(proposalid0, "yes")
         slow_gen(self.nodes[0], 1)
         end_cycle(self.nodes[0])
-        locked_accepted = self.nodes[0].cfundstats()["funds"]["locked"]
+        locked_accepted = self.nodes[0].fundstats()["funds"]["locked"]
 
         time.sleep(0.2)
 
@@ -43,7 +43,7 @@ class CommunityFundPaymentRequestExtractFundsTest(ElectrumTestFramework):
 
         assert(self.nodes[0].getproposal(proposalid0)["state"] == 1)
         assert(self.nodes[0].getproposal(proposalid0)["status"] == "accepted")
-        assert(self.nodes[0].cfundstats()["funds"]["locked"] == float(locked_before) + float(self.nodes[0].getproposal(proposalid0)["requestedAmount"]))
+        assert(self.nodes[0].fundstats()["funds"]["locked"] == float(locked_before) + float(self.nodes[0].getproposal(proposalid0)["requestedAmount"]))
 
         # Create 6 payment requests
         paymentRequests = []
@@ -75,7 +75,7 @@ class CommunityFundPaymentRequestExtractFundsTest(ElectrumTestFramework):
         assert(valid == 5)
         assert(invalid == 0)
 
-        assert(self.nodes[0].cfundstats()["funds"]["locked"] == locked_accepted)
+        assert(self.nodes[0].fundstats()["funds"]["locked"] == locked_accepted)
         
         end_cycle(self.nodes[0])
 

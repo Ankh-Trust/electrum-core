@@ -48,7 +48,7 @@ class CommunityFundPaymentRequestStateTest(ElectrumTestFramework):
 
         # Move the necessary amount of cycles for the payment request to expire
         i = 0
-        necessary = self.nodes[0].cfundstats()["consensus"]["maxCountVotingCyclePaymentRequests"]
+        necessary = self.nodes[0].fundstats()["consensus"]["maxCountVotingCyclePaymentRequests"]
         while i < necessary:
             start_new_cycle(self.nodes[0])
             i = i + 1

@@ -121,7 +121,7 @@ class CommunityFundRawTXProposalVoteTest(ElectrumTestFramework):
     def vote_to_new_cycle(self, voteTx):
         # Move one past the end of the cycle
 
-        blocksToEnd = self.nodes[0].cfundstats()["votingPeriod"]["ending"] - self.nodes[0].cfundstats()["votingPeriod"]["current"] + 1
+        blocksToEnd = self.nodes[0].fundstats()["votingPeriod"]["ending"] - self.nodes[0].fundstats()["votingPeriod"]["current"] + 1
 
         for i in range(0, blocksToEnd):
             self.nodes[0].coinbaseoutputs([voteTx])

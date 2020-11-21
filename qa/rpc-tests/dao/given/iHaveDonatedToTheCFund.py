@@ -17,7 +17,7 @@ amount=None):
     print('givenIHaveDonatedToTheCFund: invalid parameters')
     assert(False)
 
-  availableBefore = node.cfundstats()["funds"]["available"]
+  availableBefore = node.fundstats()["funds"]["available"]
 
   try:
     node.donatefund(amount)
@@ -26,4 +26,4 @@ amount=None):
     assert(False)
   
   slow_gen(node, 1)
-  assert(node.cfundstats()["funds"]["available"] == availableBefore + amount)
+  assert(node.fundstats()["funds"]["available"] == availableBefore + amount)

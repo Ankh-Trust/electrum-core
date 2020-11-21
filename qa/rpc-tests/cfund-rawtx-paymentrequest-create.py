@@ -97,7 +97,7 @@ class CommunityFundCreatePaymentrequestRawTX(ElectrumTestFramework):
 
         # # Verify nothing changed
         assert (float(self.nodes[0].getproposal(self.goodProposalHash)["notPaidYet"]) == 10)
-        assert (float(self.nodes[0].cfundstats()["funds"]["locked"]) == 10)
+        assert (float(self.nodes[0].fundstats()["funds"]["locked"]) == 10)
 
         # Accept payment request
         self.nodes[0].paymentrequestvote(self.goodPayreqHash, "yes")
@@ -106,7 +106,7 @@ class CommunityFundCreatePaymentrequestRawTX(ElectrumTestFramework):
 
         # Check the payment request is paid out
         assert_equal(float(self.nodes[0].getproposal(self.goodProposalHash)["notPaidYet"]), 9)
-        assert (float(self.nodes[0].cfundstats()["funds"]["locked"]) == 9)
+        assert (float(self.nodes[0].fundstats()["funds"]["locked"]) == 9)
 
 
         # Create multiple payment requests

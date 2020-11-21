@@ -24,7 +24,7 @@ proposalHash=None):
     assert(False)
 
   try:
-    maxCycles = node.cfundstats()["consensus"]["maxCountVotingCycleProposals"]
+    maxCycles = node.fundstats()["consensus"]["maxCountVotingCycleProposals"]
   except JSONRPCException as e:
     print(e.error)
     assert(False)

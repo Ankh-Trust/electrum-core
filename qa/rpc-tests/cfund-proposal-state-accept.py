@@ -40,8 +40,8 @@ class CommunityFundProposalStateTest(ElectrumTestFramework):
 
         # Vote enough yes votes, without enough quorum
 
-        total_votes = self.nodes[0].cfundstats()["consensus"]["minSumVotesPerVotingCycle"]
-        min_yes_votes = self.nodes[0].cfundstats()["consensus"]["votesAcceptProposalPercentage"]/100
+        total_votes = self.nodes[0].fundstats()["consensus"]["minSumVotesPerVotingCycle"]
+        min_yes_votes = self.nodes[0].fundstats()["consensus"]["votesAcceptProposalPercentage"]/100
         yes_votes = int(total_votes * min_yes_votes) + 1
 
         self.nodes[0].proposalvote(proposalid0, "yes")
@@ -66,7 +66,7 @@ class CommunityFundProposalStateTest(ElectrumTestFramework):
         assert(self.nodes[0].getproposal(proposalid0)["status"] == "pending")
 
         # Vote enough quorum, but not enough positive votes
-        total_votes = self.nodes[0].cfundstats()["consensus"]["minSumVotesPerVotingCycle"] + 1
+        total_votes = self.nodes[0].fundstats()["consensus"]["minSumVotesPerVotingCycle"] + 1
         yes_votes = int(total_votes * min_yes_votes)
 
         self.nodes[0].proposalvote(proposalid0, "yes")
@@ -90,7 +90,7 @@ class CommunityFundProposalStateTest(ElectrumTestFramework):
 
         # Vote enough quorum and enough positive votes
 
-        total_votes = self.nodes[0].cfundstats()["consensus"]["minSumVotesPerVotingCycle"] + 1
+        total_votes = self.nodes[0].fundstats()["consensus"]["minSumVotesPerVotingCycle"] + 1
         yes_votes = int(total_votes * min_yes_votes) + 1
 
 
@@ -113,7 +113,7 @@ class CommunityFundProposalStateTest(ElectrumTestFramework):
         self.nodes[0].invalidateblock(blocks[-1])
         assert(self.nodes[0].getproposal(proposalid0)["state"] == 0)
         assert(self.nodes[0].getproposal(proposalid0)["status"] == "pending")
-        self.nodes[0].cfundstats()
+        self.nodes[0].fundstats()
 
         # Vote again
 
@@ -133,16 +133,16 @@ class CommunityFundProposalStateTest(ElectrumTestFramework):
         assert(self.nodes[0].getproposal(proposalid0)["status"] == "accepted, waiting for enough coins in fund")
 
         # Check the available and locked funds
-        assert(self.nodes[0].cfundstats()["funds"]["available"] == self.nodes[0].cfundstats()["consensus"]["proposalMinimalFee"])
-        assert(self.nodes[0].cfundstats()["funds"]["locked"] == 0)
+        assert(self.nodes[0].fundstats()["funds"]["available"] == self.nodes[0].fundstats()["consensus"]["proposalMinimalFee"])
+        assert(self.nodes[0].fundstats()["funds"]["locked"] == 0)
 
         # Donate to the fund
         self.nodes[0].donatefund(100)
         slow_gen(self.nodes[0], 1)
 
         # Check the available and locked funds
-        assert (self.nodes[0].cfundstats()["funds"]["available"] == 100+self.nodes[0].cfundstats()["consensus"]["proposalMinimalFee"])
-        assert (self.nodes[0].cfundstats()["funds"]["locked"] == 0)
+        assert (self.nodes[0].fundstats()["funds"]["available"] == 100+self.nodes[0].fundstats()["consensus"]["proposalMinimalFee"])
+        assert (self.nodes[0].fundstats()["funds"]["locked"] == 0)
 
         # Move to the end of the cycle
         start_new_cycle(self.nodes[0])
@@ -152,8 +152,8 @@ class CommunityFundProposalStateTest(ElectrumTestFramework):
         assert(self.nodes[0].getproposal(proposalid0)["status"] == "accepted")
 
         # Check the available and locked funds
-        assert (self.nodes[0].cfundstats()["funds"]["available"] == self.nodes[0].cfundstats()["consensus"]["proposalMinimalFee"])
-        assert (self.nodes[0].cfundstats()["funds"]["locked"] == 100)
+        assert (self.nodes[0].fundstats()["funds"]["available"] == self.nodes[0].fundstats()["consensus"]["proposalMinimalFee"])
+        assert (self.nodes[0].fundstats()["funds"]["locked"] == 100)
 
         # Check the voting cycle does not increment in later cycle after reorg
         votingCycle_after_state_change = self.nodes[0].getproposal(proposalid0)["votingCycle"]

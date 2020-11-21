@@ -26,7 +26,7 @@ class LightVotingTest(ElectrumTestFramework):
 
     def run_test(self):
         # Get cfund parameters
-        blocks_per_voting_cycle = self.nodes[0].cfundstats()["consensus"]["blocksPerVotingCycle"]
+        blocks_per_voting_cycle = self.nodes[0].fundstats()["consensus"]["blocksPerVotingCycle"]
 
         self.nodes[0].staking(False)
         self.nodes[1].staking(False)

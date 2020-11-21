@@ -23,7 +23,7 @@ class ConsultationsTest(ElectrumTestFramework):
 
     def run_test(self):
         # Get cfund parameters
-        blocks_per_voting_cycle = self.nodes[0].cfundstats()["consensus"]["blocksPerVotingCycle"]
+        blocks_per_voting_cycle = self.nodes[0].fundstats()["consensus"]["blocksPerVotingCycle"]
 
         self.nodes[0].staking(False)
         activate_softfork(self.nodes[0], "consultations")
@@ -197,7 +197,7 @@ class ConsultationsTest(ElectrumTestFramework):
 
     def end_cycle_stake(self, node):
         # Move to the end of the cycle
-        self.stake_block(node, node.cfundstats()["votingPeriod"]["ending"] - node.cfundstats()["votingPeriod"][
+        self.stake_block(node, node.fundstats()["votingPeriod"]["ending"] - node.fundstats()["votingPeriod"][
             "current"])
 
 if __name__ == '__main__':

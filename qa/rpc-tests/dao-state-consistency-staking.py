@@ -71,7 +71,7 @@ class DaoStateConsistency(ElectrumTestFramework):
 
     def end_cycle_stake(self, node):
         # Move to the end of the cycle
-        self.stake_block(node, node.cfundstats()["votingPeriod"]["ending"] - node.cfundstats()["votingPeriod"][
+        self.stake_block(node, node.fundstats()["votingPeriod"]["ending"] - node.fundstats()["votingPeriod"][
             "current"])
 
 if __name__ == '__main__':

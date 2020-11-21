@@ -18,9 +18,9 @@ cycles=1):
     assert(False)
   
   try:
-    blocksRemaining = node.cfundstats()["votingPeriod"]["ending"] - node.cfundstats()["votingPeriod"]["current"]
-    periodStart = node.cfundstats()["votingPeriod"]["starting"]
-    periodEnd = node.cfundstats()["votingPeriod"]["ending"]
+    blocksRemaining = node.fundstats()["votingPeriod"]["ending"] - node.fundstats()["votingPeriod"]["current"]
+    periodStart = node.fundstats()["votingPeriod"]["starting"]
+    periodEnd = node.fundstats()["votingPeriod"]["ending"]
   except JSONRPCException as e:
     print(e.error)
     assert(False)
@@ -34,10 +34,10 @@ cycles=1):
 
   # parsing -1 will end a full round of proposal voting cycles
   if (cycles == -1): 
-    cycles = node.cfundstats()["consensus"]["maxCountVotingCycleProposals"] + 1
+    cycles = node.fundstats()["consensus"]["maxCountVotingCycleProposals"] + 1
 
   if (cycles > 1):
-    blocksPerCycle = node.cfundstats()["consensus"]["blocksPerVotingCycle"]
+    blocksPerCycle = node.fundstats()["consensus"]["blocksPerVotingCycle"]
     for i in range(1, cycles):
       slow_gen(node, blocksPerCycle)
       assert(node.getblockcount() == periodEnd + (i * blocksPerCycle))

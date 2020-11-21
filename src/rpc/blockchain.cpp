@@ -1120,15 +1120,15 @@ UniValue listconsultations(const UniValue& params, bool fHelp)
     return ret;
 }
 
-UniValue cfundstats(const UniValue& params, bool fHelp)
+UniValue fundstats(const UniValue& params, bool fHelp)
 {
 
     if (fHelp || params.size() != 0)
         throw runtime_error(
-                "cfundstats\n"
+                "fundstats\n"
                 "\nReturns statistics about the community fund.\n"
-                + HelpExampleCli("cfundstats", "")
-                + HelpExampleRpc("cfundstats", "")
+                + HelpExampleCli("fundstats", "")
+                + HelpExampleRpc("fundstats", "")
                 );
 
     LOCK(cs_main);
@@ -1919,7 +1919,7 @@ UniValue reconsiderblock(const UniValue& params, bool fHelp)
 static const CRPCCommand commands[] =
 { //  category              name                      actor (function)         okSafeMode
   //  --------------------- ------------------------  -----------------------  ----------
-  { "communityfund",      "cfundstats",             &cfundstats,             true  },
+  { "communityfund",      "fundstats",             &fundstats,             true  },
   { "blockchain",         "getblockchaininfo",      &getblockchaininfo,      true  },
   { "blockchain",         "getbestblockhash",       &getbestblockhash,       true  },
   { "blockchain",         "getblockcount",          &getblockcount,          true  },

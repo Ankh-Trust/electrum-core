@@ -96,7 +96,7 @@ class CommunityFundPaymentRequestDuplicate(ElectrumTestFramework):
         slow_gen(self.nodes[0], 1)
         end_cycle(self.nodes[0])
 
-        locked_accepted = self.nodes[0].cfundstats()["funds"]["locked"]
+        locked_accepted = self.nodes[0].fundstats()["funds"]["locked"]
 
         sync_blocks(self.nodes)
 
@@ -125,7 +125,7 @@ class CommunityFundPaymentRequestDuplicate(ElectrumTestFramework):
                 for preq in proposal["preqs"]:
                     assert(self.nodes[x].getpaymentrequest(preq["hash"])["state"] == 0)
                     assert(self.nodes[x].getpaymentrequest(preq["hash"])["status"] == "pending")
-                    assert(self.nodes[x].cfundstats()["funds"]["locked"] == locked_accepted)
+                    assert(self.nodes[x].fundstats()["funds"]["locked"] == locked_accepted)
 
         end_cycle(self.nodes[0])
 

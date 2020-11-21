@@ -63,8 +63,8 @@ class CommunityFundVotesTest(ElectrumTestFramework):
         # Add dummy votes
         end_cycle(self.nodes[0])
 
-        total_votes = self.nodes[0].cfundstats()["consensus"]["minSumVotesPerVotingCycle"]
-        min_yes_votes = self.nodes[0].cfundstats()["consensus"]["votesAcceptPaymentRequestPercentage"]/100
+        total_votes = self.nodes[0].fundstats()["consensus"]["minSumVotesPerVotingCycle"]
+        min_yes_votes = self.nodes[0].fundstats()["consensus"]["votesAcceptPaymentRequestPercentage"]/100
         yes_votes = int(total_votes * min_yes_votes) + 1
         no_votes = total_votes - yes_votes
 
@@ -81,7 +81,7 @@ class CommunityFundVotesTest(ElectrumTestFramework):
         assert_equal(self.nodes[0].getproposal(proposalid0)["votesNo"], no_votes)
 
         # Move to the end of the cycle
-        slow_gen(self.nodes[0], self.nodes[0].cfundstats()["votingPeriod"]["ending"] - self.nodes[0].cfundstats()["votingPeriod"]["current"])
+        slow_gen(self.nodes[0], self.nodes[0].fundstats()["votingPeriod"]["ending"] - self.nodes[0].fundstats()["votingPeriod"]["current"])
 
         assert(self.nodes[0].getproposal(proposalid0)["votingCycle"] == 1)
 
@@ -93,7 +93,7 @@ class CommunityFundVotesTest(ElectrumTestFramework):
         assert(self.nodes[0].getproposal(proposalid0)["votesYes"] == 0 and self.nodes[0].getproposal(proposalid0)["votesNo"] == 0)
         assert(self.nodes[0].getproposal(proposalid0)["status"] == "pending" and self.nodes[0].getproposal(proposalid0)["state"] == 0)
 
-        slow_gen(self.nodes[0], self.nodes[0].cfundstats()["consensus"]["blocksPerVotingCycle"] - 5)
+        slow_gen(self.nodes[0], self.nodes[0].fundstats()["consensus"]["blocksPerVotingCycle"] - 5)
 
         self.nodes[0].proposalvote(proposalid0, "yes")
         # Vote in the limits of a cycle

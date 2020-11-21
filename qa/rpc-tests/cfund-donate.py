@@ -25,7 +25,7 @@ class DonateCommunityFundTest(ElectrumTestFramework):
         slow_gen(self.nodes[0], 1)
 
         # Verify the available coins in the fund
-        assert(self.nodes[0].cfundstats()["funds"]["available"] == 100)
+        assert(self.nodes[0].fundstats()["funds"]["available"] == 100)
 
 if __name__ == '__main__':
     DonateCommunityFundTest().main()
