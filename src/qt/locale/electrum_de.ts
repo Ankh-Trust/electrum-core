@@ -1057,7 +1057,7 @@
         <translation>Wichtige Netzwerk-Mitteilung.</translation>
     </message>
     <message>
-        <source>The Electrum Network is currently voting on introducing changes on the consensus protocol. As a participant in our network, we value your input and the decision ultimately is yours. Please cast your vote. &lt;br&gt;&lt;br&gt;For more information on the proposal, please visit &lt;a href="https://navcoin.org/community-fund"&gt;this link&lt;/a&gt;&lt;br&gt;&lt;br&gt;Would you like the Nav Coin Network to update the staking rewards to setup a decentralised community fund that will help grow the network?</source>
+        <source>The Electrum Network is currently voting on introducing changes on the consensus protocol. As a participant in our network, we value your input and the decision ultimately is yours. Please cast your vote. &lt;br&gt;&lt;br&gt;For more information on the proposal, please visit &lt;a href="https://navcoin.org/community-fund"&gt;this link&lt;/a&gt;&lt;br&gt;&lt;br&gt;Would you like the Electrum Network to update the staking rewards to setup a decentralised Ankh fund that will help grow the network?</source>
         <translation>Das Electrum Netzwerk stimmt momentan über Änderungen am Consensus Protocol ab. Als ein Teilnehmer in unserem Netzwerk wertschätzen wir deinen Beitrag und die Entscheidung liegt letztendlich bei dir. Bitte gib deine Stimme ab. Für mehr Informationen zum diesem Vorhaben besuche bitte diesen Link . Würdest du gern die Staking Rewards aktualisieren um einen dezentralisierten Community Fund einzurichten, der dem Netzwerk wachsen helfen wird?</translation>
     </message>
     <message>

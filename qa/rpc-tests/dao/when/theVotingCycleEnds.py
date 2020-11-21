@@ -4,19 +4,19 @@
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #
-# Expanded helper routines for regression testing of the 0AE Coin community fund
+# Expanded helper routines for regression testing of the 0AE Coin Ankh fund
 #
 
 from test_framework.util import *
 
-def whenTheVotingCycleEnds(node=None, 
+def whenTheVotingCycleEnds(node=None,
 cycles=1):
 
   if (node is None
   or cycles < -1):
     print('whenTheVotingCycleEnds: invalid parameters')
     assert(False)
-  
+
   try:
     blocksRemaining = node.fundstats()["votingPeriod"]["ending"] - node.fundstats()["votingPeriod"]["current"]
     periodStart = node.fundstats()["votingPeriod"]["starting"]
@@ -33,7 +33,7 @@ cycles=1):
   assert(node.getblockcount() == periodEnd)
 
   # parsing -1 will end a full round of proposal voting cycles
-  if (cycles == -1): 
+  if (cycles == -1):
     cycles = node.fundstats()["consensus"]["maxCountVotingCycleProposals"] + 1
 
   if (cycles > 1):

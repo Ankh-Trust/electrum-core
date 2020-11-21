@@ -4,12 +4,12 @@
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #
-# Expanded helper routines for regression testing of the 0AE Coin community fund
+# Expanded helper routines for regression testing of the 0AE Coin Ankh fund
 #
 
 from test_framework.util import *
 
-def givenIHaveVotedOnTheProposal(node=None, 
+def givenIHaveVotedOnTheProposal(node=None,
 hash=None,
 vote=None):
 
@@ -24,7 +24,7 @@ vote=None):
   except JSONRPCException as e:
     print(e.error)
     assert(False)
-  
+
   try:
     myvotes = node.proposalvotelist()
   except JSONRPCException as e:

@@ -4,12 +4,12 @@
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #
-# Expanded helper routines for regression testing of the 0AE Coin community fund
+# Expanded helper routines for regression testing of the 0AE Coin Ankh fund
 #
 
 from test_framework.util import *
 
-def whenISubmitAPaymentRequest(node=None, 
+def whenISubmitAPaymentRequest(node=None,
 hash=None,
 amount=None,
 description=None,
@@ -22,11 +22,11 @@ expectSuccess=True):
   or (expectSuccess != True and expectSuccess != False)):
     print('whenISubmitAPaymentRequest: invalid parameters')
     assert(False)
-  
+
   try:
     hash = node.createpaymentrequest(hash, amount, description)["hash"]
   except JSONRPCException as e:
-    
+
     if (expectSuccess == True):
       print(e.error)
       assert(False)
@@ -34,7 +34,7 @@ expectSuccess=True):
     assert(e.error["code"] == -3)
     assert(e.error["message"] == "Proposal has not been accepted.")
     return
-  
+
   slow_gen(node, 1)
 
   paymentRequest = node.getpaymentrequest(hash)

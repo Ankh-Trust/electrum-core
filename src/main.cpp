@@ -3990,18 +3990,18 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
                         nMultiplier = (pindex->nHeight % GetConsensusParameter(Consensus::CONSENSUS_PARAM_FUND_SPREAD_ACCUMULATION, view)) == 0 ? GetConsensusParameter(Consensus::CONSENSUS_PARAM_FUND_SPREAD_ACCUMULATION, view) : 0;
 
                     if(!tx.vout[tx.vout.size() - 1].IsCommunityFundContribution() && nMultiplier > 0)
-                        return state.DoS(100, error("ConnectBlock(): block does not contribute to the community fund"),
+                        return state.DoS(100, error("ConnectBlock(): block does not contribute to the Ankh fund"),
                                          REJECT_INVALID, "no-cf-amount");
 
 
                     if(IsCommunityFundAmountV2Enabled(pindex->pprev, Params().GetConsensus())) {
                         if(tx.vout[tx.vout.size() - 1].nValue != nFundContributionPerBlock * nMultiplier && nMultiplier > 0)
-                            return state.DoS(100, error("ConnectBlock(): block pays incorrect amount to community fund (actual=%d vs consensus=%d)",
+                            return state.DoS(100, error("ConnectBlock(): block pays incorrect amount to Ankh fund (actual=%d vs consensus=%d)",
                                                         tx.vout[tx.vout.size() - 1].nValue, nFundContributionPerBlock * nMultiplier),
                                     REJECT_INVALID, "bad-cf-amount");
                     } else {
                         if(tx.vout[tx.vout.size() - 1].nValue != Params().GetConsensus().nCommunityFundAmount * nMultiplier && nMultiplier > 0)
-                            return state.DoS(100, error("ConnectBlock(): block pays incorrect amount to community fund (actual=%d vs consensus=%d)",
+                            return state.DoS(100, error("ConnectBlock(): block pays incorrect amount to Ankh fund (actual=%d vs consensus=%d)",
                                                         tx.vout[tx.vout.size() - 1].nValue, Params().GetConsensus().nCommunityFundAmount * nMultiplier),
                                     REJECT_INVALID, "bad-cf-amount");
                     }

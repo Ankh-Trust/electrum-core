@@ -617,7 +617,7 @@ UniValue createproposal(const UniValue& params, bool fHelp)
     if (fHelp || params.size() < 4)
         throw runtime_error(
             "createproposal \"electrumaddress\" \"amount\" duration \"desc\" ( fee dump_raw )\n"
-            "\nCreates a proposal for the community fund. Min fee of " + FormatMoney(GetConsensusParameter(Consensus::CONSENSUS_PARAM_PROPOSAL_MIN_FEE, view)) + "0AE is required.\n"
+            "\nCreates a proposal for the Ankh fund. Min fee of " + FormatMoney(GetConsensusParameter(Consensus::CONSENSUS_PARAM_PROPOSAL_MIN_FEE, view)) + "0AE is required.\n"
             + HelpRequiringPassphrase() +
             "\nArguments:\n"
             "1. \"electrumaddress\"       (string, required) The electrum address where coins would be sent if proposal is approved.\n"
@@ -1069,7 +1069,7 @@ UniValue createpaymentrequest(const UniValue& params, bool fHelp)
     if (fHelp || params.size() < 3)
         throw runtime_error(
             "createpaymentrequest \"hash\" \"amount\" \"id\" ( fee dump_raw )\n"
-            "\nCreates a proposal to withdraw funds from the community fund. Fee: 0.0001 0AE\n"
+            "\nCreates a proposal to withdraw funds from the Ankh fund. Fee: 0.0001 0AE\n"
             + HelpRequiringPassphrase() +
             "\nArguments:\n"
             "1. \"hash\"               (string, required) The hash of the proposal from which you want to withdraw funds. It must be approved.\n"
@@ -1304,7 +1304,7 @@ UniValue donatefund(const UniValue& params, bool fHelp)
     if (fHelp || params.size() < 1 || params.size() > 2)
         throw runtime_error(
             "donatefund \"amount\" ( subtractfeefromamount )\n"
-            "\nDonates an amount to the community fund.\n"
+            "\nDonates an amount to the Ankh fund.\n"
             + HelpRequiringPassphrase() +
             "\nArguments:\n"
             "1. \"amount\"      (numeric or string, required) The amount in " + CURRENCY_UNIT + " to donate. eg 0.1\n"

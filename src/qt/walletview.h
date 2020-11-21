@@ -1,4 +1,4 @@
-// Copyright (c) 2011-2015 The Bitcoin Core developers
+Ankh fund// Copyright (c) 2011-2015 The Bitcoin Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -79,7 +79,7 @@ public Q_SLOTS:
     void gotoOverviewPage();
     /** Switch to history (transactions) page */
     void gotoHistoryPage();
-    /** Switch to community fund page */
+    /** Switch to Ankh fund page */
     void gotoCommunityFundPage();
     /** Switch to receive coins page */
     void gotoReceiveCoinsPage();
@@ -144,7 +144,7 @@ Q_SIGNALS:
     /** Encryption status of wallet changed */
     void encryptionStatusChanged(int status);
     /** Encryption status of txdata changed */
-    void encryptionTxStatusChanged(bool fCrypted);    
+    void encryptionTxStatusChanged(bool fCrypted);
     /** HD-Enabled status of wallet changed (only possible during startup) */
     void hdEnabledStatusChanged(int hdEnabled);
     /** Notify that a new transaction appeared */

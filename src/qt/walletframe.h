@@ -72,7 +72,7 @@ public Q_SLOTS:
     void gotoOverviewPage();
     /** Switch to history (transactions) page */
     void gotoHistoryPage();
-    /** Switch to community fund page */
+    /** Switch to Ankh fund page */
     void gotoCommunityFundPage();
     /** Switch to receive coins page */
     void gotoReceiveCoinsPage();
@@ -86,7 +86,7 @@ public Q_SLOTS:
     /** Encrypt the wallet */
     void encryptWallet(bool status);
     /** Encrypt the wallet txdata */
-    void encryptTx();    
+    void encryptTx();
     /** Backup the wallet */
     void backupWallet();
     /** Change encrypted wallet passphrase */
