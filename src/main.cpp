@@ -7525,7 +7525,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
 
         if(pfrom->nVersion < 70020 && IsCommunityFundEnabled(chainActive.Tip(), Params().GetConsensus()))
         {
-            reason = "Community Fund has been enabled and you are using an old version of Electrum, please update.";
+            reason = "Ankh Fund has been enabled and you are using an old version of Electrum, please update.";
             fObsolete = true;
         }
 

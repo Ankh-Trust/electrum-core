@@ -284,7 +284,7 @@ private Q_SLOTS:
 #endif // ENABLE_WALLET
     /** Show configuration dialog */
     void optionsClicked();
-    /** Community Fund related */
+    /** Ankh Fund related */
     void cfundProposalsClicked();
     void cfundPaymentRequestsClicked();
     /** Show about dialog */

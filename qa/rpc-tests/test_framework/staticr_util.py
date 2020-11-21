@@ -13,15 +13,15 @@ from test_framework.util import *
 
 def activate_staticr(node):
     slow_gen(node, 100)
-    # Verify the Community Fund is started
+    # Verify the Ankh Fund is started
     assert (get_bip9_status(node, "static")["status"] == "started")
 
     slow_gen(node, 100)
-    # Verify the Community Fund is locked_in
+    # Verify the Ankh Fund is locked_in
     assert (get_bip9_status(node, "static")["status"] == "locked_in")
 
     slow_gen(node, 100)
-    # Verify the Community Fund is active
+    # Verify the Ankh Fund is active
     assert (get_bip9_status(node, "static")["status"] == "active")
 
 def end_cycle(node):

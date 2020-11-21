@@ -9,9 +9,9 @@
 
 from test_framework.util import *
 
-def givenIHaveActivatedTheCFund(node=None, 
-text=None, 
-questions=None, 
+def givenIHaveActivatedTheCFund(node=None,
+text=None,
+questions=None,
 withAnswers=False):
 
   if (node is None):
@@ -20,15 +20,15 @@ withAnswers=False):
 
   if (get_bip9_status(node, "communityfund")["status"] == "defined"):
     slow_gen(node, 100)
-    # Verify the Community Fund is started
+    # Verify the Ankh Fund is started
     assert (get_bip9_status(node, "communityfund")["status"] == "started")
 
   if (get_bip9_status(node, "communityfund")["status"] == "started"):
     slow_gen(node, 100)
-    # Verify the Community Fund is locked_in
+    # Verify the Ankh Fund is locked_in
     assert (get_bip9_status(node, "communityfund")["status"] == "locked_in")
 
   if (get_bip9_status(node, "communityfund")["status"] == "locked_in"):
     slow_gen(node, 100)
-    # Verify the Community Fund is active
+    # Verify the Ankh Fund is active
     assert (get_bip9_status(node, "communityfund")["status"] == "active")

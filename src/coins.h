@@ -356,7 +356,7 @@ public:
     //! This may (but cannot always) return true for fully spent transactions
     virtual bool HaveCoins(const uint256 &txid) const;
 
-    //! Community Fund
+    //! Ankh Fund
     virtual bool GetProposal(const uint256 &pid, CProposal &proposal) const;
     virtual bool GetAllProposals(CProposalMap& map);
     virtual bool GetPaymentRequest(const uint256 &prid, CPaymentRequest &prequest) const;

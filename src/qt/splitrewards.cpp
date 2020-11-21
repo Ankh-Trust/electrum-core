@@ -129,7 +129,7 @@ void SplitRewardsDialog::showFor(QString sin)
 
             if (teamAddresses.count(key))
             {
-                if (teamAddresses[key] == "Community Fund")
+                if (teamAddresses[key] == "Ankh Fund")
                     nCFundContribution += PercentageToNav(amount);
                 else
                     descs << QString::fromStdString(FormatMoney(PercentageToNav(amount))) + " to " + teamAddresses[key];
