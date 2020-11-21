@@ -1919,7 +1919,7 @@ UniValue reconsiderblock(const UniValue& params, bool fHelp)
 static const CRPCCommand commands[] =
 { //  category              name                      actor (function)         okSafeMode
   //  --------------------- ------------------------  -----------------------  ----------
-  { "communityfund",      "fundstats",             &fundstats,             true  },
+  { "ankhfund",           "fundstats",              &fundstats,              true  },
   { "blockchain",         "getblockchaininfo",      &getblockchaininfo,      true  },
   { "blockchain",         "getbestblockhash",       &getbestblockhash,       true  },
   { "blockchain",         "getblockcount",          &getblockcount,          true  },
