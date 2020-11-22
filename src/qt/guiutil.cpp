@@ -408,7 +408,7 @@ void openDebugLogfile()
         QDesktopServices::openUrl(QUrl::fromLocalFile(boostPathToQString(pathDebug)));
 }
 
-void openElectrumConf()
+void openConfigfile()
 {
      boost::filesystem::path pathConfig = GetConfigFile();
 

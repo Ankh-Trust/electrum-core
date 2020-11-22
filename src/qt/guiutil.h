@@ -120,7 +120,7 @@ namespace GUIUtil
     void openDebugLogfile();
 
     // Open the config file
-    void openElectrumConf();
+    void openConfigfile();
 
     // Replace invalid default fonts with known good ones
     void SubstituteFonts(const QString& language);

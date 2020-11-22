@@ -534,6 +534,8 @@ void ElectrumGUI::createActions()
     openPeersAction->setStatusTip(tr("Show peers info"));
     openRepairAction = new QAction(QIcon(":/icons/options"), tr("Wallet &Repair"), this);
     openRepairAction->setStatusTip(tr("Show wallet repair options"));
+    openConfEditorAction = new QAction(QIcon(":/icons/edit"), tr("Open Wallet &Configuration File"), this);
+    openConfEditorAction->setStatusTip(tr("Open configuration file"));
 
     // initially disable the debug window menu item
     openInfoAction->setEnabled(false);
@@ -579,6 +581,9 @@ void ElectrumGUI::createActions()
     connect(openGraphAction, SIGNAL(triggered()), this, SLOT(showGraph()));
     connect(openPeersAction, SIGNAL(triggered()), this, SLOT(showPeers()));
     connect(openRepairAction, SIGNAL(triggered()), this, SLOT(showRepair()));
+
+    // Open configs and backup folder from menu
+    connect(openConfEditorAction, SIGNAL(triggered()), this, SLOT(showConfEditor()));
 
     // Get restart command-line parameters and handle restart
     connect(rpcConsole, SIGNAL(handleRestart(QStringList)), this, SLOT(handleRestart(QStringList)));
@@ -669,6 +674,8 @@ void ElectrumGUI::createMenuBar()
         tools->addSeparator();
         tools->addAction(openGraphAction);
         tools->addAction(openPeersAction);
+        tools->addSeparator();
+        tools->addAction(openConfEditorAction);
         tools->addSeparator();
         tools->addAction(openRepairAction);
     }
@@ -866,6 +873,8 @@ void ElectrumGUI::createTrayIconMenu()
     trayIconMenu->addAction(openGraphAction);
     trayIconMenu->addAction(openPeersAction);
     trayIconMenu->addAction(openRepairAction);
+    trayIconMenu->addSeparator();
+    trayIconMenu->addAction(openConfEditorAction);
 #ifndef Q_OS_MAC // This is built-in on Mac
     trayIconMenu->addSeparator();
     trayIconMenu->addAction(quitAction);
@@ -965,6 +974,11 @@ void ElectrumGUI::showRepair()
 {
     rpcConsole->setTabFocus(RPCConsole::TAB_REPAIR);
     showDebugWindow();
+}
+
+void ElectrumGUI::showConfEditor()
+{
+    GUIUtil::openConfigfile();
 }
 
 void ElectrumGUI::showHelpMessageClicked()

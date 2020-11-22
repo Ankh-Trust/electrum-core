@@ -794,19 +794,6 @@ QTabBar { alignment: left; }</string>
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_Buttons">
        <item>
-        <widget class="QPushButton" name="openElectrumConfButton">
-         <property name="toolTip">
-          <string>Open the %1 configuration file from the working directory.</string>
-         </property>
-         <property name="text">
-          <string>Open Configuration File</string>
-         </property>
-         <property name="autoDefault">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
         <widget class="QPushButton" name="resetButton">
          <property name="toolTip">
           <string>Reset all client options to default.</string>
