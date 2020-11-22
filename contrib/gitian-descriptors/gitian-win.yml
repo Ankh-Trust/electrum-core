@@ -1,5 +1,5 @@
 ---
-name: "electrum-win-4.0.0"
+name: "electrum-win-1.0.0"
 enable_cache: true
 distro: "ubuntu"
 suites:
@@ -24,7 +24,7 @@ packages:
 - "python3"
 - "rename"
 remotes:
-- "url": "https://github.com/electrum/electrum-core.git"
+- "url": "https://github.com/ankh-trust/electrum-core.git"
   "dir": "electrum-core"
 files: []
 script: |

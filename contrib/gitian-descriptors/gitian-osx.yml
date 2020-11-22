@@ -1,5 +1,5 @@
 ---
-name: "electrum-osx-4.0.0"
+name: "electrum-osx-1.0.0"
 enable_cache: true
 distro: "ubuntu"
 suites:
@@ -29,7 +29,7 @@ packages:
 - "python3-setuptools"
 - "fonts-tuffy"
 remotes:
-- "url": "https://github.com/electrum/electrum-core.git"
+- "url": "https://github.com/ankh-trust/electrum-core.git"
   "dir": "electrum-core"
 files:
 - "MacOSX10.11.sdk.tar.gz"
