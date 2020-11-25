@@ -153,8 +153,8 @@ public:
         consensus.nCoinbaseMaturity = 50;
 
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].bit = 28;
-        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = 1573776000; // Nov 15th, 2019
-        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nTimeout = 1668470400; // Nov 15th, 2022
+        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = 1199145601; // January 1, 2008
+        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nTimeout = 1230767999; // December 31, 2008
 
         // Deployment of BIP68, BIP112, and BIP113.
         consensus.vDeployments[Consensus::DEPLOYMENT_CSV].bit = 0;
@@ -346,7 +346,7 @@ public:
         consensus.nRuleChangeActivationThreshold = 300; // 75% of 400
         consensus.nMinerConfirmationWindow = 400;
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].bit = 28;
-        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = 1573776000; // Nov 15th, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = 1199145601; // January 1, 2008
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nTimeout = 1230767999; // December 31, 2008
         consensus.nStakeMinAge = 2;	// minimum for coin age: 2 seconds
         consensus.nTargetSpacing = 30; // Blocktime: 30 secs
@@ -571,8 +571,8 @@ public:
         consensus.nRuleChangeActivationThreshold = 75; // 75% of 400
         consensus.nMinerConfirmationWindow = 100;
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].bit = 28;
-        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = 1573776000; // Nov 15th, 2019
-        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nTimeout = 1668470400; // Nov 15th, 2022
+        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = 1199145601; // January 1, 2008
+        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nTimeout = 1230767999; // December 31, 2008
         consensus.nStakeMinAge = 2;	// minimum for coin age: 2 seconds
         consensus.nTargetSpacing = 5; // Blocktime: 5 secs
         consensus.nStakeCombineThreshold = 1000 * COIN;
