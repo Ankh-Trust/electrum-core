@@ -25,14 +25,14 @@ QIcon ElectrumPushButton::getBadgeIcon(int nValue)
     QImage img(32, 32, QImage::Format_ARGB32);
     img.fill(QColor(0, 0, 0, 0));
     QPainter *p = new QPainter(&img);
-    p->setBrush(QColor(0xff, 0x66, 0x66));
+    p->setBrush(QColor(0x66, 0x02, 0x3C));
     p->setRenderHint(QPainter::Antialiasing);
     p->setRenderHint(QPainter::TextAntialiasing);
     p->setRenderHint(QPainter::SmoothPixmapTransform);
     QFont f("courier new");
     f.setPixelSize(16);
     f.setBold(true);
-    p->setPen(Qt::white);
+    p->setPen(QColor(0xCF, 0xB5, 0x3B));
     p->drawEllipse(img.rect());
     p->setFont(f);
     p->drawText(img.rect(), Qt::AlignCenter, nValue > 9 ? "9+" : QString::number(nValue));
