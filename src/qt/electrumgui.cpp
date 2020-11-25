@@ -178,8 +178,8 @@ ElectrumGUI::ElectrumGUI(const PlatformStyle *platformStyle, const NetworkStyle 
     updatePriceAction(0),
     fShowingVoting(0)
 {
-    GUIUtil::restoreWindowGeometry("nWindow", QSize(1152, 576), this);
-    setMinimumSize(QSize(1152, 576));
+    GUIUtil::restoreWindowGeometry("nWindow", QSize(1152, 720), this);
+    setMinimumSize(QSize(1152, 720));
     QString windowTitle = tr("Electrum Core") + "";
 #ifdef ENABLE_WALLET
     /* if compiled with wallet support, -disablewallet can still disable the wallet */
