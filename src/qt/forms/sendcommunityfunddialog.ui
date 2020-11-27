@@ -172,7 +172,7 @@
        <item>
         <widget class="QLabel" name="labelRequestedAmount">
          <property name="text">
-          <string>100 0AE / 100 EUR / 100 USD / 100 BTC</string>
+          <string>100 0AE / 100 USD / 100 BTC / 100 XAU</string>
          </property>
         </widget>
        </item>

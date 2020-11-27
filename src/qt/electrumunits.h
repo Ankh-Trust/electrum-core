@@ -63,6 +63,7 @@ public:
         BTC, // Bitcoin
         EUR, // Euro
         USD, // United States Dollar
+        XAU, // Gold /oz
 
         // Added more currencies
         ARS, // Argentine Peso

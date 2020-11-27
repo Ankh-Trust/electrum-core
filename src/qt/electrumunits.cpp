@@ -28,6 +28,7 @@ QList<ElectrumUnits::Unit> ElectrumUnits::availableUnits()
 
     unitlist.append(_AE); // Electrum
     unitlist.append(BTC); // Bitcoin
+    unitlist.append(XAU); // Gold /oz
     unitlist.append(EUR); // Euro
     unitlist.append(USD); // United States Dollar
     unitlist.append(ARS); // Argentine Peso
@@ -70,6 +71,7 @@ bool ElectrumUnits::valid(int unit)
     {
         case _AE:
         case BTC:
+        case XAU:
         case EUR:
         case USD:
         case ARS:
@@ -114,6 +116,7 @@ QString ElectrumUnits::name(int unit)
     {
         case _AE: return QString("0AE");
         case BTC: return QString("BTC");
+        case XAU: return QString("XAU");
         case EUR: return QString("EUR");
         case USD: return QString("USD");
         case ARS: return QString("ARS");
@@ -156,6 +159,7 @@ QString ElectrumUnits::description(int unit)
     {
         case _AE: return QString("Electrum");
         case BTC: return QString("Bitcoin");
+        case XAU: return QString("Gold /oz");
         case EUR: return QString("Euro");
         case USD: return QString("United States Dollar");
         case ARS: return QString("Argentine Peso");
@@ -201,6 +205,7 @@ qint64 ElectrumUnits::factor(int unit)
     {
         case _AE: return 100000000;
         case BTC: return settings.value("btcFactor", 0).toFloat();
+        case XAU: return settings.value("xauFactor", 0).toFloat();
         case EUR: return settings.value("eurFactor", 0).toFloat();
         case USD: return settings.value("usdFactor", 0).toFloat();
         case ARS: return settings.value("arsFactor", 0).toFloat();
@@ -243,6 +248,7 @@ int ElectrumUnits::decimals(int unit)
     {
         case _AE: return 8;
         case BTC: return 8;
+        case XAU:
         case EUR:
         case USD:
         case ARS:

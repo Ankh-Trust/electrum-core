@@ -1668,6 +1668,7 @@ void ElectrumGUI::updatePrice()
             std::string url(
                     "https://api.coingecko.com/api/v3/simple/price?ids=sequence&vs_currencies="
                     "BTC,"
+                    "XAU,"
                     "EUR,"
                     "USD,"
                     "ARS,"
@@ -1729,6 +1730,7 @@ void ElectrumGUI::updatePrice()
             QSettings settings;
             // Save the values
             settings.setValue("btcFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("btc"))) * 100000000);
+            settings.setValue("xauFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("xau"))) * 100000000);
             settings.setValue("eurFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("eur"))) * 100000000);
             settings.setValue("usdFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("usd"))) * 100000000);
             settings.setValue("arsFactor", (1.0 / boost::lexical_cast<double>(json.get<std::string>("ars"))) * 100000000);

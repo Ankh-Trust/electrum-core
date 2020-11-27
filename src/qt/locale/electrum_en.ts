@@ -2041,7 +2041,7 @@
     </message>
     <message>
         <location line="+7"/>
-        <source>100 0AE / 100 EUR / 100 USD / 100 BTC</source>
+        <source>100 0AE / 100 USD / 100 BTC / 100 XAU</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

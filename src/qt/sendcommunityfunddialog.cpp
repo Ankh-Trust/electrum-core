@@ -36,7 +36,7 @@ SendCommunityFundDialog::SendCommunityFundDialog(QWidget *parent, CProposal* pro
 
     // Amount label
     QSettings settings;
-    ui->labelRequestedAmount->setText(QString("%1 0AE / ").arg(proposal->nAmount/COIN).append("%1 EUR / ").arg(proposal->nAmount / settings.value("eurFactor", 0).toFloat()).append("%2 USD / ").arg(proposal->nAmount / settings.value("usdFactor", 0).toFloat()).append("%3 BTC").arg(proposal->nAmount / settings.value("btcFactor", 0).toFloat()));
+    ui->labelRequestedAmount->setText(QString("%1 0AE / ").arg(proposal->nAmount/COIN).append("%1 USD / ").arg(proposal->nAmount / settings.value("usdFactor", 0).toFloat()).append("%2 BTC / ").arg(proposal->nAmount / settings.value("btcFactor", 0).toFloat()).append("%3 XAU").arg(proposal->nAmount / settings.value("xauFactor", 0).toFloat()));
 
     // Format long descriptions
     std::string description = proposal->strDZeel.c_str();
@@ -93,7 +93,7 @@ SendCommunityFundDialog::SendCommunityFundDialog(QWidget *parent, CPaymentReques
 
     // Amount label
     QSettings settings;
-    ui->labelRequestedAmount->setText(QString("%1 0AE / ").arg(prequest->nAmount/COIN).append("%1 EUR / ").arg(prequest->nAmount / settings.value("eurFactor", 0).toFloat()).append("%2 USD / ").arg(prequest->nAmount / settings.value("usdFactor", 0).toFloat()).append("%3 BTC").arg(prequest->nAmount / settings.value("btcFactor", 0).toFloat()));
+    ui->labelRequestedAmount->setText(QString("%1 0AE / ").arg(prequest->nAmount/COIN).append("%1 USD / ").arg(prequest->nAmount / settings.value("usdFactor", 0).toFloat()).append("%2 BTC / ").arg(prequest->nAmount / settings.value("btcFactor", 0).toFloat()).append("%3 XAU").arg(prequest->nAmount / settings.value("xauFactor", 0).toFloat()));
 
     // Format long descriptions
     std::string description = prequest->strDZeel.c_str();
