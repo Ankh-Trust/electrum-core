@@ -53,8 +53,8 @@ static std::string sDeploymentsDesc[Consensus::MAX_VERSION_BITS_DEPLOYMENTS] = {
     "Upgrade to POSv3. Every staked block will have a fixed reward of 0.9 0AE",
     "Reduce the Quorum necessary for the last cycles of the Ankh Fund votings",
     "Upgrades the Ankh Fund with a state based cache which will save on block space as votes do not need to be broadcasted every block",
-    "Enable DAO Consultations",
-    "Enables remote DAO voting from light wallets",
+    "Enable Consultations",
+    "Enables remote voting from light wallets",
     "Enables the decision over consensus parameters using distributed voting",
     "Allows staking pools to charge a fee"
 };
