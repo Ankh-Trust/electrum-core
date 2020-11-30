@@ -237,8 +237,8 @@ public:
 
         // Deployment of Exclude voters
         consensus.vDeployments[Consensus::DEPLOYMENT_EXCLUDE].bit = 28;
-        consensus.vDeployments[Consensus::DEPLOYMENT_POOL_FEE].nStartTime = 1573776000; // Nov 15th, 2019
-        consensus.vDeployments[Consensus::DEPLOYMENT_POOL_FEE].nTimeout = 1668470400; // Nov 15th, 2022
+        consensus.vDeployments[Consensus::DEPLOYMENT_EXCLUDE].nStartTime = 1573776000; // Nov 15th, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_EXCLUDE].nTimeout = 1668470400; // Nov 15th, 2022
 
         // Deployment of Cold Staking Pool Fee
         consensus.vDeployments[Consensus::DEPLOYMENT_POOL_FEE].bit = 18;
