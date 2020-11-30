@@ -7,7 +7,7 @@ class ListView : public QListView {
       if (model() && model()->rowCount(rootIndex()) > 0) return;
       // The view is empty.
       QPainter p(this->viewport());
-      p.drawText(rect(), Qt::AlignCenter, "No transactions");
+      p.drawText(rect(), Qt::AlignLeft, "No transactions");
    }
 public:
    ListView(QWidget* parent = 0) : QListView(parent) {}
