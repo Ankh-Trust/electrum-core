@@ -56,7 +56,8 @@ static std::string sDeploymentsDesc[Consensus::MAX_VERSION_BITS_DEPLOYMENTS] = {
     "Enable Consultations",
     "Enables remote voting from light wallets",
     "Enables the decision over consensus parameters using distributed voting",
-    "Allows staking pools to charge a fee"
+    "Allows staking pools to charge a fee",
+    "Excludes inactive stakers from votings"
 };
 
 /**
