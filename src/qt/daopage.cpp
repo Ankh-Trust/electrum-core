@@ -547,7 +547,7 @@ void DaoPage::initialize(CProposalMap proposalMap, CPaymentRequestMap paymentReq
         {
         case DAOFlags::NIL:
         {
-            p.color = "#6666ff";
+            p.color = "#ffdd66";
             break;
         }
         case DAOFlags::ACCEPTED:
@@ -652,7 +652,7 @@ void DaoPage::initialize(CProposalMap proposalMap, CPaymentRequestMap paymentReq
         {
         case DAOFlags::NIL:
         {
-            p.color = "#6666ff";
+            p.color = "#ffdd66";
             break;
         }
         case DAOFlags::ACCEPTED:
@@ -844,7 +844,7 @@ void DaoPage::initialize(CProposalMap proposalMap, CPaymentRequestMap paymentReq
         {
         case DAOFlags::NIL:
         {
-            p.color = "#6666ff";
+            p.color = "#ffdd66";
             break;
         }
         case DAOFlags::ACCEPTED:
