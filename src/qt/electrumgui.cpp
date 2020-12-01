@@ -463,6 +463,8 @@ void ElectrumGUI::createActions()
     // can be triggered from the tray menu, and need to show the GUI to be useful.
     connect(overviewAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
     connect(overviewAction, SIGNAL(triggered()), this, SLOT(gotoOverviewPage()));
+    connect(daoAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
+    connect(daoAction, SIGNAL(triggered()), this, SLOT(gotoCommunityFundPage()));
     connect(sendCoinsAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
     connect(sendCoinsAction, SIGNAL(triggered()), this, SLOT(gotoSendCoinsPage()));
     connect(sendCoinsMenuAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
@@ -473,8 +475,6 @@ void ElectrumGUI::createActions()
     connect(receiveCoinsMenuAction, SIGNAL(triggered()), this, SLOT(gotoReceiveCoinsPage()));
     connect(historyAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
     connect(historyAction, SIGNAL(triggered()), this, SLOT(gotoHistoryPage()));
-    connect(daoAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
-    connect(daoAction, SIGNAL(triggered()), this, SLOT(gotoCommunityFundPage()));
     connect(toggleStakingAction, SIGNAL(triggered()), this, SLOT(toggleStaking()));
     connect(splitRewardAction, SIGNAL(triggered()), this, SLOT(splitRewards()));
     connect(generateColdStakingAction, SIGNAL(triggered()), this, SLOT(generateColdStaking()));
@@ -696,10 +696,10 @@ void ElectrumGUI::createToolBars()
         QToolBar* toolbar = new QToolBar(tr("Tabs toolbar"));
         toolbar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
         toolbar->addAction(overviewAction);
+        toolbar->addAction(daoAction);
         toolbar->addAction(sendCoinsAction);
         toolbar->addAction(receiveCoinsAction);
         toolbar->addAction(historyAction);
-        toolbar->addAction(daoAction);
 
         /** Create additional container for toolbar and walletFrame and make it the central widget.
             This is a workaround mostly for toolbar styling on Mac OS but should work fine for every other OSes too.
@@ -802,12 +802,12 @@ void ElectrumGUI::removeAllWallets()
 void ElectrumGUI::setWalletActionsEnabled(bool enabled)
 {
     overviewAction->setEnabled(enabled);
+    daoAction->setEnabled(enabled);
     sendCoinsAction->setEnabled(enabled);
     sendCoinsMenuAction->setEnabled(enabled);
     receiveCoinsAction->setEnabled(enabled);
     receiveCoinsMenuAction->setEnabled(enabled);
     historyAction->setEnabled(enabled);
-    daoAction->setEnabled(enabled);
     encryptWalletAction->setEnabled(enabled);
     encryptTxAction->setEnabled(enabled);
     backupWalletAction->setEnabled(enabled);
@@ -1002,16 +1002,16 @@ void ElectrumGUI::gotoOverviewPage()
     if (walletFrame) walletFrame->gotoOverviewPage();
 }
 
-void ElectrumGUI::gotoHistoryPage()
-{
-    historyAction->setChecked(true);
-    if (walletFrame) walletFrame->gotoHistoryPage();
-}
-
 void ElectrumGUI::gotoCommunityFundPage()
 {
     daoAction->setChecked(true);
     if (walletFrame) walletFrame->gotoCommunityFundPage();
+}
+
+void ElectrumGUI::gotoSendCoinsPage(QString addr)
+{
+    sendCoinsAction->setChecked(true);
+    if (walletFrame) walletFrame->gotoSendCoinsPage(addr);
 }
 
 void ElectrumGUI::gotoReceiveCoinsPage()
@@ -1020,10 +1020,10 @@ void ElectrumGUI::gotoReceiveCoinsPage()
     if (walletFrame) walletFrame->gotoReceiveCoinsPage();
 }
 
-void ElectrumGUI::gotoSendCoinsPage(QString addr)
+void ElectrumGUI::gotoHistoryPage()
 {
-    sendCoinsAction->setChecked(true);
-    if (walletFrame) walletFrame->gotoSendCoinsPage(addr);
+    historyAction->setChecked(true);
+    if (walletFrame) walletFrame->gotoHistoryPage();
 }
 
 void ElectrumGUI::gotoSignMessageTab(QString addr)
