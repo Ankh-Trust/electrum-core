@@ -408,11 +408,18 @@ void ElectrumGUI::createActions()
     overviewAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_1));
     tabGroup->addAction(overviewAction);
 
+    daoAction = new QAction(QIcon(":/icons/proposals"), tr("&Proposals"), this);
+    daoAction->setStatusTip(tr("Participate in the ecosystem"));
+    daoAction->setToolTip(daoAction->statusTip());
+    daoAction->setCheckable(true);
+    daoAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_2));
+    tabGroup->addAction(daoAction);
+
     sendCoinsAction = new QAction(QIcon(":/icons/send"), tr("&Send"), this);
     sendCoinsAction->setStatusTip(tr("Send coins to a Electrum address"));
     sendCoinsAction->setToolTip(sendCoinsAction->statusTip());
     sendCoinsAction->setCheckable(true);
-    sendCoinsAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_2));
+    sendCoinsAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_3));
     tabGroup->addAction(sendCoinsAction);
 
     sendCoinsMenuAction = new QAction(QIcon(":/icons/send"), sendCoinsAction->text(), this);
@@ -423,7 +430,7 @@ void ElectrumGUI::createActions()
     receiveCoinsAction->setStatusTip(tr("Request payments (generates QR codes and electrum: URIs)"));
     receiveCoinsAction->setToolTip(receiveCoinsAction->statusTip());
     receiveCoinsAction->setCheckable(true);
-    receiveCoinsAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_3));
+    receiveCoinsAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_4));
     tabGroup->addAction(receiveCoinsAction);
 
     receiveCoinsMenuAction = new QAction(QIcon(":/icons/receiving_addresses"), receiveCoinsAction->text(), this);
@@ -443,15 +450,8 @@ void ElectrumGUI::createActions()
     historyAction->setStatusTip(tr("Browse transaction history"));
     historyAction->setToolTip(historyAction->statusTip());
     historyAction->setCheckable(true);
-    historyAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_4));
+    historyAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_5));
     tabGroup->addAction(historyAction);
-
-    daoAction = new QAction(QIcon(":/icons/proposals"), tr("&Proposals"), this);
-    daoAction->setStatusTip(tr("Participate in the ecosystem"));
-    daoAction->setToolTip(daoAction->statusTip());
-    daoAction->setCheckable(true);
-    daoAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_5));
-    tabGroup->addAction(daoAction);
 
     updatePriceAction  = new QAction(QIcon(":/icons/verify"), tr("Update exchange prices"), this);
     updatePriceAction->setStatusTip(tr("Update exchange prices"));
