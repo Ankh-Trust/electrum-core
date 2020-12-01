@@ -24,7 +24,7 @@ enum HTTPStatusCode
     HTTP_NOT_FOUND             = 404,
     HTTP_BAD_METHOD            = 405,
     HTTP_INTERNAL_SERVER_ERROR = 500,
-    HTTP_SERVICE_U0AEAILABLE   = 503,
+    HTTP_SERVICE_UNAVAILABLE   = 503,
 };
 
 //! Electrum RPC error codes
