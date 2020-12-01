@@ -34,7 +34,7 @@ SignVerifyMessageDialog::SignVerifyMessageDialog(const PlatformStyle *platformSt
     ui->signMessageButton_SM->setIcon(QIcon(":/icons/edit"));
     ui->clearButton_SM->setIcon(QIcon(":/icons/remove"));
     ui->addressBookButton_VM->setIcon(QIcon(":/icons/address-book"));
-    ui->verifyMessageButton_VM->setIcon(QIcon(":/icons/transaction_0"));
+    ui->verifyMessageButton_VM->setIcon(QIcon(":/icons/verify"));
     ui->clearButton_VM->setIcon(QIcon(":/icons/remove"));
 
     ui->signatureOut_SM->setPlaceholderText(tr("Click \"Sign Message\" to generate signature"));
