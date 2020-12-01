@@ -454,18 +454,15 @@ QVariant TransactionTableModel::addressColor(const TransactionRecord *wtx) const
     switch(wtx->type)
     {
     case TransactionRecord::AnonTx:
-        return QVariant();
     case TransactionRecord::RecvWithAddress:
     case TransactionRecord::SendToAddress:
     case TransactionRecord::Generated:
-    case TransactionRecord::Staked:
-        {
+    case TransactionRecord::Staked: {
         QString label = walletModel->getAddressTableModel()->labelForAddress(QString::fromStdString(wtx->address));
         if(label.isEmpty())
-            return QVariant();
-        } break;
+            return COLOR_BAREADDRESS;
+    } break;
     case TransactionRecord::SendToSelf:
-        return QVariant();
     default:
         break;
     }
