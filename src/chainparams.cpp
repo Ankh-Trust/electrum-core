@@ -311,9 +311,9 @@ public:
             ( 2500, uint256S("0x58b554ba13db0e5331b60281f7a24c1dc663ee2465e82e3dd67f857c9d3cfb1f"))
             ( 5000, uint256S("0x1c0ad8b6468c17980fac7850c60b0ad3348cf8fae065ffb9a7815b42db5ca044"))
             ( 10000, uint256S("0xda26ca821a51b3cde71ce6b2fd030b5d3f2f4a54c0a516e979868c0f9bf26327"))
-            ( 25000, uint256S("0xd2316b427a6a9f74343e1ece7defd500f5eda066e844b28729e7cb8e82fa2c10")),
-            /*( 50000, uint256S("0x7a25b61cb771d98c71f91452e3af628c69d9d8055ea6d776c49c09d1763ecd3c"))
-            ( 100000, uint256S("0xaabf04d3961c67fc6dbb09c7b898bde1523d035d5f5ed26db739659152a89d11"))
+            ( 25000, uint256S("0xd2316b427a6a9f74343e1ece7defd500f5eda066e844b28729e7cb8e82fa2c10"))
+            ( 50000, uint256S("0xaaa50649a4f579353fb01922fc44001d94a0fdb174a7dc2f5108242a56abfb19")),
+            /*( 100000, uint256S("0xaabf04d3961c67fc6dbb09c7b898bde1523d035d5f5ed26db739659152a89d11"))
             ( 250000, uint256S("0xaabf04d3961c67fc6dbb09c7b898bde1523d035d5f5ed26db739659152a89d11"))
             ( 500000, uint256S("0x7b1d1487143d99b1b0b43a4578f32543ba2b4497ff4909acbc6b97ca951319bb")),*/
             1605398400, // * UNIX timestamp of last checkpoint block
