@@ -43,7 +43,7 @@ config file):
 
 	HiddenServiceDir /var/lib/tor/electrum-service/
 	HiddenServicePort 5556 127.0.0.1:8333
-	HiddenServicePort 15556 127.0.0.1:18333
+	HiddenServicePort 45556 127.0.0.1:18333
 
 The directory can be different of course, but (both) port numbers should be equal to
 your electrumd's P2P listen port (5556 by default).
@@ -96,7 +96,7 @@ API, to create and destroy 'ephemeral' hidden services programmatically.
 Electrum Core has been updated to make use of this.
 
 This means that if Tor is running (and proper authentication has been configured),
-Electrum Core automatically creates a hidden service to listen on. This will positively 
+Electrum Core automatically creates a hidden service to listen on. This will positively
 affect the number of available .onion nodes.
 
 This new feature is enabled by default if Electrum Core is listening, and
@@ -104,13 +104,13 @@ a connection to Tor can be made. It can be configured with the `-listenonion`,
 `-torcontrol` and `-torpassword` settings. To show verbose debugging
 information, pass `-debug=tor`.
 
-Connecting to Tor's control socket API requires one of two authentication methods to be 
-configured. For cookie authentication the user running electrumd must have write access 
-to the `CookieAuthFile` specified in Tor configuration. In some cases this is 
-preconfigured and the creation of a hidden service is automatic. If permission problems 
-are seen with `-debug=tor` they can be resolved by adding both the user running tor and 
-the user running electrumd to the same group and setting permissions appropriately. On 
-Debian-based systems the user running electrumd can be added to the debian-tor group, 
-which has the appropriate permissions. An alternative authentication method is the use 
-of the `-torpassword` flag and a `hash-password` which can be enabled and specified in 
+Connecting to Tor's control socket API requires one of two authentication methods to be
+configured. For cookie authentication the user running electrumd must have write access
+to the `CookieAuthFile` specified in Tor configuration. In some cases this is
+preconfigured and the creation of a hidden service is automatic. If permission problems
+are seen with `-debug=tor` they can be resolved by adding both the user running tor and
+the user running electrumd to the same group and setting permissions appropriately. On
+Debian-based systems the user running electrumd can be added to the debian-tor group,
+which has the appropriate permissions. An alternative authentication method is the use
+of the `-torpassword` flag and a `hash-password` which can be enabled and specified in
 Tor configuration.
