@@ -25,20 +25,19 @@ public:
     QColor SingleColor() const { return singleColor; }
 
     /** Colorize an image (given filename) with the icon color */
-    QImage Image(const QString& filename) const;
+    QImage SingleColorImage(const QString& filename) const;
 
     /** Colorize an icon (given filename) with the icon color */
-    QIcon Icon(const QString& filename) const;
-    QIcon Icon(const QString& filename, const QString& colorbase) const;
+    QIcon SingleColorIcon(const QString& filename) const;
 
     /** Colorize an icon (given object) with the icon color */
-    QIcon Icon(const QIcon& icon) const;
+    QIcon SingleColorIcon(const QIcon& icon) const;
 
     /** Colorize an icon (given filename) with the text color */
-    QIcon IconAlt(const QString& filename) const;
+    QIcon TextColorIcon(const QString& filename) const;
 
     /** Colorize an icon (given object) with the text color */
-    QIcon IconAlt(const QIcon& icon) const;
+    QIcon TextColorIcon(const QIcon& icon) const;
 
 private:
     PlatformStyle(const QString &name, bool imagesOnButtons, bool colorizeIcons, bool useExtraSpacing);
