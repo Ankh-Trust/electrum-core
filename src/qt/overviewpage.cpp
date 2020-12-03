@@ -199,8 +199,6 @@ void OverviewPage::setBalance(
     ui->labelTotal->setText(ElectrumUnits::floorHtmlWithUnit(unit, currentTotalBalance + currentWatchOnlyTotalBalance, false, ElectrumUnits::separatorAlways));
 
     updateStakeReportNow();
-
-    uiInterface.SetBalance(currentBalance, currentUnconfirmedBalance, currentImmatureBalance);
 }
 
 // show/hide watch-only labels
@@ -336,8 +334,6 @@ void OverviewPage::updateStakeReport(bool fImmediate=false)
     ui->label1yStakingStats->setText(ElectrumUnits::floorHtmlWithUnit(unit, amount1y, false, ElectrumUnits::separatorAlways));
     ui->labelallStakingStats->setText(ElectrumUnits::floorHtmlWithUnit(unit, amountAll, false, ElectrumUnits::separatorAlways));
     ui->labelExpectedStakingStats->setText(ElectrumUnits::floorHtmlWithUnit(unit, nExpectedDailyReward, false, ElectrumUnits::separatorAlways));
-
-    uiInterface.SetStaked(amountAll, amount24h, amount7d);
 }
 
 
