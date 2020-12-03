@@ -24,7 +24,7 @@ RecentRequestsTableModel::RecentRequestsTableModel(CWallet *wallet, WalletModel 
         addNewRequest(request);
 
     /* These columns must match the indices in the ColumnIndex enumeration */
-    columns << tr("Date") << tr("Label") << tr("Message") << getAmountTitle();
+    columns << tr("Date") << tr("Address") << tr("Label") << tr("Message") << getAmountTitle();
 
     connect(walletModel->getOptionsModel(), SIGNAL(displayUnitChanged(int)), this, SLOT(updateDisplayUnit()));
 }
@@ -61,6 +61,12 @@ QVariant RecentRequestsTableModel::data(const QModelIndex &index, int role) cons
         {
         case Date:
             return GUIUtil::dateTimeStr(rec->date);
+        case Address:
+            if (rec->recipient.address.isEmpty() && role == Qt::DisplayRole) {
+                return tr("(no address)");
+            } else {
+                return rec->recipient.address;
+            }
         case Label:
             if(rec->recipient.label.isEmpty() && role == Qt::DisplayRole)
             {
@@ -222,10 +228,11 @@ bool RecentRequestEntryLessThan::operator()(RecentRequestEntry &left, RecentRequ
     if (order == Qt::DescendingOrder)
         std::swap(pLeft, pRight);
 
-    switch(column)
-    {
+    switch(column) {
     case RecentRequestsTableModel::Date:
         return pLeft->date.toTime_t() < pRight->date.toTime_t();
+    case RecentRequestsTableModel::Address:
+        return pLeft->recipient.address < pRight->recipient.address;
     case RecentRequestsTableModel::Label:
         return pLeft->recipient.label < pRight->recipient.label;
     case RecentRequestsTableModel::Message:
