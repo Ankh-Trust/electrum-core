@@ -28,7 +28,7 @@ class CreateRawScriptAddress(ElectrumTestFramework):
         self.nodes[0].sendtoaddress("3HnzbJ4TR9", 100)
         self.nodes[0].generate(1)
 
-        assert_equal(self.nodes[0].getinfo()["communityfund"]["available"], 100)
+        assert_equal(self.nodes[0].getinfo()["ankhfund"]["available"], 100)
 
 if __name__ == '__main__':
     CreateRawScriptAddress().main()

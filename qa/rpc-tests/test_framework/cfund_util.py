@@ -14,15 +14,15 @@ from test_framework.util import *
 def activate_cfund(node):
     slow_gen(node, 100)
     # Verify the Ankh Fund is started
-    assert (get_bip9_status(node, "communityfund")["status"] == "started")
+    assert (get_bip9_status(node, "ankhfund")["status"] == "started")
 
     slow_gen(node, 100)
     # Verify the Ankh Fund is locked_in
-    assert (get_bip9_status(node, "communityfund")["status"] == "locked_in")
+    assert (get_bip9_status(node, "ankhfund")["status"] == "locked_in")
 
     slow_gen(node, 100)
     # Verify the Ankh Fund is active
-    assert (get_bip9_status(node, "communityfund")["status"] == "active")
+    assert (get_bip9_status(node, "ankhfund")["status"] == "active")
 
 def activate_softfork(node, what):
     slow_gen(node, 100)

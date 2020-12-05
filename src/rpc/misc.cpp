@@ -99,7 +99,7 @@ UniValue getinfo(const UniValue& params, bool fHelp)
     cf.pushKV("available",      ValueFromAmount(chainActive.Tip()->nCFSupply));
     cf.pushKV("locked",         ValueFromAmount(chainActive.Tip()->nCFLocked));
 
-    obj.pushKV("communityfund", cf);
+    obj.pushKV("ankhfund", cf);
     obj.pushKV("timeoffset",    GetTimeOffset());
     obj.pushKV("ntptimeoffset", GetNtpTimeOffset());
     obj.pushKV("connections",   (int)vNodes.size());
