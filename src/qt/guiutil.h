@@ -35,9 +35,6 @@ QT_END_NAMESPACE
  */
 namespace GUIUtil
 {
-    /** Get the screen scale, usefull for scaling UI elements */
-    float scale();
-
     // Create human-readable string from date
     QString dateTimeStr(const QDateTime &datetime);
     QString dateTimeStr(qint64 nTime);
