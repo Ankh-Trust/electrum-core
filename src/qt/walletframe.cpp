@@ -8,13 +8,10 @@
 #include <qt/walletview.h>
 #include <util.h>
 
-#include <guiutil.h>
-
 #include <cstdio>
 
 #include <QHBoxLayout>
 #include <QLabel>
-#include <QVBoxLayout>
 
 WalletFrame::WalletFrame(const PlatformStyle *platformStyle, ElectrumGUI *_gui) :
     QFrame(_gui),
