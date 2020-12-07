@@ -21,46 +21,34 @@ WalletFrame::WalletFrame(const PlatformStyle *platformStyle, ElectrumGUI *_gui) 
     gui(_gui),
     platformStyle(platformStyle)
 {
-    int headerMargin = 15;
-
     // Leave HBox hook for adding a list view later
-    QHBoxLayout *frameLayout = new QHBoxLayout(this);
-    frameLayout->setSpacing(0);
-    frameLayout->setContentsMargins(0, 0, 0, 0);
-
-    QVBoxLayout *mainLayout = new QVBoxLayout();
-    mainLayout->setContentsMargins(0, 0, 0, 0);
-    mainLayout->setSpacing(0);
+    QVBoxLayout *walletFrameLayout = new QVBoxLayout(this);
+    QHBoxLayout *topLayout = new QHBoxLayout();
+    QHBoxLayout *bottomLayout = new QHBoxLayout();
 
     menuLayout = new QHBoxLayout();
     menuLayout->setContentsMargins(0, 0, 0, 0);
     menuLayout->setSpacing(0);
-    menuLayout->setAlignment(Qt::AlignLeft);
 
-    headerLayout = new QVBoxLayout();
-    headerLayout->setContentsMargins(headerMargin, headerMargin, headerMargin, headerMargin);
-    headerLayout->setSpacing(headerMargin);
+    walletFrameLayout->setSpacing(0);
+    walletFrameLayout->setContentsMargins(0,0,0,0);
 
-    QHBoxLayout* headLayout = new QHBoxLayout();
-    headLayout->setContentsMargins(0, 0, 0, 0);
-    headLayout->setSpacing(0);
-    headerLayout->addLayout(headLayout);
+    setContentsMargins(0,0,0,0);
+
+    topLayout->setContentsMargins(0,0,0,0);
+    topLayout->setSpacing(0);
 
     walletStack = new QStackedWidget(this);
 
-    QHBoxLayout* contentLayout = new QHBoxLayout();
-    contentLayout->setContentsMargins(0, 0, 0, 0);
-    contentLayout->addWidget(walletStack);
+    bottomLayout->setContentsMargins(0,0,0,0);
+    bottomLayout->addWidget(walletStack);
 
     QLabel* noWallet = new QLabel(tr("No wallet has been loaded."));
     noWallet->setAlignment(Qt::AlignCenter);
     walletStack->addWidget(noWallet);
 
-    mainLayout->addLayout(menuLayout);
-    //mainLayout->addLayout(headerLayout);
-    mainLayout->addLayout(contentLayout);
-
-    frameLayout->addLayout(mainLayout);
+    walletFrameLayout->addLayout(menuLayout);
+    walletFrameLayout->addLayout(bottomLayout);
 }
 
 WalletFrame::~WalletFrame()
